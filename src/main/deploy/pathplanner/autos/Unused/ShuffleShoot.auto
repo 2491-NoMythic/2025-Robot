@@ -1,0 +1,31 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.7328954159687686,
+      "y": 4.421139470985942
+    },
+    "rotation": 119.74488129694214
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "initialShot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "SuffleShootPath"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

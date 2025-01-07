@@ -1,0 +1,118 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "initialShot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shooterOn"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Blue5AutoPickupFromStart"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "autoAimAtSpeaker"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "autoPickup"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "BlueSourceShoot5"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "autoAimAtSpeaker"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "note isn't held"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "sourceSideLongShot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue4AutoPickupSourceSide"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "autoPickup"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "BlueSourceShoot4UnderStage"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "lowAmpSideShooterAngle"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "note isn't held"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

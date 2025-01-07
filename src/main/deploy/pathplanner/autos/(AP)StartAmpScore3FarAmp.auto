@@ -1,0 +1,112 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "initialShot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shooterOn"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Blue1AutoPickupFromStart"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "autoAimAtSpeaker"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "autoPickup"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "BlueAmpShoot1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "midAmpSideShooterAngle"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "note isn't held"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue2AutoPickup"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "autoPickup"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "BlueAmpShoot2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "midAmpSideShooterAngle"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "note isn't held"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
