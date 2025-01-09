@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.Drive;
+import frc.robot.commands.IntakeCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.Limelight;
@@ -157,6 +158,7 @@ public class RobotContainer {
         };
     SmartDashboard.putData("set offsets", setOffsets);
     SmartDashboard.putData(new InstantCommand(driveTrain::forceUpdateOdometryWithVision));
+    new Trigger(operatorControllerPS4::getR2Button).whileTrue(new IntakeCommand());
     /*
      * bindings:
      * PS4: zero the gyroscope
