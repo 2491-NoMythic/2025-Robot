@@ -289,7 +289,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     PoseEstimate estimate = limelight.getTrustedPose();
     if (estimate != null) {
       boolean doRejectUpdate = false;
-      if (Math.abs(pigeon.getRate()) > 720) {
+      if (Math.abs(pigeon.getAngularVelocityZWorld().getValueAsDouble()) > 720) {
         doRejectUpdate = true;
       }
       if (estimate.tagCount == 0) {

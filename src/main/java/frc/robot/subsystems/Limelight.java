@@ -7,6 +7,8 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.LimelightHelpers;
@@ -85,8 +87,10 @@ public class Limelight {
         LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(APRILTAG_LIMELIGHT3_NAME);
     // we aren't using isTrustworthy here becuase as LL readings have gotten more reliable, we care
     // less about tag distance
-    Boolean pose1Trust = isValid(APRILTAG_LIMELIGHT2_NAME, pose1);
-    Boolean pose2Trust = isValid(APRILTAG_LIMELIGHT3_NAME, pose2);
+    Boolean pose1Trust = false;
+    Boolean pose2Trust = false;
+    if(isConnected(APRILTAG_LIMELIGHT2_NAME)) {pose1Trust = isValid(APRILTAG_LIMELIGHT2_NAME, pose1);}
+    if(isConnected(APRILTAG_LIMELIGHT3_NAME)) {pose2Trust = isValid(APRILTAG_LIMELIGHT3_NAME, pose2);}
     // if the limelight positions will be merged, let SmartDashboard know!
     boolean mergingPoses = false;
     if (pose1Trust && pose2Trust) {
@@ -147,16 +151,21 @@ public class Limelight {
   }
 
   public void updateLoggingWithPoses() {
-    Pose2d pose1 =
+    if(isConnected(APRILTAG_LIMELIGHT2_NAME)) {
+      Pose2d pose1 =
         LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(APRILTAG_LIMELIGHT2_NAME).pose;
-    Pose2d pose2 =
+      field1.setRobotPose(pose1);
+      Logger.recordOutput("LeftPose", pose1);
+    }
+
+    if(isConnected(APRILTAG_LIMELIGHT3_NAME)) {
+      Pose2d pose2 =
         LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(APRILTAG_LIMELIGHT3_NAME).pose;
+      field2.setRobotPose(pose2);
+      Logger.recordOutput("RightPose", pose2);
+    }
+    
 
-    field1.setRobotPose(pose1);
-    field2.setRobotPose(pose2);
-
-    Logger.recordOutput("LeftPose", pose1);
-    Logger.recordOutput("RightPose", pose2);
 
     Pose3d[] AprilTagPoses;
 
@@ -347,4 +356,16 @@ public class Limelight {
     }
     return trusted;
   }
+/**
+ * 
+ * @param limelightName
+ * @return a boolean of wether or not the data from the limelight is accessible. If false, limelight may not be connected
+ */
+  private boolean isConnected(String limelightName) {
+    NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable(limelightName);
+    double tx = limelightTable.getEntry("tx").getDouble(Double.NaN);
+    boolean connected = !Double.isNaN(tx);
+    return connected;
+  }
+
 }
