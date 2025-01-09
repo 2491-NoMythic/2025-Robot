@@ -19,8 +19,8 @@ import static frc.robot.settings.Constants.DriveConstants.FL_STEER_MOTOR_ID;
 import static frc.robot.settings.Constants.DriveConstants.FR_DRIVE_MOTOR_ID;
 import static frc.robot.settings.Constants.DriveConstants.FR_STEER_ENCODER_ID;
 import static frc.robot.settings.Constants.DriveConstants.FR_STEER_MOTOR_ID;
-import static frc.robot.settings.Constants.Vision.APRILTAG_LIMELIGHT2_NAME;
-import static frc.robot.settings.Constants.Vision.APRILTAG_LIMELIGHT3_NAME;
+import static frc.robot.settings.Constants.Vision.APRILTAG_LIMELIGHTB_NAME;
+import static frc.robot.settings.Constants.Vision.APRILTAG_LIMELIGHTC_NAME;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.util.PathPlannerLogging;
@@ -270,7 +270,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
    */
   public void updateOdometryWithVision() {
     LimelightHelpers.SetRobotOrientation(
-        APRILTAG_LIMELIGHT2_NAME,
+        APRILTAG_LIMELIGHTB_NAME,
         odometer.getEstimatedPosition().getRotation().getDegrees(),
         0,
         0,
@@ -278,7 +278,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         0,
         0);
     LimelightHelpers.SetRobotOrientation(
-        APRILTAG_LIMELIGHT3_NAME,
+        APRILTAG_LIMELIGHTC_NAME,
         odometer.getEstimatedPosition().getRotation().getDegrees(),
         0,
         0,
