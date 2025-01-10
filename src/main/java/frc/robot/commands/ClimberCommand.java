@@ -29,7 +29,7 @@ public class ClimberCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    climber.stopClimber(0);
+    climber.stopClimber();
   }
 
   // Returns true when the command should end.

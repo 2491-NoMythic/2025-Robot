@@ -30,7 +30,7 @@ public class AlgaeEndDefectorCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    algaeEndDefector.stopAlgaeEndDefector(0);
+    algaeEndDefector.stopAlgaeEndDefector();
 
   }
 

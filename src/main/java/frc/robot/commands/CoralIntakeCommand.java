@@ -32,7 +32,7 @@ public class CoralIntakeCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    coralIntake.stopCoralIntake(0);
+    coralIntake.stopCoralIntake();
   }
 
   // Returns true when the command should end.
