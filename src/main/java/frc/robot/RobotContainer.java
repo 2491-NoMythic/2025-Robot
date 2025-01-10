@@ -88,12 +88,12 @@ public class RobotContainer {
     Preferences.initBoolean("Use Limelight", true);
     Preferences.initBoolean("Use 2 Limelights", true);
     Preferences.initBoolean("Xbox Controller", true);
-    Preferences.initBoolean("CoralIntake", true);
-    Preferences.initBoolean("AlgaeIntake", true);
-    Preferences.initBoolean("Elevator", true);
-    Preferences.initBoolean("CoralEndDefector", true);
-    Preferences.initBoolean("AlgaeEndDefector", true);
-    Preferences.initBoolean("Climber", true);
+    Preferences.initBoolean("CoralIntake", false);
+    Preferences.initBoolean("AlgaeIntake", false);
+    Preferences.initBoolean("Elevator", false);
+    Preferences.initBoolean("CoralEndDefector", false);
+    Preferences.initBoolean("AlgaeEndDefector", false);
+    Preferences.initBoolean("Climber", false);
 
     DataLogManager.start(); // Start logging
     DriverStation.startDataLog(DataLogManager.getLog()); // Joystick Data logging
