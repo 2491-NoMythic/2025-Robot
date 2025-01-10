@@ -5,11 +5,16 @@
 package frc.robot;
 
 import static frc.robot.settings.Constants.DriveConstants.*;
+import static frc.robot.settings.Constants.SensorConstants.*;
 import static frc.robot.settings.Constants.PS4Driver.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+
+import com.playingwithfusion.TimeOfFlight;
+import com.playingwithfusion.jni.TimeOfFlightJNI;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -28,6 +33,8 @@ import frc.robot.commands.Drive;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.RobotState;
+
 import java.io.IOException;
 import java.util.function.BooleanSupplier;
 
@@ -45,6 +52,11 @@ public class RobotContainer {
   // we run the code.
   private final boolean useDetectorLimelight = Preferences.getBoolean("Detector Limelight", true);
   private final boolean useXboxController = Preferences.getBoolean("Xbox Controller", true);
+
+  private TimeOfFlight farLeft;
+  private TimeOfFlight middleLeft;
+  private TimeOfFlight middleRight;
+  private TimeOfFlight farRight;
 
   private DrivetrainSubsystem driveTrain;
   private Drive defaultDriveCommand;
@@ -92,6 +104,7 @@ public class RobotContainer {
     limelightInit();
     driveTrainInst();
     lightsInst();
+    lineupInit();
 
     configureDriveTrain();
     configureBindings(); // Configure the trigger bindings
@@ -135,6 +148,13 @@ public class RobotContainer {
     lights = new Lights();
   }
 
+  private void lineupInit() {
+    //TODO these must be configured from the roborio
+    farLeft = new TimeOfFlight(FAR_LEFT_DIST_SENSOR_ID);
+    middleLeft = new TimeOfFlight(MIDDLE_LEFT_DIST_SENSOR_ID);
+    middleRight = new TimeOfFlight(MIDDLE_RIGHT_DIST_SENSOR_ID);
+    farRight = new TimeOfFlight(FAR_RIGHT_DIST_SENSOR_ID);
+  }
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
@@ -233,6 +253,7 @@ public class RobotContainer {
 
   public void robotPeriodic() {
     currentAlliance = DriverStation.getAlliance().get();
+    updateDistanceSensors();
     SmartDashboard.putString(
         "AlliancePeriodic",
         currentAlliance == null ? "null" : currentAlliance == Alliance.Red ? "Red" : "Blue");
@@ -244,4 +265,11 @@ public class RobotContainer {
   public void disabledPeriodic() {}
 
   public void disabledInit() {}
+
+  private void updateDistanceSensors() {
+    RobotState.getInstance().farLeftSensorTriggered = farLeft.getRange()<RANGE_TO_SEE_REEF;
+    RobotState.getInstance().middleLeftSensorTriggered = middleLeft.getRange()<RANGE_TO_SEE_REEF;
+    RobotState.getInstance().middleRightSensorTriggered = middleRight.getRange()<RANGE_TO_SEE_REEF;
+    RobotState.getInstance().farRightSensorTriggered = farRight.getRange()<RANGE_TO_SEE_REEF;
+  }
 }

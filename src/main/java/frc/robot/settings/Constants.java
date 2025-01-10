@@ -28,8 +28,14 @@ public final class Constants {
 
   private Constants() {}
 
-  public static final int LOOPS_VALID_FOR_SHOT = 20;
+  public static final class SensorConstants {
+    public static final int FAR_LEFT_DIST_SENSOR_ID = 2491;
+    public static final int MIDDLE_LEFT_DIST_SENSOR_ID = 2491;
+    public static final int MIDDLE_RIGHT_DIST_SENSOR_ID = 2491;
+    public static final int FAR_RIGHT_DIST_SENSOR_ID = 2491;
 
+    public static final double RANGE_TO_SEE_REEF = 150; // in millimeters, the distance that will trigger the time of flight sensors to report that we are or aren't in front of the reef
+  }
   public static final class DriveConstants {
 
     public static final Pose2d DRIVE_ODOMETRY_ORIGIN = new Pose2d(5.0, 5.0, new Rotation2d());

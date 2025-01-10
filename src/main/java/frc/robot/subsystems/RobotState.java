@@ -5,6 +5,10 @@ public class RobotState {
   public boolean LimelightsUpdated;
   public boolean lightsReset;
   public double odometerOrientation;
+  public boolean farLeftSensorTriggered;
+  public boolean middleLeftSensorTriggered;
+  public boolean middleRightSensorTriggered;
+  public boolean farRightSensorTriggered;
 
   private RobotState() {}
 
