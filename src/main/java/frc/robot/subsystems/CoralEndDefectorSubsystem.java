@@ -19,7 +19,7 @@ public class CoralEndDefectorSubsystem extends SubsystemBase {
     coralEndDefectorMotor.set(speed);
 
   }
-  public void stopCoralEndDefector(double speed){
+  public void stopCoralEndDefector(){
     coralEndDefectorMotor.set(0);
   }
   @Override

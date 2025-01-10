@@ -22,7 +22,7 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
   algaeIntake1.set(speed);
   algaeIntake2.set(speed);
  }
- public void stopAlgaeIntake(double speed){
+ public void stopAlgaeIntake(){
   algaeIntake1.set(0);
   algaeIntake2.set(0);
  }

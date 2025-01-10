@@ -326,4 +326,27 @@ public final class Constants {
     // Welcome, to  Pathconstantic Park
     // Here the fine beasts of the Pathplanner Period reside, after being brought back through DNA
   }
+  public final class CoralIntakeConstants{
+    public static final int CORAL_INTAKE_MOTOR_1_ID = 9;
+    public static final int CORAL_INTAKE_MOTOR_2_ID = 10;
+  }
+  public final class AlgaeIntakeConstants{
+    public static final int ALGAE_INTAKE_MOTOR_1_ID = 11;
+    public static final int ALGAE_INTAKE_MOTOR_2_ID = 12;
+  }
+  public final class CoralEndDefectorConstants{
+    public static final int CORAL_END_DEFECTOR_MOTOR_1_ID = 13;
+  }
+  public final class AlgaeEndDefectorConstants{
+    public static final int ALGAE_END_DEFECTOR_MOTOR_1_ID = 14;
+  }
+  public final class ElevatorConstants{
+    public static final int ELEVATOR_MOTOR_1_ID = 15;
+  }
+  public final class ClimberConstants{
+    public static final int CLIMBER_MOTOR_1_ID = 16;
+    public static final int CLIMBER_MOTOR_2_ID = 17;
+
+  }
+  
 }

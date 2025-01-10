@@ -24,7 +24,7 @@ public class CoralIntakeSubsystem extends SubsystemBase {
     coralIntake2.set(speed);
 
   }
-  public void stopCoralIntake(double speed){
+  public void stopCoralIntake(){
     coralIntake1.set(0);
     coralIntake2.set(0);
 

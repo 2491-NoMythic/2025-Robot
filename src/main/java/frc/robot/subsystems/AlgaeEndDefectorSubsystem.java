@@ -20,7 +20,7 @@ public class AlgaeEndDefectorSubsystem extends SubsystemBase {
     algaeEndDefectorMotor.set(speed);
 
   }
-  public void stopAlgaeEndDefector(double speed){
+  public void stopAlgaeEndDefector(){
     algaeEndDefectorMotor.set(0);
   }
   @Override

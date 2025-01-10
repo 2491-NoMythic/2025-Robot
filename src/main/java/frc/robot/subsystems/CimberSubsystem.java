@@ -21,7 +21,7 @@ public class CimberSubsystem extends SubsystemBase {
     climberMotor1.set(speed);
     climberMotor2.set(speed);
   }
-  public void stopClimber(double speed){
+  public void stopClimber(){
     climberMotor1.set(0);
     climberMotor2.set(0);
   }
