@@ -19,6 +19,7 @@ import static frc.robot.settings.Constants.DriveConstants.FL_STEER_MOTOR_ID;
 import static frc.robot.settings.Constants.DriveConstants.FR_DRIVE_MOTOR_ID;
 import static frc.robot.settings.Constants.DriveConstants.FR_STEER_ENCODER_ID;
 import static frc.robot.settings.Constants.DriveConstants.FR_STEER_MOTOR_ID;
+import static frc.robot.settings.Constants.Vision.APRILTAG_LIMELIGHTA_NAME;
 import static frc.robot.settings.Constants.Vision.APRILTAG_LIMELIGHTB_NAME;
 import static frc.robot.settings.Constants.Vision.APRILTAG_LIMELIGHTC_NAME;
 
@@ -269,6 +270,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * larger pose shifts will take multiple calls to complete.
    */
   public void updateOdometryWithVision() {
+    LimelightHelpers.SetRobotOrientation(
+        APRILTAG_LIMELIGHTA_NAME,
+        odometer.getEstimatedPosition().getRotation().getDegrees(),
+        0,
+        0,
+        0,
+        0,
+        0);
     LimelightHelpers.SetRobotOrientation(
         APRILTAG_LIMELIGHTB_NAME,
         odometer.getEstimatedPosition().getRotation().getDegrees(),
