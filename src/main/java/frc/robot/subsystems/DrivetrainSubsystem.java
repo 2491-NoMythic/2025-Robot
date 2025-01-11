@@ -218,21 +218,20 @@ public class DrivetrainSubsystem extends SubsystemBase {
     odometer.resetPosition(getGyroscopeRotation(), getModulePositions(), pose);
   } 
   /**
-   * Sets the gyroscope angle to zero. This can be used to set the direction the robot is currently
-   * facing to the 'forwards' direction.
+   * Sets the gyro to the specified position.
    */
-  public void zeroGyroscope(double angleDeg) {
+  public void setGyroscope(double angleDeg) {
     resetOdometry(new Pose2d(getPose().getTranslation(), Rotation2d.fromDegrees(angleDeg)));
   }
   /**
-   * This is the version for use on the field. 
+   * Sets the gyroscope angle to zero.  
    */
   public void zeroGyroscope() {
     if (DriverStation.getAlliance().isPresent()
         && DriverStation.getAlliance().get() == Alliance.Red) {
-      zeroGyroscope(180);
+      setGyroscope(180);
     } else {
-      zeroGyroscope(0);
+      setGyroscope(0);
     }
   }
   //This is the set section that sends commands to the modules

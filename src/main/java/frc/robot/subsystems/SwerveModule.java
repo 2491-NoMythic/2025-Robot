@@ -29,28 +29,29 @@ public class SwerveModule {
   private TalonFXConfiguration drive_Configuration;
   private TalonFXConfiguration steer_Configuration;
   private CANcoderConfiguration enc_Configuration;
-  //Shuffleboard stuff
+  // Shuffleboard stuff
   ShuffleboardTab debugInfo;
-  //Variables
+  // Variables
   /** The target wheel angle in rotations. [-.5, .5] */
   private double m_desiredSteerAngle;
   /** The target wheel speed in rotations per second */
   private double m_desiredDriveSpeed;
-  //Controls
+  // Controls
   private VelocityVoltage m_driveControl = new VelocityVoltage(0);
   private PositionDutyCycle m_steerControl = new PositionDutyCycle(0);
   private NeutralOut m_neutralControl = new NeutralOut();
 
   /**
-   * Constructs a SwerveModule with a drive motor, steering motor, and steering encoder.
-   * Also takes a rotation 2d offset for directions and a canivore name. 
+   * Constructs a SwerveModule with a drive motor, steering motor, and steering
+   * encoder.
+   * Also takes a rotation 2d offset for directions and a canivore name.
    *
    *
-   * @param driveMotorChannel (drive motor id, integer)
-   * @param steerMotorChannel (steering motor id, integer)
+   * @param driveMotorChannel   (drive motor id, integer)
+   * @param steerMotorChannel   (steering motor id, integer)
    * @param steerEncoderChannel (steering encoder id, integer)
-   * @param steerEncoderOffset (how far the wheel is offset, rotation2d)
-   * @param canivoreName (name of the canivore, string)
+   * @param steerEncoderOffset  (how far the wheel is offset, rotation2d)
+   * @param canivoreName        (name of the canivore, string)
    */
   public SwerveModule(
       String moduleName,
@@ -68,13 +69,15 @@ public class SwerveModule {
     enc_Configuration = CTREConfigs.steerEncoderConfig;
 
     enc_Configuration.MagnetSensor.MagnetOffset = -m_steerEncoderOffset.getRotations();
-    steer_Configuration.Feedback.FeedbackRemoteSensorID = steerEncoderChannel;  
+    steer_Configuration.Feedback.FeedbackRemoteSensorID = steerEncoderChannel;
     // Apply the configurations.
     m_driveMotor.getConfigurator().apply(drive_Configuration);
     m_steerMotor.getConfigurator().apply(steer_Configuration);
     m_steerEncoder.getConfigurator().apply(enc_Configuration);
   }
-  //This section is the 'direct get' section. Everything that gets something directly from a motor is in here.
+
+  // This section is the 'direct get' section. Everything that gets something
+  // directly from a motor is in here.
   public TalonFX getDriveMotor() {
     return m_driveMotor;
   }
@@ -82,6 +85,7 @@ public class SwerveModule {
   public TalonFX getSteerMotor() {
     return m_steerMotor;
   }
+
   /**
    * Returns the current encoder distance of the drive motor.
    *
@@ -91,6 +95,7 @@ public class SwerveModule {
     return (m_driveMotor.getPosition().getValueAsDouble()
         * DriveConstants.DRIVETRAIN_ROTATIONS_TO_METERS);
   }
+
   /**
    * Returns the current encoder angle of the steer motor.
    *
@@ -110,8 +115,10 @@ public class SwerveModule {
     return (m_driveMotor.getVelocity().getValueAsDouble()
         * DriveConstants.DRIVETRAIN_ROTATIONS_TO_METERS);
   }
-    /**
-   * finds the current encoder position, it removes the current offset so we just get the raw
+
+  /**
+   * finds the current encoder position, it removes the current offset so we just
+   * get the raw
    * position
    *
    * @return
@@ -122,6 +129,7 @@ public class SwerveModule {
         -0.5,
         0.5);
   }
+
   /**
    * Returns the current state of the module.
    *
@@ -132,7 +140,8 @@ public class SwerveModule {
   }
 
   /**
-   * Returns the current position of the module. Includes the modules rotation and the modules
+   * Returns the current position of the module. Includes the modules rotation and
+   * the modules
    * distance driven.
    *
    * @return The current position of the module.
@@ -140,7 +149,9 @@ public class SwerveModule {
   public SwerveModulePosition getPosition() {
     return new SwerveModulePosition(getDriveDistanceMeters(), getRotation());
   }
-  //This is the direction section. It recives instructions and sets the desired state of the swerve module. 
+
+  // This is the direction section. It recives instructions and sets the desired
+  // state of the swerve module.
   /**
    * Returns the target angle of the wheel.
    *
@@ -174,8 +185,7 @@ public class SwerveModule {
     desiredState.optimize(getRotation());
 
     m_desiredSteerAngle = MathUtil.inputModulus(desiredState.angle.getRotations(), -0.5, 0.5);
-    m_desiredDriveSpeed =
-        desiredState.speedMetersPerSecond / DriveConstants.DRIVETRAIN_ROTATIONS_TO_METERS;
+    m_desiredDriveSpeed = desiredState.speedMetersPerSecond / DriveConstants.DRIVETRAIN_ROTATIONS_TO_METERS;
 
     if (Math.abs(m_desiredDriveSpeed) <= 0.001) {
       m_driveMotor.setControl(m_neutralControl);
