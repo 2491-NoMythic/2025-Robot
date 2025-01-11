@@ -6,16 +6,19 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.settings.Constants.AlgaeIntakeConstants;
 
 public class AlgaeIntakeSubsystem extends SubsystemBase {
   TalonFX algaeIntake1;
   TalonFX algaeIntake2;
+  PIDController alginController;
   /** Creates a new AlgaeIntakeSubsystem. */
   public AlgaeIntakeSubsystem() {
     algaeIntake1 = new TalonFX(AlgaeIntakeConstants.ALGAE_INTAKE_MOTOR_1_ID);
     algaeIntake2 = new TalonFX(AlgaeIntakeConstants.ALGAE_INTAKE_MOTOR_2_ID);
+    alginController = new PIDController(AlgaeIntakeConstants.ALGAE_INTAKE_KP, AlgaeIntakeConstants.ALGAE_INTAKE_KI, AlgaeIntakeConstants.ALGAE_INTAKE_KD);
   }
 
  public void runAlgaeIntake(double speed){
