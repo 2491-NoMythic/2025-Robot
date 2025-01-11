@@ -30,6 +30,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.Drive;
+import frc.robot.commands.LineUp;
+import frc.robot.commands.MoveMeters;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.Limelight;
@@ -52,6 +54,7 @@ public class RobotContainer {
   // we run the code.
   private final boolean useDetectorLimelight = Preferences.getBoolean("Detector Limelight", true);
   private final boolean useXboxController = Preferences.getBoolean("Xbox Controller", true);
+  boolean movingLeft;
 
   private TimeOfFlight farLeft;
   private TimeOfFlight middleLeft;
@@ -71,6 +74,8 @@ public class RobotContainer {
 
   Alliance currentAlliance;
   BooleanSupplier ZeroGyroSup;
+  BooleanSupplier LeftReefLineupSup;
+  BooleanSupplier RightReefLineupSup;
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -94,9 +99,15 @@ public class RobotContainer {
       operatorControllerXbox = new XboxController(OPERATOR_CONTROLLER_ID);
 
       ZeroGyroSup = driverControllerXbox::getStartButton;
+      LeftReefLineupSup = driverControllerXbox::getLeftBumperButton;
+      RightReefLineupSup =  driverControllerXbox::getRightBumperButton;
+
+      
     } else {
       driverControllerPS4 = new PS4Controller(DRIVE_CONTROLLER_ID);
       operatorControllerPS4 = new PS4Controller(OPERATOR_CONTROLLER_ID);
+      LeftReefLineupSup = driverControllerPS4::getL2Button;
+      RightReefLineupSup = driverControllerPS4::getR2Button;
 
       ZeroGyroSup = driverControllerPS4::getPSButton;
     }
@@ -167,6 +178,24 @@ public class RobotContainer {
   private void configureBindings() {
     SmartDashboard.putData("drivetrain", driveTrain);
     new Trigger(ZeroGyroSup).onTrue(new InstantCommand(driveTrain::zeroGyroscope));
+
+    new Trigger(LeftReefLineupSup).whileTrue(new LineUp(
+      driveTrain, 
+      true, 
+      RobotState.getInstance().farLeftSensorTriggered, 
+      RobotState.getInstance().middleLeftSensorTriggered, 
+      RobotState.getInstance().middleRightSensorTriggered, 
+      RobotState.getInstance().farRightSensorTriggered
+      ));
+    new Trigger(RightReefLineupSup).whileTrue(new LineUp(
+      driveTrain, 
+      false, 
+      RobotState.getInstance().farLeftSensorTriggered, 
+      RobotState.getInstance().middleLeftSensorTriggered, 
+      RobotState.getInstance().middleRightSensorTriggered, 
+      RobotState.getInstance().farRightSensorTriggered
+        ));
+      
 
     InstantCommand setOffsets =
         new InstantCommand(driveTrain::setEncoderOffsets) {
