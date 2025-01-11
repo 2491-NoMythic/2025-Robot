@@ -4,25 +4,32 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.settings.Constants.ElevatorConstants;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 
 public class ElevatorSubsystem extends SubsystemBase {
   TalonFX elevatorMotor1;
+  TalonFX elevatorMotor2;
+  Rotation2d elevatorPos;
   /** Creates a new ElevatorSubsystem. */
   public ElevatorSubsystem() {
     elevatorMotor1 = new TalonFX(ElevatorConstants.ELEVATOR_MOTOR_1_ID);
+    elevatorMotor2 = new TalonFX(ElevatorConstants.ELEVATOR_MOTOR_2_ID);
+    elevatorMotor1.getConfigurator().apply(ElevatorConstants.eleMotorConfig);
+    elevatorMotor2.setControl(Follower)
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
   }
-  public void runElevator(double speed){
-    elevatorMotor1.set(speed);
-
+  public void setElevatorPosition(int position){
+    elevatorMotor1
   }
   public void stopElevator(){
     elevatorMotor1.set(0);
