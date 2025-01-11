@@ -322,6 +322,28 @@ public final class Constants {
     public static final double AprilTagHeight = 1.335;
   }
 
+  public final class AutoAlignToReefConstants {
+    public static final int AUTO_AIM_ROBOT_kP = 1;
+    public static final int AUTO_AIM_ROBOT_kI = 0;
+    public static final int AUTO_AIM_ROBOT_kD = 0;
+    public static final double ROBOT_ANGLE_TOLERANCE = 0.5;
+  }
+
+  public final class FieldConstants {
+    public static final double RED_REEF_ANGLE_0 = 180;
+    public static final double RED_REEF_ANGLE_1 = 180;
+    public static final double RED_REEF_ANGLE_2 = 180;
+    public static final double RED_REEF_ANGLE_3 = 180;
+    public static final double RED_REEF_ANGLE_4 = 180;
+    public static final double RED_REEF_ANGLE_5 = 180;
+    public static final double BLUE_REEF_ANGLE_0 = 180;
+    public static final double BLUE_REEF_ANGLE_1 = 180;
+    public static final double BLUE_REEF_ANGLE_2 = 180;
+    public static final double BLUE_REEF_ANGLE_3 = 180;
+    public static final double BLUE_REEF_ANGLE_4 = 180;
+    public static final double BLUE_REEF_ANGLE_5 = 180;
+  }
+
   public final class PathConstants {
     // Welcome, to  Pathconstantic Park
     // Here the fine beasts of the Pathplanner Period reside, after being brought back through DNA
