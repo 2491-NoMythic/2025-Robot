@@ -39,4 +39,13 @@ public class MythicalMath {
     return new Pose2d(
         pose1.getX() + pose2.getX(), pose1.getY() + pose2.getY(), pose1.getRotation());
   }
+  public static Double getSmallest(Double a, Double b, Double c) {
+    // Replace null values with Double.MAX_VALUE (a very large number)
+    double valA = (a != null) ? a : Double.MAX_VALUE;
+    double valB = (b != null) ? b : Double.MAX_VALUE;
+    double valC = (c != null) ? c : Double.MAX_VALUE;
+
+    // Find the smallest value
+    return Math.min(valA, Math.min(valB, valC));
+}
 }
