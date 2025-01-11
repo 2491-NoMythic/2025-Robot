@@ -24,17 +24,27 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.AlgaeEndDefectorCommand;
 import frc.robot.commands.Drive;
+import frc.robot.subsystems.AlgaeEndDefectorSubsystem;
+import frc.robot.subsystems.AlgaeIntakeSubsystem;
+import frc.robot.subsystems.CoralEndDefectorSubsystem;
+import frc.robot.subsystems.CoralIntakeSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.CimberSubsystem;
 import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.Limelight;
 import java.io.IOException;
 import java.util.function.BooleanSupplier;
 
 /**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
+ * This class is where the bulk of the robot should be declared. Since
+ * Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in
+ * the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of
+ * the robot (including
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
@@ -56,12 +66,20 @@ public class RobotContainer {
   private Limelight limelight;
   private SendableChooser<Command> autoChooser;
   private PowerDistribution PDP;
+  private CoralIntakeSubsystem coralIntake;
+  private CoralEndDefectorSubsystem coralEndDefector;
+  private AlgaeEndDefectorSubsystem algaeEndDefector;
+  private AlgaeIntakeSubsystem algaeIntake;
+  private CimberSubsystem climber;
+  private ElevatorSubsystem elevator;
 
   Alliance currentAlliance;
   BooleanSupplier ZeroGyroSup;
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  /**
+   * The container for the robot. Contains subsystems, OI devices, and commands.
+   */
   public RobotContainer() {
     // preferences are initialized IF they don't already exist on the Rio
     Preferences.initBoolean("Lights", true);
@@ -70,11 +88,18 @@ public class RobotContainer {
     Preferences.initBoolean("Use Limelight", true);
     Preferences.initBoolean("Use 2 Limelights", true);
     Preferences.initBoolean("Xbox Controller", true);
+    Preferences.initBoolean("CoralIntake", false);
+    Preferences.initBoolean("AlgaeIntake", false);
+    Preferences.initBoolean("Elevator", false);
+    Preferences.initBoolean("CoralEndDefector", false);
+    Preferences.initBoolean("AlgaeEndDefector", false);
+    Preferences.initBoolean("Climber", false);
 
     DataLogManager.start(); // Start logging
     DriverStation.startDataLog(DataLogManager.getLog()); // Joystick Data logging
     /*
-     * the following code uses the Xbox Controller Preference to determine our controllers and all our bindings. any time you want to use/create a binding,
+     * the following code uses the Xbox Controller Preference to determine our
+     * controllers and all our bindings. any time you want to use/create a binding,
      * define a supplier as it in both conditions of this if()else{} code.
      */
     if (useXboxController) {
@@ -92,6 +117,24 @@ public class RobotContainer {
     limelightInit();
     driveTrainInst();
     lightsInst();
+    if (Preferences.getBoolean("CoralIntake", false)) {
+      coralIntakeInst();
+    }
+    if (Preferences.getBoolean("CoralEndDefector", false)) {
+      coralEndDefectorInst();
+    }
+    if (Preferences.getBoolean("AlgaeEndDefector", false)) {
+      algaeEndDefectorInst();
+    }
+    if (Preferences.getBoolean("AlgaeIntake", false)) {
+      algaeIntakeInst();
+    }
+    if (Preferences.getBoolean("Climber", false)) {
+      climberInst();
+    }
+    if (Preferences.getBoolean("Elevator", false)) {
+      elevatorInst();
+    }
 
     configureDriveTrain();
     configureBindings(); // Configure the trigger bindings
@@ -101,22 +144,20 @@ public class RobotContainer {
   private void driveTrainInst() {
     driveTrain = new DrivetrainSubsystem();
     if (useXboxController) {
-      defaultDriveCommand =
-          new Drive(
-              driveTrain,
-              () -> false,
-              () -> modifyAxis(-driverControllerXbox.getRawAxis(Y_AXIS), DEADBAND_NORMAL),
-              () -> modifyAxis(-driverControllerXbox.getRawAxis(X_AXIS), DEADBAND_NORMAL),
-              () -> modifyAxis(-driverControllerXbox.getRawAxis(Z_AXIS), DEADBAND_NORMAL));
+      defaultDriveCommand = new Drive(
+          driveTrain,
+          () -> false,
+          () -> modifyAxis(-driverControllerXbox.getRawAxis(Y_AXIS), DEADBAND_NORMAL),
+          () -> modifyAxis(-driverControllerXbox.getRawAxis(X_AXIS), DEADBAND_NORMAL),
+          () -> modifyAxis(-driverControllerXbox.getRawAxis(Z_AXIS), DEADBAND_NORMAL));
       driveTrain.setDefaultCommand(defaultDriveCommand);
     } else {
-      defaultDriveCommand =
-          new Drive(
-              driveTrain,
-              () -> false,
-              () -> modifyAxis(-driverControllerPS4.getRawAxis(Y_AXIS), DEADBAND_NORMAL),
-              () -> modifyAxis(-driverControllerPS4.getRawAxis(X_AXIS), DEADBAND_NORMAL),
-              () -> modifyAxis(-driverControllerPS4.getRawAxis(Z_AXIS), DEADBAND_NORMAL));
+      defaultDriveCommand = new Drive(
+          driveTrain,
+          () -> false,
+          () -> modifyAxis(-driverControllerPS4.getRawAxis(Y_AXIS), DEADBAND_NORMAL),
+          () -> modifyAxis(-driverControllerPS4.getRawAxis(X_AXIS), DEADBAND_NORMAL),
+          () -> modifyAxis(-driverControllerPS4.getRawAxis(Z_AXIS), DEADBAND_NORMAL));
       driveTrain.setDefaultCommand(defaultDriveCommand);
     }
   }
@@ -135,26 +176,53 @@ public class RobotContainer {
     lights = new Lights();
   }
 
+  private void coralIntakeInst() {
+    coralIntake = new CoralIntakeSubsystem();
+  }
+
+  private void algaeIntakeInst() {
+    algaeIntake = new AlgaeIntakeSubsystem();
+  }
+
+  private void coralEndDefectorInst() {
+    coralEndDefector = new CoralEndDefectorSubsystem();
+  }
+
+  private void algaeEndDefectorInst() {
+    algaeEndDefector = new AlgaeEndDefectorSubsystem();
+  }
+
+  private void climberInst() {
+    climber = new CimberSubsystem();
+  }
+
+  private void elevatorInst() {
+    elevator = new ElevatorSubsystem();
+  }
+
   /**
-   * Use this method to define your trigger->command mappings. Triggers can be created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
+   * Use this method to define your trigger->command mappings. Triggers can be
+   * created via the
+   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with
+   * an arbitrary
    * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
-   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
+   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for
+   * {@link
+   * CommandXboxController
+   * Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
+   * PS4} controllers or
+   * {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
   private void configureBindings() {
     SmartDashboard.putData("drivetrain", driveTrain);
     new Trigger(ZeroGyroSup).onTrue(new InstantCommand(driveTrain::zeroGyroscope));
 
-    InstantCommand setOffsets =
-        new InstantCommand(driveTrain::setEncoderOffsets) {
-          public boolean runsWhenDisabled() {
-            return true;
-          }
-          ;
-        };
+    InstantCommand setOffsets = new InstantCommand(driveTrain::setEncoderOffsets) {
+      public boolean runsWhenDisabled() {
+        return true;
+      };
+    };
     SmartDashboard.putData("set offsets", setOffsets);
     SmartDashboard.putData(new InstantCommand(driveTrain::forceUpdateOdometryWithVision));
     /*
@@ -176,8 +244,7 @@ public class RobotContainer {
     try {
       AutoBuilder.configure(
           driveTrain::getPose, // Pose2d supplier
-          driveTrain
-              ::resetOdometry, // Pose2d consumer, used to reset odometry at the beginning of auto
+          driveTrain::resetOdometry, // Pose2d consumer, used to reset odometry at the beginning of auto
           driveTrain::getChassisSpeeds,
           (speeds) -> driveTrain.drive(speeds),
           new PPHolonomicDriveController(
@@ -188,8 +255,8 @@ public class RobotContainer {
               new com.pathplanner.lib.config.PIDConstants(
                   k_THETA_P, k_THETA_I,
                   k_THETA_D) // PID constants to correct for rotation error (used to create the
-              // rotation controller)
-              ),
+          // rotation controller)
+          ),
           RobotConfig.fromGUISettings(),
           () -> DriverStation.getAlliance().get().equals(Alliance.Red),
           driveTrain);
@@ -217,7 +284,8 @@ public class RobotContainer {
     return value;
   }
 
-  private void registerNamedCommands() {}
+  private void registerNamedCommands() {
+  }
 
   public void logPower() {
     for (int i = 0; i < 16; i++) {
@@ -225,7 +293,8 @@ public class RobotContainer {
     }
   }
 
-  public void teleopInit() {}
+  public void teleopInit() {
+  }
 
   public void teleopPeriodic() {
     SmartDashboard.putData(driveTrain.getCurrentCommand());
@@ -241,7 +310,9 @@ public class RobotContainer {
     }
   }
 
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+  }
 
-  public void disabledInit() {}
+  public void disabledInit() {
+  }
 }
