@@ -203,32 +203,9 @@ public final class Constants {
   }
 
   public static final class CTREConfigs {
-    public TalonFXConfiguration driveMotorConfig;
-    public TalonFXConfiguration steerMotorConfig;
-    public CANcoderConfiguration steerEncoderConfig;
-    public Pigeon2Configuration pigeon2Config;
-
-    public CTREConfigs() {
-      driveMotorConfig = new TalonFXConfiguration();
-      steerMotorConfig = new TalonFXConfiguration();
-      steerEncoderConfig = new CANcoderConfiguration();
-      pigeon2Config = new Pigeon2Configuration();
-
-      // Steer motor.
-      steerMotorConfig.Feedback.RotorToSensorRatio = 1 / DriveConstants.DRIVETRAIN_STEER_REDUCTION;
-      steerMotorConfig.MotorOutput.Inverted = DriveConstants.DRIVETRAIN_STEER_INVERTED;
-      // steerMotorConfig.MotorOutput.DutyCycleNeutralDeadband = 0.05;
-      steerMotorConfig.Slot0.kP = DriveConstants.k_STEER_P;
-      steerMotorConfig.Slot0.kI = DriveConstants.k_STEER_I;
-      steerMotorConfig.Slot0.kD = DriveConstants.k_STEER_D;
-      steerMotorConfig.Slot0.kS = DriveConstants.k_STEER_FF_S;
-      steerMotorConfig.Slot0.kV = DriveConstants.k_STEER_FF_V;
-      steerMotorConfig.Voltage.PeakForwardVoltage = 12;
-      steerMotorConfig.Voltage.PeakReverseVoltage = -12;
-      steerMotorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
-
-      steerMotorConfig.ClosedLoopGeneral.ContinuousWrap = true;
-      // Drive motor.
+    // Drive motor.
+    private static TalonFXConfiguration getDriveMotorConfig() {
+      TalonFXConfiguration driveMotorConfig = new TalonFXConfiguration();
       driveMotorConfig.Feedback.SensorToMechanismRatio =
           1 / DriveConstants.DRIVETRAIN_DRIVE_REDUCTION;
       driveMotorConfig.MotorOutput.Inverted = DriveConstants.DRIVETRAIN_DRIVE_INVERTED;
@@ -246,22 +223,53 @@ public final class Constants {
       driveMotorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
       driveMotorConfig.CurrentLimits.StatorCurrentLimitEnable = false;
       /*
-       * the following does this:
-       * the current is always limited to 50 Amps. If the limit has been needed (motor is demanding more than 50, but limit stops it) for more than 0.8 seconds, than
-       * limit changes to DRIVE_CURRENT_LIMIT, which is 30 amps. this lower limit is enabled until the demanded current drops below the lower limit, then the 50 amp limit is enabled
-       */
+      * the following does this:
+      * the current is always limited to 50 Amps. If the limit has been needed (motor is demanding more than 50, but limit stops it) for more than 0.8 seconds, than
+      * limit changes to DRIVE_CURRENT_LIMIT, which is 30 amps. this lower limit is enabled until the demanded current drops below the lower limit, then the 50 amp limit is enabled
+      */
       driveMotorConfig.CurrentLimits.SupplyCurrentLimit = 50;
       driveMotorConfig.CurrentLimits.SupplyCurrentLowerLimit = DriveConstants.DRIVE_CURRENT_LIMIT;
       driveMotorConfig.CurrentLimits.SupplyCurrentLowerTime = 0.8;
+      return driveMotorConfig;
+    }
+      // Steer motor.
+      private static TalonFXConfiguration getSteerMotorConfig(){
+        TalonFXConfiguration steerMotorConfig = new TalonFXConfiguration();
+        steerMotorConfig.Feedback.RotorToSensorRatio = 1 / DriveConstants.DRIVETRAIN_STEER_REDUCTION;
+        steerMotorConfig.MotorOutput.Inverted = DriveConstants.DRIVETRAIN_STEER_INVERTED;
+        // steerMotorConfig.MotorOutput.DutyCycleNeutralDeadband = 0.05;
+        steerMotorConfig.Slot0.kP = DriveConstants.k_STEER_P;
+        steerMotorConfig.Slot0.kI = DriveConstants.k_STEER_I;
+        steerMotorConfig.Slot0.kD = DriveConstants.k_STEER_D;
+        steerMotorConfig.Slot0.kS = DriveConstants.k_STEER_FF_S;
+        steerMotorConfig.Slot0.kV = DriveConstants.k_STEER_FF_V;
+        steerMotorConfig.Voltage.PeakForwardVoltage = 12;
+        steerMotorConfig.Voltage.PeakReverseVoltage = -12;
+        steerMotorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
 
+        steerMotorConfig.ClosedLoopGeneral.ContinuousWrap = true;
+        return steerMotorConfig;
+      }
       //  Steer encoder.
-      steerEncoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
+      private static CANcoderConfiguration getSteerEncoderConfig(){
+        CANcoderConfiguration steerEncoderConfig = new CANcoderConfiguration();
+        steerEncoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
+        return steerEncoderConfig;
+      }
 
       // Pigeon 2.
-      pigeon2Config.MountPose.MountPosePitch = 0;
-      pigeon2Config.MountPose.MountPoseRoll = 0;
-      pigeon2Config.MountPose.MountPoseYaw = 0;
-    }
+      private static Pigeon2Configuration getPigeon2Config(){
+        Pigeon2Configuration pigeon2Config = new Pigeon2Configuration();
+        pigeon2Config.MountPose.MountPosePitch = 0;
+        pigeon2Config.MountPose.MountPoseRoll = 0;
+        pigeon2Config.MountPose.MountPoseYaw = 0;
+        return pigeon2Config;
+      }
+      public static final TalonFXConfiguration driveMotorConfig = getDriveMotorConfig();
+      public static final TalonFXConfiguration steerMotorConfig = getSteerMotorConfig();
+      public static final CANcoderConfiguration steerEncoderConfig = getSteerEncoderConfig();
+      public static final Pigeon2Configuration pigeon2Config = getPigeon2Config();
+    
   }
 
   public final class PS4Driver {
@@ -351,3 +359,4 @@ public final class Constants {
   }
   
 }
+

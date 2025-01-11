@@ -46,7 +46,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
 import frc.robot.LimelightHelpers.PoseEstimate;
 import frc.robot.helpers.MotorLogger;
-import frc.robot.settings.Constants.CTREConfigs;
 import frc.robot.settings.Constants.DriveConstants;
 import java.util.Arrays;
 import java.util.Collections;
@@ -54,20 +53,26 @@ import java.util.Collections;
 import org.littletonrobotics.junction.Logger;
 
 public class DrivetrainSubsystem extends SubsystemBase {
-  public static final CTREConfigs ctreConfig = new CTREConfigs();
+  //These are our swerve drive kinematics and Pigeon (gyroscope)
   public SwerveDriveKinematics kinematics = DriveConstants.kinematics;
 
   private final Pigeon2 pigeon = new Pigeon2(DRIVETRAIN_PIGEON_ID, CANIVORE_DRIVETRAIN);
 
   /**
-   * These are our modules. We initialize them in the constructor. 0 = Front Left 1 = Front Right 2
-   * = Back Left 3 = Back Right
+   * These are our modules. We initialize them in the constructor. 0 = Front Left 1 = Front Right 2 = Back Left 3 = Back Right
    */
   private final SwerveModule[] modules;
-
+  /**
+	 * These are the angles the wheels are at. This is mostly used to stop the robot without changing the angles.
+	 */
   private final Rotation2d[] lastAngles;
+  /**
+	 * This is a number that keeps track of how many times the steering motor has rotated.
+	 */
   private int accumulativeLoops;
-
+	/**
+	 * This is the odometer.
+	 */
   private final SwerveDrivePoseEstimator odometer;
   private final Field2d m_field = new Field2d();
 
@@ -86,7 +91,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SmartDashboard.putData("Field", m_field);
     SmartDashboard.putBoolean("Vision/force use limelight", false);
 
-    // creates and configures each of the four swerve modules used in the drivetrain
+    // Creates and configures each of the four swerve modules used in the drivetrain, along with their motor loggers.
     modules = new SwerveModule[4];
     lastAngles =
         new Rotation2d[] {
@@ -140,93 +145,142 @@ public class DrivetrainSubsystem extends SubsystemBase {
             kinematics, getGyroscopeRotation(), getModulePositions(), DRIVE_ODOMETRY_ORIGIN);
     odometer.setVisionMeasurementStdDevs(VecBuilder.fill(0.5, 0.5, 99999999));
   }
-
+  // This is the main 'get' section
+	/**
+	 * Gets the robot pose.
+	 * @return
+	 */
+  public Pose2d getPose() {
+    return odometer.getEstimatedPosition();
+  }
   /**
-   * Sets the gyroscope angle to zero. This can be used to set the direction the robot is currently
-   * facing to the 'forwards' direction.
-   */
-  public void zeroGyroscope() {
-    if (DriverStation.getAlliance().isPresent()
-        && DriverStation.getAlliance().get() == Alliance.Red) {
-      zeroGyroscope(180);
-    } else {
-      zeroGyroscope(0);
-    }
-  }
-
-  public void zeroGyroscope(double angleDeg) {
-    resetOdometry(new Pose2d(getPose().getTranslation(), Rotation2d.fromDegrees(angleDeg)));
-  }
-
-  public double getHeadingLooped() {
-    // returns the heading of the robot, but only out of 360, not accumulative
-    accumulativeLoops =
-        (int)
-            (getHeadingDegrees()
-                / 180); // finding the amount of times that 360 goes into the heading, as an int
-    return getHeadingDegrees() - 180 * (accumulativeLoops);
-  }
-
-  public Rotation2d getGyroscopeRotation() {
-    return pigeon.getRotation2d();
-  }
-
+	 * Returns the gyroscope rotation.
+	 * @return
+	 */
+	public Rotation2d getGyroscopeRotation() {
+		return pigeon.getRotation2d();
+	}
+  
   /**
    * @return a rotation2D of the angle according to the odometer
    */
   public Rotation2d getOdometryRotation() {
     return odometer.getEstimatedPosition().getRotation();
   }
-
-  public double getHeadingDegrees() {
-    return odometer.getEstimatedPosition().getRotation().getDegrees();
+  /**
+	 * Returns the angle as degrees instead of rotations
+	 * @return the angle in degreeds instead of rotations
+	 */
+	public double headingAsDegrees(){
+		return getOdometryRotation().getDegrees();
+	}
+  /** 
+   * Returns the heading of the robot, but only out of 360, not accumulative 
+   * */
+  public double getHeadingLooped() {
+    accumulativeLoops =
+        (int)
+            (headingAsDegrees()
+                / 180); // finding the amount of times that 360 goes into the heading, as an int
+    return headingAsDegrees() - 180 * (accumulativeLoops);
   }
-
-  public ChassisSpeeds getChassisSpeeds() {
-    return kinematics.toChassisSpeeds(getModuleStates());
-  }
-
+  	/**
+	 * Returns what directions the swerve modules are pointed in
+	 * @return the positions of the swerve modules
+	 */
   public SwerveModulePosition[] getModulePositions() {
     SwerveModulePosition[] positions = new SwerveModulePosition[4];
     for (int i = 0; i < 4; i++) positions[i] = modules[i].getPosition();
     return positions;
   }
-
+	/**
+	 * Returns the swerve module states (a mxiture of speed and angle)
+	 * @return the speeds and angles of the swerve modules
+	 */
   public SwerveModuleState[] getModuleStates() {
     SwerveModuleState[] states = new SwerveModuleState[4];
     for (int i = 0; i < 4; i++) states[i] = modules[i].getState();
     return states;
   }
-
+  /**
+   * Gets the speed of the robot
+   * @return the module states in terms of speed
+   */
+  public ChassisSpeeds getChassisSpeeds() {
+    return kinematics.toChassisSpeeds(getModuleStates());
+  }
+  //This is the odometry section. It has odometry-related functions.
+  /**
+	 * Resets the odometry of the robot.
+	 * @param pose
+	 */
+  public void resetOdometry(Pose2d pose) {
+    odometer.resetPosition(getGyroscopeRotation(), getModulePositions(), pose);
+  } 
+  /**
+   * Sets the gyro to the specified position.
+   */
+  public void setGyroscope(double angleDeg) {
+    resetOdometry(new Pose2d(getPose().getTranslation(), Rotation2d.fromDegrees(angleDeg)));
+  }
+  /**
+   * Sets the gyroscope angle to zero.  
+   */
+  public void zeroGyroscope() {
+    if (DriverStation.getAlliance().isPresent()
+        && DriverStation.getAlliance().get() == Alliance.Red) {
+      setGyroscope(180);
+    } else {
+      setGyroscope(0);
+    }
+  }
+  //This is the set section that sends commands to the modules
+  /**
+   * Calls the findOffset fucntion for each module.
+   */
   public void setEncoderOffsets() {
     Preferences.setDouble("FL offset", modules[0].findOffset());
     Preferences.setDouble("FR offset", modules[1].findOffset());
     Preferences.setDouble("BL offset", modules[2].findOffset());
     Preferences.setDouble("BR offset", modules[3].findOffset());
   }
-
-  public Pose2d getPose() {
-    return odometer.getEstimatedPosition();
+  /**
+   * Sets a given module to a given module state. 
+   * @param i the ID of the module
+   * @param desiredState the speed and angle as a SwerveModuleState
+   */
+  private void setModule(int i, SwerveModuleState desiredState) {
+    modules[i].setDesiredState(desiredState);
+    lastAngles[i] = desiredState.angle;
   }
-
-  public void resetOdometry(Pose2d pose) {
-    odometer.resetPosition(getGyroscopeRotation(), getModulePositions(), pose);
+  
+  public void setModuleStates(SwerveModuleState[] desiredStates) {
+    SwerveDriveKinematics.desaturateWheelSpeeds(
+        desiredStates, DriveConstants.MAX_VELOCITY_METERS_PER_SECOND);
+    for (int i = 0; i < 4; i++) {
+      setModule(i, desiredStates[i]);
+    }
   }
-
   /** Sets the modules speed and rotation to zero. */
+  //TODO: Make a version that works with States. 
   public void pointWheelsForward() {
     for (int i = 0; i < 4; i++) {
       setModule(i, new SwerveModuleState(0, new Rotation2d()));
     }
   }
-
+  /**
+   * Points all of the wheels towards the center of the robot, making it harder to push. 
+   */
   public void pointWheelsInward() {
     setModule(0, new SwerveModuleState(0, Rotation2d.fromDegrees(-135)));
     setModule(1, new SwerveModuleState(0, Rotation2d.fromDegrees(135)));
     setModule(2, new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
     setModule(3, new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
   }
-
+  /**
+   * The function that actually lets us drive the robot.
+   * @param chassisSpeeds the desired speed and direction
+   */
   public void drive(ChassisSpeeds chassisSpeeds) {
     SwerveModuleState[] desiredStates =
         kinematics.toSwerveModuleStates(ChassisSpeeds.discretize(chassisSpeeds, 0.02));
@@ -239,26 +293,19 @@ public class DrivetrainSubsystem extends SubsystemBase {
       setModuleStates(desiredStates);
     }
   }
-
+  /**
+   * Stops the robot. 
+   */
   public void stop() {
     for (int i = 0; i < 4; i++) {
       modules[i].setDesiredState(new SwerveModuleState(0, lastAngles[i]));
     }
   }
 
-  public void setModuleStates(SwerveModuleState[] desiredStates) {
-    SwerveDriveKinematics.desaturateWheelSpeeds(
-        desiredStates, DriveConstants.MAX_VELOCITY_METERS_PER_SECOND);
-    for (int i = 0; i < 4; i++) {
-      setModule(i, desiredStates[i]);
-    }
-  }
-
-  private void setModule(int i, SwerveModuleState desiredState) {
-    modules[i].setDesiredState(desiredState);
-    lastAngles[i] = desiredState.angle;
-  }
-
+  //This is the odometry section
+  /**
+   * Updates the odometry
+   */
   public void updateOdometry() {
     odometer.updateWithTime(Timer.getFPGATimestamp(), getGyroscopeRotation(), getModulePositions());
   }
@@ -326,7 +373,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
           "No valid limelight estimate to reset from. (Drivetrain.forceUpdateOdometryWithVision)");
     }
   }
-
+  //This is the things the subsystem does periodically. 
   @Override
   public void periodic() {
     updateOdometry();
