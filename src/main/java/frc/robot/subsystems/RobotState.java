@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import javax.print.attribute.standard.MediaSize.Other;
+
 public class RobotState {
   private static RobotState instance;
   public boolean LimelightsUpdated;
@@ -30,25 +32,39 @@ public class RobotState {
     UNKNOWN
   }
 
-  static public ReefOffset calcOffset(boolean s1, boolean s2, boolean s3, boolean s4){
+  static public ReefOffset calcOffset(boolean sFL, boolean sL, boolean sR, boolean sFR){
     int value = 0;
-    if (s1) {
-      value |= 0b0001;
+    if (sFL) {
+      value |= 0b1000;
     }
-    if (s2) {
+    if (sL) {
+      value |= 0b0100;
+    }
+    if (sR) {
       value |= 0b0010;
     }
-    switch (value) {
-      case 0b0000: return ReefOffset.NOT_SENSED;
-    }
-    if(s1 && s2 && s3 && s4){
-      return ReefOffset.CENTERED;
-    }
-    //
-    if(!s1 && !s2){
-      return ReefOffset.TOO_FAR_LEFT;
+    if (sFR) {
+      value |= 0b0001;
     }
 
-    return ReefOffset.UNKNOWN;
+    switch (value) {
+      case 0b0001:
+      case 0b0011: 
+        return ReefOffset.TOO_FAR_LEFT;
+      case 0b0111: 
+        return ReefOffset.ALIGNED_LEFT;
+      case 0b1111: 
+        return ReefOffset.CENTERED;
+      case 0b1110: 
+        return ReefOffset.ALIGNED_RIGHT;
+      case 0b1000:
+      case 0b1100: 
+        return ReefOffset.TOO_FAR_RIGHT;
+      case 0b0000: 
+        return ReefOffset.NOT_SENSED;
+      default: 
+        return ReefOffset.UNKNOWN;
+    }
   }
-}
+  }
+
