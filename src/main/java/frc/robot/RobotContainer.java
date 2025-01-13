@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AlgaeEndDefectorCommand;
+import frc.robot.commands.AutoAngleAtReef;
 import frc.robot.commands.Drive;
 import frc.robot.subsystems.AlgaeEndDefectorSubsystem;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
@@ -53,9 +54,12 @@ public class RobotContainer {
   // preferences are information saved on the Rio. They are initialized once, then
   // gotten every time
   // we run the code.
-  private final boolean useDetectorLimelight = Preferences.getBoolean("Detector Limelight", true);
   private final boolean useXboxController = Preferences.getBoolean("Xbox Controller", true);
-
+  private final boolean coralEndeffector = Preferences.getBoolean("CoralEndDefector", true);
+  private final boolean algaeEndeffector = Preferences.getBoolean("AlgaeEndDefector", true);
+  private final boolean Elevator = Preferences.getBoolean("Elevator", true);
+  private final boolean Climber = Preferences.getBoolean("Climber", true);
+//subsytems
   private DrivetrainSubsystem driveTrain;
   private Drive defaultDriveCommand;
   private Lights lights;
@@ -72,9 +76,12 @@ public class RobotContainer {
   private AlgaeIntakeSubsystem algaeIntake;
   private CimberSubsystem climber;
   private ElevatorSubsystem elevator;
-
+//Commands
+  AutoAngleAtReef autoAngleAtReef;
+//Suppliers
   Alliance currentAlliance;
   BooleanSupplier ZeroGyroSup;
+  BooleanSupplier AutoAngleAtReefSup;
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
   /**
@@ -84,9 +91,7 @@ public class RobotContainer {
     // preferences are initialized IF they don't already exist on the Rio
     Preferences.initBoolean("Lights", true);
     Preferences.initBoolean("CompBot", true);
-    Preferences.initBoolean("Detector Limelight", false);
     Preferences.initBoolean("Use Limelight", true);
-    Preferences.initBoolean("Use 2 Limelights", true);
     Preferences.initBoolean("Xbox Controller", true);
     Preferences.initBoolean("CoralIntake", false);
     Preferences.initBoolean("AlgaeIntake", false);
@@ -107,11 +112,13 @@ public class RobotContainer {
       operatorControllerXbox = new XboxController(OPERATOR_CONTROLLER_ID);
 
       ZeroGyroSup = driverControllerXbox::getStartButton;
+      AutoAngleAtReefSup = ()->driverControllerXbox.getRightTriggerAxis()>0.1;
     } else {
       driverControllerPS4 = new PS4Controller(DRIVE_CONTROLLER_ID);
       operatorControllerPS4 = new PS4Controller(OPERATOR_CONTROLLER_ID);
 
       ZeroGyroSup = driverControllerPS4::getPSButton;
+      AutoAngleAtReefSup = driverControllerPS4::getR2Button;
     }
 
     limelightInit();
@@ -160,6 +167,12 @@ public class RobotContainer {
           () -> modifyAxis(-driverControllerPS4.getRawAxis(Z_AXIS), DEADBAND_NORMAL));
       driveTrain.setDefaultCommand(defaultDriveCommand);
     }
+
+    autoAngleAtReef = new AutoAngleAtReef(
+      driveTrain, 
+      () -> modifyAxis(-driverControllerPS4.getRawAxis(Z_AXIS), DEADBAND_NORMAL),
+      () -> modifyAxis(-driverControllerXbox.getRawAxis(X_AXIS), DEADBAND_NORMAL),
+      () -> modifyAxis(-driverControllerXbox.getRawAxis(Y_AXIS), DEADBAND_NORMAL));
   }
 
   private void autoInit() {
@@ -215,6 +228,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+  //drivetrain bindings:
     SmartDashboard.putData("drivetrain", driveTrain);
     new Trigger(ZeroGyroSup).onTrue(new InstantCommand(driveTrain::zeroGyroscope));
 
@@ -225,9 +239,12 @@ public class RobotContainer {
     };
     SmartDashboard.putData("set offsets", setOffsets);
     SmartDashboard.putData(new InstantCommand(driveTrain::forceUpdateOdometryWithVision));
+
+    new Trigger(AutoAngleAtReefSup).whileTrue(autoAngleAtReef);
     /*
      * bindings:
      * PS4: zero the gyroscope
+     * R2/RightTrigger: auto angle at reef
      */
   }
 
