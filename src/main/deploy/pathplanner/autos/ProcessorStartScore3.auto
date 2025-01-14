@@ -1,0 +1,43 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "processorStartInitial"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "reefEToHP"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "HPToD"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "reefDToHP"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "HPToC"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
