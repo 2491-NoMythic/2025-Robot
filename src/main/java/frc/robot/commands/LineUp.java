@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -60,10 +61,10 @@ public class LineUp extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    reefOffset = RobotState.calcOffset(sFLtrig, sLtrig, sRtrig, sFRtrig);
+    reefOffset = RobotState.calcOffset(sFLtrig, /*sLtrig, sRtrig,*/ sFRtrig);
     switch(reefOffset){
       case TOO_FAR_LEFT:
-       if (movingLeft) {
+      if (movingLeft) {
         drivetrain.drive(new ChassisSpeeds(0, -0.2, 0));
       }
       else{
@@ -114,15 +115,9 @@ public class LineUp extends Command {
   break;
 
   case UNKNOWN:
-  drivetrain.stop();
-  drivetrain.pointWheelsInward();   
+    drivetrain.stop();
+    drivetrain.pointWheelsInward();   
 break;
-
-
-
-       
-      
-
 
     }
   }

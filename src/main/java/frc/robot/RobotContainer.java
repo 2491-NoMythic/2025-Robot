@@ -115,8 +115,7 @@ public class RobotContainer {
     limelightInit();
     driveTrainInst();
     lightsInst();
-    lineupInit();
-
+    lineupInit();     
     configureDriveTrain();
     configureBindings(); // Configure the trigger bindings
     autoInit();
@@ -296,9 +295,14 @@ public class RobotContainer {
   public void disabledInit() {}
 
   private void updateDistanceSensors() {
-    RobotState.getInstance().farLeftSensorTriggered = farLeft.getRange()<RANGE_TO_SEE_REEF;
-    RobotState.getInstance().middleLeftSensorTriggered = middleLeft.getRange()<RANGE_TO_SEE_REEF;
-    RobotState.getInstance().middleRightSensorTriggered = middleRight.getRange()<RANGE_TO_SEE_REEF;
-    RobotState.getInstance().farRightSensorTriggered = farRight.getRange()<RANGE_TO_SEE_REEF;
+    SmartDashboard.putNumber("Sensor", farLeft.getRange());
+    SmartDashboard.putBoolean("FLSensorT", farLeft.getRange()<RANGE_TO_SEE_REEF & farLeft.getRange()>0);
+    SmartDashboard.putBoolean("LSensorT", middleLeft.getRange()<RANGE_TO_SEE_REEF & middleLeft.getRange()>0);
+    SmartDashboard.putBoolean("RSensorT", middleRight.getRange()<RANGE_TO_SEE_REEF & middleRight.getRange()>0);
+    SmartDashboard.putBoolean("FRSensorT", farRight.getRange()<RANGE_TO_SEE_REEF & farRight.getRange()>0);
+    RobotState.getInstance().farLeftSensorTriggered = farLeft.getRange()<RANGE_TO_SEE_REEF && farLeft.getRange()>0;
+    RobotState.getInstance().middleLeftSensorTriggered = middleLeft.getRange()<RANGE_TO_SEE_REEF && middleLeft.getRange()>0 ;
+    RobotState.getInstance().middleRightSensorTriggered = middleRight.getRange()<RANGE_TO_SEE_REEF && middleRight.getRange()>0;
+    RobotState.getInstance().farRightSensorTriggered = farRight.getRange()<RANGE_TO_SEE_REEF && farRight.getRange()>0;
   }
 }

@@ -32,37 +32,39 @@ public class RobotState {
     UNKNOWN
   }
 
-  static public ReefOffset calcOffset(boolean sFL, boolean sL, boolean sR, boolean sFR){
+  static public ReefOffset calcOffset(boolean sFL, /*boolean sL, boolean sR,*/ boolean sFR){
     int value = 0;
     if (sFL) {
       value |= 0b1000;
     }
-    if (sL) {
-      value |= 0b0100;
-    }
-    if (sR) {
-      value |= 0b0010;
-    }
+    // if (sL) {
+    //   value |= 0b0100;
+    // }
+    // if (sR) {
+    //   value |= 0b0010;
+    // }
     if (sFR) {
       value |= 0b0001;
     }
 
     switch (value) {
-      case 0b0001:
-      case 0b0011: 
-        return ReefOffset.TOO_FAR_LEFT;
-      case 0b0111: 
-        return ReefOffset.ALIGNED_LEFT;
-      case 0b1111: 
+      
+       case 0b0001:
+      // case 0b0011: 
+       return ReefOffset.TOO_FAR_LEFT;
+      // case 0b0111: 
+      //   return ReefOffset.ALIGNED_LEFT;
+      // case 0b1111:
+      case 1001: 
         return ReefOffset.CENTERED;
-      case 0b1110: 
-        return ReefOffset.ALIGNED_RIGHT;
-      case 0b1000:
-      case 0b1100: 
-        return ReefOffset.TOO_FAR_RIGHT;
-      case 0b0000: 
-        return ReefOffset.NOT_SENSED;
-      default: 
+      // case 0b1110: 
+      //   return ReefOffset.ALIGNED_RIGHT;
+       case 0b1000:
+      // case 0b1100: 
+       return ReefOffset.TOO_FAR_RIGHT;
+       case 0b0000: 
+       return ReefOffset.NOT_SENSED;
+       default: 
         return ReefOffset.UNKNOWN;
     }
   }
