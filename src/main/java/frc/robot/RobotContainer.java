@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AlgaeEndDefectorCommand;
 import frc.robot.commands.AutoAngleAtReef;
 import frc.robot.commands.Drive;
+import frc.robot.settings.Constants.Vision;
 import frc.robot.subsystems.AlgaeEndDefectorSubsystem;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.CoralEndDefectorSubsystem;
@@ -110,12 +111,14 @@ public class RobotContainer {
     if (useXboxController) {
       driverControllerXbox = new XboxController(DRIVE_CONTROLLER_ID);
       operatorControllerXbox = new XboxController(OPERATOR_CONTROLLER_ID);
+      
 
       ZeroGyroSup = driverControllerXbox::getStartButton;
       AutoAngleAtReefSup = ()->driverControllerXbox.getRightTriggerAxis()>0.1;
     } else {
       driverControllerPS4 = new PS4Controller(DRIVE_CONTROLLER_ID);
       operatorControllerPS4 = new PS4Controller(OPERATOR_CONTROLLER_ID);
+      AutoAngleAtReefSup = ()->driverControllerPS4.getR2Button();
 
       ZeroGyroSup = driverControllerPS4::getPSButton;
       AutoAngleAtReefSup = driverControllerPS4::getR2Button;
@@ -158,6 +161,11 @@ public class RobotContainer {
           () -> modifyAxis(-driverControllerXbox.getRawAxis(X_AXIS), DEADBAND_NORMAL),
           () -> modifyAxis(-driverControllerXbox.getRawAxis(Z_AXIS), DEADBAND_NORMAL));
       driveTrain.setDefaultCommand(defaultDriveCommand);
+      autoAngleAtReef = new AutoAngleAtReef(
+        driveTrain, 
+        () -> modifyAxis(-driverControllerXbox.getRawAxis(Z_AXIS), DEADBAND_NORMAL),
+        () -> modifyAxis(-driverControllerXbox.getRawAxis(X_AXIS), DEADBAND_NORMAL),
+        () -> modifyAxis(-driverControllerXbox.getRawAxis(Y_AXIS), DEADBAND_NORMAL));
     } else {
       defaultDriveCommand = new Drive(
           driveTrain,
@@ -166,13 +174,12 @@ public class RobotContainer {
           () -> modifyAxis(-driverControllerPS4.getRawAxis(X_AXIS), DEADBAND_NORMAL),
           () -> modifyAxis(-driverControllerPS4.getRawAxis(Z_AXIS), DEADBAND_NORMAL));
       driveTrain.setDefaultCommand(defaultDriveCommand);
+      autoAngleAtReef = new AutoAngleAtReef(
+        driveTrain, 
+        () -> modifyAxis(-driverControllerXbox.getRawAxis(Z_AXIS), DEADBAND_NORMAL),
+        () -> modifyAxis(-driverControllerXbox.getRawAxis(X_AXIS), DEADBAND_NORMAL),
+        () -> modifyAxis(-driverControllerXbox.getRawAxis(Y_AXIS), DEADBAND_NORMAL));
     }
-
-    autoAngleAtReef = new AutoAngleAtReef(
-      driveTrain, 
-      () -> modifyAxis(-driverControllerPS4.getRawAxis(Z_AXIS), DEADBAND_NORMAL),
-      () -> modifyAxis(-driverControllerXbox.getRawAxis(X_AXIS), DEADBAND_NORMAL),
-      () -> modifyAxis(-driverControllerXbox.getRawAxis(Y_AXIS), DEADBAND_NORMAL));
   }
 
   private void autoInit() {
@@ -241,6 +248,7 @@ public class RobotContainer {
     SmartDashboard.putData(new InstantCommand(driveTrain::forceUpdateOdometryWithVision));
 
     new Trigger(AutoAngleAtReefSup).whileTrue(autoAngleAtReef);
+    SmartDashboard.putData(autoAngleAtReef);
     /*
      * bindings:
      * PS4: zero the gyroscope
@@ -324,6 +332,9 @@ public class RobotContainer {
         currentAlliance == null ? "null" : currentAlliance == Alliance.Red ? "Red" : "Blue");
     if (Preferences.getBoolean("Use Limelight", false)) {
       limelight.updateLoggingWithPoses();
+      SmartDashboard.putBoolean("LIMELIGHT/isConnectedA", Limelight.getInstance().isConnected(Vision.APRILTAG_LIMELIGHTA_NAME));
+      SmartDashboard.putBoolean("LIMELIGHT/isConnectedB", Limelight.getInstance().isConnected(Vision.APRILTAG_LIMELIGHTB_NAME));
+      SmartDashboard.putBoolean("LIMELIGHT/isConnectedC", Limelight.getInstance().isConnected(Vision.APRILTAG_LIMELIGHTC_NAME));
     }
   }
 

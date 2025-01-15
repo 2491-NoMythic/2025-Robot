@@ -80,11 +80,11 @@ public class AutoAngleAtReef extends Command {
     double tagC = LimelightHelpers.getFiducialID(Vision.APRILTAG_LIMELIGHTC_NAME);
 
     double tagClosest; /*the tag ID of the closest april tag to our robot */
-    if (distanceA > distanceB && distanceA > distanceC) {
+    if (distanceA < distanceB && distanceA < distanceC) {
       tagClosest = tagA;
-    } else if (distanceB > distanceA && distanceB > distanceC) {
+    } else if (distanceB < distanceA && distanceB < distanceC) {
       tagClosest = tagB;
-    } else if (distanceC > distanceA && distanceC > distanceB) {
+    } else if (distanceC < distanceA && distanceC < distanceB) {
       tagClosest = tagC;
     } else {
       tagClosest = 2491;
@@ -93,6 +93,7 @@ public class AutoAngleAtReef extends Command {
   //based on the ID of the tag, determine which angle is likely to align us with the closest side of the reef
   //this will line us up with the blue alliance reef when we are near tags on the blue alliance side, and red alliance reef when we are near tags on the red alliance side
     int tagClosestInt = (int) tagClosest;
+    SmartDashboard.putNumber("tagClosest", tagClosestInt);
     switch (tagClosestInt) {
       case 1:
       case 6:
