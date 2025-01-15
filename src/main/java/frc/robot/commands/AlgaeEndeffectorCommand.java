@@ -5,13 +5,13 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.AlgaeEndDefectorSubsystem;
+import frc.robot.subsystems.AlgaeEndeffectorSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class AlgaeEndDefectorCommand extends Command {
-  AlgaeEndDefectorSubsystem algaeEndDefector;
+public class AlgaeEndeffectorCommand extends Command {
+  AlgaeEndeffectorSubsystem algaeEndDefector;
   /** Creates a new AlgaeEndDefectorCommand. */
-  public AlgaeEndDefectorCommand() {
+  public AlgaeEndeffectorCommand() {
     this.algaeEndDefector = algaeEndDefector;
     addRequirements(algaeEndDefector);
     // Use addRequirements() here to declare subsystem dependencies.

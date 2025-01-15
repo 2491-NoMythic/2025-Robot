@@ -24,12 +24,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.AlgaeEndDefectorCommand;
+import frc.robot.commands.AlgaeEndeffectorCommand;
 import frc.robot.commands.Drive;
-import frc.robot.subsystems.AlgaeEndDefectorSubsystem;
-import frc.robot.subsystems.AlgaeIntakeSubsystem;
-import frc.robot.subsystems.CoralEndDefectorSubsystem;
-import frc.robot.subsystems.CoralIntakeSubsystem;
+import frc.robot.subsystems.AlgaeEndeffectorSubsystem;
+import frc.robot.subsystems.CoralEndeffectorSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.CimberSubsystem;
@@ -66,10 +64,8 @@ public class RobotContainer {
   private Limelight limelight;
   private SendableChooser<Command> autoChooser;
   private PowerDistribution PDP;
-  private CoralIntakeSubsystem coralIntake;
-  private CoralEndDefectorSubsystem coralEndDefector;
-  private AlgaeEndDefectorSubsystem algaeEndDefector;
-  private AlgaeIntakeSubsystem algaeIntake;
+  private CoralEndeffectorSubsystem coralEndDefector;
+  private AlgaeEndeffectorSubsystem algaeEndDefector;
   private CimberSubsystem climber;
   private ElevatorSubsystem elevator;
 
@@ -117,17 +113,11 @@ public class RobotContainer {
     limelightInit();
     driveTrainInst();
     lightsInst();
-    if (Preferences.getBoolean("CoralIntake", false)) {
-      coralIntakeInst();
-    }
     if (Preferences.getBoolean("CoralEndDefector", false)) {
       coralEndDefectorInst();
     }
     if (Preferences.getBoolean("AlgaeEndDefector", false)) {
       algaeEndDefectorInst();
-    }
-    if (Preferences.getBoolean("AlgaeIntake", false)) {
-      algaeIntakeInst();
     }
     if (Preferences.getBoolean("Climber", false)) {
       climberInst();
@@ -176,20 +166,12 @@ public class RobotContainer {
     lights = new Lights();
   }
 
-  private void coralIntakeInst() {
-    coralIntake = new CoralIntakeSubsystem();
-  }
-
-  private void algaeIntakeInst() {
-    algaeIntake = new AlgaeIntakeSubsystem();
-  }
-
   private void coralEndDefectorInst() {
-    coralEndDefector = new CoralEndDefectorSubsystem();
+    coralEndDefector = new CoralEndeffectorSubsystem();
   }
 
   private void algaeEndDefectorInst() {
-    algaeEndDefector = new AlgaeEndDefectorSubsystem();
+    algaeEndDefector = new AlgaeEndeffectorSubsystem();
   }
 
   private void climberInst() {

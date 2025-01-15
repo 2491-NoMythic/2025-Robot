@@ -7,13 +7,15 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.settings.Constants.CoralEndDefectorConstants;
+import static frc.robot.settings.Constants.CoralEndeffectorConstants.*;
 
-public class CoralEndDefectorSubsystem extends SubsystemBase {
+public class CoralEndeffectorSubsystem extends SubsystemBase {
   TalonFX coralEndDefectorMotor;
+
   /** Creates a new CoralEndDefectorSubsystem. */
-  public CoralEndDefectorSubsystem() {
-    coralEndDefectorMotor = new TalonFX(CoralEndDefectorConstants.CORAL_END_DEFECTOR_MOTOR_1_ID);
+  public CoralEndeffectorSubsystem() {
+    coralEndDefectorMotor = new TalonFX(CORAL_ENDEFFECTOR_MOTOR_1_ID);
+    coralEndDefectorMotor.getConfigurator().apply(coralMotorConfigs);
   }
   public void runCoralEndDefector(double speed){
     coralEndDefectorMotor.set(speed);
