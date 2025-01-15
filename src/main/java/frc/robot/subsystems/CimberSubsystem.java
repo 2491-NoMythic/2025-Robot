@@ -23,11 +23,9 @@ public class CimberSubsystem extends SubsystemBase {
   }
   public void runClimber(double speed){
     climberMotor1.set(speed);
-    climberMotor2.set(speed);
   }
   public void stopClimber(){
     climberMotor1.set(0);
-    climberMotor2.set(0);
   }
 
   @Override

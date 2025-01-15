@@ -5,17 +5,16 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.AlgaeEndeffectorSubsystem;
+import frc.robot.subsystems.CoralEndeffectorSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class AlgaeIntakeCommand extends Command {
-  AlgaeEndeffectorSubsystem algaeEndeffector;
-  /** Creates a new AlgaeIntakeCommand. */
-  public AlgaeIntakeCommand(AlgaeEndeffectorSubsystem algaeEndeffector) {
-    this.algaeEndeffector = algaeEndeffector;
-    addRequirements(algaeEndeffector);
+public class CoralIntakeCommand extends Command {
+  CoralEndeffectorSubsystem coralEndeffector;
+  /** Creates a new CoralEndDefectorCommand. */
+  public CoralIntakeCommand(CoralEndeffectorSubsystem coralEndeffector) {
+    this.coralEndeffector = coralEndeffector;
+    addRequirements(coralEndeffector);
     // Use addRequirements() here to declare subsystem dependencies.
-
   }
 
   // Called when the command is initially scheduled.
@@ -25,15 +24,13 @@ public class AlgaeIntakeCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    algaeEndeffector.runAlgaeEndDefector(1);
-
+    coralEndeffector.runCoralEndDefector(1);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    algaeEndeffector.stopAlgaeEndDefector();
-
+    coralEndeffector.stopCoralEndDefector();
   }
 
   // Returns true when the command should end.

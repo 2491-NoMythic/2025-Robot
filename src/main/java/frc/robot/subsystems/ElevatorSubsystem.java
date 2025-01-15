@@ -51,7 +51,6 @@ public class ElevatorSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
   }
   public void setElevatorPosition(int position){
-    elevatorMotor1
   }
   public void stopElevator(){
     elevatorMotor1.set(0);

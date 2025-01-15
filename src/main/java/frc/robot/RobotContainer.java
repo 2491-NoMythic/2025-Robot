@@ -27,7 +27,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AlgaeEndeffectorCommand;
 import frc.robot.commands.Drive;
 import frc.robot.subsystems.AlgaeEndeffectorSubsystem;
-import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.CoralEndeffectorSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -67,7 +66,6 @@ public class RobotContainer {
   private PowerDistribution PDP;
   private CoralEndeffectorSubsystem coralEndDefector;
   private AlgaeEndeffectorSubsystem algaeEndDefector;
-  private AlgaeIntakeSubsystem algaeIntake;
   private CimberSubsystem climber;
   private ElevatorSubsystem elevator;
 
@@ -121,9 +119,6 @@ public class RobotContainer {
     if (Preferences.getBoolean("AlgaeEndDefector", false)) {
       algaeEndDefectorInst();
     }
-    if (Preferences.getBoolean("AlgaeIntake", false)) {
-      algaeIntakeInst();
-    }
     if (Preferences.getBoolean("Climber", false)) {
       climberInst();
     }
@@ -169,10 +164,6 @@ public class RobotContainer {
 
   private void lightsInst() {
     lights = new Lights();
-  }
-
-  private void algaeIntakeInst() {
-    algaeIntake = new AlgaeIntakeSubsystem();
   }
 
   private void coralEndDefectorInst() {

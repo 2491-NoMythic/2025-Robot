@@ -7,15 +7,15 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.settings.Constants.AlgaeEndeffectorConstants;
+import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.*;
 import edu.wpi.first.math.controller.PIDController;
 public class AlgaeEndeffectorSubsystem extends SubsystemBase {
   TalonFX algaeEndDefectorMotor;
   PIDController algendController;
   /** Creates a new AlgaeEndDefectorSubsystem. */
   public AlgaeEndeffectorSubsystem() {
-    algaeEndDefectorMotor = new TalonFX(AlgaeEndeffectorConstants.ALGAE_ENDEFFECTOR_MOTOR_1_ID);
-    algendController = new PIDController(AlgaeEndeffectorConstants.ALGAE_ENDEFFECTOR_KP, AlgaeEndeffectorConstants.ALGAE_ENDEFFECTOR_KI, AlgaeEndeffectorConstants.ALGAE_ENDEFFECTOR_KD);
+    algaeEndDefectorMotor = new TalonFX(ALGAE_ENDEFFECTOR_MOTOR_1_ID);
+    algaeEndDefectorMotor.getConfigurator().apply(AlgaeEndeffectorConfig);
   }
 
   public void runAlgaeEndDefector(double speed){

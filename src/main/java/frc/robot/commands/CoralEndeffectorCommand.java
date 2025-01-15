@@ -9,11 +9,11 @@ import frc.robot.subsystems.CoralEndeffectorSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class CoralEndeffectorCommand extends Command {
-  CoralEndeffectorSubsystem coralEndDefector;
+  CoralEndeffectorSubsystem coralEndeffector;
   /** Creates a new CoralEndDefectorCommand. */
-  public CoralEndeffectorCommand() {
-    this.coralEndDefector = coralEndDefector;
-    addRequirements(coralEndDefector);
+  public CoralEndeffectorCommand(CoralEndeffectorSubsystem coralEndeffector) {
+    this.coralEndeffector = coralEndeffector;
+    addRequirements(coralEndeffector);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -24,13 +24,13 @@ public class CoralEndeffectorCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    coralEndDefector.runCoralEndDefector(1);
+    coralEndeffector.runCoralEndDefector(1);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    coralEndDefector.stopCoralEndDefector();
+    coralEndeffector.stopCoralEndDefector();
   }
 
   // Returns true when the command should end.
