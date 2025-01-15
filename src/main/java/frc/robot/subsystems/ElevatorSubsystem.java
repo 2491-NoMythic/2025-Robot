@@ -10,8 +10,10 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.ControlModeValue;
+import com.ctre.phoenix6.signals.ForwardLimitValue;
 import com.revrobotics.spark.SparkBase.ControlType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -45,7 +47,9 @@ public class ElevatorSubsystem extends SubsystemBase {
       .withMotionMagicAcceleration(2491)
       .withMotionMagicCruiseVelocity(2491)
       .withMotionMagicJerk(2491));
+      //TODO: Add distance sensor
     elevatorMotor1.getConfigurator().apply(eleMotorConfig);
+    elevatorMotor2.getConfigurator().apply(eleMotorConfig);
     elevatorMotor2.setControl(new Follower(ELEVATOR_MOTOR_1_ID, true));
   }
 
@@ -57,11 +61,19 @@ public class ElevatorSubsystem extends SubsystemBase {
    * Creates a zero at the limit switch
    */
   public double createZero(){
-    if (elevatorMotor1.) == true{
-
+    if (elevatorMotor1.getForwardLimit().getValue() == ForwardLimitValue.ClosedToGround) {
+      zeroPoint = 0.0;
     }
+    return zeroPoint;
   }
-  public void setElevatorPosition(int position){
+  /**
+   * Sets the elevator to a position relative to the 0 set by createZero. 
+   * @param position double that controls how many rotations
+   */
+  public void setElevatorPosition(double position){
+    double uPos = position + zeroPoint;
+    PositionVoltage voltReq = new PositionVoltage(0);
+    elevatorMotor1.setControl(voltReq.withPosition(uPos));
   }
   public void stopElevator(){
     elevatorMotor1.set(0);
