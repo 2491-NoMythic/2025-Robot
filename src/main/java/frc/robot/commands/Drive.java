@@ -4,6 +4,7 @@ import edu.wpi.first.hal.simulation.DriverStationDataJNI;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.settings.Constants.DriveConstants;
 import frc.robot.subsystems.DistanceSensors;
@@ -93,7 +94,8 @@ public class Drive extends Command {
 
               //may have to mess with what is "forward" (aka y or x, positive or negative)
               //this will SCALE bassed off DRIVER INPUT. Meaning the driver still has to be moving forward for it to move forward. This will need to be tuned to driver preference.
-               double setAxisValue =  (speeds.vyMetersPerSecond * (distanceSensorsSubssytem.distanceOfFrontDistancer))/SLOW_DOWN_RANGE;
+               double setAxisValue =  (speeds.vyMetersPerSecond * distanceSensorsSubssytem.distanceOfFrontDistancer/SLOW_DOWN_RANGE);
+               SmartDashboard.putNumber("SLOWFRONT/axis value", setAxisValue);
 
                //this is checking to ensure that it isnt going to A: SPEED UP the DT, and B: that the trigger is pressed
                if(setAxisValue < speeds.vyMetersPerSecond && slowFront.getAsBoolean() == true)

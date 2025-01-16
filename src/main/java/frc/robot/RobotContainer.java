@@ -105,24 +105,15 @@ public class RobotContainer {
       ZeroGyroSup = driverControllerXbox::getStartButton;
       LeftReefLineupSup = driverControllerXbox::getLeftBumperButton;
       RightReefLineupSup =  driverControllerXbox::getRightBumperButton;
-
-
-      if(driverControllerXbox.getRightTriggerAxis() > 0.1){
-        SlowFrontSup = () -> true;
-      }
-      else{
-        SlowFrontSup = () -> false;
-      }
-
+      SlowFrontSup = ()-> driverControllerXbox.getRightTriggerAxis() > 0.1;
       
     } else {
       driverControllerPS4 = new PS4Controller(DRIVE_CONTROLLER_ID);
       operatorControllerPS4 = new PS4Controller(OPERATOR_CONTROLLER_ID);
       LeftReefLineupSup = driverControllerPS4::getL1Button;
       RightReefLineupSup = driverControllerPS4::getR1Button;
-      
       SlowFrontSup = driverControllerPS4::getR2Button;
-
+      
       ZeroGyroSup = driverControllerPS4::getPSButton;
     }
 

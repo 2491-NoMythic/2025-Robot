@@ -15,8 +15,14 @@ public class DistanceSensors  extends SubsystemBase{
   private TimeOfFlight farRight;
 
   private TimeOfFlight frontDistancer;
-
   public double distanceOfFrontDistancer;
+
+
+  
+  public DistanceSensors(){
+    lineupInit();
+  }
+
 
   @Override
   public void periodic() {
@@ -39,7 +45,7 @@ public class DistanceSensors  extends SubsystemBase{
         distanceOfFrontDistancer = frontDistancer.getRange();
   
 /** 
-        SmartDashboard.putNumber("Sensor", farLeft.getRange());
+        // SmartDashboard.putNumber("Sensor", farLeft.getRange());
     SmartDashboard.putBoolean("FLSensorT", farLeft.getRange()<RANGE_TO_SEE_REEF & farLeft.getRange()>0);
     SmartDashboard.putBoolean("LSensorT", middleLeft.getRange()<RANGE_TO_SEE_REEF & middleLeft.getRange()>0);
     SmartDashboard.putBoolean("RSensorT", middleRight.getRange()<RANGE_TO_SEE_REEF & middleRight.getRange()>0);
