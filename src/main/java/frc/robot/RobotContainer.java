@@ -32,6 +32,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.Drive;
 import frc.robot.commands.LineUp;
 import frc.robot.commands.MoveMeters;
+import frc.robot.subsystems.DistanceSensors;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.Limelight;
@@ -71,11 +72,14 @@ public class RobotContainer {
   private Limelight limelight;
   private SendableChooser<Command> autoChooser;
   private PowerDistribution PDP;
+  private DistanceSensors distanceSensors;
 
   Alliance currentAlliance;
   BooleanSupplier ZeroGyroSup;
   BooleanSupplier LeftReefLineupSup;
   BooleanSupplier RightReefLineupSup;
+  BooleanSupplier SlowFrontSup;
+
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -102,12 +106,22 @@ public class RobotContainer {
       LeftReefLineupSup = driverControllerXbox::getLeftBumperButton;
       RightReefLineupSup =  driverControllerXbox::getRightBumperButton;
 
+
+      if(driverControllerXbox.getRightTriggerAxis() > 0.1){
+        SlowFrontSup = () -> true;
+      }
+      else{
+        SlowFrontSup = () -> false;
+      }
+
       
     } else {
       driverControllerPS4 = new PS4Controller(DRIVE_CONTROLLER_ID);
       operatorControllerPS4 = new PS4Controller(OPERATOR_CONTROLLER_ID);
-      LeftReefLineupSup = driverControllerPS4::getL2Button;
-      RightReefLineupSup = driverControllerPS4::getR2Button;
+      LeftReefLineupSup = driverControllerPS4::getL1Button;
+      RightReefLineupSup = driverControllerPS4::getR1Button;
+      
+      SlowFrontSup = driverControllerPS4::getR2Button;
 
       ZeroGyroSup = driverControllerPS4::getPSButton;
     }
@@ -119,6 +133,8 @@ public class RobotContainer {
     configureDriveTrain();
     configureBindings(); // Configure the trigger bindings
     autoInit();
+    distanceSensorsInst();
+
   }
 
   private void driveTrainInst() {
@@ -126,6 +142,8 @@ public class RobotContainer {
     if (useXboxController) {
       defaultDriveCommand =
           new Drive(
+              distanceSensors,
+              SlowFrontSup,
               driveTrain,
               () -> false,
               () -> modifyAxis(-driverControllerXbox.getRawAxis(Y_AXIS), DEADBAND_NORMAL),
@@ -135,6 +153,8 @@ public class RobotContainer {
     } else {
       defaultDriveCommand =
           new Drive(
+            distanceSensors,
+            SlowFrontSup,
               driveTrain,
               () -> false,
               () -> modifyAxis(-driverControllerPS4.getRawAxis(Y_AXIS), DEADBAND_NORMAL),
@@ -156,6 +176,10 @@ public class RobotContainer {
 
   private void lightsInst() {
     lights = new Lights();
+  }
+
+  private void distanceSensorsInst(){
+    distanceSensors = new DistanceSensors();
   }
 
   private void lineupInit() {
@@ -296,7 +320,6 @@ public class RobotContainer {
 
   private void updateDistanceSensors() {
     SmartDashboard.putNumber("Sensor", farLeft.getRange());
-    SmartDashboard.putBoolean("FLSensorT", farLeft.getRange()<RANGE_TO_SEE_REEF & farLeft.getRange()>0);
     SmartDashboard.putBoolean("LSensorT", middleLeft.getRange()<RANGE_TO_SEE_REEF & middleLeft.getRange()>0);
     SmartDashboard.putBoolean("RSensorT", middleRight.getRange()<RANGE_TO_SEE_REEF & middleRight.getRange()>0);
     SmartDashboard.putBoolean("FRSensorT", farRight.getRange()<RANGE_TO_SEE_REEF & farRight.getRange()>0);
