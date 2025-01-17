@@ -36,11 +36,11 @@ public final class Constants {
     public static final  int FRONT_DISTANCER_ID = 1;
 
     public static final double RANGE_TO_SEE_REEF = 150; // in millimeters, the distance that will trigger the time of flight sensors to report that we are or aren't in front of the reef
-    public static final double SLOW_DOWN_RANGE = 150;
+    public static final double SLOW_DOWN_RANGE = 1500;
 
   }
   public static final class DriveConstants {
-
+    public static final double BUMPER_TO_SENSOR = 63.5; // in milliqmeters
     public static final Pose2d DRIVE_ODOMETRY_ORIGIN = new Pose2d(5.0, 5.0, new Rotation2d());
     /** The bumper-to-bumper width of the robot. */
     public static final double DRIVETRAIN_ROBOT_WIDTH_METERS = 0.83;

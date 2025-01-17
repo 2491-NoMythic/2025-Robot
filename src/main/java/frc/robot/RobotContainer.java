@@ -116,6 +116,7 @@ public class RobotContainer {
       
       ZeroGyroSup = driverControllerPS4::getPSButton;
     }
+    distanceSensorsInst();
 
     limelightInit();
     driveTrainInst();
@@ -124,7 +125,7 @@ public class RobotContainer {
     configureDriveTrain();
     configureBindings(); // Configure the trigger bindings
     autoInit();
-    distanceSensorsInst();
+  
 
   }
 

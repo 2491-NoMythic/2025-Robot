@@ -13,6 +13,7 @@ public class DistanceSensors  extends SubsystemBase{
   private TimeOfFlight middleLeft;
   private TimeOfFlight middleRight;
   private TimeOfFlight farRight;
+  private double loopsSensed;
 
   private TimeOfFlight frontDistancer;
   public double distanceOfFrontDistancer;
@@ -21,6 +22,7 @@ public class DistanceSensors  extends SubsystemBase{
   
   public DistanceSensors(){
     lineupInit();
+    loopsSensed = 0;
   }
 
 
@@ -41,20 +43,17 @@ public class DistanceSensors  extends SubsystemBase{
 
 
     private void updateDistanceSensors() {
-
+      SmartDashboard.putNumber("looops sensed", loopsSensed);
+      if(frontDistancer.getRange() == 0) {
+        loopsSensed = 0;
+      } else {
+        loopsSensed++;
+      }
+      if(loopsSensed>10) {
         distanceOfFrontDistancer = frontDistancer.getRange();
-  
-/** 
-        // SmartDashboard.putNumber("Sensor", farLeft.getRange());
-    SmartDashboard.putBoolean("FLSensorT", farLeft.getRange()<RANGE_TO_SEE_REEF & farLeft.getRange()>0);
-    SmartDashboard.putBoolean("LSensorT", middleLeft.getRange()<RANGE_TO_SEE_REEF & middleLeft.getRange()>0);
-    SmartDashboard.putBoolean("RSensorT", middleRight.getRange()<RANGE_TO_SEE_REEF & middleRight.getRange()>0);
-    SmartDashboard.putBoolean("FRSensorT", farRight.getRange()<RANGE_TO_SEE_REEF & farRight.getRange()>0);
-    RobotState.getInstance().farLeftSensorTriggered = farLeft.getRange()<RANGE_TO_SEE_REEF && farLeft.getRange()>0;
-    RobotState.getInstance().middleLeftSensorTriggered = middleLeft.getRange()<RANGE_TO_SEE_REEF && middleLeft.getRange()>0 ;
-    RobotState.getInstance().middleRightSensorTriggered = middleRight.getRange()<RANGE_TO_SEE_REEF && middleRight.getRange()>0;
-    RobotState.getInstance().farRightSensorTriggered = farRight.getRange()<RANGE_TO_SEE_REEF && farRight.getRange()>0;
-    */
+      } else {
+        distanceOfFrontDistancer = 0;
+      }
 
   }
 

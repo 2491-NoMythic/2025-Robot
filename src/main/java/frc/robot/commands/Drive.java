@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.hal.simulation.DriverStationDataJNI;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -23,6 +24,11 @@ public class Drive extends Command {
   private final DoubleSupplier translationYSupplier;
   private final DoubleSupplier rotationSupplier;
   private int invert;
+
+  private final double kP = 0.002;
+  private final double kI = 0.0;
+  private final double kD = 0.0;
+  private final PIDController pidController = new PIDController(kP, kI, kD);
 
   /**
    * drives the robot at a specific forward velocity, sideways velocity, and rotational velocity.
@@ -91,25 +97,31 @@ public class Drive extends Command {
               rotationSupplier.getAsDouble()
                   * DriveConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
               drivetrain.getPose().getRotation());
-
-              //may have to mess with what is "forward" (aka y or x, positive or negative)
-              //this will SCALE bassed off DRIVER INPUT. Meaning the driver still has to be moving forward for it to move forward. This will need to be tuned to driver preference.
-               double setAxisValue =  (speeds.vyMetersPerSecond * distanceSensorsSubssytem.distanceOfFrontDistancer/SLOW_DOWN_RANGE);
-               SmartDashboard.putNumber("SLOWFRONT/axis value", setAxisValue);
-
-               //this is checking to ensure that it isnt going to A: SPEED UP the DT, and B: that the trigger is pressed
-               if(setAxisValue < speeds.vyMetersPerSecond && slowFront.getAsBoolean() == true)
-               {
-                //setting vy NOT from field orientation means that this is the ROBOTS y. 
-                  speeds.vyMetersPerSecond = setAxisValue;
-               }
-
-              drivetrain.drive(speeds);
+      //may have to mess with what is "forward" (aka y or x, positive or negative)
+      //this will SCALE bassed off DRIVER INPUT. Meaning the driver still has to be moving forward for it to move forward. This will need to be tuned to driver preference.
+        // double setAxisValue =  (speeds.vxMetersPerSecond * distanceSensorsSubssytem.distanceOfFrontDistancer/SLOW_DOWN_RANGE);
+        // SmartDashboard.putNumber("percentPower", distanceSensorsSubssytem.distanceOfFrontDistancer/SLOW_DOWN_RANGE);
+        // SmartDashboard.putNumber("SLOWFRONT/axis value", setAxisValue);
+        // SmartDashboard.putNumber("yspd", speeds.vxMetersPerSecond);
+      //this is checking to ensure that it isnt going to A: SPEED UP the DT, and B: that the trigger is pressed
+      pidController.setSetpoint(DriveConstants.BUMPER_TO_SENSOR);
+      double distance = distanceSensorsSubssytem.distanceOfFrontDistancer;
+      SmartDashboard.putNumber("SLOWFRONT/sensorReading", distance);
+      distance = (distance == 0) ? 3000 : distance;
+      double calculatedSpeed = pidController.calculate(distanceSensorsSubssytem.distanceOfFrontDistancer);
+      SmartDashboard.putNumber("SLOWFRONT/calculated speed", calculatedSpeed);
+      SmartDashboard.putNumber("SLOWFRONT/controller input speed", speeds.vxMetersPerSecond);
+      if(slowFront.getAsBoolean() && distance<1300) {
+        //setting vy NOT from field orientation means that this is the ROBOTS y. 
+        speeds.vxMetersPerSecond = Math.max(-1, calculatedSpeed);
+      }
+        
+        drivetrain.drive(speeds);
     }
-  }
-
-  @Override
-  public void end(boolean interrupted) {
-    drivetrain.drive(new ChassisSpeeds(0.0, 0.0, 0.0));
+    }
+            
+    @Override
+    public void end(boolean interrupted) {
+      drivetrain.drive(new ChassisSpeeds(0.0, 0.0, 0.0));
   }
 }
