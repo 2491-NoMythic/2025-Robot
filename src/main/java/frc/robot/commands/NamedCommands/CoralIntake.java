@@ -10,6 +10,7 @@ import frc.robot.subsystems.RobotState;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.CoralIntakeCommand;
 import frc.robot.commands.ElevatorCommand;
+import frc.robot.subsystems.CoralEndeffectorSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelIntake;
 
@@ -17,30 +18,28 @@ import frc.robot.subsystems.FunnelIntake;
 public class CoralIntake extends Command {
   /** Creates a new CoralIntake. */
   ElevatorSubsystem elevatorSubsystem;
-  FunnelIntake funnelIntake;
-  RobotState robotState;
+  FunnelIntake funnelIntake;  
+  CoralEndeffectorSubsystem coralIntake;
   
-  
-  public CoralIntake(ElevatorSubsystem elevatorSubsystem, FunnelIntake funnelIntake, RobotState robotState) {
+  public CoralIntake(ElevatorSubsystem elevatorSubsystem, FunnelIntake funnelIntake, CoralEndeffectorSubsystem coralIntake) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(elevatorSubsystem);
+    addRequirements(elevatorSubsystem, funnelIntake, coralIntake);
     this.elevatorSubsystem = elevatorSubsystem;
     this.funnelIntake = funnelIntake;
-    this.robotState = robotState;
+    this.coralIntake = coralIntake;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    elevatorSubsystem.setElevatorPosition(HUMAN_PLAYER_STATION_ROTATIONS);
+    coralIntake.runCoralEndDefector(0.3);
+    funnelIntake.runFunnel();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    elevatorSubsystem.setElevatorPosition(HUMAN_PLAYER_STATION_ROTATIONS);
-    
-    funnelIntake.runFunnel();
-
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
@@ -51,6 +50,6 @@ public class CoralIntake extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return robotState.getInstane().coralSeen;
+    return RobotState.getInstance().coralSeen;
   }
 }

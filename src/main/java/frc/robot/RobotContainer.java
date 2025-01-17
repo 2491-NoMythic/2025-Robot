@@ -34,6 +34,7 @@ import frc.robot.subsystems.CoralEndeffectorSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelIntake;
+import frc.robot.subsystems.FunnelRotator;
 import frc.robot.subsystems.CimberSubsystem;
 import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.Limelight;
@@ -59,6 +60,14 @@ public class RobotContainer {
   // we run the code.
   private final boolean useDetectorLimelight = Preferences.getBoolean("Detector Limelight", true);
   private final boolean useXboxController = Preferences.getBoolean("Xbox Controller", true);
+  private final boolean coralIntakeExists = Preferences.getBoolean("CoralIntake", true);
+  private final boolean algaeIntakeExists = Preferences.getBoolean("AlgaeIntake", true);
+  private final boolean algaeEndeffectorExists = Preferences.getBoolean("AlgaeEndDefector", true);
+  private final boolean coralEndeffectorExists = Preferences.getBoolean("CoralEndDefector", true);
+  private final boolean climberExists = Preferences.getBoolean("Climber", true);
+  private final boolean elevatorExists = Preferences.getBoolean("Elevator", true);
+  private final boolean funnelIntakeExists = Preferences.getBoolean("FunnelIntake", true);
+  private final boolean funnelRotatorExists = Preferences.getBoolean("FunnelRotator", true);
 
   private DrivetrainSubsystem driveTrain;
   private Drive defaultDriveCommand;
@@ -76,6 +85,7 @@ public class RobotContainer {
   private ElevatorSubsystem elevator;
   private CoralIntake coralIntake;
   private FunnelIntake funnelIntake;
+  private FunnelRotator funnelRotator;
   private deliverCoral deliverCoral;
   RobotState robotState;
   Alliance currentAlliance;
@@ -98,6 +108,8 @@ public class RobotContainer {
     Preferences.initBoolean("Elevator", false);
     Preferences.initBoolean("CoralEndDefector", false);
     Preferences.initBoolean("AlgaeEndDefector", false);
+    Preferences.initBoolean("FunnelIntake", false);
+    Preferences.initBoolean("FunnelRotator", false);
     Preferences.initBoolean("Climber", false);
 
     DataLogManager.start(); // Start logging
@@ -122,18 +134,12 @@ public class RobotContainer {
     limelightInit();
     driveTrainInst();
     lightsInst();
-    if (Preferences.getBoolean("CoralEndDefector", false)) {
-      coralEndDefectorInst();
-    }
-    if (Preferences.getBoolean("AlgaeEndDefector", false)) {
-      algaeEndDefectorInst();
-    }
-    if (Preferences.getBoolean("Climber", false)) {
-      climberInst();
-    }
-    if (Preferences.getBoolean("Elevator", false)) {
-      elevatorInst();
-    }
+    if (coralEndeffectorExists) {coralEndDefectorInst();}
+    if (algaeEndeffectorExists) {algaeEndDefectorInst();}
+    if (climberExists) {climberInst();}
+    if (elevatorExists) {elevatorInst();}
+    if (funnelIntakeExists) {funnelIntakeInst();}
+    if (funnelRotatorExists) {funnelRotatorInst();}
 
     configureDriveTrain();
     configureBindings(); // Configure the trigger bindings
@@ -189,6 +195,14 @@ public class RobotContainer {
 
   private void elevatorInst() {
     elevator = new ElevatorSubsystem();
+  }
+
+  private void funnelIntakeInst() {
+    funnelIntake = new FunnelIntake();
+  }
+
+  private void funnelRotatorInst() {
+    funnelRotator = new FunnelRotator();
   }
 
   /**
@@ -276,11 +290,19 @@ public class RobotContainer {
   }
 
   private void registerNamedCommands() {
-    funnelIntake = new FunnelIntake();
-    coralIntake = new CoralIntake(elevator, funnelIntake, robotState);
-    NamedCommands.registerCommand("CoralIntake", coralIntake);
-    deliverCoral = new deliverCoral(coralEndDefector, elevator, robotState);
-    NamedCommands.registerCommand("DeliverCoral", deliverCoral);
+    Command coralIntakeNamedCommand;
+    Command deliverCoralNamedCommand;
+    if(elevatorExists&&funnelIntakeExists&&coralEndeffectorExists) {
+      coralIntake = new CoralIntake(elevator, funnelIntake, coralEndDefector);
+      deliverCoral = new deliverCoral(coralEndDefector, elevator);
+      coralIntakeNamedCommand = coralIntake;
+      deliverCoralNamedCommand = deliverCoral;
+    } else {
+      coralIntakeNamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
+      deliverCoralNamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
+    }
+    NamedCommands.registerCommand("CoralIntake", coralIntakeNamedCommand);
+    NamedCommands.registerCommand("DeliverCoral", deliverCoralNamedCommand);
   }
 
   public void logPower() {

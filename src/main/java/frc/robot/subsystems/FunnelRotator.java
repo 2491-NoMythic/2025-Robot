@@ -4,26 +4,24 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix6.hardware.TalonFX;
 import static frc.robot.settings.Constants.FunnelConstants.*;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-public class FunnelIntake extends SubsystemBase {
-  /** Creates a new Funnelintake. */
-  TalonFX intakeMotor;
-  public FunnelIntake() {
-    intakeMotor = new TalonFX(FUNNEL_INTAKE_MOTOR_ID);
-    intakeMotor.getConfigurator().apply(FunnelIntakeConfig);
+public class FunnelRotator extends SubsystemBase {
+  TalonFX rotatorMotor;
+  /** Creates a new FunnelRotator. */
+  public FunnelRotator() {
+    rotatorMotor = new TalonFX(FUNNEL_ROTATOR_MOTOR_ID);
+    rotatorMotor.getConfigurator().apply(FunnelRotatorConfig);
   }
+
+  public void setFunnelRotation(double degrees) {
+
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-  }
-  public void runFunnel(){
-
-  }
-  public void stopFunnel() {
-
   }
 }

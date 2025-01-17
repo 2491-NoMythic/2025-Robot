@@ -14,20 +14,13 @@ import frc.robot.subsystems.RobotState;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class deliverCoral extends Command {
   ElevatorSubsystem elevatorSubsystem;
-
-  RobotState robotState;
-
   CoralEndeffectorSubsystem coralEndeffector;
 
 
   /** Creates a new deliverCoral. */
-  public deliverCoral( CoralEndeffectorSubsystem coralEndeffector, ElevatorSubsystem elevatorSubsystem, RobotState robotState) {
-    addRequirements(elevatorSubsystem);
-
+  public deliverCoral( CoralEndeffectorSubsystem coralEndeffector, ElevatorSubsystem elevatorSubsystem) {
+    addRequirements(elevatorSubsystem, coralEndeffector);
     this.elevatorSubsystem = elevatorSubsystem;
-
-    this.robotState = robotState;
-
     this.coralEndeffector = coralEndeffector;
 
     // Use addRequirements() here to declare subsystem dependencies.
@@ -54,6 +47,6 @@ public class deliverCoral extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return robotState.isCoralGone();
+    return !RobotState.getInstance().coralSeen;
   }
 }
