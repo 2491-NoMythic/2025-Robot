@@ -275,7 +275,6 @@ public class RobotContainer {
 
   public void robotPeriodic() {
     currentAlliance = DriverStation.getAlliance().get();
-    updateDistanceSensors();
     SmartDashboard.putString(
         "AlliancePeriodic",
         currentAlliance == null ? "null" : currentAlliance == Alliance.Red ? "Red" : "Blue");
@@ -287,15 +286,4 @@ public class RobotContainer {
   public void disabledPeriodic() {}
 
   public void disabledInit() {}
-
-  private void updateDistanceSensors() {
-    SmartDashboard.putNumber("Sensor", farLeft.getRange());
-    SmartDashboard.putBoolean("LSensorT", middleLeft.getRange()<RANGE_TO_SEE_REEF & middleLeft.getRange()>0);
-    SmartDashboard.putBoolean("RSensorT", middleRight.getRange()<RANGE_TO_SEE_REEF & middleRight.getRange()>0);
-    SmartDashboard.putBoolean("FRSensorT", farRight.getRange()<RANGE_TO_SEE_REEF & farRight.getRange()>0);
-    RobotState.getInstance().farLeftSensorTriggered = farLeft.getRange()<RANGE_TO_SEE_REEF && farLeft.getRange()>0;
-    RobotState.getInstance().middleLeftSensorTriggered = middleLeft.getRange()<RANGE_TO_SEE_REEF && middleLeft.getRange()>0 ;
-    RobotState.getInstance().middleRightSensorTriggered = middleRight.getRange()<RANGE_TO_SEE_REEF && middleRight.getRange()>0;
-    RobotState.getInstance().farRightSensorTriggered = farRight.getRange()<RANGE_TO_SEE_REEF && farRight.getRange()>0;
-  }
 }
