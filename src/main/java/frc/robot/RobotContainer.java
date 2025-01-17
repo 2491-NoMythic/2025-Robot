@@ -8,6 +8,7 @@ import static frc.robot.settings.Constants.DriveConstants.*;
 import static frc.robot.settings.Constants.PS4Driver.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import edu.wpi.first.math.MathUtil;
@@ -26,13 +27,18 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AlgaeEndeffectorCommand;
 import frc.robot.commands.Drive;
+import frc.robot.commands.NamedCommands.CoralIntake;
+import frc.robot.commands.NamedCommands.deliverCoral;
 import frc.robot.subsystems.AlgaeEndeffectorSubsystem;
 import frc.robot.subsystems.CoralEndeffectorSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.FunnelIntake;
 import frc.robot.subsystems.CimberSubsystem;
 import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.RobotState;
+
 import java.io.IOException;
 import java.util.function.BooleanSupplier;
 
@@ -68,7 +74,10 @@ public class RobotContainer {
   private AlgaeEndeffectorSubsystem algaeEndDefector;
   private CimberSubsystem climber;
   private ElevatorSubsystem elevator;
-
+  private CoralIntake coralIntake;
+  private FunnelIntake funnelIntake;
+  private deliverCoral deliverCoral;
+  RobotState robotState;
   Alliance currentAlliance;
   BooleanSupplier ZeroGyroSup;
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -267,6 +276,11 @@ public class RobotContainer {
   }
 
   private void registerNamedCommands() {
+    funnelIntake = new FunnelIntake();
+    coralIntake = new CoralIntake(elevator, funnelIntake, robotState);
+    NamedCommands.registerCommand("CoralIntake", coralIntake);
+    deliverCoral = new deliverCoral(coralEndDefector, elevator, robotState);
+    NamedCommands.registerCommand("DeliverCoral", deliverCoral);
   }
 
   public void logPower() {

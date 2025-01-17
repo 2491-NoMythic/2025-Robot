@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "BargeTopInitial"
+            "pathName": "2G"
           }
         },
         {
@@ -19,7 +19,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "BargeSidePickup"
+            "pathName": "3HP"
           }
         },
         {

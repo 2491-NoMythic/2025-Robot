@@ -5,6 +5,8 @@ public class RobotState {
   public boolean LimelightsUpdated;
   public boolean lightsReset;
   public double odometerOrientation;
+  public boolean coralSeen;
+  public boolean coralGone;
 
   private RobotState() {}
 

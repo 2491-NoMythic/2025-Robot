@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "BargeTopInitial"
+            "pathName": "2G"
           }
         },
         {
@@ -19,7 +19,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "BargeSidePickup"
+            "pathName": "2GHP"
           }
         },
         {
@@ -31,7 +31,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "BargeSideTopToReefK"
+            "pathName": "HPToD"
           }
         },
         {
@@ -43,7 +43,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "ReefKtoBargeSideTopFeeder"
+            "pathName": "reefDToHP"
           }
         },
         {
@@ -55,7 +55,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "BargeSideToptoReefL"
+            "pathName": "HPToC"
           }
         },
         {
