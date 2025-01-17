@@ -29,27 +29,20 @@ public class LineUp extends Command {
   boolean sFRtrig;
   boolean movingLeft;
   boolean notSensed;
+  boolean finished;
 
-
-  public LineUp(
-    DrivetrainSubsystem drivetrain,
-    boolean movingLeft,
-    boolean sFLtrig,
-    boolean sLtrig,
-    boolean sRtrig,
-    boolean sFRtrig
-  ) 
-  {
+/**
+ * this command will align your robot side-to-side on one of the reef poles. 
+ * @param drivetrain
+ * @param movingLeft true if you are aligning on the left pole, false, if you are aligning on the right pole
+ */
+  public LineUp(DrivetrainSubsystem drivetrain, boolean movingLeft) {
     this.drivetrain = drivetrain;
     this.movingLeft = movingLeft;
-     this.sFLtrig  = sFLtrig;
-     this.sLtrig = sLtrig;
-     this.sRtrig = sRtrig;
-     this.sFRtrig = sFRtrig; 
-    
-      notSensed = false;
-    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
+    
+    notSensed = false;
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
@@ -61,64 +54,68 @@ public class LineUp extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+  //update sensor readings with Robot STate (which is updated periodically by DistanceSensors.java)
+    sFLtrig = RobotState.getInstance().farLeftSensorTriggered;
+    sLtrig = RobotState.getInstance().middleLeftSensorTriggered;
+    sRtrig = RobotState.getInstance().middleRightSensorTriggered;
+    sFRtrig = RobotState.getInstance().middleRightSensorTriggered;
+    
+  //moves the robot based on what the Robot State declares is our location, relative to the reef lineup
     reefOffset = RobotState.calcOffset(sFLtrig, /*sLtrig, sRtrig,*/ sFRtrig);
     switch(reefOffset){
       case TOO_FAR_LEFT:
-      if (movingLeft) {
-        drivetrain.drive(new ChassisSpeeds(0, -0.2, 0));
-      }
-      else{
-        drivetrain.drive(new ChassisSpeeds(0, -0.3, 0));
-      }
-      break;
+        if (movingLeft) {
+          drivetrain.drive(new ChassisSpeeds(0, -0.2, 0));
+        } else{
+          drivetrain.drive(new ChassisSpeeds(0, -0.3, 0));
+        }
+        break;
 
       case ALIGNED_LEFT:
-    if(movingLeft) {
-      drivetrain.stop();
-      drivetrain.pointWheelsInward();
-    }
-      else {
-        drivetrain.drive(new ChassisSpeeds(0, -0.2, 0));
-      }   
-    break;
+        if(movingLeft) {
+          drivetrain.stop();
+          drivetrain.pointWheelsInward();
+          finished = true;
+        } else {
+          drivetrain.drive(new ChassisSpeeds(0, -0.2, 0));
+        }   
+        break;
 
       case CENTERED:
         if(movingLeft) {
           drivetrain.drive(new ChassisSpeeds(0, 0.2, 0));
-        }
-        else {
+        } else {
           drivetrain.drive(new ChassisSpeeds(0, -0.2, 0));
         }   
-      break;
+        break;
 
       case ALIGNED_RIGHT:
-      if(movingLeft) {
-        drivetrain.drive(new ChassisSpeeds(0, 0.2, 0));
-      }
-      else {
+        if(movingLeft) {
+          drivetrain.drive(new ChassisSpeeds(0, 0.2, 0));
+        } else {
+          drivetrain.stop();
+          drivetrain.pointWheelsInward();
+          finished = true;
+        }   
+        break;
+      
+      case TOO_FAR_RIGHT:
+        if(movingLeft) {
+          drivetrain.drive(new ChassisSpeeds(0, 0.3, 0));
+        } else {
+          drivetrain.drive(new ChassisSpeeds(0, 0.2, 0));
+        }   
+        break;
+
+      case NOT_SENSED:
+        notSensed = true;
+        break;
+
+      case UNKNOWN:
         drivetrain.stop();
         drivetrain.pointWheelsInward();
-      }   
-    break;
-      
-    case TOO_FAR_RIGHT:
-    if(movingLeft) {
-      drivetrain.drive(new ChassisSpeeds(0, 0.3, 0));
-    }
-    else {
-      drivetrain.drive(new ChassisSpeeds(0, 0.2, 0));
-    }   
-  break;
-
-  case NOT_SENSED:
-    notSensed = true;
-  break;
-
-  case UNKNOWN:
-    drivetrain.stop();
-    drivetrain.pointWheelsInward();   
-break;
-
+        finished = true;   
+        break;
     }
   }
 

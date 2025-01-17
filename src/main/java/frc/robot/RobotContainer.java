@@ -183,20 +183,11 @@ public class RobotContainer {
 
     new Trigger(LeftReefLineupSup).whileTrue(new LineUp(
       driveTrain, 
-      true, 
-      RobotState.getInstance().farLeftSensorTriggered, 
-      RobotState.getInstance().middleLeftSensorTriggered, 
-      RobotState.getInstance().middleRightSensorTriggered, 
-      RobotState.getInstance().farRightSensorTriggered
-      ));
+      true));
+
     new Trigger(RightReefLineupSup).whileTrue(new LineUp(
       driveTrain, 
-      false, 
-      RobotState.getInstance().farLeftSensorTriggered, 
-      RobotState.getInstance().middleLeftSensorTriggered, 
-      RobotState.getInstance().middleRightSensorTriggered, 
-      RobotState.getInstance().farRightSensorTriggered
-        ));
+      false));
       
 
     InstantCommand setOffsets =
