@@ -64,6 +64,9 @@ public class Drive extends Command {
     } else {
       invert = 1;
     }
+    //The two statements are mostly identical, taking X, Y, and Rotation suppliers 
+    //and multiplying them by maximum velocties and inversions
+    //The only difference is that one is relative to the field, and the other to the robot. 
     if (robotCentricMode.getAsBoolean()) {
       drivetrain.drive(
           new ChassisSpeeds(

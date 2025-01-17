@@ -5,7 +5,10 @@
 package frc.robot.settings;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
+import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -212,32 +215,9 @@ public final class Constants {
   }
 
   public static final class CTREConfigs {
-    public TalonFXConfiguration driveMotorConfig;
-    public TalonFXConfiguration steerMotorConfig;
-    public CANcoderConfiguration steerEncoderConfig;
-    public Pigeon2Configuration pigeon2Config;
-
-    public CTREConfigs() {
-      driveMotorConfig = new TalonFXConfiguration();
-      steerMotorConfig = new TalonFXConfiguration();
-      steerEncoderConfig = new CANcoderConfiguration();
-      pigeon2Config = new Pigeon2Configuration();
-
-      // Steer motor.
-      steerMotorConfig.Feedback.RotorToSensorRatio = 1 / DriveConstants.DRIVETRAIN_STEER_REDUCTION;
-      steerMotorConfig.MotorOutput.Inverted = DriveConstants.DRIVETRAIN_STEER_INVERTED;
-      // steerMotorConfig.MotorOutput.DutyCycleNeutralDeadband = 0.05;
-      steerMotorConfig.Slot0.kP = DriveConstants.k_STEER_P;
-      steerMotorConfig.Slot0.kI = DriveConstants.k_STEER_I;
-      steerMotorConfig.Slot0.kD = DriveConstants.k_STEER_D;
-      steerMotorConfig.Slot0.kS = DriveConstants.k_STEER_FF_S;
-      steerMotorConfig.Slot0.kV = DriveConstants.k_STEER_FF_V;
-      steerMotorConfig.Voltage.PeakForwardVoltage = 12;
-      steerMotorConfig.Voltage.PeakReverseVoltage = -12;
-      steerMotorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
-
-      steerMotorConfig.ClosedLoopGeneral.ContinuousWrap = true;
-      // Drive motor.
+    // Drive motor.
+    private static TalonFXConfiguration getDriveMotorConfig() {
+      TalonFXConfiguration driveMotorConfig = new TalonFXConfiguration();
       driveMotorConfig.Feedback.SensorToMechanismRatio =
           1 / DriveConstants.DRIVETRAIN_DRIVE_REDUCTION;
       driveMotorConfig.MotorOutput.Inverted = DriveConstants.DRIVETRAIN_DRIVE_INVERTED;
@@ -255,22 +235,53 @@ public final class Constants {
       driveMotorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
       driveMotorConfig.CurrentLimits.StatorCurrentLimitEnable = false;
       /*
-       * the following does this:
-       * the current is always limited to 50 Amps. If the limit has been needed (motor is demanding more than 50, but limit stops it) for more than 0.8 seconds, than
-       * limit changes to DRIVE_CURRENT_LIMIT, which is 30 amps. this lower limit is enabled until the demanded current drops below the lower limit, then the 50 amp limit is enabled
-       */
+      * the following does this:
+      * the current is always limited to 50 Amps. If the limit has been needed (motor is demanding more than 50, but limit stops it) for more than 0.8 seconds, than
+      * limit changes to DRIVE_CURRENT_LIMIT, which is 30 amps. this lower limit is enabled until the demanded current drops below the lower limit, then the 50 amp limit is enabled
+      */
       driveMotorConfig.CurrentLimits.SupplyCurrentLimit = 50;
       driveMotorConfig.CurrentLimits.SupplyCurrentLowerLimit = DriveConstants.DRIVE_CURRENT_LIMIT;
       driveMotorConfig.CurrentLimits.SupplyCurrentLowerTime = 0.8;
+      return driveMotorConfig;
+    }
+      // Steer motor.
+      private static TalonFXConfiguration getSteerMotorConfig(){
+        TalonFXConfiguration steerMotorConfig = new TalonFXConfiguration();
+        steerMotorConfig.Feedback.RotorToSensorRatio = 1 / DriveConstants.DRIVETRAIN_STEER_REDUCTION;
+        steerMotorConfig.MotorOutput.Inverted = DriveConstants.DRIVETRAIN_STEER_INVERTED;
+        // steerMotorConfig.MotorOutput.DutyCycleNeutralDeadband = 0.05;
+        steerMotorConfig.Slot0.kP = DriveConstants.k_STEER_P;
+        steerMotorConfig.Slot0.kI = DriveConstants.k_STEER_I;
+        steerMotorConfig.Slot0.kD = DriveConstants.k_STEER_D;
+        steerMotorConfig.Slot0.kS = DriveConstants.k_STEER_FF_S;
+        steerMotorConfig.Slot0.kV = DriveConstants.k_STEER_FF_V;
+        steerMotorConfig.Voltage.PeakForwardVoltage = 12;
+        steerMotorConfig.Voltage.PeakReverseVoltage = -12;
+        steerMotorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
 
+        steerMotorConfig.ClosedLoopGeneral.ContinuousWrap = true;
+        return steerMotorConfig;
+      }
       //  Steer encoder.
-      steerEncoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
+      private static CANcoderConfiguration getSteerEncoderConfig(){
+        CANcoderConfiguration steerEncoderConfig = new CANcoderConfiguration();
+        steerEncoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
+        return steerEncoderConfig;
+      }
 
       // Pigeon 2.
-      pigeon2Config.MountPose.MountPosePitch = 0;
-      pigeon2Config.MountPose.MountPoseRoll = 0;
-      pigeon2Config.MountPose.MountPoseYaw = 0;
-    }
+      private static Pigeon2Configuration getPigeon2Config(){
+        Pigeon2Configuration pigeon2Config = new Pigeon2Configuration();
+        pigeon2Config.MountPose.MountPosePitch = 0;
+        pigeon2Config.MountPose.MountPoseRoll = 0;
+        pigeon2Config.MountPose.MountPoseYaw = 0;
+        return pigeon2Config;
+      }
+      public static final TalonFXConfiguration driveMotorConfig = getDriveMotorConfig();
+      public static final TalonFXConfiguration steerMotorConfig = getSteerMotorConfig();
+      public static final CANcoderConfiguration steerEncoderConfig = getSteerEncoderConfig();
+      public static final Pigeon2Configuration pigeon2Config = getPigeon2Config();
+    
   }
 
   public final class PS4Driver {
@@ -312,8 +323,9 @@ public final class Constants {
   public final class Field {}
 
   public final class Vision {
-    public static final String APRILTAG_LIMELIGHT2_NAME = "limelight-aprill";
-    public static final String APRILTAG_LIMELIGHT3_NAME = "limelight-aprilr";
+    public static final String APRILTAG_LIMELIGHTA_NAME = "limelight-aprila";
+    public static final String APRILTAG_LIMELIGHTB_NAME = "limelight-aprilb";
+    public static final String APRILTAG_LIMELIGHTC_NAME = "limelight-aprilc";
     public static final String OBJ_DETECTION_LIMELIGHT_NAME = "limelight-neural";
 
     public static final String LIMELIGHT_SHUFFLEBOARD_TAB = "Vision";
@@ -335,4 +347,58 @@ public final class Constants {
     // Welcome, to  Pathconstantic Park
     // Here the fine beasts of the Pathplanner Period reside, after being brought back through DNA
   }
+
+  public final class CoralEndeffectorConstants{
+    public static final int CORAL_ENDEFFECTOR_MOTOR_1_ID = 11;
+
+    public static final TalonFXConfiguration coralMotorConfigs= new TalonFXConfiguration()
+    .withSlot0(new Slot0Configs()
+      .withKP(1)
+      .withKS(0)
+      .withKA(0)
+      .withKV(0))
+    .withCurrentLimits(new CurrentLimitsConfigs()
+      .withSupplyCurrentLimit(100)
+      .withSupplyCurrentLimitEnable(true));
+  }
+
+  public final class AlgaeEndeffectorConstants{
+    public static final int ALGAE_ENDEFFECTOR_MOTOR_1_ID = 12;
+
+    public static final TalonFXConfiguration AlgaeEndeffectorConfig = new TalonFXConfiguration()
+    .withSlot0(new Slot0Configs()
+      .withKP(1)
+      .withKI(0)
+      .withKD(0)
+      .withKV(0))
+    .withCurrentLimits(new CurrentLimitsConfigs()
+      .withSupplyCurrentLimit(100)
+      .withSupplyCurrentLimitEnable(true));
+  }
+  
+  public final class ElevatorConstants{
+    public static final int ELEVATOR_MOTOR_1_ID = 13;
+    public static final int ELEVATOR_MOTOR_2_ID = 14;
+    public static final double HUMAN_PLAYER_STATION_ROTATIONS = 2491;
+    public static final double REEF_LEVEL_1_ROTATIONS = 2491;
+    public static final double REEF_LEVEL_2_ROTATIONS = 2491;
+    public static final double REEF_LEVEL_3_ROTATIONS = 2491;
+    public static final double REEF_LEVEL_4_ROTATIONS = 2491;
+  }
+
+  public final class ClimberConstants{
+    public static final int CLIMBER_MOTOR_1_ID = 15;
+    public static final int CLIMBER_MOTOR_2_ID = 16;
+
+    public static final TalonFXConfiguration ClimberMotorConfig = new TalonFXConfiguration()
+    .withSlot0(new Slot0Configs()
+      .withKP(1)
+      .withKI(0)
+      .withKD(0)
+      .withKV(0))
+    .withCurrentLimits(new CurrentLimitsConfigs()
+      .withSupplyCurrentLimit(100)
+      .withSupplyCurrentLimitEnable(true));
+  }
 }
+
