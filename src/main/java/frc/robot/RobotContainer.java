@@ -116,12 +116,11 @@ public class RobotContainer {
       
       ZeroGyroSup = driverControllerPS4::getPSButton;
     }
-    distanceSensorsInst();
 
     limelightInit();
     driveTrainInst();
     lightsInst();
-    lineupInit();     
+    sensorInit();     
     configureDriveTrain();
     configureBindings(); // Configure the trigger bindings
     autoInit();
@@ -165,17 +164,9 @@ public class RobotContainer {
   private void lightsInst() {
     lights = new Lights();
   }
-
-  private void distanceSensorsInst(){
+  
+  private void sensorInit() {
     distanceSensors = new DistanceSensors();
-  }
-
-  private void lineupInit() {
-    //TODO these must be configured from the roborio
-    farLeft = new TimeOfFlight(FAR_LEFT_DIST_SENSOR_ID);
-    middleLeft = new TimeOfFlight(MIDDLE_LEFT_DIST_SENSOR_ID);
-    middleRight = new TimeOfFlight(MIDDLE_RIGHT_DIST_SENSOR_ID);
-    farRight = new TimeOfFlight(FAR_RIGHT_DIST_SENSOR_ID);
   }
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the

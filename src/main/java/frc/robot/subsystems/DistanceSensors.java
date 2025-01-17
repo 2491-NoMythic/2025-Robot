@@ -59,6 +59,7 @@ public class DistanceSensors  extends SubsystemBase{
   @Override
   public void periodic() {
       updateForReefApproach();
+      updateRobotState();
   }
 
   private void updateForReefApproach() {
@@ -73,4 +74,21 @@ public class DistanceSensors  extends SubsystemBase{
       distanceOfFrontDistancer = 0;
     }
   } 
+
+  private void updateRobotState() {
+  //post ranges for each sensor to SmartDashboard
+    SmartDashboard.putNumber("SENSOR/RANGE/elevator", elevatorSensor.getRange());
+    SmartDashboard.putNumber("SENSOR/RANGE/far left", farLeft.getRange());
+    SmartDashboard.putNumber("SENSOR/RANGE/middle left", middleLeft.getRange());
+    SmartDashboard.putNumber("SENSOR/RANGE/middle right", middleRight.getRange());
+    SmartDashboard.putNumber("SENSOR/RANGE/far right", farRight.getRange());
+  //update Robot State with sensor readings
+    RobotState.getInstance().farLeftSensorTriggered = farLeft.getRange()<RANGE_TO_SEE_REEF && farLeft.getRange()>0;
+    RobotState.getInstance().middleLeftSensorTriggered = middleLeft.getRange()<RANGE_TO_SEE_REEF && middleLeft.getRange()>0 ;
+    RobotState.getInstance().middleRightSensorTriggered = middleRight.getRange()<RANGE_TO_SEE_REEF && middleRight.getRange()>0;
+    RobotState.getInstance().farRightSensorTriggered = farRight.getRange()<RANGE_TO_SEE_REEF && farRight.getRange()>0;
+  //for testing purposes
+    SmartDashboard.putBoolean("RSensorT", middleRight.getRange()<RANGE_TO_SEE_REEF & middleRight.getRange()>0);
+    SmartDashboard.putBoolean("FRSensorT", farRight.getRange()<RANGE_TO_SEE_REEF & farRight.getRange()>0);
+  }
 }
