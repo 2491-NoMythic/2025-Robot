@@ -1,18 +1,13 @@
 package frc.robot.commands;
 
-import edu.wpi.first.hal.simulation.DriverStationDataJNI;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.settings.Constants.DriveConstants;
-import frc.robot.subsystems.DistanceSensors;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
-import static frc.robot.settings.Constants.SensorConstants.*;
 
 public class Drive extends Command {
 
@@ -22,11 +17,6 @@ public class Drive extends Command {
   private final DoubleSupplier translationYSupplier;
   private final DoubleSupplier rotationSupplier;
   private int invert;
-
-  private final double kP = 0.002;
-  private final double kI = 0.0;
-  private final double kD = 0.0;
-  private final PIDController pidController = new PIDController(kP, kI, kD);
 
   /**
    * drives the robot at a specific forward velocity, sideways velocity, and rotational velocity.
@@ -90,11 +80,11 @@ public class Drive extends Command {
               rotationSupplier.getAsDouble()
                   * DriveConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
               drivetrain.getPose().getRotation()));
-      }
     }
+  }
             
-    @Override
-    public void end(boolean interrupted) {
-      drivetrain.drive(new ChassisSpeeds(0.0, 0.0, 0.0));
+  @Override
+  public void end(boolean interrupted) {
+    drivetrain.drive(new ChassisSpeeds(0.0, 0.0, 0.0));
   }
 }
