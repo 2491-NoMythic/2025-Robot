@@ -55,7 +55,7 @@ public class RobotState {
       // case 0b0111: 
       //   return ReefOffset.ALIGNED_LEFT;
       // case 0b1111:
-      case 1001: 
+      case 0b1001: 
         return ReefOffset.CENTERED;
       // case 0b1110: 
       //   return ReefOffset.ALIGNED_RIGHT;

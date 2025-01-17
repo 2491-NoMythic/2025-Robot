@@ -134,8 +134,6 @@ public class RobotContainer {
     if (useXboxController) {
       defaultDriveCommand =
           new Drive(
-              distanceSensors,
-              SlowFrontSup,
               driveTrain,
               () -> false,
               () -> modifyAxis(-driverControllerXbox.getRawAxis(Y_AXIS), DEADBAND_NORMAL),
@@ -145,8 +143,6 @@ public class RobotContainer {
     } else {
       defaultDriveCommand =
           new Drive(
-            distanceSensors,
-            SlowFrontSup,
               driveTrain,
               () -> false,
               () -> modifyAxis(-driverControllerPS4.getRawAxis(Y_AXIS), DEADBAND_NORMAL),
