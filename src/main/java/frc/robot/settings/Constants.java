@@ -372,10 +372,11 @@ public final class Constants {
     public static final int ELEVATOR_MOTOR_1_ID = 13;
     public static final int ELEVATOR_MOTOR_2_ID = 14;
     public static final double HUMAN_PLAYER_STATION_ROTATIONS = 2491;
-    public static final double REEF_LEVEL_1_ROTATIONS = 2491;
-    public static final double REEF_LEVEL_2_ROTATIONS = 2491;
-    public static final double REEF_LEVEL_3_ROTATIONS = 2491;
-    public static final double REEF_LEVEL_4_ROTATIONS = 2491;
+    public static final double REEF_LEVEL_1_MILLIMETERS = 2491;
+    public static final double REEF_LEVEL_2_MILLIMETERS = 2491;
+    public static final double REEF_LEVEL_3_MILLIMETERS = 2491;
+    public static final double REEF_LEVEL_4_MILLIMETERS = 2491;
+    public static final double ELEVATOR_MILLIMETERS_TO_ROTATIONS = 2491;
   }
 
   public final class ClimberConstants{
