@@ -45,6 +45,7 @@ public class CoralIntake extends Command {
   @Override
   public void end(boolean interrupted) {
     funnelIntake.stopFunnel();
+    coralIntake.stopCoralEndEffector();
   }
 
   // Returns true when the command should end.
