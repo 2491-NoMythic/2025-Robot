@@ -354,7 +354,9 @@ public class RobotContainer {
     SmartDashboard.putData(driveTrain.getCurrentCommand());
   }
   public void robotInit(){
-    elevator.setZero(distanceSensors.getDistance(0));
+    if (elevatorExists){
+      elevator.setZero(distanceSensors.getDistance(0));
+    }
   }
   public void robotPeriodic() {
     currentAlliance = DriverStation.getAlliance().get();
