@@ -43,7 +43,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     .withCurrentLimits(new CurrentLimitsConfigs()
       .withSupplyCurrentLimit(100)
       .withSupplyCurrentLimitEnable(true));
-    //.withMotionMagic(new MotionMagicConfigs()
+    //We are not yet sure on whether or not we are using MotionMagic.
+      //.withMotionMagic(new MotionMagicConfigs()
       //.withMotionMagicAcceleration(2491)
       //.withMotionMagicCruiseVelocity(2491)
       //.withMotionMagicJerk(2491));
