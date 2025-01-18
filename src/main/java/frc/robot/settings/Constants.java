@@ -406,6 +406,12 @@ public final class Constants {
   public final class FunnelConstants{
     public static final int FUNNEL_INTAKE_MOTOR_ID = 2491;
     public static final int FUNNEL_ROTATOR_MOTOR_ID = 2491;
+    public static final double FUNNEL_ROTATOR_KP = 2491;
+    public static final double FUNNEL_ROTATOR_KS = 2491;
+    public static final double FUNNEL_ROTATOR_KA = 2491;
+    public static final double FUNNEL_ROTATOR_KV = 2491;
+    public static final int FUNNEL_ROTATOR_SUPPLY_CURRENT_LIMIT = 2491;
+    public static final double FUNNEL_ROTATOR_GEAR_RATIO = 2491;
     public static final TalonFXConfiguration FunnelIntakeConfig = new TalonFXConfiguration()
       .withSlot0(new Slot0Configs()
         .withKP(1)
@@ -425,6 +431,8 @@ public final class Constants {
       .withCurrentLimits(new CurrentLimitsConfigs()
         .withSupplyCurrentLimit(100)
         .withSupplyCurrentLimitEnable(true));
+
+    
   }
 }
 
