@@ -37,6 +37,7 @@ import frc.robot.commands.MoveMeters;
 import frc.robot.subsystems.DistanceSensors;
 import frc.robot.commands.NamedCommands.CoralIntake;
 import frc.robot.commands.NamedCommands.DeliverCoral;
+import frc.robot.settings.SensorNameEnums;
 import frc.robot.subsystems.AlgaeEndeffectorSubsystem;
 import frc.robot.subsystems.CoralEndeffectorSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -355,7 +356,7 @@ public class RobotContainer {
   }
   public void robotInit(){
     if (elevatorExists){
-      elevator.setZero(distanceSensors.getDistance(0));
+      elevator.setZero(distanceSensors.getDistance(SensorNameEnums.Elevator));
     }
   }
   public void robotPeriodic() {
