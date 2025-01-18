@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.180794439996236,
-        "y": 6.823978971301404
+        "x": 2.2293472031292048,
+        "y": 6.79167117324056
       },
       "isLocked": false,
       "linkedName": "BargeSideTopFeeder"
@@ -20,8 +20,8 @@
         "y": 5.085911885245901
       },
       "prevControl": {
-        "x": 1.5533924266901544,
-        "y": 5.810354666832645
+        "x": 2.154803544578292,
+        "y": 6.885829985582759
       },
       "nextControl": null,
       "isLocked": false,

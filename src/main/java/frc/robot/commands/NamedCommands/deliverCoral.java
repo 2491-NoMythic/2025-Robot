@@ -5,24 +5,19 @@
 package frc.robot.commands.NamedCommands;
 
 import static frc.robot.settings.Constants.CoralEndeffectorConstants.CORAL_ENDEFFECTOR_SPEED;
-import static frc.robot.settings.Constants.ElevatorConstants.REEF_LEVEL_4_ROTATIONS;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.CoralEndeffectorSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.RobotState;
-import frc.robot.settings.Constants;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class deliverCoral extends Command {
-  ElevatorSubsystem elevatorSubsystem;
   CoralEndeffectorSubsystem coralEndeffector;
 
 
   /** Creates a new deliverCoral. */
-  public deliverCoral( CoralEndeffectorSubsystem coralEndeffector, ElevatorSubsystem elevatorSubsystem) {
-    addRequirements(elevatorSubsystem, coralEndeffector);
-    this.elevatorSubsystem = elevatorSubsystem;
+  public deliverCoral( CoralEndeffectorSubsystem coralEndeffector) {
+    addRequirements(coralEndeffector);
     this.coralEndeffector = coralEndeffector;
 
     // Use addRequirements() here to declare subsystem dependencies.
@@ -35,8 +30,6 @@ public class deliverCoral extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    elevatorSubsystem.setElevatorPosition(REEF_LEVEL_4_ROTATIONS);
-    
     coralEndeffector.runCoralEndEffector(CORAL_ENDEFFECTOR_SPEED);
   }
 
