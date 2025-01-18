@@ -42,11 +42,11 @@ public class ElevatorSubsystem extends SubsystemBase {
       .withKV(0))
     .withCurrentLimits(new CurrentLimitsConfigs()
       .withSupplyCurrentLimit(100)
-      .withSupplyCurrentLimitEnable(true))
-    .withMotionMagic(new MotionMagicConfigs()
-      .withMotionMagicAcceleration(2491)
-      .withMotionMagicCruiseVelocity(2491)
-      .withMotionMagicJerk(2491));
+      .withSupplyCurrentLimitEnable(true));
+    //.withMotionMagic(new MotionMagicConfigs()
+      //.withMotionMagicAcceleration(2491)
+      //.withMotionMagicCruiseVelocity(2491)
+      //.withMotionMagicJerk(2491));
       elevatorMotor1.getConfigurator().apply(eleMotorConfig);
     elevatorMotor2.getConfigurator().apply(eleMotorConfig);
     elevatorMotor2.setControl(new Follower(ELEVATOR_MOTOR_1_ID, true));
@@ -58,20 +58,18 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
   /**
    * Creates a zero from input
-   * @return zeroPoint
+   * @param theDistance the distance that the distance sensor at the bottom of the elevator reads
    */
   public void setZero(double theDistance){//Replace with sensor return
-   // double curPos = elevatorMotor1.getPosition().getValueAsDouble();
-    elevatorMotor1.
-    
-    
-    this.zeroPoint = theDistance * ELEVATOR_MILLIMETERS_TO_ROTATIONS;
-      }
+    double rof0 = theDistance * ELEVATOR_MILLIMETERS_TO_ROTATIONS;
+    zeroPoint = elevatorMotor1.getPosition().getValueAsDouble() - rof0;    
+    }
   /**
    * Sets the elevator to a position relative to the 0 set by createZero. 
-   * @param position double that controls how many rotations
+   * @param height double that controls how many millimeters from the distance sensor
    */
-  public void setElevatorPosition(double position){
+  public void setElevatorPosition(double height){
+    double position = height * ELEVATOR_MILLIMETERS_TO_ROTATIONS;
     double uPos = position + zeroPoint;
     PositionVoltage voltReq = new PositionVoltage(0);
     elevatorMotor1.setControl(voltReq.withPosition(uPos));
