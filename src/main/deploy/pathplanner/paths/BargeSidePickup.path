@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.382451464416964,
-        "y": 4.942816732923019
+        "x": 4.467272727272728,
+        "y": 5.585553977272727
       },
       "isLocked": false,
       "linkedName": "ReefTopRight"
@@ -20,8 +20,8 @@
         "y": 7.3985
       },
       "prevControl": {
-        "x": 1.2422768165524245,
-        "y": 7.706870394025995
+        "x": 3.2607102272727273,
+        "y": 6.293536931818181
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 127.00000000000001
+    "rotation": -54.0
   },
   "reversed": false,
   "folder": null,

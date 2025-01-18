@@ -11,6 +11,8 @@ public class RobotState {
   public boolean middleLeftSensorTriggered;
   public boolean middleRightSensorTriggered;
   public boolean farRightSensorTriggered;
+  public boolean coralSeen;
+  public boolean coralGone;
 
   private RobotState() {
   }

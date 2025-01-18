@@ -360,6 +360,7 @@ public final class Constants {
     .withCurrentLimits(new CurrentLimitsConfigs()
       .withSupplyCurrentLimit(100)
       .withSupplyCurrentLimitEnable(true));
+    public static final double CORAL_ENDEFFECTOR_SPEED = 2491.0;
   }
 
   public final class AlgaeEndeffectorConstants{
@@ -380,15 +381,16 @@ public final class Constants {
     public static final int ELEVATOR_MOTOR_1_ID = 13;
     public static final int ELEVATOR_MOTOR_2_ID = 14;
     public static final double HUMAN_PLAYER_STATION_ROTATIONS = 2491;
-    public static final double REEF_LEVEL_1_ROTATIONS = 2491;
-    public static final double REEF_LEVEL_2_ROTATIONS = 2491;
-    public static final double REEF_LEVEL_3_ROTATIONS = 2491;
-    public static final double REEF_LEVEL_4_ROTATIONS = 2491;
+    public static final double REEF_LEVEL_1_MILLIMETERS = 2491;
+    public static final double REEF_LEVEL_2_MILLIMETERS = 2491;
+    public static final double REEF_LEVEL_3_MILLIMETERS = 2491;
+    public static final double REEF_LEVEL_4_MILLIMETERS = 2491;
+    public static final double ELEVATOR_MILLIMETERS_TO_ROTATIONS = 2491;
   }
 
   public final class ClimberConstants{
-    public static final int CLIMBER_MOTOR_1_ID = 15;
-    public static final int CLIMBER_MOTOR_2_ID = 16;
+    public static final int CLIMBER_MOTOR_1_ID = 2491;
+    public static final int CLIMBER_MOTOR_2_ID = 2491;
 
     public static final TalonFXConfiguration ClimberMotorConfig = new TalonFXConfiguration()
     .withSlot0(new Slot0Configs()
@@ -399,6 +401,30 @@ public final class Constants {
     .withCurrentLimits(new CurrentLimitsConfigs()
       .withSupplyCurrentLimit(100)
       .withSupplyCurrentLimitEnable(true));
+  }
+
+  public final class FunnelConstants{
+    public static final int FUNNEL_INTAKE_MOTOR_ID = 2491;
+    public static final int FUNNEL_ROTATOR_MOTOR_ID = 2491;
+    public static final TalonFXConfiguration FunnelIntakeConfig = new TalonFXConfiguration()
+      .withSlot0(new Slot0Configs()
+        .withKP(1)
+        .withKI(0)
+        .withKD(0)
+        .withKV(0))
+      .withCurrentLimits(new CurrentLimitsConfigs()
+        .withSupplyCurrentLimit(100)
+        .withSupplyCurrentLimitEnable(true));
+    
+        public static final TalonFXConfiguration FunnelRotatorConfig = new TalonFXConfiguration()
+      .withSlot0(new Slot0Configs()
+        .withKP(1)
+        .withKI(0)
+        .withKD(0)
+        .withKV(0))
+      .withCurrentLimits(new CurrentLimitsConfigs()
+        .withSupplyCurrentLimit(100)
+        .withSupplyCurrentLimitEnable(true));
   }
 }
 

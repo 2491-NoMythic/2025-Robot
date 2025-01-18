@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.70625,
-        "y": 0.6904999999999996
+        "x": 1.5655397727272726,
+        "y": 0.7493323863636363
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.224030207621895,
-        "y": 1.0470439307528168
+        "x": 2.423096590909091,
+        "y": 1.7165767045454539
       },
       "isLocked": false,
       "linkedName": "humanPlayerProcessor"
@@ -20,8 +20,8 @@
         "y": 2.916137295081967
       },
       "prevControl": {
-        "x": 1.4295271894687702,
-        "y": 1.7312137619618015
+        "x": 2.9316477272727273,
+        "y": 2.2450710227272723
       },
       "nextControl": null,
       "isLocked": false,
@@ -48,7 +48,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -130.91438322002512
+    "rotation": 52.431407971172504
   },
   "useDefaultConstraints": true
 }

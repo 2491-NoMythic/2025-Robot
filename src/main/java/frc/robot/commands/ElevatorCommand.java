@@ -34,13 +34,13 @@ public class ElevatorCommand extends Command {
       case 0:
         elevator.setElevatorPosition(ElevatorConstants.HUMAN_PLAYER_STATION_ROTATIONS);
       case 1:
-        elevator.setElevatorPosition(ElevatorConstants.REEF_LEVEL_1_ROTATIONS);
+        elevator.setElevatorPosition(ElevatorConstants.REEF_LEVEL_1_MILLIMETERS);
       case 2:
-        elevator.setElevatorPosition(ElevatorConstants.REEF_LEVEL_2_ROTATIONS);
+        elevator.setElevatorPosition(ElevatorConstants.REEF_LEVEL_2_MILLIMETERS);
       case 3:
-        elevator.setElevatorPosition(ElevatorConstants.REEF_LEVEL_3_ROTATIONS);
+        elevator.setElevatorPosition(ElevatorConstants.REEF_LEVEL_3_MILLIMETERS);
       case 4:
-        elevator.setElevatorPosition(ElevatorConstants.REEF_LEVEL_4_ROTATIONS);
+        elevator.setElevatorPosition(ElevatorConstants.REEF_LEVEL_4_MILLIMETERS);
     }
   }
 

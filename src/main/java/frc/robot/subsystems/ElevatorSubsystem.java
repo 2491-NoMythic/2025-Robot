@@ -24,11 +24,11 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 
 public class ElevatorSubsystem extends SubsystemBase {
-  TalonFX elevatorMotor1;
-  TalonFX elevatorMotor2;
-  Rotation2d elevatorPos;
-  TalonFXConfiguration eleMotorConfig;
-  double zeroPoint;
+  private TalonFX elevatorMotor1;
+  private TalonFX elevatorMotor2;
+  private Rotation2d elevatorPos;
+  private TalonFXConfiguration eleMotorConfig;
+  private double zeroPoint;
   /** Creates a new ElevatorSubsystem. */
   public ElevatorSubsystem() {
     elevatorMotor1 = new TalonFX(ELEVATOR_MOTOR_1_ID);
@@ -42,13 +42,13 @@ public class ElevatorSubsystem extends SubsystemBase {
       .withKV(0))
     .withCurrentLimits(new CurrentLimitsConfigs()
       .withSupplyCurrentLimit(100)
-      .withSupplyCurrentLimitEnable(true))
-    .withMotionMagic(new MotionMagicConfigs()
-      .withMotionMagicAcceleration(2491)
-      .withMotionMagicCruiseVelocity(2491)
-      .withMotionMagicJerk(2491));
-      //TODO: Add distance sensor
-    elevatorMotor1.getConfigurator().apply(eleMotorConfig);
+      .withSupplyCurrentLimitEnable(true));
+    //We are not yet sure on whether or not we are using MotionMagic.
+      //.withMotionMagic(new MotionMagicConfigs()
+      //.withMotionMagicAcceleration(2491)
+      //.withMotionMagicCruiseVelocity(2491)
+      //.withMotionMagicJerk(2491));
+      elevatorMotor1.getConfigurator().apply(eleMotorConfig);
     elevatorMotor2.getConfigurator().apply(eleMotorConfig);
     elevatorMotor2.setControl(new Follower(ELEVATOR_MOTOR_1_ID, true));
   }
@@ -58,19 +58,19 @@ public class ElevatorSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
   }
   /**
-   * Creates a zero at the limit switch
+   * Creates a zero from input
+   * @param theDistance the distance that the distance sensor at the bottom of the elevator reads
    */
-  public double createZero(){
-    if (elevatorMotor1.getForwardLimit().getValue() == ForwardLimitValue.ClosedToGround) {
-      zeroPoint = 0.0;
+  public void setZero(double theDistance){//Replace with sensor return
+    double rof0 = theDistance * ELEVATOR_MILLIMETERS_TO_ROTATIONS;
+    zeroPoint = elevatorMotor1.getPosition().getValueAsDouble() - rof0;    
     }
-    return zeroPoint;
-  }
   /**
    * Sets the elevator to a position relative to the 0 set by createZero. 
-   * @param position double that controls how many rotations
+   * @param height double that controls how many millimeters from the distance sensor
    */
-  public void setElevatorPosition(double position){
+  public void setElevatorPosition(double height){
+    double position = height * ELEVATOR_MILLIMETERS_TO_ROTATIONS;
     double uPos = position + zeroPoint;
     PositionVoltage voltReq = new PositionVoltage(0);
     elevatorMotor1.setControl(voltReq.withPosition(uPos));
@@ -78,4 +78,5 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void stopElevator(){
     elevatorMotor1.set(0);
   }
+
 }

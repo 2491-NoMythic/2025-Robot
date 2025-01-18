@@ -2,18 +2,24 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.NamedCommands;
+
+import static frc.robot.settings.Constants.CoralEndeffectorConstants.CORAL_ENDEFFECTOR_SPEED;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.CoralEndeffectorSubsystem;
+import frc.robot.subsystems.RobotState;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class CoralIntakeCommand extends Command {
+public class DeliverCoral extends Command {
   CoralEndeffectorSubsystem coralEndeffector;
-  /** Creates a new CoralEndDefectorCommand. */
-  public CoralIntakeCommand(CoralEndeffectorSubsystem coralEndeffector) {
-    this.coralEndeffector = coralEndeffector;
+
+
+  /** Creates a new deliverCoral. */
+  public DeliverCoral( CoralEndeffectorSubsystem coralEndeffector) {
     addRequirements(coralEndeffector);
+    this.coralEndeffector = coralEndeffector;
+
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -24,7 +30,7 @@ public class CoralIntakeCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    coralEndeffector.runCoralEndEffector(1);
+    coralEndeffector.runCoralEndEffector(CORAL_ENDEFFECTOR_SPEED);
   }
 
   // Called once the command ends or is interrupted.
@@ -36,6 +42,6 @@ public class CoralIntakeCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return !RobotState.getInstance().coralSeen;
   }
 }

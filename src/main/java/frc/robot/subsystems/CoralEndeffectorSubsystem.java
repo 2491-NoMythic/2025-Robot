@@ -17,11 +17,11 @@ public class CoralEndeffectorSubsystem extends SubsystemBase {
     coralEndDefectorMotor = new TalonFX(CORAL_ENDEFFECTOR_MOTOR_1_ID);
     coralEndDefectorMotor.getConfigurator().apply(coralMotorConfigs);
   }
-  public void runCoralEndDefector(double speed){
+  public void runCoralEndEffector(double speed){
     coralEndDefectorMotor.set(speed);
 
   }
-  public void stopCoralEndDefector(){
+  public void stopCoralEndEffector(){
     coralEndDefectorMotor.set(0);
   }
   @Override
