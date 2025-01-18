@@ -22,17 +22,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 
 public class PlaceCoralCommand extends SequentialCommandGroup{
 
-    DrivetrainSubsystem drivetrain;
-    ElevatorSubsystem elevator;
-    CoralEndeffectorSubsystem coralEndDefector;
-    DeliverCoral deliverCoral;
-    ApproachReef approachReef;
-    LineUp lineUp;
-    NamedCommands namedCommands;
-    DistanceSensors distanceSensors;
-    DoubleSupplier xSupplier, ySupplier, rSupplier;
-    Double elevatorPosition;
-
+    
     public PlaceCoralCommand(ElevatorSubsystem elevator,double elevatorPosition, DistanceSensors distanceSensors,
             DrivetrainSubsystem drivetrain, DoubleSupplier xSupplier, DoubleSupplier ySupplier, DoubleSupplier rSupplier,
             CoralEndeffectorSubsystem coralEndeffector, boolean leftPlace){
