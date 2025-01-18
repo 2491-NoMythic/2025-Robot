@@ -24,11 +24,11 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 
 public class ElevatorSubsystem extends SubsystemBase {
-  TalonFX elevatorMotor1;
-  TalonFX elevatorMotor2;
-  Rotation2d elevatorPos;
-  TalonFXConfiguration eleMotorConfig;
-  double zeroPoint;
+  private TalonFX elevatorMotor1;
+  private TalonFX elevatorMotor2;
+  private Rotation2d elevatorPos;
+  private TalonFXConfiguration eleMotorConfig;
+  private double zeroPoint;
   /** Creates a new ElevatorSubsystem. */
   public ElevatorSubsystem() {
     elevatorMotor1 = new TalonFX(ELEVATOR_MOTOR_1_ID);
@@ -47,8 +47,7 @@ public class ElevatorSubsystem extends SubsystemBase {
       .withMotionMagicAcceleration(2491)
       .withMotionMagicCruiseVelocity(2491)
       .withMotionMagicJerk(2491));
-      //TODO: Add distance sensor
-    elevatorMotor1.getConfigurator().apply(eleMotorConfig);
+      elevatorMotor1.getConfigurator().apply(eleMotorConfig);
     elevatorMotor2.getConfigurator().apply(eleMotorConfig);
     elevatorMotor2.setControl(new Follower(ELEVATOR_MOTOR_1_ID, true));
   }
@@ -58,14 +57,16 @@ public class ElevatorSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
   }
   /**
-   * Creates a zero at the limit switch
+   * Creates a zero from input
+   * @return zeroPoint
    */
-  public double createZero(){
-    if (elevatorMotor1.getForwardLimit().getValue() == ForwardLimitValue.ClosedToGround) {
-      zeroPoint = 0.0;
-    }
-    return zeroPoint;
-  }
+  public void setZero(double theDistance){//Replace with sensor return
+   // double curPos = elevatorMotor1.getPosition().getValueAsDouble();
+    elevatorMotor1.
+    
+    
+    this.zeroPoint = theDistance * ELEVATOR_MILLIMETERS_TO_ROTATIONS;
+      }
   /**
    * Sets the elevator to a position relative to the 0 set by createZero. 
    * @param position double that controls how many rotations
@@ -78,4 +79,5 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void stopElevator(){
     elevatorMotor1.set(0);
   }
+
 }

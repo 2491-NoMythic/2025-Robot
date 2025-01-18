@@ -367,6 +367,7 @@ public final class Constants {
     public static final double REEF_LEVEL_2_ROTATIONS = 2491;
     public static final double REEF_LEVEL_3_ROTATIONS = 2491;
     public static final double REEF_LEVEL_4_ROTATIONS = 2491;
+    public static final double ELEVATOR_MILLIMETERS_TO_ROTATIONS = 2491;
   }
 
   public final class ClimberConstants{
