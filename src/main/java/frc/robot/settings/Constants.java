@@ -5,7 +5,10 @@
 package frc.robot.settings;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
+import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -335,28 +338,83 @@ public final class Constants {
     // Welcome, to  Pathconstantic Park
     // Here the fine beasts of the Pathplanner Period reside, after being brought back through DNA
   }
-  public final class CoralIntakeConstants{
-    public static final int CORAL_INTAKE_MOTOR_1_ID = 9;
-    public static final int CORAL_INTAKE_MOTOR_2_ID = 10;
-  }
-  public final class AlgaeIntakeConstants{
-    public static final int ALGAE_INTAKE_MOTOR_1_ID = 11;
-    public static final int ALGAE_INTAKE_MOTOR_2_ID = 12;
-  }
-  public final class CoralEndDefectorConstants{
-    public static final int CORAL_END_DEFECTOR_MOTOR_1_ID = 13;
-  }
-  public final class AlgaeEndDefectorConstants{
-    public static final int ALGAE_END_DEFECTOR_MOTOR_1_ID = 14;
-  }
-  public final class ElevatorConstants{
-    public static final int ELEVATOR_MOTOR_1_ID = 15;
-  }
-  public final class ClimberConstants{
-    public static final int CLIMBER_MOTOR_1_ID = 16;
-    public static final int CLIMBER_MOTOR_2_ID = 17;
 
+  public final class CoralEndeffectorConstants{
+    public static final int CORAL_ENDEFFECTOR_MOTOR_1_ID = 11;
+
+    public static final TalonFXConfiguration coralMotorConfigs= new TalonFXConfiguration()
+    .withSlot0(new Slot0Configs()
+      .withKP(1)
+      .withKS(0)
+      .withKA(0)
+      .withKV(0))
+    .withCurrentLimits(new CurrentLimitsConfigs()
+      .withSupplyCurrentLimit(100)
+      .withSupplyCurrentLimitEnable(true));
+    public static final double CORAL_ENDEFFECTOR_SPEED = 2491.0;
+  }
+
+  public final class AlgaeEndeffectorConstants{
+    public static final int ALGAE_ENDEFFECTOR_MOTOR_1_ID = 12;
+
+    public static final TalonFXConfiguration AlgaeEndeffectorConfig = new TalonFXConfiguration()
+    .withSlot0(new Slot0Configs()
+      .withKP(1)
+      .withKI(0)
+      .withKD(0)
+      .withKV(0))
+    .withCurrentLimits(new CurrentLimitsConfigs()
+      .withSupplyCurrentLimit(100)
+      .withSupplyCurrentLimitEnable(true));
   }
   
+  public final class ElevatorConstants{
+    public static final int ELEVATOR_MOTOR_1_ID = 13;
+    public static final int ELEVATOR_MOTOR_2_ID = 14;
+    public static final double HUMAN_PLAYER_STATION_ROTATIONS = 2491;
+    public static final double REEF_LEVEL_1_ROTATIONS = 2491;
+    public static final double REEF_LEVEL_2_ROTATIONS = 2491;
+    public static final double REEF_LEVEL_3_ROTATIONS = 2491;
+    public static final double REEF_LEVEL_4_ROTATIONS = 2491;
+  }
+
+  public final class ClimberConstants{
+    public static final int CLIMBER_MOTOR_1_ID = 2491;
+    public static final int CLIMBER_MOTOR_2_ID = 2491;
+
+    public static final TalonFXConfiguration ClimberMotorConfig = new TalonFXConfiguration()
+    .withSlot0(new Slot0Configs()
+      .withKP(1)
+      .withKI(0)
+      .withKD(0)
+      .withKV(0))
+    .withCurrentLimits(new CurrentLimitsConfigs()
+      .withSupplyCurrentLimit(100)
+      .withSupplyCurrentLimitEnable(true));
+  }
+
+  public final class FunnelConstants{
+    public static final int FUNNEL_INTAKE_MOTOR_ID = 2491;
+    public static final int FUNNEL_ROTATOR_MOTOR_ID = 2491;
+    public static final TalonFXConfiguration FunnelIntakeConfig = new TalonFXConfiguration()
+      .withSlot0(new Slot0Configs()
+        .withKP(1)
+        .withKI(0)
+        .withKD(0)
+        .withKV(0))
+      .withCurrentLimits(new CurrentLimitsConfigs()
+        .withSupplyCurrentLimit(100)
+        .withSupplyCurrentLimitEnable(true));
+    
+        public static final TalonFXConfiguration FunnelRotatorConfig = new TalonFXConfiguration()
+      .withSlot0(new Slot0Configs()
+        .withKP(1)
+        .withKI(0)
+        .withKD(0)
+        .withKV(0))
+      .withCurrentLimits(new CurrentLimitsConfigs()
+        .withSupplyCurrentLimit(100)
+        .withSupplyCurrentLimitEnable(true));
+  }
 }
 
