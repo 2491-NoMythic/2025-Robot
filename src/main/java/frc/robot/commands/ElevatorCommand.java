@@ -32,7 +32,7 @@ public class ElevatorCommand extends Command {
   public void execute() {
     switch(level){
       case 0:
-        elevator.setElevatorPosition(ElevatorConstants.HUMAN_PLAYER_STATION_MILLIMETERS);
+        elevator.setElevatorPosition(ElevatorConstants.HUMAN_PLAYER_STATION_ROTATIONS);
       case 1:
         elevator.setElevatorPosition(ElevatorConstants.REEF_LEVEL_1_MILLIMETERS);
       case 2:
