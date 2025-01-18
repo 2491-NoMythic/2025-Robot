@@ -33,13 +33,14 @@ public class CoralIntake extends Command {
   @Override
   public void initialize() {
     elevatorSubsystem.setElevatorPosition(HUMAN_PLAYER_STATION_ROTATIONS);
-    coralIntake.runCoralEndEffector(0.3);
-    funnelIntake.runFunnel();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    coralIntake.runCoralEndEffector(0.3);
+    funnelIntake.runFunnel();
+  }
 
   // Called once the command ends or is interrupted.
   @Override
