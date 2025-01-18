@@ -28,7 +28,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AlgaeEndeffectorCommand;
 import frc.robot.commands.Drive;
 import frc.robot.commands.NamedCommands.CoralIntake;
-import frc.robot.commands.NamedCommands.coralRelease;
+import frc.robot.commands.NamedCommands.DeliverCoral;
 import frc.robot.subsystems.AlgaeEndeffectorSubsystem;
 import frc.robot.subsystems.CoralEndeffectorSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -86,7 +86,7 @@ public class RobotContainer {
   private CoralIntake coralIntake;
   private FunnelIntake funnelIntake;
   private FunnelRotator funnelRotator;
-  private coralRelease deliverCoral;
+  private DeliverCoral deliverCoral;
   RobotState robotState;
   Alliance currentAlliance;
   BooleanSupplier ZeroGyroSup;
@@ -294,7 +294,7 @@ public class RobotContainer {
     Command deliverCoralNamedCommand;
     if(elevatorExists&&funnelIntakeExists&&coralEndeffectorExists) {
       coralIntake = new CoralIntake(elevator, funnelIntake, coralEndDefector);
-      deliverCoral = new coralRelease(coralEndDefector);
+      deliverCoral = new DeliverCoral(coralEndDefector);
       coralIntakeNamedCommand = coralIntake;
       deliverCoralNamedCommand = deliverCoral;
     } else {

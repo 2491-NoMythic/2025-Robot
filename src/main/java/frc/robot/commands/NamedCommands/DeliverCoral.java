@@ -11,12 +11,12 @@ import frc.robot.subsystems.CoralEndeffectorSubsystem;
 import frc.robot.subsystems.RobotState;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class coralRelease extends Command {
+public class DeliverCoral extends Command {
   CoralEndeffectorSubsystem coralEndeffector;
 
 
   /** Creates a new deliverCoral. */
-  public coralRelease( CoralEndeffectorSubsystem coralEndeffector) {
+  public DeliverCoral( CoralEndeffectorSubsystem coralEndeffector) {
     addRequirements(coralEndeffector);
     this.coralEndeffector = coralEndeffector;
 
