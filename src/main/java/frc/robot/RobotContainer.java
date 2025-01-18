@@ -5,12 +5,17 @@
 package frc.robot;
 
 import static frc.robot.settings.Constants.DriveConstants.*;
+import static frc.robot.settings.Constants.SensorConstants.*;
 import static frc.robot.settings.Constants.PS4Driver.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+
+import com.playingwithfusion.TimeOfFlight;
+import com.playingwithfusion.jni.TimeOfFlightJNI;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -27,6 +32,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AlgaeEndeffectorCommand;
 import frc.robot.commands.Drive;
+import frc.robot.commands.LineUp;
+import frc.robot.commands.MoveMeters;
+import frc.robot.subsystems.DistanceSensors;
 import frc.robot.commands.NamedCommands.CoralIntake;
 import frc.robot.commands.NamedCommands.DeliverCoral;
 import frc.robot.subsystems.AlgaeEndeffectorSubsystem;
@@ -79,6 +87,7 @@ public class RobotContainer {
   private Limelight limelight;
   private SendableChooser<Command> autoChooser;
   private PowerDistribution PDP;
+  private DistanceSensors distanceSensors;
   private CoralEndeffectorSubsystem coralEndDefector;
   private AlgaeEndeffectorSubsystem algaeEndDefector;
   private CimberSubsystem climber;
@@ -90,6 +99,10 @@ public class RobotContainer {
   RobotState robotState;
   Alliance currentAlliance;
   BooleanSupplier ZeroGyroSup;
+  BooleanSupplier LeftReefLineupSup;
+  BooleanSupplier RightReefLineupSup;
+  BooleanSupplier SlowFrontSup;
+
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
   /**
@@ -124,16 +137,25 @@ public class RobotContainer {
       operatorControllerXbox = new XboxController(OPERATOR_CONTROLLER_ID);
 
       ZeroGyroSup = driverControllerXbox::getStartButton;
+      LeftReefLineupSup = driverControllerXbox::getLeftBumperButton;
+      RightReefLineupSup =  driverControllerXbox::getRightBumperButton;
+      SlowFrontSup = ()-> driverControllerXbox.getRightTriggerAxis() > 0.1;
+      
     } else {
       driverControllerPS4 = new PS4Controller(DRIVE_CONTROLLER_ID);
       operatorControllerPS4 = new PS4Controller(OPERATOR_CONTROLLER_ID);
-
+      LeftReefLineupSup = driverControllerPS4::getL1Button;
+      RightReefLineupSup = driverControllerPS4::getR1Button;
+      SlowFrontSup = driverControllerPS4::getR2Button;
+      
       ZeroGyroSup = driverControllerPS4::getPSButton;
     }
 
     limelightInit();
     driveTrainInst();
     lightsInst();
+    sensorInit();     
+ 
     if (coralEndeffectorExists) {coralEndDefectorInst();}
     if (algaeEndeffectorExists) {algaeEndDefectorInst();}
     if (climberExists) {climberInst();}
@@ -144,6 +166,8 @@ public class RobotContainer {
     configureDriveTrain();
     configureBindings(); // Configure the trigger bindings
     autoInit();
+  
+
   }
 
   private void driveTrainInst() {
@@ -179,6 +203,10 @@ public class RobotContainer {
 
   private void lightsInst() {
     lights = new Lights();
+  }
+  
+  private void sensorInit() {
+    distanceSensors = new DistanceSensors();
   }
 
   private void coralEndDefectorInst() {
@@ -223,11 +251,20 @@ public class RobotContainer {
     SmartDashboard.putData("drivetrain", driveTrain);
     new Trigger(ZeroGyroSup).onTrue(new InstantCommand(driveTrain::zeroGyroscope));
 
+    new Trigger(LeftReefLineupSup).whileTrue(new LineUp(
+      driveTrain, 
+      true));
+
+    new Trigger(RightReefLineupSup).whileTrue(new LineUp(
+      driveTrain, 
+      false));
+    
     InstantCommand setOffsets = new InstantCommand(driveTrain::setEncoderOffsets) {
       public boolean runsWhenDisabled() {
         return true;
       };
     };
+
     SmartDashboard.putData("set offsets", setOffsets);
     SmartDashboard.putData(new InstantCommand(driveTrain::forceUpdateOdometryWithVision));
     /*
