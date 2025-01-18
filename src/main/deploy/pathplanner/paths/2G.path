@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.94875,
-        "y": 2.6892499999999995
+        "x": 7.636168032786885,
+        "y": 4.066956967213113
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.951590909090909,
-        "y": 1.8761221590909098
+        "x": 6.976844262295081,
+        "y": 4.05496926229508
       },
       "isLocked": false,
-      "linkedName": "ReefD"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.5655397727272726,
-        "y": 0.7493323863636363
+        "x": 5.754098360655737,
+        "y": 4.066956967213113
       },
       "prevControl": {
-        "x": 2.562698863636364,
-        "y": 1.56700284090909
+        "x": 6.137704918032787,
+        "y": 4.078944672131145
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "humanPlayerProcessor"
+      "linkedName": "2G"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 52.431407971172504
+    "rotation": -178.85423716182487
   },
   "reversed": false,
-  "folder": null,
+  "folder": "New Folder",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 58.39249775375106
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

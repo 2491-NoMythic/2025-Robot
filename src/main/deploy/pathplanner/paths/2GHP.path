@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.94875,
-        "y": 2.6892499999999995
+        "x": 5.754098360655737,
+        "y": 4.066956967213113
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.951590909090909,
-        "y": 1.8761221590909098
+        "x": 5.8619877049180324,
+        "y": 0.7703381147540984
       },
       "isLocked": false,
-      "linkedName": "ReefD"
+      "linkedName": "2G"
     },
     {
       "anchor": {
@@ -20,8 +20,8 @@
         "y": 0.7493323863636363
       },
       "prevControl": {
-        "x": 2.562698863636364,
-        "y": 1.56700284090909
+        "x": 3.4955602645305506,
+        "y": 1.216852878166915
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,10 +45,10 @@
     "rotation": 52.431407971172504
   },
   "reversed": false,
-  "folder": null,
+  "folder": "New Folder",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 58.39249775375106
+    "rotation": -178.85423716182487
   },
   "useDefaultConstraints": true
 }

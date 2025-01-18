@@ -7,13 +7,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "processorStartInitial"
+            "pathName": "2G"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DeliverCoral"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "reefEToHP"
+            "pathName": "2GHP"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralIntake"
           }
         },
         {
@@ -23,15 +35,33 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "DeliverCoral"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "reefDToHP"
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "CoralIntake"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "HPToC"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DeliverCoral"
           }
         }
       ]

@@ -7,13 +7,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "BargeTopInitial"
+            "pathName": "2G"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DeliverCoral"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "BargeSidePickup"
+            "pathName": "3HP"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralIntake"
           }
         },
         {
@@ -23,15 +35,33 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "DeliverCoral"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "ReefKtoBargeSideTopFeeder"
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "CoralIntake"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "BargeSideToptoReefL"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DeliverCoral"
           }
         }
       ]
