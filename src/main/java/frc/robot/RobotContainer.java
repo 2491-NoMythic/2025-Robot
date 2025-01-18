@@ -232,7 +232,6 @@ public class RobotContainer {
   private void funnelRotatorInst() {
     funnelRotator = new FunnelRotator();
   }
-
   /**
    * Use this method to define your trigger->command mappings. Triggers can be
    * created via the
@@ -354,7 +353,11 @@ public class RobotContainer {
   public void teleopPeriodic() {
     SmartDashboard.putData(driveTrain.getCurrentCommand());
   }
-
+  public void robotInit(){
+    if (elevatorExists){
+      elevator.setZero(distanceSensors.getDistance(0));
+    }
+  }
   public void robotPeriodic() {
     currentAlliance = DriverStation.getAlliance().get();
     SmartDashboard.putString(

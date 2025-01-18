@@ -4,7 +4,7 @@
 
 package frc.robot.commands.NamedCommands;
 
-import static frc.robot.settings.Constants.ElevatorConstants.HUMAN_PLAYER_STATION_ROTATIONS;
+import static frc.robot.settings.Constants.ElevatorConstants.HUMAN_PLAYER_STATION_MILLIMETERS;
 
 import frc.robot.subsystems.RobotState;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -32,7 +32,7 @@ public class CoralIntake extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    elevatorSubsystem.setElevatorPosition(HUMAN_PLAYER_STATION_ROTATIONS);
+    elevatorSubsystem.setElevatorPosition(HUMAN_PLAYER_STATION_MILLIMETERS);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
