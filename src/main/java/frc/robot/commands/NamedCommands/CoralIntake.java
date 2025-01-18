@@ -39,7 +39,7 @@ public class CoralIntake extends Command {
   @Override
   public void execute() {
     coralIntake.runCoralEndEffector(0.3);
-    funnelIntake.runFunnel();
+    funnelIntake.runFunnel(2491);
   }
 
   // Called once the command ends or is interrupted.
