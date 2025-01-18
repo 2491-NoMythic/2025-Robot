@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AlgaeEndeffectorCommand;
+import frc.robot.commands.ApproachReef;
 import frc.robot.commands.Drive;
 import frc.robot.commands.LineUp;
 import frc.robot.commands.MoveMeters;
@@ -96,6 +97,7 @@ public class RobotContainer {
   private FunnelIntake funnelIntake;
   private FunnelRotator funnelRotator;
   private DeliverCoral deliverCoral;
+  private ApproachReef approachReef;
   RobotState robotState;
   Alliance currentAlliance;
   BooleanSupplier ZeroGyroSup;
@@ -146,15 +148,15 @@ public class RobotContainer {
       operatorControllerPS4 = new PS4Controller(OPERATOR_CONTROLLER_ID);
       LeftReefLineupSup = driverControllerPS4::getL1Button;
       RightReefLineupSup = driverControllerPS4::getR1Button;
-      SlowFrontSup = driverControllerPS4::getR2Button;
+      SlowFrontSup = ()->driverControllerPS4.getR2Axis()>-0.5;
       
       ZeroGyroSup = driverControllerPS4::getPSButton;
     }
 
     limelightInit();
+    sensorInit();     
     driveTrainInst();
     lightsInst();
-    sensorInit();     
  
     if (coralEndeffectorExists) {coralEndDefectorInst();}
     if (algaeEndeffectorExists) {algaeEndDefectorInst();}
@@ -180,6 +182,13 @@ public class RobotContainer {
           () -> modifyAxis(-driverControllerXbox.getRawAxis(X_AXIS), DEADBAND_NORMAL),
           () -> modifyAxis(-driverControllerXbox.getRawAxis(Z_AXIS), DEADBAND_NORMAL));
       driveTrain.setDefaultCommand(defaultDriveCommand);
+
+      approachReef = new ApproachReef(
+        distanceSensors,
+        driveTrain,
+        () -> modifyAxis(-driverControllerXbox.getRawAxis(Y_AXIS), DEADBAND_NORMAL),
+        () -> modifyAxis(-driverControllerXbox.getRawAxis(X_AXIS), DEADBAND_NORMAL),
+        () -> modifyAxis(-driverControllerXbox.getRawAxis(Z_AXIS), DEADBAND_NORMAL));
     } else {
       defaultDriveCommand = new Drive(
           driveTrain,
@@ -188,6 +197,13 @@ public class RobotContainer {
           () -> modifyAxis(-driverControllerPS4.getRawAxis(X_AXIS), DEADBAND_NORMAL),
           () -> modifyAxis(-driverControllerPS4.getRawAxis(Z_AXIS), DEADBAND_NORMAL));
       driveTrain.setDefaultCommand(defaultDriveCommand);
+
+      approachReef = new ApproachReef(
+        distanceSensors,
+        driveTrain,
+        () -> modifyAxis(-driverControllerPS4.getRawAxis(Y_AXIS), DEADBAND_NORMAL),
+        () -> modifyAxis(-driverControllerPS4.getRawAxis(X_AXIS), DEADBAND_NORMAL),
+        () -> modifyAxis(-driverControllerPS4.getRawAxis(Z_AXIS), DEADBAND_NORMAL));
     }
   }
 
@@ -253,6 +269,8 @@ public class RobotContainer {
     new Trigger(()->RightReefLineupSup.getAsBoolean()||LeftReefLineupSup.getAsBoolean()).whileTrue(new LineUp(
       driveTrain, 
       LeftReefLineupSup));
+    
+    new Trigger(SlowFrontSup).whileTrue(approachReef);
     
     InstantCommand setOffsets = new InstantCommand(driveTrain::setEncoderOffsets) {
       public boolean runsWhenDisabled() {
