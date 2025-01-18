@@ -88,7 +88,7 @@ public class DistanceSensors  extends SubsystemBase{
     RobotState.getInstance().middleRightSensorTriggered = middleRight.getRange()<RANGE_TO_SEE_REEF && middleRight.getRange()>0;
     RobotState.getInstance().farRightSensorTriggered = farRight.getRange()<RANGE_TO_SEE_REEF && farRight.getRange()>0;
   //for testing purposes
-    SmartDashboard.putBoolean("RSensorT", middleRight.getRange()<RANGE_TO_SEE_REEF & middleRight.getRange()>0);
+    SmartDashboard.putBoolean("FLSensorT", farLeft.getRange()<RANGE_TO_SEE_REEF & farLeft.getRange()>0);
     SmartDashboard.putBoolean("FRSensorT", farRight.getRange()<RANGE_TO_SEE_REEF & farRight.getRange()>0);
   }
 }

@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 import javax.print.attribute.standard.MediaSize.Other;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class RobotState {
   private static RobotState instance;
   public boolean LimelightsUpdated;
@@ -48,22 +50,22 @@ public class RobotState {
     if (sFR) {
       value |= 0b0001;
     }
-
     switch (value) {
       
        case 0b0001:
       // case 0b0011: 
-       return ReefOffset.TOO_FAR_LEFT;
+     //  return ReefOffset.TOO_FAR_LEFT;
       // case 0b0111: 
-      //   return ReefOffset.ALIGNED_LEFT;
+         return ReefOffset.ALIGNED_LEFT;
       // case 0b1111:
       case 0b1001: 
         return ReefOffset.CENTERED;
       // case 0b1110: 
-      //   return ReefOffset.ALIGNED_RIGHT;
-       case 0b1000:
+      case 0b1000:
+        return ReefOffset.ALIGNED_RIGHT;
+      // case 0b1000:
       // case 0b1100: 
-       return ReefOffset.TOO_FAR_RIGHT;
+     //  return ReefOffset.TOO_FAR_RIGHT;
        case 0b0000: 
        return ReefOffset.NOT_SENSED;
        default: 

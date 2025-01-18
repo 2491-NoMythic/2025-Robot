@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.util.sendable.Sendable;
@@ -27,7 +29,7 @@ public class LineUp extends Command {
   boolean sLtrig;
   boolean sRtrig;
   boolean sFRtrig;
-  boolean movingLeft;
+  BooleanSupplier movingLeft;
   boolean notSensed;
   boolean finished;
 
@@ -36,35 +38,38 @@ public class LineUp extends Command {
  * @param drivetrain
  * @param movingLeft true if you are aligning on the left pole, false, if you are aligning on the right pole
  */
-  public LineUp(DrivetrainSubsystem drivetrain, boolean movingLeft) {
+  public LineUp(DrivetrainSubsystem drivetrain, BooleanSupplier movingLeft) {
     this.drivetrain = drivetrain;
     this.movingLeft = movingLeft;
     addRequirements(drivetrain);
     
-    notSensed = false;
     // Use addRequirements() here to declare subsystem dependencies.
   }
-
+  
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
+    notSensed = false;
+    finished = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    SmartDashboard.putBoolean("LINEUP/notSensed", notSensed);
+    SmartDashboard.putBoolean("LINEUP/movingLeft", movingLeft.getAsBoolean());
   //update sensor readings with Robot STate (which is updated periodically by DistanceSensors.java)
     sFLtrig = RobotState.getInstance().farLeftSensorTriggered;
     sLtrig = RobotState.getInstance().middleLeftSensorTriggered;
     sRtrig = RobotState.getInstance().middleRightSensorTriggered;
-    sFRtrig = RobotState.getInstance().middleRightSensorTriggered;
+    sFRtrig = RobotState.getInstance().farRightSensorTriggered;
     
   //moves the robot based on what the Robot State declares is our location, relative to the reef lineup
     reefOffset = RobotState.calcOffset(sFLtrig, /*sLtrig, sRtrig,*/ sFRtrig);
+    SmartDashboard.putString("sensing case", reefOffset.toString());
     switch(reefOffset){
       case TOO_FAR_LEFT:
-        if (movingLeft) {
+        if (movingLeft.getAsBoolean()) {
           drivetrain.drive(new ChassisSpeeds(0, -0.2, 0));
         } else{
           drivetrain.drive(new ChassisSpeeds(0, -0.3, 0));
@@ -72,26 +77,26 @@ public class LineUp extends Command {
         break;
 
       case ALIGNED_LEFT:
-        if(movingLeft) {
-          drivetrain.stop();
+        if(movingLeft.getAsBoolean()) {
+           drivetrain.stop();
           drivetrain.pointWheelsInward();
           finished = true;
         } else {
-          drivetrain.drive(new ChassisSpeeds(0, -0.2, 0));
+          drivetrain.drive(new ChassisSpeeds(0, 0.2, 0));
         }   
         break;
 
       case CENTERED:
-        if(movingLeft) {
-          drivetrain.drive(new ChassisSpeeds(0, 0.2, 0));
-        } else {
+        if(movingLeft.getAsBoolean()) {
           drivetrain.drive(new ChassisSpeeds(0, -0.2, 0));
+        } else {
+          drivetrain.drive(new ChassisSpeeds(0, 0.2, 0));
         }   
         break;
 
       case ALIGNED_RIGHT:
-        if(movingLeft) {
-          drivetrain.drive(new ChassisSpeeds(0, 0.2, 0));
+        if(movingLeft.getAsBoolean()) {
+          drivetrain.drive(new ChassisSpeeds(0, -0.2, 0));
         } else {
           drivetrain.stop();
           drivetrain.pointWheelsInward();
@@ -100,7 +105,7 @@ public class LineUp extends Command {
         break;
       
       case TOO_FAR_RIGHT:
-        if(movingLeft) {
+        if(movingLeft.getAsBoolean()) {
           drivetrain.drive(new ChassisSpeeds(0, 0.3, 0));
         } else {
           drivetrain.drive(new ChassisSpeeds(0, 0.2, 0));
@@ -115,20 +120,22 @@ public class LineUp extends Command {
         drivetrain.stop();
         drivetrain.pointWheelsInward();
         finished = true;   
-        break;
+        break;  
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-
+    System.out.println("command ended by condtions"+finished+notSensed);
+    drivetrain.stop();
+    finished = false;
+    notSensed = false;
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // return distance >= m_meters;
-    return notSensed;
+    return finished||notSensed;
   }
 }
