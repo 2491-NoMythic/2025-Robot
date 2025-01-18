@@ -4,12 +4,14 @@
 
 package frc.robot.commands.NamedCommands;
 
+import static frc.robot.settings.Constants.CoralEndeffectorConstants.CORAL_ENDEFFECTOR_SPEED;
 import static frc.robot.settings.Constants.ElevatorConstants.REEF_LEVEL_4_ROTATIONS;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.CoralEndeffectorSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.RobotState;
+import frc.robot.settings.Constants;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class deliverCoral extends Command {
@@ -35,13 +37,13 @@ public class deliverCoral extends Command {
   public void execute() {
     elevatorSubsystem.setElevatorPosition(REEF_LEVEL_4_ROTATIONS);
     
-    coralEndeffector.runCoralEndDefector(REEF_LEVEL_4_ROTATIONS);
+    coralEndeffector.runCoralEndEffector(CORAL_ENDEFFECTOR_SPEED);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    coralEndeffector.stopCoralEndDefector();
+    coralEndeffector.stopCoralEndEffector();
   }
 
   // Returns true when the command should end.

@@ -351,6 +351,7 @@ public final class Constants {
     .withCurrentLimits(new CurrentLimitsConfigs()
       .withSupplyCurrentLimit(100)
       .withSupplyCurrentLimitEnable(true));
+    public static final double CORAL_ENDEFFECTOR_SPEED = 2491.0;
   }
 
   public final class AlgaeEndeffectorConstants{

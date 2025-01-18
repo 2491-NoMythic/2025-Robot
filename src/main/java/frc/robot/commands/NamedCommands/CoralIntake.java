@@ -33,7 +33,7 @@ public class CoralIntake extends Command {
   @Override
   public void initialize() {
     elevatorSubsystem.setElevatorPosition(HUMAN_PLAYER_STATION_ROTATIONS);
-    coralIntake.runCoralEndDefector(0.3);
+    coralIntake.runCoralEndEffector(0.3);
     funnelIntake.runFunnel();
   }
 
