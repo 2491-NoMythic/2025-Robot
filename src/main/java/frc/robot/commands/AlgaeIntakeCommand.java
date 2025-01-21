@@ -39,6 +39,10 @@ public class AlgaeIntakeCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    if (algaeEndeffector.powerSpike == true){
+      return true;
+    } else {
+      return false;
   }
+}
 }

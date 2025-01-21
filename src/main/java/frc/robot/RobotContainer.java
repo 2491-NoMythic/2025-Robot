@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AlgaeEndeffectorCommand;
+import frc.robot.commands.AlgaeIntakeCommand;
 import frc.robot.commands.Drive;
 import frc.robot.commands.LineUp;
 import frc.robot.commands.MoveMeters;
@@ -103,6 +104,7 @@ public class RobotContainer {
   BooleanSupplier LeftReefLineupSup;
   BooleanSupplier RightReefLineupSup;
   BooleanSupplier SlowFrontSup;
+  BooleanSupplier AlgaeIntakeSup;
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
@@ -258,7 +260,7 @@ public class RobotContainer {
     new Trigger(RightReefLineupSup).whileTrue(new LineUp(
       driveTrain, 
       false));
-    
+    new Trigger(AlgaeIntakeSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector));
     InstantCommand setOffsets = new InstantCommand(driveTrain::setEncoderOffsets) {
       public boolean runsWhenDisabled() {
         return true;
