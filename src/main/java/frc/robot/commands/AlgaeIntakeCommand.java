@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.AlgaeEndeffectorSubsystem;
+import frc.robot.subsystems.RobotState;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class AlgaeIntakeCommand extends Command {
@@ -39,7 +40,7 @@ public class AlgaeIntakeCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (algaeEndeffector.powerSpike == true){
+    if (RobotState.getInstance().hasCoral == true){
       return true;
     } else {
       return false;
