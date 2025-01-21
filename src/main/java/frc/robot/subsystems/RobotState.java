@@ -13,7 +13,7 @@ public class RobotState {
   public boolean farRightSensorTriggered;
   public boolean coralSeen;
   public boolean coralGone;
-  public boolean hasCoral;
+  public boolean hasAlgae;
 
   private RobotState() {
   }

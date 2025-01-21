@@ -10,32 +10,23 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.*;
 import edu.wpi.first.math.controller.PIDController;
 public class AlgaeEndeffectorSubsystem extends SubsystemBase {
-  TalonFX algaeEndeffectorMotor;
+  TalonFX algaeEndDefectorMotor;
   PIDController algendController;
-  public boolean powerSpike;
   /** Creates a new AlgaeEndDefectorSubsystem. */
   public AlgaeEndeffectorSubsystem() {
-    algaeEndeffectorMotor = new TalonFX(ALGAE_ENDEFFECTOR_MOTOR_1_ID);
-    algaeEndeffectorMotor.getConfigurator().apply(AlgaeEndeffectorConfig);
+    algaeEndDefectorMotor = new TalonFX(ALGAE_ENDEFFECTOR_MOTOR_1_ID);
+    algaeEndDefectorMotor.getConfigurator().apply(AlgaeEndeffectorConfig);
   }
-  public boolean powerCheck(){
-    if (algaeEndeffectorMotor.getSupplyCurrent().getValueAsDouble() >= 95){
-      powerSpike = true;
-    } else {
-      powerSpike = false;
-    }
-    return powerSpike;
-  }
+
   public void runAlgaeEndDefector(double speed){
-    algaeEndeffectorMotor.set(speed);
+    algaeEndDefectorMotor.set(speed);
 
   }
   public void stopAlgaeEndDefector(){
-    algaeEndeffectorMotor.set(0);
+    algaeEndDefectorMotor.set(0);
   }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    powerCheck();
   }
 }

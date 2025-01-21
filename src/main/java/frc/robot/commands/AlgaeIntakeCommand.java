@@ -40,10 +40,6 @@ public class AlgaeIntakeCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (RobotState.getInstance().hasCoral == true){
-      return true;
-    } else {
-      return false;
-  }
+    return RobotState.getInstance().hasAlgae;
 }
 }
