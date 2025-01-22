@@ -270,6 +270,8 @@ public class RobotContainer {
   private void configureBindings() {
     SmartDashboard.putData("drivetrain", driveTrain);
 
+    new Trigger(ZeroGyroSup).onTrue(new InstantCommand(driveTrain::zeroGyroscope));
+
     new Trigger(()->RightReefLineupSup.getAsBoolean()||LeftReefLineupSup.getAsBoolean()).whileTrue(new LineUp(
       driveTrain, 
       LeftReefLineupSup));
