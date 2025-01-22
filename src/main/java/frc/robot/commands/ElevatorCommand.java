@@ -7,16 +7,18 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.settings.Constants.ElevatorConstants;
+import frc.robot.settings.ElevatorEnums;
+
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ElevatorCommand extends Command {
   ElevatorSubsystem elevator;
-  int level;
+  ElevatorEnums level;
   /** Creates a new ElevatorCommand. 
    * @param elevator elevator subsystem
    * @param level level of reef, human player station is 0. 
   */
-  public ElevatorCommand(ElevatorSubsystem elevator, int level) {
+  public ElevatorCommand(ElevatorSubsystem elevator, ElevatorEnums level) {
     this.elevator = elevator;
     this.level = level;
     addRequirements(elevator);
@@ -31,15 +33,15 @@ public class ElevatorCommand extends Command {
   @Override
   public void execute() {
     switch(level){
-      case 0:
-        elevator.setElevatorPosition(ElevatorConstants.HUMAN_PLAYER_STATION_ROTATIONS);
-      case 1:
+      case HumanPlayer:
+        elevator.setElevatorPosition(ElevatorConstants.HUMAN_PLAYER_STATION_MILLIMETERS);
+      case Reef1:
         elevator.setElevatorPosition(ElevatorConstants.REEF_LEVEL_1_MILLIMETERS);
-      case 2:
+      case Reef2:
         elevator.setElevatorPosition(ElevatorConstants.REEF_LEVEL_2_MILLIMETERS);
-      case 3:
+      case Reef3:
         elevator.setElevatorPosition(ElevatorConstants.REEF_LEVEL_3_MILLIMETERS);
-      case 4:
+      case Reef4:
         elevator.setElevatorPosition(ElevatorConstants.REEF_LEVEL_4_MILLIMETERS);
     }
   }

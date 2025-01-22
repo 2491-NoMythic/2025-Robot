@@ -32,12 +32,14 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AlgaeEndeffectorCommand;
 import frc.robot.commands.ApproachReef;
+import frc.robot.commands.AlgaeIntakeCommand;
 import frc.robot.commands.Drive;
 import frc.robot.commands.LineUp;
 import frc.robot.commands.MoveMeters;
 import frc.robot.subsystems.DistanceSensors;
 import frc.robot.commands.NamedCommands.CoralIntake;
 import frc.robot.commands.NamedCommands.DeliverCoral;
+import frc.robot.settings.SensorNameEnums;
 import frc.robot.subsystems.AlgaeEndeffectorSubsystem;
 import frc.robot.subsystems.CoralEndeffectorSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -104,6 +106,7 @@ public class RobotContainer {
   BooleanSupplier LeftReefLineupSup;
   BooleanSupplier RightReefLineupSup;
   BooleanSupplier SlowFrontSup;
+  BooleanSupplier AlgaeIntakeSup;
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
@@ -142,6 +145,7 @@ public class RobotContainer {
       LeftReefLineupSup = driverControllerXbox::getLeftBumperButton;
       RightReefLineupSup =  driverControllerXbox::getRightBumperButton;
       SlowFrontSup = ()-> driverControllerXbox.getRightTriggerAxis() > 0.1;
+      AlgaeIntakeSup = driverControllerXbox::getAButton; //TODO change to actual
       
     } else {
       driverControllerPS4 = new PS4Controller(DRIVE_CONTROLLER_ID);
@@ -149,7 +153,8 @@ public class RobotContainer {
       LeftReefLineupSup = driverControllerPS4::getL1Button;
       RightReefLineupSup = driverControllerPS4::getR1Button;
       SlowFrontSup = ()->driverControllerPS4.getR2Axis()>-0.5;
-      
+      AlgaeIntakeSup = driverControllerPS4::getCrossButton; //TODO change to actual
+
       ZeroGyroSup = driverControllerPS4::getPSButton;
     }
 
@@ -248,7 +253,6 @@ public class RobotContainer {
   private void funnelRotatorInst() {
     funnelRotator = new FunnelRotator();
   }
-
   /**
    * Use this method to define your trigger->command mappings. Triggers can be
    * created via the
@@ -271,6 +275,7 @@ public class RobotContainer {
       LeftReefLineupSup));
     
     new Trigger(SlowFrontSup).whileTrue(approachReef);
+    new Trigger(AlgaeIntakeSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector));
     
     InstantCommand setOffsets = new InstantCommand(driveTrain::setEncoderOffsets) {
       public boolean runsWhenDisabled() {
@@ -367,7 +372,11 @@ public class RobotContainer {
   public void teleopPeriodic() {
     SmartDashboard.putData(driveTrain.getCurrentCommand());
   }
-
+  public void robotInit(){
+    if (elevatorExists){
+      elevator.setZero(distanceSensors.getDistance(SensorNameEnums.Elevator));
+    }
+  }
   public void robotPeriodic() {
     currentAlliance = DriverStation.getAlliance().get();
     SmartDashboard.putString(

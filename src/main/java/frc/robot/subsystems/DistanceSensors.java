@@ -5,7 +5,7 @@ import com.playingwithfusion.TimeOfFlight;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.settings.Constants.SensorConstants.*;
-
+import frc.robot.settings.SensorNameEnums;
 public class DistanceSensors  extends SubsystemBase{
 
     
@@ -30,25 +30,25 @@ public class DistanceSensors  extends SubsystemBase{
 /**
  * a method that returns the distance sensed by the given sensor, as shown below. If a sensor senses nothing within it's range, It returns 0.0 <br>
  * Left To Right, as Viewed from behind the line of sensors <p>
- * Elevator Sensor ID: 0 <p>
- * Far Left ID: 1 <p>
- * Middle Left ID: 2 <p>
- * Middle Right ID: 3 <p>
- * Far Right ID: 4 <p>
- * @param sensorNumber the ID of the sensor, as shown above
+ * Elevator Sensor ID: Elevator  <p>
+ * Far Left ID: FarLeft <p>
+ * Middle Left ID: MiddleLeft <p>
+ * Middle Right ID: MiddleRight <p>
+ * Far Right ID: FarRight <p>
+ * @param sensorName the ID of the sensor, as shown above
  * @return the distance sensed by given sensor
  */
-  public double getDistance(int sensorNumber) {
-    switch (sensorNumber) {
-      case 0:
+  public double getDistance(SensorNameEnums sensorName) {
+    switch (sensorName) {
+      case Elevator:
         return elevatorSensor.getRange();
-      case 1:
+      case FarLeft:
         return farLeft.getRange();
-      case 2:
+      case MiddleLeft:
         return middleLeft.getRange();
-      case 3:
+      case MiddleRight:
         return middleRight.getRange();
-      case 4:
+      case FarRight:
         return farRight.getRange();
       default:
       System.out.println("attempted to grab data from invalid sensor ID");

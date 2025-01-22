@@ -5,15 +5,18 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.CoralEndeffectorSubsystem;
+import frc.robot.subsystems.FunnelRotator;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class CoralIntakeCommand extends Command {
-  CoralEndeffectorSubsystem coralEndeffector;
-  /** Creates a new CoralEndDefectorCommand. */
-  public CoralIntakeCommand(CoralEndeffectorSubsystem coralEndeffector) {
-    this.coralEndeffector = coralEndeffector;
-    addRequirements(coralEndeffector);
+public class FunnelRotatorCommand extends Command {
+  FunnelRotator rotator;
+  double position;
+  /** Creates a new FunnelRotatorCommand. */
+  public FunnelRotatorCommand(FunnelRotator rotator, double position) {
+    this.rotator = rotator;
+    addRequirements(rotator);
+    this.position = position;
+
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -24,13 +27,13 @@ public class CoralIntakeCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    coralEndeffector.runCoralEndEffector(1);
+    rotator.setFunnelRotation(position);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    coralEndeffector.stopCoralEndEffector();
+    rotator.stopRotating();
   }
 
   // Returns true when the command should end.

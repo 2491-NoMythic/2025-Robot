@@ -4,11 +4,10 @@
 
 package frc.robot.commands.NamedCommands;
 
-import static frc.robot.settings.Constants.ElevatorConstants.HUMAN_PLAYER_STATION_ROTATIONS;
+import static frc.robot.settings.Constants.ElevatorConstants.HUMAN_PLAYER_STATION_MILLIMETERS;
 
 import frc.robot.subsystems.RobotState;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.commands.CoralIntakeCommand;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.subsystems.CoralEndeffectorSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -32,14 +31,14 @@ public class CoralIntake extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    elevatorSubsystem.setElevatorPosition(HUMAN_PLAYER_STATION_ROTATIONS);
+    elevatorSubsystem.setElevatorPosition(HUMAN_PLAYER_STATION_MILLIMETERS);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     coralIntake.runCoralEndEffector(0.3);
-    funnelIntake.runFunnel();
+    funnelIntake.runFunnel(2491);
   }
 
   // Called once the command ends or is interrupted.

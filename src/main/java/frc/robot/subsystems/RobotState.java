@@ -15,6 +15,7 @@ public class RobotState {
   public boolean farRightSensorTriggered;
   public boolean coralSeen;
   public boolean coralGone;
+  public boolean hasAlgae;
 
   private RobotState() {
   }
@@ -25,7 +26,6 @@ public class RobotState {
     }
     return instance;
   }
-
   public enum ReefOffset {
     TOO_FAR_LEFT,
     ALIGNED_LEFT,

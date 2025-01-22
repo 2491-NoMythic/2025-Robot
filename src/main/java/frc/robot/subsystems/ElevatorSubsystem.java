@@ -12,21 +12,16 @@ import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.ControlModeValue;
 import com.ctre.phoenix6.signals.ForwardLimitValue;
-import com.revrobotics.spark.SparkBase.ControlType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.settings.Constants.ElevatorConstants;
 
 import static frc.robot.settings.Constants.ElevatorConstants.*;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 
 public class ElevatorSubsystem extends SubsystemBase {
   private TalonFX elevatorMotor1;
   private TalonFX elevatorMotor2;
-  private Rotation2d elevatorPos;
   private TalonFXConfiguration eleMotorConfig;
   private double zeroPoint;
   /** Creates a new ElevatorSubsystem. */
