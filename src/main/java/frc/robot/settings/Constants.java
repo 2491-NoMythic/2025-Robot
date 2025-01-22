@@ -349,32 +349,34 @@ public final class Constants {
   }
 
   public final class CoralEndeffectorConstants{
-    public static final int CORAL_ENDEFFECTOR_MOTOR_1_ID = 11;
+    public static final int CORAL_ENDEFFECTOR_MOTOR_1_ID = 2491;
+    public static final int CORAL_ENDEFFECTOR_MOTOR_2_ID = 2491;
 
-    public static final TalonFXConfiguration coralMotorConfigs= new TalonFXConfiguration()
-    .withSlot0(new Slot0Configs()
-      .withKP(1)
-      .withKS(0)
-      .withKA(0)
-      .withKV(0))
-    .withCurrentLimits(new CurrentLimitsConfigs()
-      .withSupplyCurrentLimit(100)
-      .withSupplyCurrentLimitEnable(true));
+    public static final int CORAL_ENDEFFECTOR_KP_1 = 2491;
+    public static final int CORAL_ENDEFFECTOR_KI_1 = 2491;
+    public static final int CORAL_ENDEFFECTOR_KD_1 = 2491;
+    public static final int CORAL_ENDEFFECTOR_KFF_1 = 2491;
+
+    public static final int CORAL_ENDEFFECTOR_KP_2 = 2491;
+    public static final int CORAL_ENDEFFECTOR_KI_2 = 2491;
+    public static final int CORAL_ENDEFFECTOR_KD_2 = 2491;
+    public static final int CORAL_ENDEFFECTOR_KFF_2 = 2491;
+
     public static final double CORAL_ENDEFFECTOR_SPEED = 2491.0;
   }
 
   public final class AlgaeEndeffectorConstants{
-    public static final int ALGAE_ENDEFFECTOR_MOTOR_1_ID = 12;
+    public static final int ALGAE_ENDEFFECTOR_MOTOR_1_ID = 2491;
+    public static final int ALGAE_ENDEFFECTOR_MOTOR_2_ID = 2491;
+    public static final int ALGAE_ENDEFFECTOR_KP_1 = 2491;
+    public static final int ALGAE_ENDEFFECTOR_KI_1 = 2491;
+    public static final int ALGAE_ENDEFFECTOR_KD_1 = 2491;
+    public static final int ALGAE_ENDEFFECTOR_KFF_1 = 2491;
 
-    public static final TalonFXConfiguration AlgaeEndeffectorConfig = new TalonFXConfiguration()
-    .withSlot0(new Slot0Configs()
-      .withKP(1)
-      .withKI(0)
-      .withKD(0)
-      .withKV(0))
-    .withCurrentLimits(new CurrentLimitsConfigs()
-      .withSupplyCurrentLimit(100)
-      .withSupplyCurrentLimitEnable(true));
+    public static final int ALGAE_ENDEFFECTOR_KP_2 = 2491;
+    public static final int ALGAE_ENDEFFECTOR_KI_2 = 2491;
+    public static final int ALGAE_ENDEFFECTOR_KD_2 = 2491;
+    public static final int ALGAE_ENDEFFECTOR_KFF_2 = 2491;
   }
   
   public final class ElevatorConstants{
@@ -406,33 +408,18 @@ public final class Constants {
   public final class FunnelConstants{
     public static final int FUNNEL_INTAKE_MOTOR_ID = 2491;
     public static final int FUNNEL_ROTATOR_MOTOR_ID = 2491;
+
+    public static final int FUNNEL_INTAKE_KP = 2491;
+    public static final int FUNNEL_INTAKE_KI = 2491;
+    public static final int FUNNEL_INTAKE_KD = 2491;
+    public static final int FUNNEL_INTAKE_KFF = 2491;
+
     public static final double FUNNEL_ROTATOR_KP = 2491;
-    public static final double FUNNEL_ROTATOR_KS = 2491;
-    public static final double FUNNEL_ROTATOR_KA = 2491;
-    public static final double FUNNEL_ROTATOR_KV = 2491;
+    public static final double FUNNEL_ROTATOR_KI = 2491;
+    public static final double FUNNEL_ROTATOR_KD = 2491;
+    public static final double FUNNEL_ROTATOR_KFF = 2491;
     public static final int FUNNEL_ROTATOR_SUPPLY_CURRENT_LIMIT = 2491;
     public static final double FUNNEL_ROTATOR_GEAR_RATIO = 2491;
-    public static final TalonFXConfiguration FunnelIntakeConfig = new TalonFXConfiguration()
-      .withSlot0(new Slot0Configs()
-        .withKP(1)
-        .withKI(0)
-        .withKD(0)
-        .withKV(0))
-      .withCurrentLimits(new CurrentLimitsConfigs()
-        .withSupplyCurrentLimit(100)
-        .withSupplyCurrentLimitEnable(true));
-    
-        public static final TalonFXConfiguration FunnelRotatorConfig = new TalonFXConfiguration()
-      .withSlot0(new Slot0Configs()
-        .withKP(1)
-        .withKI(0)
-        .withKD(0)
-        .withKV(0))
-      .withCurrentLimits(new CurrentLimitsConfigs()
-        .withSupplyCurrentLimit(100)
-        .withSupplyCurrentLimitEnable(true));
-
-    
   }
 }
 

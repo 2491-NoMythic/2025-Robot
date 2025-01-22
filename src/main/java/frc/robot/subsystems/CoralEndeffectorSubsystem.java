@@ -5,24 +5,61 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.ClosedLoopConfig;
+import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.settings.Constants.CoralEndeffectorConstants.*;
 
 public class CoralEndeffectorSubsystem extends SubsystemBase {
-  TalonFX coralEndDefectorMotor;
+  SparkMax coralEndDefectorMotor1;
+  SparkMax coralEndDefectorMotor2;
+  SparkBaseConfig coralConfig1;
+  SparkBaseConfig coralConfig2;
 
   /** Creates a new CoralEndDefectorSubsystem. */
   public CoralEndeffectorSubsystem() {
-    coralEndDefectorMotor = new TalonFX(CORAL_ENDEFFECTOR_MOTOR_1_ID);
-    coralEndDefectorMotor.getConfigurator().apply(coralMotorConfigs);
+    coralEndDefectorMotor1 = new SparkMax(CORAL_ENDEFFECTOR_MOTOR_1_ID, MotorType.kBrushless);
+    coralEndDefectorMotor2 = new SparkMax(CORAL_ENDEFFECTOR_MOTOR_1_ID, MotorType.kBrushless);
+    coralConfig1 = new SparkMaxConfig();
+    coralConfig1.apply(new ClosedLoopConfig().pidf(
+      CORAL_ENDEFFECTOR_KP_1,
+      CORAL_ENDEFFECTOR_KI_1,
+      CORAL_ENDEFFECTOR_KD_1,
+      CORAL_ENDEFFECTOR_KFF_1));
+    coralConfig1.idleMode(IdleMode.kCoast);
+    coralConfig1.smartCurrentLimit(25, 40, 1000);
+    coralEndDefectorMotor1.configure(coralConfig1, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    coralConfig1 = new SparkMaxConfig();
+
+    coralConfig2.apply(new ClosedLoopConfig().pidf(
+      CORAL_ENDEFFECTOR_KP_1,
+      CORAL_ENDEFFECTOR_KI_1,
+      CORAL_ENDEFFECTOR_KD_1,
+      CORAL_ENDEFFECTOR_KFF_1));
+    coralConfig2.idleMode(IdleMode.kCoast);
+    coralConfig2.smartCurrentLimit(25, 40, 1000);
+    coralEndDefectorMotor2.configure(coralConfig2, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
-  public void runCoralEndEffector(double speed){
-    coralEndDefectorMotor.set(speed);
+  /**
+   * a method to set the speeds of both motors on the end effector. speeds are percentage of full power, from -1 to 1.
+   * @param speed1 the speed for motor1
+   * @param speed2 the speed for motor2
+   */
+  public void runCoralEndEffector(double speed1, double speed2){
+    coralEndDefectorMotor1.set(speed1);
+    coralEndDefectorMotor2.set(speed2);
 
   }
   public void stopCoralEndEffector(){
-    coralEndDefectorMotor.set(0);
+    coralEndDefectorMotor1.set(0);
+    coralEndDefectorMotor2.set(0);
   }
   @Override
   public void periodic() {

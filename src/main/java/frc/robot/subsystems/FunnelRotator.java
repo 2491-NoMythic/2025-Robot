@@ -6,6 +6,15 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import com.revrobotics.spark.SparkBase;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.ClosedLoopConfig;
+import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -14,28 +23,25 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import static frc.robot.settings.Constants.FunnelConstants.*;
 
 public class FunnelRotator extends SubsystemBase {
-  private TalonFX rotatorMotor;
-  private TalonFXConfiguration rotatorMotorConfig;
+
+  private SparkBaseConfig rotatorMotorConfig;
+  SparkMax rotatorMotor; 
   /** Creates a new FunnelRotator. */
   public FunnelRotator() {
-    rotatorMotor = new TalonFX(FUNNEL_ROTATOR_MOTOR_ID);
-    rotatorMotor.getConfigurator().apply(FunnelRotatorConfig);
-    rotatorMotorConfig = new TalonFXConfiguration().withSlot0(new Slot0Configs()
-    .withKP(FUNNEL_ROTATOR_KP)
-    .withKS(FUNNEL_ROTATOR_KS)
-    .withKA(FUNNEL_ROTATOR_KA)
-    .withKV(FUNNEL_ROTATOR_KV)) 
-    .withCurrentLimits(new CurrentLimitsConfigs()
-    .withSupplyCurrentLimit(FUNNEL_ROTATOR_SUPPLY_CURRENT_LIMIT)
-    .withSupplyCurrentLimitEnable(true));
-    
-    
+    rotatorMotor = new SparkMax (FUNNEL_ROTATOR_MOTOR_ID, MotorType.kBrushless);
+    rotatorMotorConfig = new SparkMaxConfig();
+    rotatorMotorConfig.apply(new ClosedLoopConfig().pidf(
+      FUNNEL_ROTATOR_KP,
+      FUNNEL_ROTATOR_KI,
+      FUNNEL_ROTATOR_KD,
+      FUNNEL_ROTATOR_KFF));
+    rotatorMotorConfig.idleMode(IdleMode.kCoast);
+    rotatorMotorConfig.smartCurrentLimit(25, 40, 1000);
+    rotatorMotor.configure(rotatorMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
-  public void setFunnelRotation(double rotation) {
-    double position = rotation * FUNNEL_ROTATOR_GEAR_RATIO;
-    PositionVoltage voltReq = new PositionVoltage(0);
-    rotatorMotor.setControl(voltReq.withPosition(position)); 
+  public void setFunnelRotator(double speed) {
+    rotatorMotor.set(speed);
   }
   public void stopRotating(){
     rotatorMotor.set(0);
