@@ -160,6 +160,16 @@ public class DrivetrainSubsystem extends SubsystemBase {
 	public Rotation2d getGyroscopeRotation() {
 		return pigeon.getRotation2d();
 	}
+
+  public double getPigeonPitch(){
+    double pitch = pigeon.getPitch().getValueAsDouble();
+    return pitch;
+  }
+
+  public double getPigeonRoll(){
+    double roll = pigeon.getRoll().getValueAsDouble();
+    return roll;
+  }
   
   /**
    * @return a rotation2D of the angle according to the odometer
