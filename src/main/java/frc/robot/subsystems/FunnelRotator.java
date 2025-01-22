@@ -36,7 +36,7 @@ public class FunnelRotator extends SubsystemBase {
       FUNNEL_ROTATOR_KD,
       FUNNEL_ROTATOR_KFF));
     rotatorMotorConfig.idleMode(IdleMode.kCoast);
-    rotatorMotorConfig.smartCurrentLimit(25, 40, 1000);
+    rotatorMotorConfig.smartCurrentLimit(25, 25, 1000);
     rotatorMotor.configure(rotatorMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 

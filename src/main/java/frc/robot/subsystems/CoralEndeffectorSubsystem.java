@@ -44,7 +44,7 @@ public class CoralEndeffectorSubsystem extends SubsystemBase {
       CORAL_ENDEFFECTOR_KD_1,
       CORAL_ENDEFFECTOR_KFF_1));
     coralConfig2.idleMode(IdleMode.kCoast);
-    coralConfig2.smartCurrentLimit(25, 40, 1000);
+    coralConfig2.smartCurrentLimit(25, 25, 1000);
     coralEndeffectorMotor2.configure(coralConfig2, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
   /**

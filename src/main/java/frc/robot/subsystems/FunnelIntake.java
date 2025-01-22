@@ -32,7 +32,7 @@ public class FunnelIntake extends SubsystemBase {
       FUNNEL_INTAKE_KFF));
 
     intakeMotorConfig.idleMode(IdleMode.kCoast);
-    intakeMotorConfig.smartCurrentLimit(25, 40, 1000);
+    intakeMotorConfig.smartCurrentLimit(25, 25, 1000);
     intakeMotor.configure(intakeMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 

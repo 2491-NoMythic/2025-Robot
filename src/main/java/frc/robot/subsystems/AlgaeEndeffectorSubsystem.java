@@ -36,7 +36,7 @@ public class AlgaeEndeffectorSubsystem extends SubsystemBase {
       ALGAE_ENDEFFECTOR_KD_1,
       ALGAE_ENDEFFECTOR_KFF_1));
     algaeConfig1.idleMode(IdleMode.kCoast);
-    algaeConfig1.smartCurrentLimit(25, 40, 1000);
+    algaeConfig1.smartCurrentLimit(ALGAE_ENDEFFECTOR_CURRENT_LIMIT, ALGAE_ENDEFFECTOR_CURRENT_LIMIT, 1000);
     algaeEndeffectorMotor1.configure(algaeConfig1, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
    
     algaeConfig2 = new SparkMaxConfig();
@@ -46,7 +46,7 @@ public class AlgaeEndeffectorSubsystem extends SubsystemBase {
       ALGAE_ENDEFFECTOR_KD_2,
       ALGAE_ENDEFFECTOR_KFF_2));
     algaeConfig2.idleMode(IdleMode.kCoast);
-    algaeConfig2.smartCurrentLimit(25, 40, 1000);
+    algaeConfig2.smartCurrentLimit(ALGAE_ENDEFFECTOR_CURRENT_LIMIT, ALGAE_ENDEFFECTOR_CURRENT_LIMIT, 1000);
     algaeEndeffectorMotor2.configure(algaeConfig2, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     powerSpike = false;
   }
@@ -61,7 +61,8 @@ public class AlgaeEndeffectorSubsystem extends SubsystemBase {
     algaeEndeffectorMotor2.set(0);
   }
   public void powerCheck(){
-    if(algaeEndeffectorMotor1.getOutputCurrent()>95){
+    //if we are at 80%+ percent of the current limit, assume it's becuse we have an algae
+    if(algaeEndeffectorMotor1.getOutputCurrent()>ALGAE_ENDEFFECTOR_CURRENT_LIMIT*0.8){ 
       RobotState.getInstance().hasAlgae = true;
     }else{
       RobotState.getInstance().hasAlgae = false;
