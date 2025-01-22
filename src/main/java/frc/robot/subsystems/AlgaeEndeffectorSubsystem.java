@@ -18,16 +18,16 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.*;
 import edu.wpi.first.math.controller.PIDController;
 public class AlgaeEndeffectorSubsystem extends SubsystemBase {
-  SparkMax algaeEndDefectorMotor1;
-  SparkMax algaeEndDefectorMotor2;
+  SparkMax algaeEndeffectorMotor1;
+  SparkMax algaeEndeffectorMotor2;
   SparkBaseConfig algaeConfig1;
   SparkBaseConfig algaeConfig2;
   PIDController algendController;
   public boolean powerSpike;
   /** Creates a new AlgaeEndDefectorSubsystem. */
   public AlgaeEndeffectorSubsystem() {
-    algaeEndDefectorMotor1 = new SparkMax(ALGAE_ENDEFFECTOR_MOTOR_1_ID, MotorType.kBrushless);
-    algaeEndDefectorMotor2 = new SparkMax(ALGAE_ENDEFFECTOR_MOTOR_2_ID, MotorType.kBrushless);
+    algaeEndeffectorMotor1 = new SparkMax(ALGAE_ENDEFFECTOR_MOTOR_1_ID, MotorType.kBrushless);
+    algaeEndeffectorMotor2 = new SparkMax(ALGAE_ENDEFFECTOR_MOTOR_2_ID, MotorType.kBrushless);
 
     algaeConfig1 = new SparkMaxConfig();
     algaeConfig1.apply(new ClosedLoopConfig().pidf(
@@ -37,7 +37,7 @@ public class AlgaeEndeffectorSubsystem extends SubsystemBase {
       ALGAE_ENDEFFECTOR_KFF_1));
     algaeConfig1.idleMode(IdleMode.kCoast);
     algaeConfig1.smartCurrentLimit(25, 40, 1000);
-    algaeEndDefectorMotor1.configure(algaeConfig1, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    algaeEndeffectorMotor1.configure(algaeConfig1, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
    
     algaeConfig2 = new SparkMaxConfig();
     algaeConfig2.apply(new ClosedLoopConfig().pidf(
@@ -47,21 +47,21 @@ public class AlgaeEndeffectorSubsystem extends SubsystemBase {
       ALGAE_ENDEFFECTOR_KFF_2));
     algaeConfig2.idleMode(IdleMode.kCoast);
     algaeConfig2.smartCurrentLimit(25, 40, 1000);
-    algaeEndDefectorMotor2.configure(algaeConfig2, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    algaeEndeffectorMotor2.configure(algaeConfig2, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     powerSpike = false;
   }
 
   public void runAlgaeEndDefector(double speed){
-    algaeEndDefectorMotor1.set(speed);
-    algaeEndDefectorMotor2.set(speed);
+    algaeEndeffectorMotor1.set(speed);
+    algaeEndeffectorMotor2.set(speed);
   }
 
   public void stopAlgaeEndDefector(){
-    algaeEndDefectorMotor1.set(0);
-    algaeEndDefectorMotor2.set(0);
+    algaeEndeffectorMotor1.set(0);
+    algaeEndeffectorMotor2.set(0);
   }
   public void powerCheck(){
-    if(algaeEndDefectorMotor1.getOutputCurrent()>95){
+    if(algaeEndeffectorMotor1.getOutputCurrent()>95){
       RobotState.getInstance().hasAlgae = true;
     }else{
       RobotState.getInstance().hasAlgae = false;

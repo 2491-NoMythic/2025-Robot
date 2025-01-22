@@ -18,15 +18,15 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.settings.Constants.CoralEndeffectorConstants.*;
 
 public class CoralEndeffectorSubsystem extends SubsystemBase {
-  SparkMax coralEndDefectorMotor1;
-  SparkMax coralEndDefectorMotor2;
+  SparkMax coralEndeffectorMotor1;
+  SparkMax coralEndeffectorMotor2;
   SparkBaseConfig coralConfig1;
   SparkBaseConfig coralConfig2;
 
   /** Creates a new CoralEndDefectorSubsystem. */
   public CoralEndeffectorSubsystem() {
-    coralEndDefectorMotor1 = new SparkMax(CORAL_ENDEFFECTOR_MOTOR_1_ID, MotorType.kBrushless);
-    coralEndDefectorMotor2 = new SparkMax(CORAL_ENDEFFECTOR_MOTOR_1_ID, MotorType.kBrushless);
+    coralEndeffectorMotor1 = new SparkMax(CORAL_ENDEFFECTOR_MOTOR_1_ID, MotorType.kBrushless);
+    coralEndeffectorMotor2 = new SparkMax(CORAL_ENDEFFECTOR_MOTOR_1_ID, MotorType.kBrushless);
     coralConfig1 = new SparkMaxConfig();
     coralConfig1.apply(new ClosedLoopConfig().pidf(
       CORAL_ENDEFFECTOR_KP_1,
@@ -35,7 +35,7 @@ public class CoralEndeffectorSubsystem extends SubsystemBase {
       CORAL_ENDEFFECTOR_KFF_1));
     coralConfig1.idleMode(IdleMode.kCoast);
     coralConfig1.smartCurrentLimit(25, 40, 1000);
-    coralEndDefectorMotor1.configure(coralConfig1, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    coralEndeffectorMotor1.configure(coralConfig1, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     coralConfig1 = new SparkMaxConfig();
 
     coralConfig2.apply(new ClosedLoopConfig().pidf(
@@ -45,7 +45,7 @@ public class CoralEndeffectorSubsystem extends SubsystemBase {
       CORAL_ENDEFFECTOR_KFF_1));
     coralConfig2.idleMode(IdleMode.kCoast);
     coralConfig2.smartCurrentLimit(25, 40, 1000);
-    coralEndDefectorMotor2.configure(coralConfig2, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    coralEndeffectorMotor2.configure(coralConfig2, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
   /**
    * a method to set the speeds of both motors on the end effector. speeds are percentage of full power, from -1 to 1.
@@ -53,13 +53,13 @@ public class CoralEndeffectorSubsystem extends SubsystemBase {
    * @param speed2 the speed for motor2
    */
   public void runCoralEndEffector(double speed1, double speed2){
-    coralEndDefectorMotor1.set(speed1);
-    coralEndDefectorMotor2.set(speed2);
+    coralEndeffectorMotor1.set(speed1);
+    coralEndeffectorMotor2.set(speed2);
 
   }
   public void stopCoralEndEffector(){
-    coralEndDefectorMotor1.set(0);
-    coralEndDefectorMotor2.set(0);
+    coralEndeffectorMotor1.set(0);
+    coralEndeffectorMotor2.set(0);
   }
   @Override
   public void periodic() {
