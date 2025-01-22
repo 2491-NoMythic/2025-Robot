@@ -14,9 +14,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
+import frc.robot.settings.ReefOffsetEnums;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.RobotState;
-import frc.robot.subsystems.RobotState.ReefOffset;
 
 public class LineUp extends Command {
   /** Creates a new MoveMeters. */
@@ -24,7 +24,7 @@ public class LineUp extends Command {
   double fSensorSpeed;
   double lSensorSpeed;
   double rotSensorSpeed;
-  ReefOffset reefOffset;
+  ReefOffsetEnums reefOffset;
   boolean sFLtrig;
   boolean sLtrig;
   boolean sRtrig;
@@ -65,7 +65,7 @@ public class LineUp extends Command {
     sFRtrig = RobotState.getInstance().farRightSensorTriggered;
     
   //moves the robot based on what the Robot State declares is our location, relative to the reef lineup
-    reefOffset = RobotState.calcOffset(sFLtrig, /*sLtrig, sRtrig,*/ sFRtrig);
+    reefOffset = RobotState.getInstance().reefOffset;
     SmartDashboard.putString("sensing case", reefOffset.toString());
     switch(reefOffset){
       case TOO_FAR_LEFT:

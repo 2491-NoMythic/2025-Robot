@@ -4,6 +4,7 @@ import com.playingwithfusion.TimeOfFlight;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.settings.ReefOffsetEnums;
 import static frc.robot.settings.Constants.SensorConstants.*;
 import frc.robot.settings.SensorNameEnums;
 public class DistanceSensors  extends SubsystemBase{
@@ -74,6 +75,48 @@ public class DistanceSensors  extends SubsystemBase{
       distanceOfFrontDistancer = 0;
     }
   } 
+/**
+ * figures out the state of the robot, in terms of it being aligned infront of the reef. can return any state from ReefOffsetEnums
+ * @param sFL
+ * @param sFR
+ * @return
+ */
+  private ReefOffsetEnums calcOffset(boolean sFL, /*boolean sL, boolean sR,*/ boolean sFR){
+    int value = 0;
+    if (sFL) {
+      value |= 0b1000;
+    }
+    // if (sL) {
+    //   value |= 0b0100;
+    // }
+    // if (sR) {
+    //   value |= 0b0010;
+    // }
+    if (sFR) {
+      value |= 0b0001;
+    }
+    switch (value) {
+      
+       case 0b0001:
+      // case 0b0011: 
+     //  return ReefOffset.TOO_FAR_LEFT;
+      // case 0b0111: 
+         return ReefOffsetEnums.ALIGNED_LEFT;
+      // case 0b1111:
+      case 0b1001: 
+        return ReefOffsetEnums.CENTERED;
+      // case 0b1110: 
+      case 0b1000:
+        return ReefOffsetEnums.ALIGNED_RIGHT;
+      // case 0b1000:
+      // case 0b1100: 
+     //  return ReefOffset.TOO_FAR_RIGHT;
+       case 0b0000: 
+       return ReefOffsetEnums.NOT_SENSED;
+       default: 
+        return ReefOffsetEnums.UNKNOWN;
+    }
+  }
 
   private void updateRobotState() {
   //post ranges for each sensor to SmartDashboard
@@ -87,6 +130,12 @@ public class DistanceSensors  extends SubsystemBase{
     RobotState.getInstance().middleLeftSensorTriggered = middleLeft.getRange()<RANGE_TO_SEE_REEF && middleLeft.getRange()>0 ;
     RobotState.getInstance().middleRightSensorTriggered = middleRight.getRange()<RANGE_TO_SEE_REEF && middleRight.getRange()>0;
     RobotState.getInstance().farRightSensorTriggered = farRight.getRange()<RANGE_TO_SEE_REEF && farRight.getRange()>0;
+    RobotState.getInstance().reefOffset = calcOffset(
+      farLeft.getRange()<RANGE_TO_SEE_REEF && farLeft.getRange()>0,/* 
+      middleLeft.getRange()<RANGE_TO_SEE_REEF && middleLeft.getRange()>0,
+      middleRight.getRange()<RANGE_TO_SEE_REEF && middleRight.getRange()>0,*/
+      farRight.getRange()<RANGE_TO_SEE_REEF && farRight.getRange()>0
+    );
   //for testing purposes
     SmartDashboard.putBoolean("FLSensorT", farLeft.getRange()<RANGE_TO_SEE_REEF & farLeft.getRange()>0);
     SmartDashboard.putBoolean("FRSensorT", farRight.getRange()<RANGE_TO_SEE_REEF & farRight.getRange()>0);
