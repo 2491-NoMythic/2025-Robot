@@ -292,17 +292,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @param chassisSpeeds the desired speed and direction
    */
   public void drive(ChassisSpeeds chassisSpeeds) {
-    SwerveModuleState[] desiredStates =
-        kinematics.toSwerveModuleStates(ChassisSpeeds.discretize(chassisSpeeds, 0.02));
-    double maxSpeed = Collections.max(Arrays.asList(desiredStates)).speedMetersPerSecond;
-    if (maxSpeed <= DriveConstants.DRIVE_DEADBAND_MPS) {
-      for (int i = 0; i < 4; i++) {
-        stop();
-      }
-    } else {
-      setModuleStates(desiredStates);
-    }
-
     if (Preferences.getBoolean("AntiTipActive", false)) {
       if (pigeon.getRoll().getValueAsDouble() > 3) {
         chassisSpeeds.vxMetersPerSecond = chassisSpeeds.vxMetersPerSecond
@@ -318,6 +307,17 @@ public class DrivetrainSubsystem extends SubsystemBase {
         chassisSpeeds.vyMetersPerSecond = chassisSpeeds.vyMetersPerSecond
             + (-Math.sqrt(Math.abs(pigeon.getPitch().getValueAsDouble())) - 0.1);
       }
+    }
+    
+    SwerveModuleState[] desiredStates =
+        kinematics.toSwerveModuleStates(ChassisSpeeds.discretize(chassisSpeeds, 0.02));
+    double maxSpeed = Collections.max(Arrays.asList(desiredStates)).speedMetersPerSecond;
+    if (maxSpeed <= DriveConstants.DRIVE_DEADBAND_MPS) {
+      for (int i = 0; i < 4; i++) {
+        stop();
+      }
+    } else {
+      setModuleStates(desiredStates);
     }
   }
   /**
