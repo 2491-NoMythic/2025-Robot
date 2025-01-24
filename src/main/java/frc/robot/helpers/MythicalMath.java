@@ -29,6 +29,21 @@ public class MythicalMath {
   public static Pose2d divideOnlyPos(Pose2d pose, Double scalar) {
     return new Pose2d(pose.getX() / scalar, pose.getY() / scalar, pose.getRotation());
   }
+/**
+ * returns the minimum of two values, but treats any vaue that is 0 as 10,000
+ * @param value1
+ * @param value2
+ * @return
+ */
+  public static double minNotZero(double value1, double value2) {
+    if(value1 == 0) {
+      value1 = 10000;
+    }
+    if(value2 == 0) {
+      value2 = 10000;
+    }
+    return Math.min(value1, value2);
+  }
 
   /**
    * @param pose1
