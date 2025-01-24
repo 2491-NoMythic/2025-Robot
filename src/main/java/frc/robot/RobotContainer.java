@@ -53,6 +53,7 @@ import frc.robot.subsystems.RobotState;
 
 import java.io.IOException;
 import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -107,6 +108,9 @@ public class RobotContainer {
   BooleanSupplier RightReefLineupSup;
   BooleanSupplier SlowFrontSup;
   BooleanSupplier AlgaeIntakeSup;
+  DoubleSupplier ControllerYAxisSupplier;
+  DoubleSupplier ControllerXAxisSupplier;
+  DoubleSupplier ControllerZAxisSupplier;
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
@@ -141,6 +145,10 @@ public class RobotContainer {
       driverControllerXbox = new XboxController(DRIVE_CONTROLLER_ID);
       operatorControllerXbox = new XboxController(OPERATOR_CONTROLLER_ID);
 
+      ControllerXAxisSupplier = () -> modifyAxis(-driverControllerXbox.getRawAxis(X_AXIS), DEADBAND_NORMAL);
+      ControllerYAxisSupplier = () -> modifyAxis(-driverControllerXbox.getRawAxis(Y_AXIS), DEADBAND_NORMAL);
+      ControllerZAxisSupplier = () -> modifyAxis(-driverControllerXbox.getRawAxis(Z_AXIS), DEADBAND_NORMAL);
+      
       ZeroGyroSup = driverControllerXbox::getStartButton;
       LeftReefLineupSup = driverControllerXbox::getLeftBumperButton;
       RightReefLineupSup =  driverControllerXbox::getRightBumperButton;
@@ -150,6 +158,11 @@ public class RobotContainer {
     } else {
       driverControllerPS4 = new PS4Controller(DRIVE_CONTROLLER_ID);
       operatorControllerPS4 = new PS4Controller(OPERATOR_CONTROLLER_ID);
+
+      ControllerXAxisSupplier = () -> modifyAxis(-driverControllerPS4.getRawAxis(X_AXIS), DEADBAND_NORMAL);
+      ControllerYAxisSupplier = () -> modifyAxis(-driverControllerPS4.getRawAxis(Y_AXIS), DEADBAND_NORMAL);
+      ControllerZAxisSupplier = () -> modifyAxis(-driverControllerPS4.getRawAxis(Z_AXIS), DEADBAND_NORMAL);
+
       LeftReefLineupSup = driverControllerPS4::getL1Button;
       RightReefLineupSup = driverControllerPS4::getR1Button;
       SlowFrontSup = ()->driverControllerPS4.getR2Axis()>-0.5;
@@ -177,37 +190,21 @@ public class RobotContainer {
 
   private void driveTrainInst() {
     driveTrain = new DrivetrainSubsystem();
-    if (useXboxController) {
-      defaultDriveCommand = new Drive(
-          driveTrain,
-          () -> false,
-          () -> modifyAxis(-driverControllerXbox.getRawAxis(Y_AXIS), DEADBAND_NORMAL),
-          () -> modifyAxis(-driverControllerXbox.getRawAxis(X_AXIS), DEADBAND_NORMAL),
-          () -> modifyAxis(-driverControllerXbox.getRawAxis(Z_AXIS), DEADBAND_NORMAL));
-      driveTrain.setDefaultCommand(defaultDriveCommand);
 
-      approachReef = new ApproachReef(
-        distanceSensors,
+    defaultDriveCommand = new Drive(
         driveTrain,
-        () -> modifyAxis(-driverControllerXbox.getRawAxis(Y_AXIS), DEADBAND_NORMAL),
-        () -> modifyAxis(-driverControllerXbox.getRawAxis(X_AXIS), DEADBAND_NORMAL),
-        () -> modifyAxis(-driverControllerXbox.getRawAxis(Z_AXIS), DEADBAND_NORMAL));
-    } else {
-      defaultDriveCommand = new Drive(
-          driveTrain,
-          () -> false,
-          () -> modifyAxis(-driverControllerPS4.getRawAxis(Y_AXIS), DEADBAND_NORMAL),
-          () -> modifyAxis(-driverControllerPS4.getRawAxis(X_AXIS), DEADBAND_NORMAL),
-          () -> modifyAxis(-driverControllerPS4.getRawAxis(Z_AXIS), DEADBAND_NORMAL));
-      driveTrain.setDefaultCommand(defaultDriveCommand);
-
-      approachReef = new ApproachReef(
-        distanceSensors,
-        driveTrain,
-        () -> modifyAxis(-driverControllerPS4.getRawAxis(Y_AXIS), DEADBAND_NORMAL),
-        () -> modifyAxis(-driverControllerPS4.getRawAxis(X_AXIS), DEADBAND_NORMAL),
-        () -> modifyAxis(-driverControllerPS4.getRawAxis(Z_AXIS), DEADBAND_NORMAL));
-    }
+        () -> false,
+        ControllerYAxisSupplier,
+        ControllerXAxisSupplier,
+        ControllerZAxisSupplier);
+    driveTrain.setDefaultCommand(defaultDriveCommand);
+    
+    approachReef = new ApproachReef(
+      distanceSensors,
+      driveTrain,
+      ControllerYAxisSupplier,
+      ControllerXAxisSupplier,
+      ControllerZAxisSupplier);
   }
 
   private void autoInit() {
