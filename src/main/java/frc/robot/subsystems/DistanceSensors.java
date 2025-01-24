@@ -19,14 +19,15 @@ public class DistanceSensors  extends SubsystemBase{
   private TimeOfFlight farRight;
   private TimeOfFlight elevatorSensor;
 
-  private boolean FLValid;
-  private boolean MLValid;
-  private boolean FRValid;
-  private boolean MRValid;
+  private int loopsFLValid;
+  private int loopsMLValid;
+  private int loopsFRValid;
+  private int loopsMRValid;
   private double previousFL = 0;
   private double previousML = 0;
   private double previousFR = 0;
   private double previousMR = 0;
+  private final int loopsNeededForValid = 3;
 
   private double loopsSensed;
 
@@ -77,32 +78,32 @@ public class DistanceSensors  extends SubsystemBase{
       updateValidity();
   }
 /**
- * this method should be called periodically to update the FLValid, FRValid, MLValid, and MRValid booleans based on wether or not the sensor
- * is believed to be staring off into space or not. These booleans are used to verify if we are close enough to the reef, and also used in the getValidRange method
+ * this method should be called periodically to update the FLValid, FRValid, MLValid, and MRValid numbers based on wether or not the sensor
+ * is believed to be staring off into space or not. These numbers are used to verify if sensor readings are valid or just blinking static, and also used in the getValidRange method
  */
   private void updateValidity() {
     if(Math.abs(farLeft.getRange()-previousFL)>50) {
-      FLValid = false;
+      loopsFLValid = 0;
     } else {
-      FLValid = true;
+      loopsFLValid++;
     }
 
     if(Math.abs(middleLeft.getRange()-previousML)>50) {
-      MLValid = false;
+      loopsMLValid = 0;
     } else {
-      MLValid = true;
+      loopsMLValid++;
     }
 
     if(Math.abs(farRight.getRange()-previousFR)>50) {
-      FRValid = false;
+      loopsFRValid = 0;
     } else {
-      FRValid = true;
+      loopsFRValid++;
     }
 
     if(Math.abs(middleRight.getRange()-previousMR)>50) {
-      MRValid = false;
+      loopsMRValid = 0;
     } else {
-      MRValid = true;
+      loopsMRValid++;
     }
 
     previousFL = farLeft.getRange();
@@ -118,26 +119,26 @@ public class DistanceSensors  extends SubsystemBase{
   public double getValidRange(SensorNameEnums sensorName) {
     switch (sensorName) {
       case FarLeft:
-        if(FLValid) {
+        if(loopsFLValid>loopsNeededForValid) {
           return farLeft.getRange();
         } else {
           return 0;
         }
       case MiddleLeft:
-        if(MLValid) {
+        if(loopsMLValid>loopsNeededForValid) {
           return middleLeft.getRange();
         } else {
           return 0;
         }
       case FarRight: {
-        if(FRValid) {
+        if(loopsFRValid>loopsNeededForValid) {
           return farRight.getRange();
         } else {
           return 0;
         }
       }
       case MiddleRight: {
-        if(MRValid) {
+        if(loopsMRValid>loopsNeededForValid) {
           return middleRight.getRange();
         } else {
           return 0;
@@ -162,9 +163,11 @@ public class DistanceSensors  extends SubsystemBase{
   } 
 /**
  * figures out the state of the robot, in terms of it being aligned infront of the reef. can return any state from ReefOffsetEnums
- * @param sFL
- * @param sFR
- * @return
+ * @param sFL true if the far left sensor senses the reef in front of it
+ * @param sL true if the middle left sensor sense the reef in front of it
+ * @param sR true if the middle right sensor sense the reef in front of it
+ * @param sFR true if the far right sensor sense the reef in front of it
+ * @return what state of alignemnt in front of the reef our robot is, based on the inputted sensor readings
  */
   private ReefOffsetEnums calcOffset(boolean sFL, boolean sL, boolean sR, boolean sFR){
     int value = 0;
@@ -215,10 +218,22 @@ public class DistanceSensors  extends SubsystemBase{
     SmartDashboard.putNumber("SENSOR/VALIDRANGE/middle right", getValidRange(SensorNameEnums.MiddleRight));
     SmartDashboard.putNumber("SENSOR/VALIDRANGE/far right", getValidRange(SensorNameEnums.FarRight));
     //update Robot State with sensor readings
-    RobotState.getInstance().farLeftSensorTriggered = farLeft.getRange()<RANGE_TO_SEE_REEF && farLeft.getRange()>0 && FLValid;
-    RobotState.getInstance().middleLeftSensorTriggered = middleLeft.getRange()<RANGE_TO_SEE_REEF && middleLeft.getRange()>0 && MLValid;
-    RobotState.getInstance().middleRightSensorTriggered = middleRight.getRange()<RANGE_TO_SEE_REEF && middleRight.getRange()>0 && FRValid;
-    RobotState.getInstance().farRightSensorTriggered = farRight.getRange()<RANGE_TO_SEE_REEF && farRight.getRange()>0 && MRValid;
+    RobotState.getInstance().farLeftSensorTriggered = 
+      farLeft.getRange()<RANGE_TO_SEE_REEF //sensor senses that we are close enough to the reef to deliver a coral
+      && farLeft.getRange()>0 //the sensor does not read (which it sometimes reads when there is nothing within it's sensing range)
+      && loopsFLValid>loopsNeededForValid; //the sensor has given a consistent, smoothly changing reading for at least x loops of the code, meaning it isn't just blinking static
+    RobotState.getInstance().middleLeftSensorTriggered = 
+      middleLeft.getRange()<RANGE_TO_SEE_REEF
+      && middleLeft.getRange()>0
+      && loopsMLValid>loopsNeededForValid;
+    RobotState.getInstance().middleRightSensorTriggered =
+      middleRight.getRange()<RANGE_TO_SEE_REEF
+      && middleRight.getRange()>0
+      && loopsFRValid>loopsNeededForValid;
+    RobotState.getInstance().farRightSensorTriggered =
+      farRight.getRange()<RANGE_TO_SEE_REEF
+      && farRight.getRange()>0
+      && loopsMRValid>loopsNeededForValid;
     RobotState.getInstance().reefOffset = calcOffset(
       farLeft.getRange()<RANGE_TO_SEE_REEF && farLeft.getRange()>0, 
       middleLeft.getRange()<RANGE_TO_SEE_REEF && middleLeft.getRange()>0,
