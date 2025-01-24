@@ -78,6 +78,7 @@ public class RobotContainer {
   private final boolean elevatorExists = Preferences.getBoolean("Elevator", true);
   private final boolean funnelIntakeExists = Preferences.getBoolean("FunnelIntake", true);
   private final boolean funnelRotatorExists = Preferences.getBoolean("FunnelRotator", true);
+  private final boolean DrivetrainExists = Preferences.getBoolean("DrivetrainExists", true);
 
   private DrivetrainSubsystem driveTrain;
   private Drive defaultDriveCommand;
@@ -127,6 +128,7 @@ public class RobotContainer {
     Preferences.initBoolean("FunnelIntake", false);
     Preferences.initBoolean("FunnelRotator", false);
     Preferences.initBoolean("Climber", false);
+    Preferences.initBoolean("DrivetrainExists", false);
 
     DataLogManager.start(); // Start logging
     DriverStation.startDataLog(DataLogManager.getLog()); // Joystick Data logging
@@ -156,7 +158,7 @@ public class RobotContainer {
     }
 
     limelightInit();
-    driveTrainInst();
+    if (DrivetrainExists) {driveTrainInst();}
     lightsInst();
     sensorInit();     
  
@@ -167,7 +169,7 @@ public class RobotContainer {
     if (funnelIntakeExists) {funnelIntakeInst();}
     if (funnelRotatorExists) {funnelRotatorInst();}
 
-    configureDriveTrain();
+    if (DrivetrainExists) {configureDriveTrain();}
     configureBindings(); // Configure the trigger bindings
     autoInit();
   
@@ -251,9 +253,10 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    if (DrivetrainExists){
     SmartDashboard.putData("drivetrain", driveTrain);
     new Trigger(ZeroGyroSup).onTrue(new InstantCommand(driveTrain::zeroGyroscope));
-
+    
     new Trigger(LeftReefLineupSup).whileTrue(new LineUp(
       driveTrain, 
       true));
@@ -261,7 +264,6 @@ public class RobotContainer {
     new Trigger(RightReefLineupSup).whileTrue(new LineUp(
       driveTrain, 
       false));
-    new Trigger(AlgaeIntakeSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector));
     
     InstantCommand setOffsets = new InstantCommand(driveTrain::setEncoderOffsets) {
       public boolean runsWhenDisabled() {
@@ -271,6 +273,8 @@ public class RobotContainer {
 
     SmartDashboard.putData("set offsets", setOffsets);
     SmartDashboard.putData(new InstantCommand(driveTrain::forceUpdateOdometryWithVision));
+    }
+    new Trigger(AlgaeIntakeSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector));
     /*
      * bindings:
      * PS4: zero the gyroscope

@@ -47,18 +47,17 @@ public class AlgaeEndeffectorSubsystem extends SubsystemBase {
       ALGAE_ENDEFFECTOR_KFF_2));
     algaeConfig2.idleMode(IdleMode.kCoast);
     algaeConfig2.smartCurrentLimit(ALGAE_ENDEFFECTOR_CURRENT_LIMIT, ALGAE_ENDEFFECTOR_CURRENT_LIMIT, 1000);
+    algaeConfig2.follow(algaeEndeffectorMotor1);
     algaeEndeffectorMotor2.configure(algaeConfig2, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     powerSpike = false;
   }
 
   public void runAlgaeEndDefector(double speed){
     algaeEndeffectorMotor1.set(speed);
-    algaeEndeffectorMotor2.set(speed);
   }
 
   public void stopAlgaeEndDefector(){
     algaeEndeffectorMotor1.set(0);
-    algaeEndeffectorMotor2.set(0);
   }
   public void powerCheck(){
     //if we are at 80%+ percent of the current limit, assume it's becuse we have an algae
