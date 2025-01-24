@@ -4,13 +4,17 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.NamedCommands.DeliverCoral;
+import frc.robot.settings.ElevatorEnums;
 import frc.robot.subsystems.CoralEndeffectorSubsystem;
 import frc.robot.subsystems.DistanceSensors;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import java.util.function.Supplier;
 import frc.robot.commands.NamedCommands.DeliverCoral;
 import frc.robot.commands.ApproachReef;
 import frc.robot.commands.LineUp;
@@ -23,12 +27,13 @@ import com.pathplanner.lib.auto.NamedCommands;
 public class PlaceCoralCommand extends SequentialCommandGroup{
 
     
-    public PlaceCoralCommand(ElevatorSubsystem elevator,double elevatorPosition, DistanceSensors distanceSensors,
+    public PlaceCoralCommand(ElevatorSubsystem elevator, Supplier<ElevatorEnums> elevatorPose, DistanceSensors distanceSensors,
             DrivetrainSubsystem drivetrain, DoubleSupplier xSupplier, DoubleSupplier ySupplier, DoubleSupplier rSupplier,
             CoralEndeffectorSubsystem coralEndeffector, boolean leftPlace){
         addCommands(
-            new InstantCommand(()->elevator.setElevatorPosition(elevatorPosition), elevator),//moves elevator
-            new ApproachReef(distanceSensors, drivetrain,xSupplier, ySupplier, rSupplier),//aproches the reef
+            new ParallelRaceGroup(
+                new ElevatorCommand(elevator, elevatorPose),
+                new ApproachReef(distanceSensors, drivetrain, xSupplier, ySupplier, rSupplier)),//approaches reef while raising elevator
             new LineUp(drivetrain, leftPlace),//align with reef
             new DeliverCoral(coralEndeffector)//drops coral
         );

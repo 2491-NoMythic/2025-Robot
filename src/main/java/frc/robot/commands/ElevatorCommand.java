@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.settings.Constants.ElevatorConstants;
@@ -14,13 +16,14 @@ import frc.robot.settings.ElevatorEnums;
 public class ElevatorCommand extends Command {
   ElevatorSubsystem elevator;
   ElevatorEnums level;
+  Supplier<ElevatorEnums> levelSupplier;
   /** Creates a new ElevatorCommand. 
    * @param elevator elevator subsystem
    * @param level level of reef, human player station is 0. 
   */
-  public ElevatorCommand(ElevatorSubsystem elevator, ElevatorEnums level) {
+  public ElevatorCommand(ElevatorSubsystem elevator, Supplier<ElevatorEnums> levelSupplier) {
     this.elevator = elevator;
-    this.level = level;
+    this.levelSupplier = levelSupplier;
     addRequirements(elevator);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -32,6 +35,7 @@ public class ElevatorCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    level = levelSupplier.get();
     switch(level){
       case HumanPlayer:
         elevator.setElevatorPosition(ElevatorConstants.HUMAN_PLAYER_STATION_MILLIMETERS);
