@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import static frc.robot.settings.Constants.DriveConstants.ANTI_TIP_ACTIVE;
 import static frc.robot.settings.Constants.DriveConstants.BL_DRIVE_MOTOR_ID;
 import static frc.robot.settings.Constants.DriveConstants.BL_STEER_ENCODER_ID;
 import static frc.robot.settings.Constants.DriveConstants.BL_STEER_MOTOR_ID;
@@ -301,6 +302,26 @@ public class DrivetrainSubsystem extends SubsystemBase {
       }
     } else {
       setModuleStates(desiredStates);
+    }
+
+    if (ANTI_TIP_ACTIVE) {
+      if (Math.abs(pigeon.getRoll().getValueAsDouble()) > Math.abs(pigeon.getPitch().getValueAsDouble())) {
+        if (pigeon.getRoll().getValueAsDouble() > 3) {
+          chassisSpeeds.vxMetersPerSecond = chassisSpeeds.vxMetersPerSecond
+              + (Math.sqrt(pigeon.getRoll().getValueAsDouble()) - 0.1);
+        } else if (pigeon.getRoll().getValueAsDouble() < -3) {
+          chassisSpeeds.vxMetersPerSecond = chassisSpeeds.vxMetersPerSecond
+              + (-Math.sqrt(Math.abs(pigeon.getRoll().getValueAsDouble())) - 0.1);
+        }
+      } else if (Math.abs(pigeon.getRoll().getValueAsDouble()) < Math.abs(pigeon.getPitch().getValueAsDouble())) {
+        if (pigeon.getPitch().getValueAsDouble() > 3) {
+          chassisSpeeds.vyMetersPerSecond = chassisSpeeds.vyMetersPerSecond
+              + (Math.sqrt(pigeon.getPitch().getValueAsDouble()) - 0.1);
+        } else if (pigeon.getRoll().getValueAsDouble() < -3) {
+          chassisSpeeds.vyMetersPerSecond = chassisSpeeds.vyMetersPerSecond
+              + (-Math.sqrt(Math.abs(pigeon.getPitch().getValueAsDouble())) - 0.1);
+        }
+      }
     }
   }
   /**
