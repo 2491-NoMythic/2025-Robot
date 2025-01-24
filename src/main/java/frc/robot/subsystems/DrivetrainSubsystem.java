@@ -160,6 +160,16 @@ public class DrivetrainSubsystem extends SubsystemBase {
 	public Rotation2d getGyroscopeRotation() {
 		return pigeon.getRotation2d();
 	}
+
+  public double getPigeonPitch(){
+    double pitch = pigeon.getPitch().getValueAsDouble();
+    return pitch;
+  }
+
+  public double getPigeonRoll(){
+    double roll = pigeon.getRoll().getValueAsDouble();
+    return roll;
+  }
   
   /**
    * @return a rotation2D of the angle according to the odometer
@@ -282,6 +292,23 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @param chassisSpeeds the desired speed and direction
    */
   public void drive(ChassisSpeeds chassisSpeeds) {
+    if (Preferences.getBoolean("AntiTipActive", false)) {
+      if (pigeon.getRoll().getValueAsDouble() > 3) {
+        chassisSpeeds.vxMetersPerSecond = chassisSpeeds.vxMetersPerSecond
+            + (Math.sqrt(pigeon.getRoll().getValueAsDouble()) - 0.1);
+      } else if (pigeon.getRoll().getValueAsDouble() < -3) {
+        chassisSpeeds.vxMetersPerSecond = chassisSpeeds.vxMetersPerSecond
+            + (-Math.sqrt(Math.abs(pigeon.getRoll().getValueAsDouble())) - 0.1);
+      }
+      if (pigeon.getPitch().getValueAsDouble() > 3) {
+        chassisSpeeds.vyMetersPerSecond = chassisSpeeds.vyMetersPerSecond
+            + (Math.sqrt(pigeon.getPitch().getValueAsDouble()) - 0.1);
+      } else if (pigeon.getPitch().getValueAsDouble() < -3) {
+        chassisSpeeds.vyMetersPerSecond = chassisSpeeds.vyMetersPerSecond
+            + (-Math.sqrt(Math.abs(pigeon.getPitch().getValueAsDouble())) - 0.1);
+      }
+    }
+    
     SwerveModuleState[] desiredStates =
         kinematics.toSwerveModuleStates(ChassisSpeeds.discretize(chassisSpeeds, 0.02));
     double maxSpeed = Collections.max(Arrays.asList(desiredStates)).speedMetersPerSecond;

@@ -127,6 +127,7 @@ public class RobotContainer {
     Preferences.initBoolean("FunnelIntake", false);
     Preferences.initBoolean("FunnelRotator", false);
     Preferences.initBoolean("Climber", false);
+    Preferences.initBoolean("AntiTipActive", true);
 
     DataLogManager.start(); // Start logging
     DriverStation.startDataLog(DataLogManager.getLog()); // Joystick Data logging
