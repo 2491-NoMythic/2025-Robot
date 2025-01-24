@@ -314,7 +314,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
       if (pigeon.getPitch().getValueAsDouble() > 3) {
         chassisSpeeds.vyMetersPerSecond = chassisSpeeds.vyMetersPerSecond
             + (Math.sqrt(pigeon.getPitch().getValueAsDouble()) - 0.1);
-      } else if (pigeon.getRoll().getValueAsDouble() < -3) {
+      } else if (pigeon.getPitch().getValueAsDouble() < -3) {
         chassisSpeeds.vyMetersPerSecond = chassisSpeeds.vyMetersPerSecond
             + (-Math.sqrt(Math.abs(pigeon.getPitch().getValueAsDouble())) - 0.1);
       }
