@@ -6,6 +6,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.settings.ReefOffsetEnums;
 import static frc.robot.settings.Constants.SensorConstants.*;
+
+import org.opencv.core.Mat;
+
 import frc.robot.settings.SensorNameEnums;
 public class DistanceSensors  extends SubsystemBase{
 
@@ -15,6 +18,16 @@ public class DistanceSensors  extends SubsystemBase{
   private TimeOfFlight middleRight;
   private TimeOfFlight farRight;
   private TimeOfFlight elevatorSensor;
+
+  private boolean FLValid;
+  private boolean MLValid;
+  private boolean FRValid;
+  private boolean MRValid;
+  private double previousFL = 0;
+  private double previousML = 0;
+  private double previousFR = 0;
+  private double previousMR = 0;
+
   private double loopsSensed;
 
   public double distanceOfFrontDistancer;
@@ -61,6 +74,78 @@ public class DistanceSensors  extends SubsystemBase{
   public void periodic() {
       updateForReefApproach();
       updateRobotState();
+      updateValidity();
+  }
+/**
+ * this method should be called periodically to update the FLValid, FRValid, MLValid, and MRValid booleans based on wether or not the sensor
+ * is believed to be staring off into space or not. These booleans are used to verify if we are close enough to the reef, and also used in the getValidRange method
+ */
+  private void updateValidity() {
+    if(Math.abs(farLeft.getRange()-previousFL)>50) {
+      FLValid = false;
+    } else {
+      FLValid = true;
+    }
+
+    if(Math.abs(middleLeft.getRange()-previousML)>50) {
+      MLValid = false;
+    } else {
+      MLValid = true;
+    }
+
+    if(Math.abs(farRight.getRange()-previousFR)>50) {
+      FRValid = false;
+    } else {
+      FRValid = true;
+    }
+
+    if(Math.abs(middleRight.getRange()-previousMR)>50) {
+      MRValid = false;
+    } else {
+      MRValid = true;
+    }
+
+    previousFL = farLeft.getRange();
+    previousFR = farRight.getRange();
+    previousML = middleLeft.getRange();
+    previousMR = middleRight.getRange();
+  }
+/**
+ * 
+ * @param sensorName the name of the sensor that you want to check for
+ * @return if the sensor is blinking rapidly between values, then returns 0. If not, it returns the sensors range
+ */
+  public double getValidRange(SensorNameEnums sensorName) {
+    switch (sensorName) {
+      case FarLeft:
+        if(FLValid) {
+          return farLeft.getRange();
+        } else {
+          return 0;
+        }
+      case MiddleLeft:
+        if(MLValid) {
+          return middleLeft.getRange();
+        } else {
+          return 0;
+        }
+      case FarRight: {
+        if(FRValid) {
+          return farRight.getRange();
+        } else {
+          return 0;
+        }
+      }
+      case MiddleRight: {
+        if(MRValid) {
+          return middleRight.getRange();
+        } else {
+          return 0;
+        }
+      }
+      
+    }
+        return 0;
   }
 
   private void updateForReefApproach() {
@@ -125,11 +210,16 @@ public class DistanceSensors  extends SubsystemBase{
     SmartDashboard.putNumber("SENSOR/RANGE/middle left", middleLeft.getRange());
     SmartDashboard.putNumber("SENSOR/RANGE/middle right", middleRight.getRange());
     SmartDashboard.putNumber("SENSOR/RANGE/far right", farRight.getRange());
-  //update Robot State with sensor readings
-    RobotState.getInstance().farLeftSensorTriggered = farLeft.getRange()<RANGE_TO_SEE_REEF && farLeft.getRange()>0;
-    RobotState.getInstance().middleLeftSensorTriggered = middleLeft.getRange()<RANGE_TO_SEE_REEF && middleLeft.getRange()>0 ;
-    RobotState.getInstance().middleRightSensorTriggered = middleRight.getRange()<RANGE_TO_SEE_REEF && middleRight.getRange()>0;
-    RobotState.getInstance().farRightSensorTriggered = farRight.getRange()<RANGE_TO_SEE_REEF && farRight.getRange()>0;
+
+    SmartDashboard.putNumber("SENSOR/VALIDRANGE/far left", getValidRange(SensorNameEnums.FarLeft));
+    SmartDashboard.putNumber("SENSOR/VALIDRANGE/middle left", getValidRange(SensorNameEnums.MiddleLeft));
+    SmartDashboard.putNumber("SENSOR/VALIDRANGE/middle right", getValidRange(SensorNameEnums.MiddleRight));
+    SmartDashboard.putNumber("SENSOR/VALIDRANGE/far right", getValidRange(SensorNameEnums.FarRight));
+    //update Robot State with sensor readings
+    RobotState.getInstance().farLeftSensorTriggered = farLeft.getRange()<RANGE_TO_SEE_REEF && farLeft.getRange()>0 && FLValid;
+    RobotState.getInstance().middleLeftSensorTriggered = middleLeft.getRange()<RANGE_TO_SEE_REEF && middleLeft.getRange()>0 && MLValid;
+    RobotState.getInstance().middleRightSensorTriggered = middleRight.getRange()<RANGE_TO_SEE_REEF && middleRight.getRange()>0 && FRValid;
+    RobotState.getInstance().farRightSensorTriggered = farRight.getRange()<RANGE_TO_SEE_REEF && farRight.getRange()>0 && MRValid;
     RobotState.getInstance().reefOffset = calcOffset(
       farLeft.getRange()<RANGE_TO_SEE_REEF && farLeft.getRange()>0,/* 
       middleLeft.getRange()<RANGE_TO_SEE_REEF && middleLeft.getRange()>0,
