@@ -19,6 +19,7 @@ import frc.robot.commands.NamedCommands.DeliverCoral;
 import frc.robot.commands.ApproachReef;
 import frc.robot.commands.LineUp;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import com.pathplanner.lib.auto.NamedCommands;
@@ -29,12 +30,13 @@ public class PlaceCoralCommand extends SequentialCommandGroup{
     
     public PlaceCoralCommand(ElevatorSubsystem elevator, Supplier<ElevatorEnums> elevatorPose, DistanceSensors distanceSensors,
             DrivetrainSubsystem drivetrain, DoubleSupplier xSupplier, DoubleSupplier ySupplier, DoubleSupplier rSupplier,
-            CoralEndeffectorSubsystem coralEndeffector, boolean leftPlace){
+            CoralEndeffectorSubsystem coralEndeffector, BooleanSupplier leftPlace){
         addCommands(
             new ParallelRaceGroup(
                 new ElevatorCommand(elevator, elevatorPose),
                 new ApproachReef(distanceSensors, drivetrain, xSupplier, ySupplier, rSupplier)),//approaches reef while raising elevator
-            new LineUp(drivetrain, leftPlace),//align with reef
+            new LineUp(drivetrain, leftPlace, 0.9),//align with reef
+            new LineUp(drivetrain, leftPlace, 0.3),//align with reef
             new DeliverCoral(coralEndeffector)//drops coral
         );
 

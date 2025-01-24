@@ -19,8 +19,8 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ApproachReef extends Command {
-  private final double kP = 0.002;
-  private final double kI = 0.0;
+  private final double kP = 0.0023;
+  private final double kI = 0.001;
   private final double kD = 0.0;
   private final PIDController pidController = new PIDController(kP, kI, kD);
 
@@ -38,10 +38,13 @@ public class ApproachReef extends Command {
     DoubleSupplier translationYSupplier,
     DoubleSupplier rotationSupplier
   ) {
+    drivetrain = drivetrainSubsystem;
+    sensorSubsystem = distanceSensorsSubssytem;
     forwardSupplier = translationXSupplier;
     rightwardsSupplier = translationYSupplier;
     this.rotationSupplier = rotationSupplier;
-    addRequirements(distanceSensorsSubssytem, drivetrainSubsystem);
+    addRequirements(drivetrainSubsystem);
+    pidController.setIZone(300);
     pidController.setTolerance(10);
   }
 
@@ -83,7 +86,7 @@ public class ApproachReef extends Command {
     SmartDashboard.putNumber("SLOWFRONT/controller input speed", speeds.vxMetersPerSecond);
   //dont use the calculated speed unless it is between -1 and 0 (we don't want to go too fast)
     if(distance<1300) {
-      speeds.vxMetersPerSecond = Math.max(-1, calculatedSpeed);
+      speeds.vxMetersPerSecond = Math.max(-2, calculatedSpeed);
     }
   //drive using controller inputs + calculated forward speed
     drivetrain.drive(speeds);

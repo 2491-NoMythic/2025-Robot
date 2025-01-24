@@ -28,14 +28,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AlgaeEndeffectorCommand;
+import frc.robot.commands.ApproachReef;
 import frc.robot.commands.AlgaeIntakeCommand;
 import frc.robot.commands.Drive;
 import frc.robot.commands.LineUp;
 import frc.robot.commands.MoveMeters;
 import frc.robot.commands.PlaceCoralCommand;
+import frc.robot.commands.WaitCommand;
 import frc.robot.subsystems.DistanceSensors;
 import frc.robot.commands.NamedCommands.CoralIntake;
 import frc.robot.commands.NamedCommands.DeliverCoral;
@@ -54,6 +57,7 @@ import frc.robot.subsystems.RobotState;
 
 import java.io.IOException;
 import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -100,6 +104,7 @@ public class RobotContainer {
   private FunnelIntake funnelIntake;
   private FunnelRotator funnelRotator;
   private DeliverCoral deliverCoral;
+  private ApproachReef approachReef;
   RobotState robotState;
   Alliance currentAlliance;
   BooleanSupplier ZeroGyroSup;
@@ -112,6 +117,9 @@ public class RobotContainer {
   BooleanSupplier ReefHeight3Supplier;
   BooleanSupplier ReefHeight4Supplier;
   BooleanSupplier CoralIntakeHeightSupplier;
+  DoubleSupplier ControllerYAxisSupplier;
+  DoubleSupplier ControllerXAxisSupplier;
+  DoubleSupplier ControllerZAxisSupplier;
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
@@ -147,6 +155,10 @@ public class RobotContainer {
       driverControllerXbox = new XboxController(DRIVE_CONTROLLER_ID);
       operatorControllerXbox = new XboxController(OPERATOR_CONTROLLER_ID);
 
+      ControllerXAxisSupplier = () -> modifyAxis(-driverControllerXbox.getRawAxis(X_AXIS), DEADBAND_NORMAL);
+      ControllerYAxisSupplier = () -> modifyAxis(-driverControllerXbox.getRawAxis(Y_AXIS), DEADBAND_NORMAL);
+      ControllerZAxisSupplier = () -> modifyAxis(-driverControllerXbox.getRawAxis(Z_AXIS), DEADBAND_NORMAL);
+      
       ZeroGyroSup = driverControllerXbox::getStartButton;
       LeftReefLineupSup = driverControllerXbox::getLeftBumperButton;
       RightReefLineupSup =  driverControllerXbox::getRightBumperButton;
@@ -162,10 +174,16 @@ public class RobotContainer {
     } else {
       driverControllerPS4 = new PS4Controller(DRIVE_CONTROLLER_ID);
       operatorControllerPS4 = new PS4Controller(OPERATOR_CONTROLLER_ID);
+
+      ControllerXAxisSupplier = () -> modifyAxis(-driverControllerPS4.getRawAxis(X_AXIS), DEADBAND_NORMAL);
+      ControllerYAxisSupplier = () -> modifyAxis(-driverControllerPS4.getRawAxis(Y_AXIS), DEADBAND_NORMAL);
+      ControllerZAxisSupplier = () -> modifyAxis(-driverControllerPS4.getRawAxis(Z_AXIS), DEADBAND_NORMAL);
+
       LeftReefLineupSup = driverControllerPS4::getL1Button;
       RightReefLineupSup = driverControllerPS4::getR1Button;
-      SlowFrontSup = driverControllerPS4::getR2Button;
+      SlowFrontSup = ()->driverControllerPS4.getR2Axis()>-0.5;
       AlgaeIntakeSup = driverControllerPS4::getCrossButton; //TODO change to actual
+
       ZeroGyroSup = driverControllerPS4::getPSButton;
 
       ReefHeight1Supplier = ()->operatorControllerPS4.getPOV() == 0;
@@ -176,9 +194,9 @@ public class RobotContainer {
     }
 
     limelightInit();
+    sensorInit();     
     driveTrainInst();
     lightsInst();
-    sensorInit();     
  
     if (coralEndeffectorExists) {coralEndDefectorInst();}
     if (algaeEndeffectorExists) {algaeEndDefectorInst();}
@@ -190,29 +208,25 @@ public class RobotContainer {
     configureDriveTrain();
     configureBindings(); // Configure the trigger bindings
     autoInit();
-  
-
   }
 
   private void driveTrainInst() {
     driveTrain = new DrivetrainSubsystem();
-    if (useXboxController) {
-      defaultDriveCommand = new Drive(
-          driveTrain,
-          () -> false,
-          () -> modifyAxis(-driverControllerXbox.getRawAxis(Y_AXIS), DEADBAND_NORMAL),
-          () -> modifyAxis(-driverControllerXbox.getRawAxis(X_AXIS), DEADBAND_NORMAL),
-          () -> modifyAxis(-driverControllerXbox.getRawAxis(Z_AXIS), DEADBAND_NORMAL));
-      driveTrain.setDefaultCommand(defaultDriveCommand);
-    } else {
-      defaultDriveCommand = new Drive(
-          driveTrain,
-          () -> false,
-          () -> modifyAxis(-driverControllerPS4.getRawAxis(Y_AXIS), DEADBAND_NORMAL),
-          () -> modifyAxis(-driverControllerPS4.getRawAxis(X_AXIS), DEADBAND_NORMAL),
-          () -> modifyAxis(-driverControllerPS4.getRawAxis(Z_AXIS), DEADBAND_NORMAL));
-      driveTrain.setDefaultCommand(defaultDriveCommand);
-    }
+
+    defaultDriveCommand = new Drive(
+        driveTrain,
+        () -> false,
+        ControllerYAxisSupplier,
+        ControllerXAxisSupplier,
+        ControllerZAxisSupplier);
+    driveTrain.setDefaultCommand(defaultDriveCommand);
+    
+    approachReef = new ApproachReef(
+      distanceSensors,
+      driveTrain,
+      ControllerYAxisSupplier,
+      ControllerXAxisSupplier,
+      ControllerZAxisSupplier);
   }
 
   private void autoInit() {
@@ -272,16 +286,17 @@ public class RobotContainer {
    */
   private void configureBindings() {
     SmartDashboard.putData("drivetrain", driveTrain);
+
     new Trigger(ZeroGyroSup).onTrue(new InstantCommand(driveTrain::zeroGyroscope));
 
-    new Trigger(LeftReefLineupSup).whileTrue(new LineUp(
-      driveTrain, 
-      true));
+    new Trigger(()->RightReefLineupSup.getAsBoolean()||LeftReefLineupSup.getAsBoolean()).whileTrue(new SequentialCommandGroup(
+      new LineUp(driveTrain, LeftReefLineupSup,0.9),
+      new WaitCommand(()->0.1),
+      new LineUp(driveTrain, LeftReefLineupSup,0.3)));
+    
+    new Trigger(SlowFrontSup).whileTrue(approachReef);
 
-    new Trigger(RightReefLineupSup).whileTrue(new LineUp(
-      driveTrain, 
-      false));
-    new Trigger(AlgaeIntakeSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector));
+    if(algaeIntakeExists) {new Trigger(AlgaeIntakeSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector));}
     
     InstantCommand setOffsets = new InstantCommand(driveTrain::setEncoderOffsets) {
       public boolean runsWhenDisabled() {
