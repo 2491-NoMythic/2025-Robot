@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-import static frc.robot.settings.Constants.DriveConstants.ANTI_TIP_ACTIVE;
 import static frc.robot.settings.Constants.DriveConstants.BL_DRIVE_MOTOR_ID;
 import static frc.robot.settings.Constants.DriveConstants.BL_STEER_ENCODER_ID;
 import static frc.robot.settings.Constants.DriveConstants.BL_STEER_MOTOR_ID;
