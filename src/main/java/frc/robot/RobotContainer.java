@@ -107,6 +107,11 @@ public class RobotContainer {
   BooleanSupplier RightReefLineupSup;
   BooleanSupplier SlowFrontSup;
   BooleanSupplier AlgaeIntakeSup;
+  BooleanSupplier ReefHeight1Supplier;
+  BooleanSupplier ReefHeight2Supplier;
+  BooleanSupplier ReefHeight3Supplier;
+  BooleanSupplier ReefHeight4Supplier;
+  BooleanSupplier CoralIntakeHeightSupplier;
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
@@ -147,6 +152,12 @@ public class RobotContainer {
       RightReefLineupSup =  driverControllerXbox::getRightBumperButton;
       SlowFrontSup = ()-> driverControllerXbox.getRightTriggerAxis() > 0.1;
       AlgaeIntakeSup = driverControllerXbox::getAButton; //TODO change to actual
+
+      ReefHeight1Supplier = ()->operatorControllerXbox.getPOV() == 0;
+      ReefHeight2Supplier = ()->operatorControllerXbox.getPOV() == 90;
+      ReefHeight3Supplier = ()->operatorControllerXbox.getPOV() == 180;
+      ReefHeight4Supplier = ()->operatorControllerXbox.getPOV() == 270;
+      CoralIntakeHeightSupplier = ()->operatorControllerXbox.getStartButton();
       
     } else {
       driverControllerPS4 = new PS4Controller(DRIVE_CONTROLLER_ID);
@@ -156,6 +167,12 @@ public class RobotContainer {
       SlowFrontSup = driverControllerPS4::getR2Button;
       AlgaeIntakeSup = driverControllerPS4::getCrossButton; //TODO change to actual
       ZeroGyroSup = driverControllerPS4::getPSButton;
+
+      ReefHeight1Supplier = ()->operatorControllerPS4.getPOV() == 0;
+      ReefHeight2Supplier = ()->operatorControllerPS4.getPOV() == 90;
+      ReefHeight3Supplier = ()->operatorControllerPS4.getPOV() == 180;
+      ReefHeight4Supplier = ()->operatorControllerPS4.getPOV() == 270;
+      CoralIntakeHeightSupplier = ()->operatorControllerPS4.getOptionsButton();
     }
 
     limelightInit();
@@ -274,6 +291,12 @@ public class RobotContainer {
 
     SmartDashboard.putData("set offsets", setOffsets);
     SmartDashboard.putData(new InstantCommand(driveTrain::forceUpdateOdometryWithVision));
+
+    new Trigger(ReefHeight1Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef1));
+    new Trigger(ReefHeight2Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef2));
+    new Trigger(ReefHeight3Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef3));
+    new Trigger(ReefHeight4Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef4));
+    new Trigger(CoralIntakeHeightSupplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.HumanPlayer));
     /*
      * bindings:
      * PS4: zero the gyroscope
