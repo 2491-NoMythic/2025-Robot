@@ -333,18 +333,45 @@ public class RobotContainer {
 
   private void registerNamedCommands() {
     Command coralIntakeNamedCommand;
-    Command deliverCoralNamedCommand;
+    Command deliverCoralLeft1NamedCommand;
+    Command deliverCoralLeft2NamedCommand;
+    Command deliverCoralLeft3NamedCommand;
+    Command deliverCoralLeft4NamedCommand;
+    Command deliverCoralRight1NamedCommand;
+    Command deliverCoralRight2NamedCommand;
+    Command deliverCoralRight3NamedCommand;
+    Command deliverCoralRight4NamedCommand;
     if(elevatorExists&&funnelIntakeExists&&coralEndeffectorExists) {
       coralIntake = new CoralIntake(elevator, funnelIntake, coralEndDefector);
-      deliverCoral = new DeliverCoral(coralEndDefector);
       coralIntakeNamedCommand = coralIntake;
-      deliverCoralNamedCommand = deliverCoral;
+      deliverCoralLeft1NamedCommand = new PlaceCoralCommand(elevator, ()->ElevatorEnums.Reef1, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, true);
+      deliverCoralLeft2NamedCommand = new PlaceCoralCommand(elevator, ()->ElevatorEnums.Reef2, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, true);
+      deliverCoralLeft3NamedCommand = new PlaceCoralCommand(elevator, ()->ElevatorEnums.Reef3, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, true);
+      deliverCoralLeft4NamedCommand = new PlaceCoralCommand(elevator, ()->ElevatorEnums.Reef4, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, true);
+      deliverCoralRight1NamedCommand = new PlaceCoralCommand(elevator, ()->ElevatorEnums.Reef1, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, false);
+      deliverCoralRight2NamedCommand = new PlaceCoralCommand(elevator, ()->ElevatorEnums.Reef2, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, false);
+      deliverCoralRight3NamedCommand = new PlaceCoralCommand(elevator, ()->ElevatorEnums.Reef3, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, false);
+      deliverCoralRight4NamedCommand = new PlaceCoralCommand(elevator, ()->ElevatorEnums.Reef4, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, false);
     } else {
       coralIntakeNamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
-      deliverCoralNamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
+      deliverCoralLeft1NamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
+      deliverCoralLeft2NamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
+      deliverCoralLeft3NamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
+      deliverCoralLeft4NamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
+      deliverCoralRight1NamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
+      deliverCoralRight2NamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
+      deliverCoralRight3NamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
+      deliverCoralRight4NamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
     }
     NamedCommands.registerCommand("CoralIntake", coralIntakeNamedCommand);
-    NamedCommands.registerCommand("DeliverCoral", deliverCoralNamedCommand);
+    NamedCommands.registerCommand("DeliverCoralLeft1", deliverCoralLeft1NamedCommand);
+    NamedCommands.registerCommand("DeliverCoralLeft2", deliverCoralLeft2NamedCommand);
+    NamedCommands.registerCommand("DeliverCoralLeft3", deliverCoralLeft3NamedCommand);
+    NamedCommands.registerCommand("DeliverCoralLeft4", deliverCoralLeft4NamedCommand);
+    NamedCommands.registerCommand("DeliverCoralRight1", deliverCoralRight1NamedCommand);
+    NamedCommands.registerCommand("DeliverCoralRight2", deliverCoralRight2NamedCommand);
+    NamedCommands.registerCommand("DeliverCoralRight3", deliverCoralRight3NamedCommand);
+    NamedCommands.registerCommand("DeliverCoralRight4", deliverCoralRight4NamedCommand);
   }
 
   public void logPower() {
