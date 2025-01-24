@@ -304,22 +304,19 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
 
     if (Preferences.getBoolean("AntiTipActive", false)) {
-      if (Math.abs(pigeon.getRoll().getValueAsDouble()) > Math.abs(pigeon.getPitch().getValueAsDouble())) {
-        if (pigeon.getRoll().getValueAsDouble() > 3) {
-          chassisSpeeds.vxMetersPerSecond = chassisSpeeds.vxMetersPerSecond
-              + (Math.sqrt(pigeon.getRoll().getValueAsDouble()) - 0.1);
-        } else if (pigeon.getRoll().getValueAsDouble() < -3) {
-          chassisSpeeds.vxMetersPerSecond = chassisSpeeds.vxMetersPerSecond
-              + (-Math.sqrt(Math.abs(pigeon.getRoll().getValueAsDouble())) - 0.1);
-        }
-      } else if (Math.abs(pigeon.getRoll().getValueAsDouble()) < Math.abs(pigeon.getPitch().getValueAsDouble())) {
-        if (pigeon.getPitch().getValueAsDouble() > 3) {
-          chassisSpeeds.vyMetersPerSecond = chassisSpeeds.vyMetersPerSecond
-              + (Math.sqrt(pigeon.getPitch().getValueAsDouble()) - 0.1);
-        } else if (pigeon.getRoll().getValueAsDouble() < -3) {
-          chassisSpeeds.vyMetersPerSecond = chassisSpeeds.vyMetersPerSecond
-              + (-Math.sqrt(Math.abs(pigeon.getPitch().getValueAsDouble())) - 0.1);
-        }
+      if (pigeon.getRoll().getValueAsDouble() > 3) {
+        chassisSpeeds.vxMetersPerSecond = chassisSpeeds.vxMetersPerSecond
+            + (Math.sqrt(pigeon.getRoll().getValueAsDouble()) - 0.1);
+      } else if (pigeon.getRoll().getValueAsDouble() < -3) {
+        chassisSpeeds.vxMetersPerSecond = chassisSpeeds.vxMetersPerSecond
+            + (-Math.sqrt(Math.abs(pigeon.getRoll().getValueAsDouble())) - 0.1);
+      }
+      if (pigeon.getPitch().getValueAsDouble() > 3) {
+        chassisSpeeds.vyMetersPerSecond = chassisSpeeds.vyMetersPerSecond
+            + (Math.sqrt(pigeon.getPitch().getValueAsDouble()) - 0.1);
+      } else if (pigeon.getRoll().getValueAsDouble() < -3) {
+        chassisSpeeds.vyMetersPerSecond = chassisSpeeds.vyMetersPerSecond
+            + (-Math.sqrt(Math.abs(pigeon.getPitch().getValueAsDouble())) - 0.1);
       }
     }
   }
