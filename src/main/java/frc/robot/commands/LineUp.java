@@ -70,9 +70,9 @@ public class LineUp extends Command {
     switch(reefOffset){
       case TOO_FAR_LEFT:
         if (movingLeft.getAsBoolean()) {
-          drivetrain.drive(new ChassisSpeeds(0, -0.2, 0));
+          drivetrain.drive(new ChassisSpeeds(0, 0.4, 0));
         } else{
-          drivetrain.drive(new ChassisSpeeds(0, -0.3, 0));
+          drivetrain.drive(new ChassisSpeeds(0, 0.5, 0));
         }
         break;
 
@@ -82,21 +82,21 @@ public class LineUp extends Command {
           drivetrain.pointWheelsInward();
           finished = true;
         } else {
-          drivetrain.drive(new ChassisSpeeds(0, 0.2, 0));
+          drivetrain.drive(new ChassisSpeeds(0, 0.4, 0));
         }   
         break;
 
       case CENTERED:
         if(movingLeft.getAsBoolean()) {
-          drivetrain.drive(new ChassisSpeeds(0, -0.2, 0));
+          drivetrain.drive(new ChassisSpeeds(0, -0.4, 0));
         } else {
-          drivetrain.drive(new ChassisSpeeds(0, 0.2, 0));
+          drivetrain.drive(new ChassisSpeeds(0, 0.4, 0));
         }   
         break;
 
       case ALIGNED_RIGHT:
         if(movingLeft.getAsBoolean()) {
-          drivetrain.drive(new ChassisSpeeds(0, -0.2, 0));
+          drivetrain.drive(new ChassisSpeeds(0, -0.4, 0));
         } else {
           drivetrain.stop();
           drivetrain.pointWheelsInward();
@@ -106,9 +106,9 @@ public class LineUp extends Command {
       
       case TOO_FAR_RIGHT:
         if(movingLeft.getAsBoolean()) {
-          drivetrain.drive(new ChassisSpeeds(0, 0.3, 0));
+          drivetrain.drive(new ChassisSpeeds(0, -0.5, 0));
         } else {
-          drivetrain.drive(new ChassisSpeeds(0, 0.2, 0));
+          drivetrain.drive(new ChassisSpeeds(0, -0.4, 0));
         }   
         break;
 

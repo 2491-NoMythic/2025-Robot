@@ -166,36 +166,35 @@ public class DistanceSensors  extends SubsystemBase{
  * @param sFR
  * @return
  */
-  private ReefOffsetEnums calcOffset(boolean sFL, /*boolean sL, boolean sR,*/ boolean sFR){
+  private ReefOffsetEnums calcOffset(boolean sFL, boolean sL, boolean sR, boolean sFR){
     int value = 0;
     if (sFL) {
       value |= 0b1000;
     }
-    // if (sL) {
-    //   value |= 0b0100;
-    // }
-    // if (sR) {
-    //   value |= 0b0010;
-    // }
+    if (sL) {
+      value |= 0b0100;
+    }
+    if (sR) {
+      value |= 0b0010;
+    }
     if (sFR) {
       value |= 0b0001;
     }
     switch (value) {
       
-       case 0b0001:
-      // case 0b0011: 
-     //  return ReefOffset.TOO_FAR_LEFT;
-      // case 0b0111: 
+      case 0b0001:
+      case 0b0011: 
+      return ReefOffsetEnums.TOO_FAR_LEFT;
+      case 0b0111: 
          return ReefOffsetEnums.ALIGNED_LEFT;
-      // case 0b1111:
+      case 0b1111:
       case 0b1001: 
         return ReefOffsetEnums.CENTERED;
-      // case 0b1110: 
-      case 0b1000:
+      case 0b1110: 
         return ReefOffsetEnums.ALIGNED_RIGHT;
-      // case 0b1000:
-      // case 0b1100: 
-     //  return ReefOffset.TOO_FAR_RIGHT;
+      case 0b1000:
+      case 0b1100: 
+      return ReefOffsetEnums.TOO_FAR_RIGHT;
        case 0b0000: 
        return ReefOffsetEnums.NOT_SENSED;
        default: 
@@ -221,13 +220,15 @@ public class DistanceSensors  extends SubsystemBase{
     RobotState.getInstance().middleRightSensorTriggered = middleRight.getRange()<RANGE_TO_SEE_REEF && middleRight.getRange()>0 && FRValid;
     RobotState.getInstance().farRightSensorTriggered = farRight.getRange()<RANGE_TO_SEE_REEF && farRight.getRange()>0 && MRValid;
     RobotState.getInstance().reefOffset = calcOffset(
-      farLeft.getRange()<RANGE_TO_SEE_REEF && farLeft.getRange()>0,/* 
+      farLeft.getRange()<RANGE_TO_SEE_REEF && farLeft.getRange()>0, 
       middleLeft.getRange()<RANGE_TO_SEE_REEF && middleLeft.getRange()>0,
-      middleRight.getRange()<RANGE_TO_SEE_REEF && middleRight.getRange()>0,*/
+      middleRight.getRange()<RANGE_TO_SEE_REEF && middleRight.getRange()>0,
       farRight.getRange()<RANGE_TO_SEE_REEF && farRight.getRange()>0
     );
   //for testing purposes
-    SmartDashboard.putBoolean("FLSensorT", farLeft.getRange()<RANGE_TO_SEE_REEF & farLeft.getRange()>0);
-    SmartDashboard.putBoolean("FRSensorT", farRight.getRange()<RANGE_TO_SEE_REEF & farRight.getRange()>0);
+    SmartDashboard.putBoolean("TRIGGERED/FarLeft", farLeft.getRange()<RANGE_TO_SEE_REEF & farLeft.getRange()>0);
+    SmartDashboard.putBoolean("TRIGGERED/FarRight", farRight.getRange()<RANGE_TO_SEE_REEF & farRight.getRange()>0);
+    SmartDashboard.putBoolean("TRIGGERED/MiddleLeft", middleLeft.getRange()<RANGE_TO_SEE_REEF & farLeft.getRange()>0);
+    SmartDashboard.putBoolean("TRIGGERED/MiddleRight", middleRight.getRange()<RANGE_TO_SEE_REEF & farRight.getRange()>0);
   }
 }

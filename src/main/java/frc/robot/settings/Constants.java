@@ -33,9 +33,9 @@ public final class Constants {
 
   public static final class SensorConstants {
     public static final int FAR_LEFT_DIST_SENSOR_ID = 1;
-    public static final int MIDDLE_LEFT_DIST_SENSOR_ID = 2491;
-    public static final int MIDDLE_RIGHT_DIST_SENSOR_ID = 2491;
-    public static final int FAR_RIGHT_DIST_SENSOR_ID = 2;
+    public static final int MIDDLE_LEFT_DIST_SENSOR_ID = 2;
+    public static final int MIDDLE_RIGHT_DIST_SENSOR_ID = 3;
+    public static final int FAR_RIGHT_DIST_SENSOR_ID = 4;
     public static final  int ELEVATOR_SENSOR_ID = 2491;
 
     public static final double RANGE_TO_SEE_REEF = 200; // in millimeters, the distance that will trigger the time of flight sensors to report that we are or aren't in front of the reef

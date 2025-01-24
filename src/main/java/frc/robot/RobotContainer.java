@@ -173,8 +173,6 @@ public class RobotContainer {
     configureDriveTrain();
     configureBindings(); // Configure the trigger bindings
     autoInit();
-  
-
   }
 
   private void driveTrainInst() {
@@ -277,7 +275,8 @@ public class RobotContainer {
       LeftReefLineupSup));
     
     new Trigger(SlowFrontSup).whileTrue(approachReef);
-    new Trigger(AlgaeIntakeSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector));
+
+    if(algaeIntakeExists) {new Trigger(AlgaeIntakeSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector));}
     
     InstantCommand setOffsets = new InstantCommand(driveTrain::setEncoderOffsets) {
       public boolean runsWhenDisabled() {
