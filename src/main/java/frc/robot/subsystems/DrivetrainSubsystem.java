@@ -304,7 +304,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
       setModuleStates(desiredStates);
     }
 
-    if (ANTI_TIP_ACTIVE) {
+    if (Preferences.getBoolean("AntiTipActive", false)) {
       if (Math.abs(pigeon.getRoll().getValueAsDouble()) > Math.abs(pigeon.getPitch().getValueAsDouble())) {
         if (pigeon.getRoll().getValueAsDouble() > 3) {
           chassisSpeeds.vxMetersPerSecond = chassisSpeeds.vxMetersPerSecond
