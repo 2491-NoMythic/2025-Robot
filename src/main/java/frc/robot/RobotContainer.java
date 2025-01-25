@@ -87,6 +87,7 @@ public class RobotContainer {
   private final boolean funnelIntakeExists = Preferences.getBoolean("FunnelIntake", true);
   private final boolean funnelRotatorExists = Preferences.getBoolean("FunnelRotator", true);
   private final boolean DrivetrainExists = Preferences.getBoolean("DrivetrainExists", true);
+  private final boolean distanceSensorsExist = Preferences.getBoolean("DistanceSensors Exist", true);
 
   private DrivetrainSubsystem driveTrain;
   private Drive defaultDriveCommand;
@@ -330,7 +331,7 @@ public class RobotContainer {
       new Trigger(AlgaeShooterSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector, ALGAE_SHOOT_SPEED));
     }
 
-    if(elevatorExists && coralEndeffectorExists){
+    if(elevatorExists && coralEndeffectorExists && DrivetrainExists && distanceSensorsExist){
       new Trigger(CoralPlaceTeleSupplier).whileTrue(
           new PlaceCoralCommand(elevator,
               ()-> RobotState.getInstance().deliveringCoralHeight,
