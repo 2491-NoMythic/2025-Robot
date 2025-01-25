@@ -11,11 +11,11 @@ import frc.robot.subsystems.RobotState;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class AlgaeIntakeCommand extends Command {
   AlgaeEndeffectorSubsystem algaeEndeffector;
-  double shoot;
+  double shootSpeed;
   /** Creates a new AlgaeIntakeCommand. */
-  public AlgaeIntakeCommand(AlgaeEndeffectorSubsystem algaeEndeffector, double shoot) {
+  public AlgaeIntakeCommand(AlgaeEndeffectorSubsystem algaeEndeffector, double shootSpeed) {
     this.algaeEndeffector = algaeEndeffector;
-    this.shoot = shoot;
+    this.shootSpeed = shootSpeed;
     addRequirements(algaeEndeffector);
     // Use addRequirements() here to declare subsystem dependencies.
 
@@ -29,7 +29,7 @@ public class AlgaeIntakeCommand extends Command {
   @Override
   public void execute() {
     
-    algaeEndeffector.runAlgaeEndDefector(shoot);
+    algaeEndeffector.runAlgaeEndDefector(shootSpeed);
 
   }
 
@@ -43,7 +43,7 @@ public class AlgaeIntakeCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(shoot > 0) {
+    if(shootSpeed > 0) {
       return RobotState.getInstance().hasAlgae;
     }
     else{
