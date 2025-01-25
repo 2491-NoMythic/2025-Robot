@@ -30,7 +30,7 @@ public class DeliverCoral extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    coralEndeffector.runCoralEndEffector(CORAL_ENDEFFECTOR_SPEED, CORAL_ENDEFFECTOR_SPEED);
+    coralEndeffector.runCoralEndEffector(CORAL_ENDEFFECTOR_SPEED);
   }
 
   // Called once the command ends or is interrupted.

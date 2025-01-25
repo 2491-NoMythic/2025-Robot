@@ -349,19 +349,13 @@ public final class Constants {
   }
 
   public final class CoralEndeffectorConstants{
-    public static final int CORAL_ENDEFFECTOR_MOTOR_1_ID = 9;
-    public static final int CORAL_ENDEFFECTOR_MOTOR_2_ID = 10;
+    public static final int CORAL_ENDEFFECTOR_MOTOR = 9;
 
-    public static final double CORAL_ENDEFFECTOR_KP_1 = 0.001;
-    public static final double CORAL_ENDEFFECTOR_KI_1 = 0;
-    public static final double CORAL_ENDEFFECTOR_KD_1 = 0;
-    public static final double CORAL_ENDEFFECTOR_KFF_1 = 0;
-
-    public static final double CORAL_ENDEFFECTOR_KP_2 = 2491;
-    public static final double CORAL_ENDEFFECTOR_KI_2 = 2491;
-    public static final double CORAL_ENDEFFECTOR_KD_2 = 2491;
-    public static final double CORAL_ENDEFFECTOR_KFF_2 = 2491;
-
+    public static final double CORAL_ENDEFFECTOR_KP = 0.001;
+    public static final double CORAL_ENDEFFECTOR_KI = 0;
+    public static final double CORAL_ENDEFFECTOR_KD = 0;
+    public static final double CORAL_ENDEFFECTOR_KFF = 0;
+    
     public static final double CORAL_ENDEFFECTOR_SPEED = 2491.0;
   }
 

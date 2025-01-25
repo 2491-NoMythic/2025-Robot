@@ -37,7 +37,7 @@ public class CoralIntake extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    coralIntake.runCoralEndEffector(0.3, 0.3);
+    coralIntake.runCoralEndEffector(0.3);
     funnelIntake.runFunnel(2491);
   }
 
