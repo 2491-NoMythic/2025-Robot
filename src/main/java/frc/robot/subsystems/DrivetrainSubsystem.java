@@ -404,7 +404,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   /*
    * Logs important data for the drivetrain
    */
-  public void logData(){
+  public void logDrivetrainData(){
     SmartDashboard.putNumber("DRIVETRAIN/Robot Angle", getOdometryRotation().getDegrees());
     SmartDashboard.putString("DRIVETRAIN/Robot Location", getPose().getTranslation().toString());
     SmartDashboard.putNumber("DRIVETRAIN/forward speed", getChassisSpeeds().vxMetersPerSecond);
@@ -440,6 +440,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
     for (int i = 0; i < 4; i++) {
       motorLoggers[i].log(modules[i].getDriveMotor());
     }
-    logData();
+    logDrivetrainData();
   }
 }
