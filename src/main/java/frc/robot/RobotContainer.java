@@ -41,7 +41,6 @@ import frc.robot.commands.WaitCommand;
 import frc.robot.subsystems.DistanceSensors;
 import frc.robot.commands.NamedCommands.CoralIntake;
 import frc.robot.commands.NamedCommands.DeliverCoral;
-import frc.robot.helpers.MotorLogger;
 import frc.robot.settings.SensorNameEnums;
 import frc.robot.subsystems.AlgaeEndeffectorSubsystem;
 import frc.robot.subsystems.CoralEndeffectorSubsystem;
@@ -394,14 +393,9 @@ public class RobotContainer {
     if (Preferences.getBoolean("Use Limelight", false)) {
       limelight.updateLoggingWithPoses();
     }
-    updateMotorLogging();
 
   }
-public void updateMotorLogging(){
-  if(algaeEndeffectorExists){
-    motorLogger.log(algaeEndDefector.getMotor());
-  }
-}
+
   public void disabledPeriodic() {
   }
 
