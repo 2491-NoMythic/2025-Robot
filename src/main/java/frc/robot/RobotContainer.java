@@ -38,6 +38,7 @@ import frc.robot.commands.MoveMeters;
 import frc.robot.subsystems.DistanceSensors;
 import frc.robot.commands.NamedCommands.CoralIntake;
 import frc.robot.commands.NamedCommands.DeliverCoral;
+import frc.robot.helpers.MotorLogger;
 import frc.robot.settings.SensorNameEnums;
 import frc.robot.subsystems.AlgaeEndeffectorSubsystem;
 import frc.robot.subsystems.CoralEndeffectorSubsystem;
@@ -99,6 +100,7 @@ public class RobotContainer {
   private FunnelIntake funnelIntake;
   private FunnelRotator funnelRotator;
   private DeliverCoral deliverCoral;
+  private MotorLogger motorLogger;
   RobotState robotState;
   Alliance currentAlliance;
   BooleanSupplier ZeroGyroSup;
@@ -161,7 +163,7 @@ public class RobotContainer {
     if (DrivetrainExists) {driveTrainInst();}
     lightsInst();
     sensorInit();     
- 
+    motorLogger = new MotorLogger(DataLogManager.getLog(), "/algeaEndEffector/motor1");
     if (coralEndeffectorExists) {coralEndDefectorInst();}
     if (algaeEndeffectorExists) {algaeEndDefectorInst();}
     if (climberExists) {climberInst();}
@@ -375,8 +377,14 @@ public class RobotContainer {
     if (Preferences.getBoolean("Use Limelight", false)) {
       limelight.updateLoggingWithPoses();
     }
-  }
+    updateMotorLogging();
 
+  }
+public void updateMotorLogging(){
+  if(algaeEndeffectorExists){
+    motorLogger.log(algaeEndDefector.getMotor());
+  }
+}
   public void disabledPeriodic() {
   }
 
