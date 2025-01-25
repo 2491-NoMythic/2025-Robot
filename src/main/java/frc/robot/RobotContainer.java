@@ -82,6 +82,7 @@ public class RobotContainer {
   private final boolean elevatorExists = Preferences.getBoolean("Elevator", true);
   private final boolean funnelIntakeExists = Preferences.getBoolean("FunnelIntake", true);
   private final boolean funnelRotatorExists = Preferences.getBoolean("FunnelRotator", true);
+  private final boolean DrivetrainExists = Preferences.getBoolean("DrivetrainExists", true);
 
   private DrivetrainSubsystem driveTrain;
   private Drive defaultDriveCommand;
@@ -103,6 +104,7 @@ public class RobotContainer {
   private FunnelRotator funnelRotator;
   private DeliverCoral deliverCoral;
   private ApproachReef approachReef;
+
   RobotState robotState;
   Alliance currentAlliance;
   BooleanSupplier ZeroGyroSup;
@@ -135,6 +137,7 @@ public class RobotContainer {
     Preferences.initBoolean("FunnelIntake", false);
     Preferences.initBoolean("FunnelRotator", false);
     Preferences.initBoolean("Climber", false);
+    Preferences.initBoolean("DrivetrainExists", false);
     Preferences.initBoolean("AntiTipActive", true);
 
     DataLogManager.start(); // Start logging
@@ -175,8 +178,8 @@ public class RobotContainer {
     }
 
     limelightInit();
+    if (DrivetrainExists) {driveTrainInst();}
     sensorInit();     
-    driveTrainInst();
     lightsInst();
  
     if (coralEndeffectorExists) {coralEndDefectorInst();}
@@ -186,7 +189,7 @@ public class RobotContainer {
     if (funnelIntakeExists) {funnelIntakeInst();}
     if (funnelRotatorExists) {funnelRotatorInst();}
 
-    configureDriveTrain();
+    if (DrivetrainExists) {configureDriveTrain();}
     configureBindings(); // Configure the trigger bindings
     autoInit();
   }
@@ -266,6 +269,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    if (DrivetrainExists){
     SmartDashboard.putData("drivetrain", driveTrain);
 
     new Trigger(ZeroGyroSup).onTrue(new InstantCommand(driveTrain::zeroGyroscope));
@@ -287,6 +291,8 @@ public class RobotContainer {
 
     SmartDashboard.putData("set offsets", setOffsets);
     SmartDashboard.putData(new InstantCommand(driveTrain::forceUpdateOdometryWithVision));
+    }
+    new Trigger(AlgaeIntakeSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector));
     /*
      * bindings:
      * PS4: zero the gyroscope
@@ -387,6 +393,7 @@ public class RobotContainer {
     if (Preferences.getBoolean("Use Limelight", false)) {
       limelight.updateLoggingWithPoses();
     }
+
   }
 
   public void disabledPeriodic() {
