@@ -37,6 +37,7 @@ import frc.robot.commands.AlgaeEndeffectorCommand;
 import frc.robot.commands.ApproachReef;
 import frc.robot.commands.AlgaeIntakeCommand;
 import frc.robot.commands.Drive;
+import frc.robot.commands.IndicatorLights;
 import frc.robot.commands.LineUp;
 import frc.robot.commands.MoveMeters;
 import frc.robot.commands.PlaceCoralCommand;
@@ -88,6 +89,7 @@ public class RobotContainer {
   private final boolean funnelRotatorExists = Preferences.getBoolean("FunnelRotator", true);
   private final boolean DrivetrainExists = Preferences.getBoolean("DrivetrainExists", true);
   private final boolean distanceSensorsExist = Preferences.getBoolean("DistanceSensors Exist", true);
+  private final boolean lightsExist = Preferences.getBoolean("Lights Exist", true);
 
   private DrivetrainSubsystem driveTrain;
   private Drive defaultDriveCommand;
@@ -135,7 +137,7 @@ public class RobotContainer {
    */
   public RobotContainer() {
     // preferences are initialized IF they don't already exist on the Rio
-    Preferences.initBoolean("Lights", true);
+    Preferences.initBoolean("Lights Exist", true);
     Preferences.initBoolean("CompBot", true);
     Preferences.initBoolean("Detector Limelight", false);
     Preferences.initBoolean("Use Limelight", true);
@@ -151,6 +153,7 @@ public class RobotContainer {
     Preferences.initBoolean("Climber", false);
     Preferences.initBoolean("DrivetrainExists", false);
     Preferences.initBoolean("AntiTipActive", true);
+    Preferences.initBoolean("DistanceSensors Exist", true);
 
     DataLogManager.start(); // Start logging
     DriverStation.startDataLog(DataLogManager.getLog()); // Joystick Data logging
@@ -253,6 +256,7 @@ public class RobotContainer {
 
   private void lightsInst() {
     lights = new Lights();
+    lights.setDefaultCommand(new IndicatorLights(lights, lightsExist));
   }
   
   private void sensorInit() {
