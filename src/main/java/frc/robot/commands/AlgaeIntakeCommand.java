@@ -29,7 +29,7 @@ public class AlgaeIntakeCommand extends Command {
   @Override
   public void execute() {
     
-    algaeEndeffector.runAlgaeEndDefector(1);
+    algaeEndeffector.runAlgaeEndDefector(shoot);
 
   }
 
@@ -45,9 +45,6 @@ public class AlgaeIntakeCommand extends Command {
   public boolean isFinished() {
     if(shoot > 0) {
       return RobotState.getInstance().hasAlgae;
-    }
-    else if(shoot < 0) {
-      return !RobotState.getInstance().hasAlgae;
     }
     else{
       return false;

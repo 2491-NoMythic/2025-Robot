@@ -303,10 +303,6 @@ public class RobotContainer {
       new LineUp(driveTrain, LeftReefLineupSup,0.3)));
     
     new Trigger(SlowFrontSup).whileTrue(approachReef);
-
-    if(algaeIntakeExists) {new Trigger(AlgaeIntakeSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector, ALGAE_INTAKE_SPEED));}
-    if(algaeIntakeExists) {new Trigger(AlgaeShooterSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector, ALGAE_SHOOT_SPEED));}
-    
     InstantCommand setOffsets = new InstantCommand(driveTrain::setEncoderOffsets) {
       public boolean runsWhenDisabled() {
         return true;
@@ -315,6 +311,8 @@ public class RobotContainer {
 
     SmartDashboard.putData("set offsets", setOffsets);
     SmartDashboard.putData(new InstantCommand(driveTrain::forceUpdateOdometryWithVision));
+    SmartDashboard.putNumber("speedOut", ALGAE_SHOOT_SPEED);
+    SmartDashboard.putNumber("speedIn", ALGAE_INTAKE_SPEED);
 
     new Trigger(ReefHeight1Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef1));
     new Trigger(ReefHeight2Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef2));
@@ -323,9 +321,9 @@ public class RobotContainer {
     new Trigger(CoralIntakeHeightSupplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.HumanPlayer));
 
     }
-    if(algaeEndeffectorExists) {
-    new Trigger(AlgaeIntakeSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector, ALGAE_INTAKE_SPEED));
-    new Trigger(AlgaeShooterSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector, ALGAE_SHOOT_SPEED));
+    if (algaeEndeffectorExists) {
+      new Trigger(AlgaeIntakeSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector, ALGAE_INTAKE_SPEED));
+      new Trigger(AlgaeShooterSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector, ALGAE_SHOOT_SPEED));
     }
     /*
      * bindings:
@@ -439,7 +437,9 @@ public class RobotContainer {
   }
 
   public void teleopPeriodic() {
-    SmartDashboard.putData(driveTrain.getCurrentCommand());
+    if(DrivetrainExists) {
+      SmartDashboard.putData(driveTrain.getCurrentCommand());
+    }
   }
   public void robotInit(){
     if (elevatorExists){
