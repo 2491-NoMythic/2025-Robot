@@ -15,6 +15,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.ForwardLimitValue;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.helpers.MotorLogger;
 
 import static frc.robot.settings.Constants.ElevatorConstants.*;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -24,6 +25,8 @@ public class ElevatorSubsystem extends SubsystemBase {
   private TalonFX elevatorMotor2;
   private TalonFXConfiguration eleMotorConfig;
   private double zeroPoint;
+  MotorLogger motorLogger1;
+  MotorLogger motorLogger2;
   /** Creates a new ElevatorSubsystem. */
   public ElevatorSubsystem() {
     elevatorMotor1 = new TalonFX(ELEVATOR_MOTOR_1_ID);
@@ -46,11 +49,19 @@ public class ElevatorSubsystem extends SubsystemBase {
       elevatorMotor1.getConfigurator().apply(eleMotorConfig);
     elevatorMotor2.getConfigurator().apply(eleMotorConfig);
     elevatorMotor2.setControl(new Follower(ELEVATOR_MOTOR_1_ID, true));
+
+    motorLogger1 = new MotorLogger("/elevator/motor1");
+    motorLogger2 = new MotorLogger("/elevator/motor2");
+  }
+  private void logMotors(){
+    motorLogger1.log(elevatorMotor1);
+    motorLogger2.log(elevatorMotor2);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    logMotors();
   }
   /**
    * Creates a zero from input

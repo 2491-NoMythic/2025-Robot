@@ -15,6 +15,8 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.helpers.MotorLogger;
+
 import static frc.robot.settings.Constants.CoralEndeffectorConstants.*;
 
 public class CoralEndeffectorSubsystem extends SubsystemBase {
@@ -22,6 +24,8 @@ public class CoralEndeffectorSubsystem extends SubsystemBase {
   SparkMax coralEndeffectorMotor2;
   SparkBaseConfig coralConfig1;
   SparkBaseConfig coralConfig2;
+  MotorLogger motorLogger1;
+  MotorLogger motorLogger2;
 
   /** Creates a new CoralEndDefectorSubsystem. */
   public CoralEndeffectorSubsystem() {
@@ -46,6 +50,9 @@ public class CoralEndeffectorSubsystem extends SubsystemBase {
     coralConfig2.idleMode(IdleMode.kCoast);
     coralConfig2.smartCurrentLimit(25, 25, 1000);
     coralEndeffectorMotor2.configure(coralConfig2, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+    motorLogger1 = new MotorLogger("/coralEndEffector/motor1");
+    motorLogger2 = new MotorLogger("/coralEndEffector/motor2");
   }
   /**
    * a method to set the speeds of both motors on the end effector. speeds are percentage of full power, from -1 to 1.
@@ -61,8 +68,13 @@ public class CoralEndeffectorSubsystem extends SubsystemBase {
     coralEndeffectorMotor1.set(0);
     coralEndeffectorMotor2.set(0);
   }
+  private void logMotors(){
+    motorLogger1.log(coralEndeffectorMotor1);
+    motorLogger2.log(coralEndeffectorMotor2);
+  }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    logMotors();
   }
 }

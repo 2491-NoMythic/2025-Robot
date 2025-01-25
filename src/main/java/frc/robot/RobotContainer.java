@@ -262,7 +262,8 @@ public class RobotContainer {
     new Trigger(RightReefLineupSup).whileTrue(new LineUp(
       driveTrain, 
       false));
-    new Trigger(AlgaeIntakeSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector));
+    if(algaeEndeffectorExists){new Trigger(AlgaeIntakeSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector));
+    }
     
     InstantCommand setOffsets = new InstantCommand(driveTrain::setEncoderOffsets) {
       public boolean runsWhenDisabled() {

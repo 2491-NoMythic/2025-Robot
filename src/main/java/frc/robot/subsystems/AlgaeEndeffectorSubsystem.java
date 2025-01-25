@@ -15,6 +15,8 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.helpers.MotorLogger;
+
 import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.*;
 import edu.wpi.first.math.controller.PIDController;
 public class AlgaeEndeffectorSubsystem extends SubsystemBase {
@@ -23,11 +25,16 @@ public class AlgaeEndeffectorSubsystem extends SubsystemBase {
   SparkBaseConfig algaeConfig1;
   SparkBaseConfig algaeConfig2;
   PIDController algendController;
+  MotorLogger motorLogger1;
+  MotorLogger motorLogger2;
   public boolean powerSpike;
   /** Creates a new AlgaeEndDefectorSubsystem. */
   public AlgaeEndeffectorSubsystem() {
     algaeEndeffectorMotor1 = new SparkMax(ALGAE_ENDEFFECTOR_MOTOR_1_ID, MotorType.kBrushless);
     algaeEndeffectorMotor2 = new SparkMax(ALGAE_ENDEFFECTOR_MOTOR_2_ID, MotorType.kBrushless);
+
+    motorLogger1 = new MotorLogger("/algaeEndEffector/motor1");
+    motorLogger2 = new MotorLogger("/algaeEndEffector/motor2");
 
     algaeConfig1 = new SparkMaxConfig();
     algaeConfig1.apply(new ClosedLoopConfig().pidf(
@@ -67,11 +74,15 @@ public class AlgaeEndeffectorSubsystem extends SubsystemBase {
     }else{
       RobotState.getInstance().hasAlgae = false;
     }
-    
+  }
+  private void logMotors(){
+    motorLogger1.log(algaeEndeffectorMotor1);
+    motorLogger2.log(algaeEndeffectorMotor2);
   }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    logMotors();
     powerCheck();
   }
 }
