@@ -17,6 +17,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "ElevatorReset"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "reefEToHP"
@@ -41,6 +47,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "ElevatorReset"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "reefDToHP"
@@ -62,6 +74,12 @@
           "type": "named",
           "data": {
             "name": "DeliverCoralRight2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ElevatorReset"
           }
         }
       ]

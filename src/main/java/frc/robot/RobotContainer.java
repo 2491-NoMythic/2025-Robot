@@ -415,6 +415,7 @@ public class RobotContainer {
     Command deliverCoralRight2NamedCommand;
     Command deliverCoralRight3NamedCommand;
     Command deliverCoralRight4NamedCommand;
+    Command elevatorResetNamedCommand;
     if(elevatorExists&&funnelIntakeExists&&coralEndeffectorExists) {
       coralIntake = new CoralIntake(elevator, funnelIntake, coralEndDefector);
       coralIntakeNamedCommand = coralIntake;
@@ -437,6 +438,13 @@ public class RobotContainer {
       deliverCoralRight3NamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
       deliverCoralRight4NamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
     }
+
+    if(elevatorExists) {
+      elevatorResetNamedCommand = new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer));
+    } else {
+      elevatorResetNamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
+    }
+
     NamedCommands.registerCommand("CoralIntake", coralIntakeNamedCommand);
     NamedCommands.registerCommand("DeliverCoralLeft1", deliverCoralLeft1NamedCommand);
     NamedCommands.registerCommand("DeliverCoralLeft2", deliverCoralLeft2NamedCommand);
@@ -446,6 +454,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("DeliverCoralRight2", deliverCoralRight2NamedCommand);
     NamedCommands.registerCommand("DeliverCoralRight3", deliverCoralRight3NamedCommand);
     NamedCommands.registerCommand("DeliverCoralRight4", deliverCoralRight4NamedCommand);
+    NamedCommands.registerCommand("ElevatorReset", elevatorResetNamedCommand);
   }
 
   public void logPower() {
