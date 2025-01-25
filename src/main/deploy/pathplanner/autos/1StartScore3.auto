@@ -17,6 +17,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "ElevatorReset"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "BargeSidePickup"
@@ -41,6 +47,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "ElevatorReset"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "ReefKtoBargeSideTopFeeder"
@@ -62,6 +74,12 @@
           "type": "named",
           "data": {
             "name": "DeliverCoralRight4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ElevatorReset"
           }
         }
       ]

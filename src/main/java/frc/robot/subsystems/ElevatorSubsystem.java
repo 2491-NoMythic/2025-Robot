@@ -16,6 +16,7 @@ import com.ctre.phoenix6.signals.ForwardLimitValue;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.helpers.MotorLogger;
+import frc.robot.settings.ElevatorEnums;
 
 import static frc.robot.settings.Constants.ElevatorConstants.*;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -80,6 +81,25 @@ public class ElevatorSubsystem extends SubsystemBase {
     double uPos = position + zeroPoint;
     PositionVoltage voltReq = new PositionVoltage(0);
     elevatorMotor1.setControl(voltReq.withPosition(uPos));
+  }
+  public void setElevatorPosition(ElevatorEnums height){
+    switch(height){
+      case Reef1:
+        setElevatorPosition(REEF_LEVEL_1_MILLIMETERS);
+        break;
+      case Reef2:
+        setElevatorPosition(REEF_LEVEL_2_MILLIMETERS);
+        break;
+      case Reef3:
+        setElevatorPosition(REEF_LEVEL_3_MILLIMETERS);
+        break;
+      case Reef4:
+        setElevatorPosition(REEF_LEVEL_4_MILLIMETERS);
+        break;
+      case HumanPlayer:
+        setElevatorPosition(HUMAN_PLAYER_STATION_MILLIMETERS);
+        break;
+    }
   }
   public void stopElevator(){
     elevatorMotor1.set(0);

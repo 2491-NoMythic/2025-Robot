@@ -35,19 +35,7 @@ public class ElevatorCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    level = levelSupplier.get();
-    switch(level){
-      case HumanPlayer:
-        elevator.setElevatorPosition(ElevatorConstants.HUMAN_PLAYER_STATION_MILLIMETERS);
-      case Reef1:
-        elevator.setElevatorPosition(ElevatorConstants.REEF_LEVEL_1_MILLIMETERS);
-      case Reef2:
-        elevator.setElevatorPosition(ElevatorConstants.REEF_LEVEL_2_MILLIMETERS);
-      case Reef3:
-        elevator.setElevatorPosition(ElevatorConstants.REEF_LEVEL_3_MILLIMETERS);
-      case Reef4:
-        elevator.setElevatorPosition(ElevatorConstants.REEF_LEVEL_4_MILLIMETERS);
-    }
+  elevator.setElevatorPosition(levelSupplier.get());
   }
 
   // Called once the command ends or is interrupted.
