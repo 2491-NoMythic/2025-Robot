@@ -379,6 +379,10 @@ public final class Constants {
     public static final double ALGAE_ENDEFFECTOR_KI_2 = 2491;
     public static final double ALGAE_ENDEFFECTOR_KD_2 = 2491;
     public static final double ALGAE_ENDEFFECTOR_KFF_2 = 2491;
+
+    public static final double ALGAE_INTAKE_SPEED = 1;
+    public static final double ALGAE_SHOOT_SPEED = -1;
+
   }
   
   public final class ElevatorConstants{

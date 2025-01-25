@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.ALGAE_INTAKE_SPEED;
+import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.ALGAE_SHOOT_SPEED;
 import static frc.robot.settings.Constants.DriveConstants.*;
 import static frc.robot.settings.Constants.SensorConstants.*;
 import static frc.robot.settings.Constants.PS4Driver.*;
@@ -110,6 +112,7 @@ public class RobotContainer {
   BooleanSupplier RightReefLineupSup;
   BooleanSupplier SlowFrontSup;
   BooleanSupplier AlgaeIntakeSup;
+  BooleanSupplier AlgaeShooterSup;
   DoubleSupplier ControllerYAxisSupplier;
   DoubleSupplier ControllerXAxisSupplier;
   DoubleSupplier ControllerZAxisSupplier;
@@ -157,6 +160,7 @@ public class RobotContainer {
       RightReefLineupSup =  driverControllerXbox::getRightBumperButton;
       SlowFrontSup = ()-> driverControllerXbox.getRightTriggerAxis() > 0.1;
       AlgaeIntakeSup = driverControllerXbox::getAButton; //TODO change to actual
+      AlgaeShooterSup = driverControllerXbox::getXButton;
       
     } else {
       driverControllerPS4 = new PS4Controller(DRIVE_CONTROLLER_ID);
@@ -170,6 +174,7 @@ public class RobotContainer {
       RightReefLineupSup = driverControllerPS4::getR1Button;
       SlowFrontSup = ()->driverControllerPS4.getR2Axis()>-0.5;
       AlgaeIntakeSup = driverControllerPS4::getCrossButton; //TODO change to actual
+      AlgaeShooterSup = driverControllerPS4::getSquareButton;
 
       ZeroGyroSup = driverControllerPS4::getPSButton;
     }
@@ -277,7 +282,8 @@ public class RobotContainer {
     
     new Trigger(SlowFrontSup).whileTrue(approachReef);
 
-    if(algaeIntakeExists) {new Trigger(AlgaeIntakeSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector));}
+    if(algaeIntakeExists) {new Trigger(AlgaeIntakeSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector, ALGAE_INTAKE_SPEED));}
+    if(algaeIntakeExists) {new Trigger(AlgaeShooterSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector, ALGAE_SHOOT_SPEED));}
     
     InstantCommand setOffsets = new InstantCommand(driveTrain::setEncoderOffsets) {
       public boolean runsWhenDisabled() {
