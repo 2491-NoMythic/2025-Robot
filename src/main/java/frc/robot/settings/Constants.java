@@ -349,13 +349,13 @@ public final class Constants {
   }
 
   public final class CoralEndeffectorConstants{
-    public static final int CORAL_ENDEFFECTOR_MOTOR_1_ID = 2491;
-    public static final int CORAL_ENDEFFECTOR_MOTOR_2_ID = 2491;
+    public static final int CORAL_ENDEFFECTOR_MOTOR_1_ID = 9;
+    public static final int CORAL_ENDEFFECTOR_MOTOR_2_ID = 10;
 
-    public static final double CORAL_ENDEFFECTOR_KP_1 = 2491;
-    public static final double CORAL_ENDEFFECTOR_KI_1 = 2491;
-    public static final double CORAL_ENDEFFECTOR_KD_1 = 2491;
-    public static final double CORAL_ENDEFFECTOR_KFF_1 = 2491;
+    public static final double CORAL_ENDEFFECTOR_KP_1 = 0.001;
+    public static final double CORAL_ENDEFFECTOR_KI_1 = 0;
+    public static final double CORAL_ENDEFFECTOR_KD_1 = 0;
+    public static final double CORAL_ENDEFFECTOR_KFF_1 = 0;
 
     public static final double CORAL_ENDEFFECTOR_KP_2 = 2491;
     public static final double CORAL_ENDEFFECTOR_KI_2 = 2491;
@@ -366,23 +366,26 @@ public final class Constants {
   }
 
   public final class AlgaeEndeffectorConstants{
-    public static final int ALGAE_ENDEFFECTOR_MOTOR_1_ID = 2491;
-    public static final int ALGAE_ENDEFFECTOR_MOTOR_2_ID = 2491;
+    public static final int ALGAE_ENDEFFECTOR_MOTOR_1_ID = 40;
+    public static final int ALGAE_ENDEFFECTOR_MOTOR_2_ID = 41;
     
     public static final int ALGAE_ENDEFFECTOR_CURRENT_LIMIT = 25;
-    public static final double ALGAE_ENDEFFECTOR_KP_1 = 2491;
-    public static final double ALGAE_ENDEFFECTOR_KI_1 = 2491;
-    public static final double ALGAE_ENDEFFECTOR_KD_1 = 2491;
-    public static final double ALGAE_ENDEFFECTOR_KFF_1 = 2491;
-
-    public static final double ALGAE_ENDEFFECTOR_KP_2 = 2491;
-    public static final double ALGAE_ENDEFFECTOR_KI_2 = 2491;
-    public static final double ALGAE_ENDEFFECTOR_KD_2 = 2491;
-    public static final double ALGAE_ENDEFFECTOR_KFF_2 = 2491;
-
     public static final double ALGAE_INTAKE_SPEED = 1;
     public static final double ALGAE_SHOOT_SPEED = -1;
-
+    public static final double ALGAE_ENDEFFECTOR_KP_1 = 0.0003;
+    public static final double ALGAE_ENDEFFECTOR_KI_1 = 0;
+    //2 volts ~= 1760 rpm
+    //4 volts ~= 3670 rpm
+    //1 volt ~= 815 rpm
+    public static final double ALGAE_ENDEFFECTOR_KP_2 = 0.0002;
+    public static final double ALGAE_ENDEFFECTOR_KI_2 = 0;
+    public static final double ALGAE_ENDEFFECTOR_KD_2 = 0;
+    public static final double ALGAE_ENDEFFECTOR_KFF_2 = 0.000091;
+    //2 volts ~= 1822 rpm
+    //4 volts ~= 3750 rpm
+    //1 volt ~= 870 rpm
+    public static final double ALGAE_ENDEFFECTOR_KD_1 = 0;
+    public static final double ALGAE_ENDEFFECTOR_KFF_1 = 0.000095;
   }
   
   public final class ElevatorConstants{
