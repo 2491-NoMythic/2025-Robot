@@ -33,14 +33,17 @@ public class LineUp extends Command {
   boolean notSensed;
   boolean finished;
 
+  double speed;
+
 /**
  * this command will align your robot side-to-side on one of the reef poles. 
  * @param drivetrain
  * @param movingLeft true if you are aligning on the left pole, false, if you are aligning on the right pole
  */
-  public LineUp(DrivetrainSubsystem drivetrain, BooleanSupplier movingLeft) {
+  public LineUp(DrivetrainSubsystem drivetrain, BooleanSupplier movingLeft, double speed) {
     this.drivetrain = drivetrain;
     this.movingLeft = movingLeft;
+    this.speed = speed;
     addRequirements(drivetrain);
     
     // Use addRequirements() here to declare subsystem dependencies.
@@ -70,9 +73,9 @@ public class LineUp extends Command {
     switch(reefOffset){
       case TOO_FAR_LEFT:
         if (movingLeft.getAsBoolean()) {
-          drivetrain.drive(new ChassisSpeeds(0, 0.4, 0));
+          drivetrain.drive(new ChassisSpeeds(0, speed, 0));
         } else{
-          drivetrain.drive(new ChassisSpeeds(0, 0.5, 0));
+          drivetrain.drive(new ChassisSpeeds(0, speed, 0));
         }
         break;
 
@@ -82,21 +85,21 @@ public class LineUp extends Command {
           drivetrain.pointWheelsInward();
           finished = true;
         } else {
-          drivetrain.drive(new ChassisSpeeds(0, 0.4, 0));
+          drivetrain.drive(new ChassisSpeeds(0, speed, 0));
         }   
         break;
 
       case CENTERED:
         if(movingLeft.getAsBoolean()) {
-          drivetrain.drive(new ChassisSpeeds(0, -0.4, 0));
+          drivetrain.drive(new ChassisSpeeds(0, -speed, 0));
         } else {
-          drivetrain.drive(new ChassisSpeeds(0, 0.4, 0));
+          drivetrain.drive(new ChassisSpeeds(0, speed, 0));
         }   
         break;
 
       case ALIGNED_RIGHT:
         if(movingLeft.getAsBoolean()) {
-          drivetrain.drive(new ChassisSpeeds(0, -0.4, 0));
+          drivetrain.drive(new ChassisSpeeds(0, -speed, 0));
         } else {
           drivetrain.stop();
           drivetrain.pointWheelsInward();
@@ -106,9 +109,9 @@ public class LineUp extends Command {
       
       case TOO_FAR_RIGHT:
         if(movingLeft.getAsBoolean()) {
-          drivetrain.drive(new ChassisSpeeds(0, -0.5, 0));
+          drivetrain.drive(new ChassisSpeeds(0, -speed, 0));
         } else {
-          drivetrain.drive(new ChassisSpeeds(0, -0.4, 0));
+          drivetrain.drive(new ChassisSpeeds(0, -speed, 0));
         }   
         break;
 
@@ -117,9 +120,6 @@ public class LineUp extends Command {
         break;
 
       case UNKNOWN:
-        drivetrain.stop();
-        drivetrain.pointWheelsInward();
-        finished = true;   
         break;  
     }
   }
@@ -127,7 +127,7 @@ public class LineUp extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println("command ended by condtions"+finished+notSensed);
+    System.out.println("command ended by condtions"+notSensed);
     drivetrain.stop();
     finished = false;
     notSensed = false;

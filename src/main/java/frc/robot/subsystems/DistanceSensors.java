@@ -1,9 +1,11 @@
 package frc.robot.subsystems;
 
 import com.playingwithfusion.TimeOfFlight;
+import com.playingwithfusion.TimeOfFlight.RangingMode;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.helpers.MythicalMath;
 import frc.robot.settings.ReefOffsetEnums;
 import static frc.robot.settings.Constants.SensorConstants.*;
 
@@ -27,7 +29,7 @@ public class DistanceSensors  extends SubsystemBase{
   private double previousML = 0;
   private double previousFR = 0;
   private double previousMR = 0;
-  private final int loopsNeededForValid = 3;
+  private final int loopsNeededForValid = 2;
 
   private double loopsSensed;
 
@@ -41,6 +43,11 @@ public class DistanceSensors  extends SubsystemBase{
     middleLeft = new TimeOfFlight(MIDDLE_LEFT_DIST_SENSOR_ID);
     middleRight = new TimeOfFlight(MIDDLE_RIGHT_DIST_SENSOR_ID);
     farRight = new TimeOfFlight(FAR_RIGHT_DIST_SENSOR_ID);
+    SmartDashboard.putNumber("SENSOR/farLeftSampleTime", farLeft.getSampleTime());
+    farLeft.setRangingMode(RangingMode.Short, 24);
+    middleLeft.setRangingMode(RangingMode.Short, 24);
+    middleRight.setRangingMode(RangingMode.Short, 24);
+    farRight.setRangingMode(RangingMode.Short, 24);
   }
 /**
  * a method that returns the distance sensed by the given sensor, as shown below. If a sensor senses nothing within it's range, It returns 0.0 <br>
@@ -235,15 +242,15 @@ public class DistanceSensors  extends SubsystemBase{
       && farRight.getRange()>0
       && loopsMRValid>loopsNeededForValid;
     RobotState.getInstance().reefOffset = calcOffset(
-      farLeft.getRange()<RANGE_TO_SEE_REEF && farLeft.getRange()>0, 
-      middleLeft.getRange()<RANGE_TO_SEE_REEF && middleLeft.getRange()>0,
-      middleRight.getRange()<RANGE_TO_SEE_REEF && middleRight.getRange()>0,
-      farRight.getRange()<RANGE_TO_SEE_REEF && farRight.getRange()>0
+      RobotState.getInstance().farLeftSensorTriggered, 
+      RobotState.getInstance().middleLeftSensorTriggered,
+      RobotState.getInstance().middleRightSensorTriggered,
+      RobotState.getInstance().farRightSensorTriggered
     );
   //for testing purposes
     SmartDashboard.putBoolean("TRIGGERED/FarLeft", RobotState.getInstance().farLeftSensorTriggered);
-    SmartDashboard.putBoolean("TRIGGERED/FarRight", RobotState.getInstance().middleLeftSensorTriggered);
-    SmartDashboard.putBoolean("TRIGGERED/MiddleLeft", RobotState.getInstance().middleRightSensorTriggered);
-    SmartDashboard.putBoolean("TRIGGERED/MiddleRight", RobotState.getInstance().farRightSensorTriggered);
+    SmartDashboard.putBoolean("TRIGGERED/FarRight", RobotState.getInstance().farRightSensorTriggered);
+    SmartDashboard.putBoolean("TRIGGERED/MiddleLeft", RobotState.getInstance().middleLeftSensorTriggered);
+    SmartDashboard.putBoolean("TRIGGERED/MiddleRight", RobotState.getInstance().middleRightSensorTriggered);
   }
 }

@@ -30,7 +30,8 @@ public class PlaceCoralCommand extends SequentialCommandGroup{
         addCommands(
             new InstantCommand(()->elevator.setElevatorPosition(elevatorPosition), elevator),//moves elevator
             new ApproachReef(distanceSensors, drivetrain,xSupplier, ySupplier, rSupplier),//aproches the reef
-            new LineUp(drivetrain, leftPlace),//align with reef
+            new LineUp(drivetrain, leftPlace, 0.7),//align with reef
+            new LineUp(drivetrain, leftPlace, 0.3),//align with reef
             new DeliverCoral(coralEndeffector)//drops coral
         );
 
