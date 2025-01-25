@@ -39,11 +39,13 @@ import frc.robot.commands.AlgaeIntakeCommand;
 import frc.robot.commands.Drive;
 import frc.robot.commands.LineUp;
 import frc.robot.commands.MoveMeters;
+import frc.robot.commands.PlaceCoralCommand;
 import frc.robot.commands.WaitCommand;
 import frc.robot.subsystems.DistanceSensors;
 import frc.robot.commands.NamedCommands.CoralIntake;
 import frc.robot.commands.NamedCommands.DeliverCoral;
 import frc.robot.settings.SensorNameEnums;
+import frc.robot.settings.ElevatorEnums;
 import frc.robot.subsystems.AlgaeEndeffectorSubsystem;
 import frc.robot.subsystems.CoralEndeffectorSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -115,6 +117,11 @@ public class RobotContainer {
   BooleanSupplier SlowFrontSup;
   BooleanSupplier AlgaeIntakeSup;
   BooleanSupplier AlgaeShooterSup;
+  BooleanSupplier ReefHeight1Supplier;
+  BooleanSupplier ReefHeight2Supplier;
+  BooleanSupplier ReefHeight3Supplier;
+  BooleanSupplier ReefHeight4Supplier;
+  BooleanSupplier CoralIntakeHeightSupplier;
   DoubleSupplier ControllerYAxisSupplier;
   DoubleSupplier ControllerXAxisSupplier;
   DoubleSupplier ControllerZAxisSupplier;
@@ -164,6 +171,11 @@ public class RobotContainer {
       SlowFrontSup = ()-> driverControllerXbox.getRightTriggerAxis() > 0.1;
       AlgaeIntakeSup = driverControllerXbox::getAButton; //TODO change to actual
       AlgaeShooterSup = driverControllerXbox::getXButton;
+      ReefHeight1Supplier = ()->operatorControllerXbox.getPOV() == 0;
+      ReefHeight2Supplier = ()->operatorControllerXbox.getPOV() == 90;
+      ReefHeight3Supplier = ()->operatorControllerXbox.getPOV() == 180;
+      ReefHeight4Supplier = ()->operatorControllerXbox.getPOV() == 270;
+      CoralIntakeHeightSupplier = ()->operatorControllerXbox.getStartButton();
       
     } else {
       driverControllerPS4 = new PS4Controller(DRIVE_CONTROLLER_ID);
@@ -180,6 +192,12 @@ public class RobotContainer {
       AlgaeShooterSup = driverControllerPS4::getSquareButton;
 
       ZeroGyroSup = driverControllerPS4::getPSButton;
+
+      ReefHeight1Supplier = ()->operatorControllerPS4.getPOV() == 0;
+      ReefHeight2Supplier = ()->operatorControllerPS4.getPOV() == 90;
+      ReefHeight3Supplier = ()->operatorControllerPS4.getPOV() == 180;
+      ReefHeight4Supplier = ()->operatorControllerPS4.getPOV() == 270;
+      CoralIntakeHeightSupplier = ()->operatorControllerPS4.getOptionsButton();
     }
 
     limelightInit();
@@ -297,9 +315,18 @@ public class RobotContainer {
 
     SmartDashboard.putData("set offsets", setOffsets);
     SmartDashboard.putData(new InstantCommand(driveTrain::forceUpdateOdometryWithVision));
+
+    new Trigger(ReefHeight1Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef1));
+    new Trigger(ReefHeight2Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef2));
+    new Trigger(ReefHeight3Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef3));
+    new Trigger(ReefHeight4Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef4));
+    new Trigger(CoralIntakeHeightSupplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.HumanPlayer));
+
     }
+    if(algaeEndeffectorExists) {
     new Trigger(AlgaeIntakeSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector, ALGAE_INTAKE_SPEED));
     new Trigger(AlgaeShooterSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector, ALGAE_SHOOT_SPEED));
+    }
     /*
      * bindings:
      * PS4: zero the gyroscope
@@ -361,18 +388,45 @@ public class RobotContainer {
 
   private void registerNamedCommands() {
     Command coralIntakeNamedCommand;
-    Command deliverCoralNamedCommand;
+    Command deliverCoralLeft1NamedCommand;
+    Command deliverCoralLeft2NamedCommand;
+    Command deliverCoralLeft3NamedCommand;
+    Command deliverCoralLeft4NamedCommand;
+    Command deliverCoralRight1NamedCommand;
+    Command deliverCoralRight2NamedCommand;
+    Command deliverCoralRight3NamedCommand;
+    Command deliverCoralRight4NamedCommand;
     if(elevatorExists&&funnelIntakeExists&&coralEndeffectorExists) {
       coralIntake = new CoralIntake(elevator, funnelIntake, coralEndDefector);
-      deliverCoral = new DeliverCoral(coralEndDefector);
       coralIntakeNamedCommand = coralIntake;
-      deliverCoralNamedCommand = deliverCoral;
+      deliverCoralLeft1NamedCommand = new PlaceCoralCommand(elevator, ()->ElevatorEnums.Reef1, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true);
+      deliverCoralLeft2NamedCommand = new PlaceCoralCommand(elevator, ()->ElevatorEnums.Reef2, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true);
+      deliverCoralLeft3NamedCommand = new PlaceCoralCommand(elevator, ()->ElevatorEnums.Reef3, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true);
+      deliverCoralLeft4NamedCommand = new PlaceCoralCommand(elevator, ()->ElevatorEnums.Reef4, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true);
+      deliverCoralRight1NamedCommand = new PlaceCoralCommand(elevator, ()->ElevatorEnums.Reef1, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->false);
+      deliverCoralRight2NamedCommand = new PlaceCoralCommand(elevator, ()->ElevatorEnums.Reef2, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->false);
+      deliverCoralRight3NamedCommand = new PlaceCoralCommand(elevator, ()->ElevatorEnums.Reef3, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->false);
+      deliverCoralRight4NamedCommand = new PlaceCoralCommand(elevator, ()->ElevatorEnums.Reef4, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->false);
     } else {
       coralIntakeNamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
-      deliverCoralNamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
+      deliverCoralLeft1NamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
+      deliverCoralLeft2NamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
+      deliverCoralLeft3NamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
+      deliverCoralLeft4NamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
+      deliverCoralRight1NamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
+      deliverCoralRight2NamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
+      deliverCoralRight3NamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
+      deliverCoralRight4NamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
     }
     NamedCommands.registerCommand("CoralIntake", coralIntakeNamedCommand);
-    NamedCommands.registerCommand("DeliverCoral", deliverCoralNamedCommand);
+    NamedCommands.registerCommand("DeliverCoralLeft1", deliverCoralLeft1NamedCommand);
+    NamedCommands.registerCommand("DeliverCoralLeft2", deliverCoralLeft2NamedCommand);
+    NamedCommands.registerCommand("DeliverCoralLeft3", deliverCoralLeft3NamedCommand);
+    NamedCommands.registerCommand("DeliverCoralLeft4", deliverCoralLeft4NamedCommand);
+    NamedCommands.registerCommand("DeliverCoralRight1", deliverCoralRight1NamedCommand);
+    NamedCommands.registerCommand("DeliverCoralRight2", deliverCoralRight2NamedCommand);
+    NamedCommands.registerCommand("DeliverCoralRight3", deliverCoralRight3NamedCommand);
+    NamedCommands.registerCommand("DeliverCoralRight4", deliverCoralRight4NamedCommand);
   }
 
   public void logPower() {

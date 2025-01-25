@@ -5,6 +5,8 @@ import frc.robot.settings.ReefOffsetEnums;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import frc.robot.settings.ElevatorEnums;
+
 public class RobotState {
   private static RobotState instance;
   public boolean LimelightsUpdated;
@@ -17,6 +19,7 @@ public class RobotState {
   public boolean coralSeen;
   public boolean coralGone;
   public boolean hasAlgae;
+  public ElevatorEnums deliveringCoralHeight;
   public ReefOffsetEnums reefOffset;
 
   private RobotState() {
