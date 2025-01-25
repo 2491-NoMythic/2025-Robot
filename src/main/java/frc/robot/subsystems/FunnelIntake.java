@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.revrobotics.spark.SparkAnalogSensor;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -17,11 +18,14 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import static frc.robot.settings.Constants.FunnelConstants.*;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 
 public class FunnelIntake extends SubsystemBase {
   /** Creates a new Funnelintake. */
   SparkMax intakeMotor;
   SparkBaseConfig intakeMotorConfig;
+  SparkAnalogSensor funnelIntakeSensor;
+
   public FunnelIntake() {
     intakeMotor = new SparkMax(FUNNEL_INTAKE_MOTOR_ID, MotorType.kBrushless);
     intakeMotorConfig = new SparkMaxConfig();
@@ -34,12 +38,14 @@ public class FunnelIntake extends SubsystemBase {
     intakeMotorConfig.idleMode(IdleMode.kCoast);
     intakeMotorConfig.smartCurrentLimit(25, 25, 1000);
     intakeMotor.configure(intakeMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+    funnelIntakeSensor = intakeMotor.getAnalog();
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-
+    RobotState.getInstance().funnelSensorTrig = funnelIntakeSensor.getVoltage()>2;
   }
   public void runFunnel(double speed){
     intakeMotor.set(speed);
@@ -47,4 +53,5 @@ public class FunnelIntake extends SubsystemBase {
   public void stopFunnel() {
     intakeMotor.set(0);
   }
+
 }
