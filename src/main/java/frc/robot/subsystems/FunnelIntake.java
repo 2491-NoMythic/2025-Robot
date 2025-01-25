@@ -60,7 +60,7 @@ public class FunnelIntake extends SubsystemBase {
     motorLogger1 = new MotorLogger("/funnelIntake/intakemotor1");
     motorLogger2 = new MotorLogger("/funnelIntake/intakeMotor2");
     
-    funnelIntakeSensor = intakeMotor.getAnalog();
+    funnelIntakeSensor = intakeMotor1.getAnalog();
 
   }
   private void logMotors(){
