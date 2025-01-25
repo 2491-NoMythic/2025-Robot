@@ -241,9 +241,9 @@ public class DistanceSensors  extends SubsystemBase{
       farRight.getRange()<RANGE_TO_SEE_REEF && farRight.getRange()>0
     );
   //for testing purposes
-    SmartDashboard.putBoolean("TRIGGERED/FarLeft", farLeft.getRange()<RANGE_TO_SEE_REEF & farLeft.getRange()>0);
-    SmartDashboard.putBoolean("TRIGGERED/FarRight", farRight.getRange()<RANGE_TO_SEE_REEF & farRight.getRange()>0);
-    SmartDashboard.putBoolean("TRIGGERED/MiddleLeft", middleLeft.getRange()<RANGE_TO_SEE_REEF & farLeft.getRange()>0);
-    SmartDashboard.putBoolean("TRIGGERED/MiddleRight", middleRight.getRange()<RANGE_TO_SEE_REEF & farRight.getRange()>0);
+    SmartDashboard.putBoolean("TRIGGERED/FarLeft", RobotState.getInstance().farLeftSensorTriggered);
+    SmartDashboard.putBoolean("TRIGGERED/FarRight", RobotState.getInstance().middleLeftSensorTriggered);
+    SmartDashboard.putBoolean("TRIGGERED/MiddleLeft", RobotState.getInstance().middleRightSensorTriggered);
+    SmartDashboard.putBoolean("TRIGGERED/MiddleRight", RobotState.getInstance().farRightSensorTriggered);
   }
 }
