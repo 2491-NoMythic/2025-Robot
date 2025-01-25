@@ -37,6 +37,7 @@ import frc.robot.commands.AlgaeEndeffectorCommand;
 import frc.robot.commands.ApproachReef;
 import frc.robot.commands.AlgaeIntakeCommand;
 import frc.robot.commands.Drive;
+import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.LineUp;
 import frc.robot.commands.MoveMeters;
 import frc.robot.commands.PlaceCoralCommand;
@@ -90,6 +91,7 @@ public class RobotContainer {
   private final boolean distanceSensorsExist = Preferences.getBoolean("DistanceSensors Exist", true);
 
   private DrivetrainSubsystem driveTrain;
+  private ElevatorCommand elevatorDefaultCommand;
   private Drive defaultDriveCommand;
   private Lights lights;
   private XboxController driverControllerXbox;
@@ -273,6 +275,7 @@ public class RobotContainer {
 
   private void elevatorInst() {
     elevator = new ElevatorSubsystem();
+    elevatorDefaultCommand = new ElevatorCommand(elevator,()-> ElevatorEnums.HumanPlayer);
   }
 
   private void funnelIntakeInst() {
