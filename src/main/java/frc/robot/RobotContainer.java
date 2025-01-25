@@ -301,12 +301,12 @@ public class RobotContainer {
     SmartDashboard.putData("drivetrain", driveTrain);
 
     new Trigger(ZeroGyroSup).onTrue(new InstantCommand(driveTrain::zeroGyroscope));
-
+ 
     new Trigger(()->RightReefLineupSup.getAsBoolean()||LeftReefLineupSup.getAsBoolean()).whileTrue(new SequentialCommandGroup(
       new LineUp(driveTrain, LeftReefLineupSup,0.9),
       new WaitCommand(()->0.1),
       new LineUp(driveTrain, LeftReefLineupSup,0.3)));
-    
+
     new Trigger(SlowFrontSup).whileTrue(approachReef);
     InstantCommand setOffsets = new InstantCommand(driveTrain::setEncoderOffsets) {
       public boolean runsWhenDisabled() {

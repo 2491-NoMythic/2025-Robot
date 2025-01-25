@@ -4,7 +4,9 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.helpers.MotorLogger;
 
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -25,7 +27,8 @@ import static frc.robot.settings.Constants.FunnelConstants.*;
 public class FunnelRotator extends SubsystemBase {
 
   private SparkBaseConfig rotatorMotorConfig;
-  SparkMax rotatorMotor; 
+  SparkMax rotatorMotor;
+  MotorLogger motorLogger;
   /** Creates a new FunnelRotator. */
   public FunnelRotator() {
     rotatorMotor = new SparkMax (FUNNEL_ROTATOR_MOTOR_ID, MotorType.kBrushless);
@@ -38,6 +41,8 @@ public class FunnelRotator extends SubsystemBase {
     rotatorMotorConfig.idleMode(IdleMode.kCoast);
     rotatorMotorConfig.smartCurrentLimit(25, 25, 1000);
     rotatorMotor.configure(rotatorMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+    motorLogger = new MotorLogger("/funnelRotator/rotatorMotor");
   }
 
   public void setFunnelRotator(double speed) {
@@ -46,8 +51,12 @@ public class FunnelRotator extends SubsystemBase {
   public void stopRotating(){
     rotatorMotor.set(0);
   }
+  private void logMotors(){
+    motorLogger.log(rotatorMotor);
+  }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    logMotors();
   }
 }

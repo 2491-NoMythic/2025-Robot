@@ -415,13 +415,19 @@ public final class Constants {
   }
 
   public final class FunnelConstants{
-    public static final int FUNNEL_INTAKE_MOTOR_ID = 2491;
+    public static final int FUNNEL_INTAKE_MOTOR_1_ID = 2491;
+    public static final int FUNNEL_INTAKE_MOTOR_2_ID = 2491;
     public static final int FUNNEL_ROTATOR_MOTOR_ID = 2491;
 
-    public static final double FUNNEL_INTAKE_KP = 2491;
-    public static final double FUNNEL_INTAKE_KI = 2491;
-    public static final double FUNNEL_INTAKE_KD = 2491;
-    public static final double FUNNEL_INTAKE_KFF = 2491;
+    public static final double FUNNEL_INTAKE_1_KP = 2491;
+    public static final double FUNNEL_INTAKE_1_KI = 2491;
+    public static final double FUNNEL_INTAKE_1_KD = 2491;
+    public static final double FUNNEL_INTAKE_1_KFF = 2491;
+
+    public static final double FUNNEL_INTAKE_2_KP = 2491;
+    public static final double FUNNEL_INTAKE_2_KI = 2491;
+    public static final double FUNNEL_INTAKE_2_KD = 2491;
+    public static final double FUNNEL_INTAKE_2_KFF = 2491;
 
     public static final double FUNNEL_ROTATOR_KP = 2491;
     public static final double FUNNEL_ROTATOR_KI = 2491;

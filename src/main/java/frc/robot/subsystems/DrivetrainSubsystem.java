@@ -51,6 +51,7 @@ import java.util.Arrays;
 import java.util.Collections;
 // import java.util.logging.Logger;
 import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.AutoLogOutput;
 
 public class DrivetrainSubsystem extends SubsystemBase {
   //These are our swerve drive kinematics and Pigeon (gyroscope)
@@ -134,10 +135,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
     DataLog log = DataLogManager.getLog();
     motorLoggers =
         new MotorLogger[] {
-          new MotorLogger(log, "/drivetrain/motorFL"),
-          new MotorLogger(log, "/drivetrain/motorFR"),
-          new MotorLogger(log, "/drivetrain/motorBL"),
-          new MotorLogger(log, "/drivetrain/motorBR"),
+          new MotorLogger("/drivetrain/motorFL"),
+          new MotorLogger("/drivetrain/motorFR"),
+          new MotorLogger( "/drivetrain/motorBL"),
+          new MotorLogger("/drivetrain/motorBR"),
         };
     // configures the odometer
     odometer =
