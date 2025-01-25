@@ -400,6 +400,25 @@ public class DrivetrainSubsystem extends SubsystemBase {
           "No valid limelight estimate to reset from. (Drivetrain.forceUpdateOdometryWithVision)");
     }
   }
+
+  /*
+   * Logs important data for the drivetrain
+   */
+  public void logData(){
+    SmartDashboard.putNumber("DRIVETRAIN/Robot Angle", getOdometryRotation().getDegrees());
+    SmartDashboard.putString("DRIVETRAIN/Robot Location", getPose().getTranslation().toString());
+    SmartDashboard.putNumber("DRIVETRAIN/forward speed", getChassisSpeeds().vxMetersPerSecond);
+    SmartDashboard.putNumber(
+        "DRIVETRAIN/rotational speed", Math.toDegrees(getChassisSpeeds().omegaRadiansPerSecond));
+    SmartDashboard.putNumber(
+        "DRIVETRAIN/gyroscope rotation degrees", getPose().getRotation().getDegrees());
+    SmartDashboard.putNumber(
+        "DRIVETRAIN/degrees per second", Math.toDegrees(getChassisSpeeds().omegaRadiansPerSecond));
+
+    Logger.recordOutput("MyStates", getModuleStates());
+    Logger.recordOutput("Position", odometer.getEstimatedPosition());
+    Logger.recordOutput("Gyro", getGyroscopeRotation());
+  }
   //This is the things the subsystem does periodically. 
   @Override
   public void periodic() {
@@ -421,19 +440,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
     for (int i = 0; i < 4; i++) {
       motorLoggers[i].log(modules[i].getDriveMotor());
     }
-    // puts important data for testing features on SmartDashboard
-    SmartDashboard.putNumber("Robot Angle", getOdometryRotation().getDegrees());
-    SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
-    SmartDashboard.putNumber("DRIVETRAIN/forward speed", getChassisSpeeds().vxMetersPerSecond);
-    SmartDashboard.putNumber(
-        "DRIVETRAIN/rotational speed", Math.toDegrees(getChassisSpeeds().omegaRadiansPerSecond));
-    SmartDashboard.putNumber(
-        "DRIVETRAIN/gyroscope rotation degrees", getPose().getRotation().getDegrees());
-    SmartDashboard.putNumber(
-        "DRIVETRAIN/degrees per second", Math.toDegrees(getChassisSpeeds().omegaRadiansPerSecond));
-
-    Logger.recordOutput("MyStates", getModuleStates());
-    Logger.recordOutput("Position", odometer.getEstimatedPosition());
-    Logger.recordOutput("Gyro", getGyroscopeRotation());
+    logData();
   }
 }
