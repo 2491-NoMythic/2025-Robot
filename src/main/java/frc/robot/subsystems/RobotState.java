@@ -21,6 +21,8 @@ public class RobotState {
   public boolean hasAlgae;
   public ElevatorEnums deliveringCoralHeight;
   public ReefOffsetEnums reefOffset;
+  public boolean funnelSensorTrig;
+  public boolean coralEndeffSensorTrig;
 
   private RobotState() {
   }

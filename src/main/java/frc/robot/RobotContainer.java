@@ -38,6 +38,7 @@ import frc.robot.commands.ApproachReef;
 import frc.robot.commands.AlgaeIntakeCommand;
 import frc.robot.commands.Drive;
 import frc.robot.commands.IndicatorLights;
+import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.LineUp;
 import frc.robot.commands.MoveMeters;
 import frc.robot.commands.PlaceCoralCommand;
@@ -92,6 +93,7 @@ public class RobotContainer {
   private final boolean lightsExist = Preferences.getBoolean("Lights Exist", true);
 
   private DrivetrainSubsystem driveTrain;
+  private ElevatorCommand elevatorDefaultCommand;
   private Drive defaultDriveCommand;
   private Lights lights;
   private XboxController driverControllerXbox;
@@ -277,6 +279,7 @@ public class RobotContainer {
 
   private void elevatorInst() {
     elevator = new ElevatorSubsystem();
+    elevatorDefaultCommand = new ElevatorCommand(elevator,()-> ElevatorEnums.HumanPlayer);
   }
 
   private void funnelIntakeInst() {
@@ -305,12 +308,12 @@ public class RobotContainer {
     SmartDashboard.putData("drivetrain", driveTrain);
 
     new Trigger(ZeroGyroSup).onTrue(new InstantCommand(driveTrain::zeroGyroscope));
-
+ 
     new Trigger(()->RightReefLineupSup.getAsBoolean()||LeftReefLineupSup.getAsBoolean()).whileTrue(new SequentialCommandGroup(
       new LineUp(driveTrain, LeftReefLineupSup,0.9),
       new WaitCommand(()->0.1),
       new LineUp(driveTrain, LeftReefLineupSup,0.3)));
-    
+
     new Trigger(SlowFrontSup).whileTrue(approachReef);
     InstantCommand setOffsets = new InstantCommand(driveTrain::setEncoderOffsets) {
       public boolean runsWhenDisabled() {

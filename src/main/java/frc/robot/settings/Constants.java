@@ -349,19 +349,13 @@ public final class Constants {
   }
 
   public final class CoralEndeffectorConstants{
-    public static final int CORAL_ENDEFFECTOR_MOTOR_1_ID = 9;
-    public static final int CORAL_ENDEFFECTOR_MOTOR_2_ID = 10;
+    public static final int CORAL_ENDEFFECTOR_MOTOR = 9;
 
-    public static final double CORAL_ENDEFFECTOR_KP_1 = 0.001;
-    public static final double CORAL_ENDEFFECTOR_KI_1 = 0;
-    public static final double CORAL_ENDEFFECTOR_KD_1 = 0;
-    public static final double CORAL_ENDEFFECTOR_KFF_1 = 0;
-
-    public static final double CORAL_ENDEFFECTOR_KP_2 = 2491;
-    public static final double CORAL_ENDEFFECTOR_KI_2 = 2491;
-    public static final double CORAL_ENDEFFECTOR_KD_2 = 2491;
-    public static final double CORAL_ENDEFFECTOR_KFF_2 = 2491;
-
+    public static final double CORAL_ENDEFFECTOR_KP = 0.001;
+    public static final double CORAL_ENDEFFECTOR_KI = 0;
+    public static final double CORAL_ENDEFFECTOR_KD = 0;
+    public static final double CORAL_ENDEFFECTOR_KFF = 0;
+    
     public static final double CORAL_ENDEFFECTOR_SPEED = 2491.0;
   }
 
@@ -415,13 +409,19 @@ public final class Constants {
   }
 
   public final class FunnelConstants{
-    public static final int FUNNEL_INTAKE_MOTOR_ID = 2491;
+    public static final int FUNNEL_INTAKE_MOTOR_1_ID = 2491;
+    public static final int FUNNEL_INTAKE_MOTOR_2_ID = 2491;
     public static final int FUNNEL_ROTATOR_MOTOR_ID = 2491;
 
-    public static final double FUNNEL_INTAKE_KP = 2491;
-    public static final double FUNNEL_INTAKE_KI = 2491;
-    public static final double FUNNEL_INTAKE_KD = 2491;
-    public static final double FUNNEL_INTAKE_KFF = 2491;
+    public static final double FUNNEL_INTAKE_1_KP = 2491;
+    public static final double FUNNEL_INTAKE_1_KI = 2491;
+    public static final double FUNNEL_INTAKE_1_KD = 2491;
+    public static final double FUNNEL_INTAKE_1_KFF = 2491;
+
+    public static final double FUNNEL_INTAKE_2_KP = 2491;
+    public static final double FUNNEL_INTAKE_2_KI = 2491;
+    public static final double FUNNEL_INTAKE_2_KD = 2491;
+    public static final double FUNNEL_INTAKE_2_KFF = 2491;
 
     public static final double FUNNEL_ROTATOR_KP = 2491;
     public static final double FUNNEL_ROTATOR_KI = 2491;

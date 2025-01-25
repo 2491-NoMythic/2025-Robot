@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.revrobotics.spark.SparkAnalogSensor;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -16,35 +17,70 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 
 import static frc.robot.settings.Constants.FunnelConstants.*;
 
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.helpers.MotorLogger;
 
 public class FunnelIntake extends SubsystemBase {
   /** Creates a new Funnelintake. */
-  SparkMax intakeMotor;
-  SparkBaseConfig intakeMotorConfig;
-  public FunnelIntake() {
-    intakeMotor = new SparkMax(FUNNEL_INTAKE_MOTOR_ID, MotorType.kBrushless);
-    intakeMotorConfig = new SparkMaxConfig();
-    intakeMotorConfig.apply(new ClosedLoopConfig().pidf(
-      FUNNEL_INTAKE_KP,
-      FUNNEL_INTAKE_KI,
-      FUNNEL_INTAKE_KD,
-      FUNNEL_INTAKE_KFF));
+  SparkMax intakeMotor1;
+  SparkMax intakeMotor2;
+  SparkBaseConfig intakeMotor1Config;
+  SparkBaseConfig intakeMotor2Config;
+  MotorLogger motorLogger1;
+  MotorLogger motorLogger2;
+  SparkAnalogSensor funnelIntakeSensor;
 
-    intakeMotorConfig.idleMode(IdleMode.kCoast);
-    intakeMotorConfig.smartCurrentLimit(25, 25, 1000);
-    intakeMotor.configure(intakeMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+  
+  public FunnelIntake() {
+    intakeMotor1 = new SparkMax(FUNNEL_INTAKE_MOTOR_1_ID, MotorType.kBrushless);
+    intakeMotor1Config = new SparkMaxConfig();
+    intakeMotor1Config.apply(new ClosedLoopConfig().pidf(
+      FUNNEL_INTAKE_1_KP,
+      FUNNEL_INTAKE_1_KI,
+      FUNNEL_INTAKE_1_KD,
+      FUNNEL_INTAKE_1_KFF));
+
+    intakeMotor1Config.idleMode(IdleMode.kCoast);
+    intakeMotor1Config.smartCurrentLimit(25, 25, 1000);
+    intakeMotor1.configure(intakeMotor1Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+    intakeMotor2 = new SparkMax(FUNNEL_INTAKE_MOTOR_2_ID,MotorType.kBrushless);
+    intakeMotor2Config = new SparkMaxConfig();
+    intakeMotor2Config.apply(new ClosedLoopConfig().pidf(
+      FUNNEL_INTAKE_2_KP,
+      FUNNEL_INTAKE_2_KI,
+      FUNNEL_INTAKE_2_KD,
+      FUNNEL_INTAKE_2_KFF));
+
+    intakeMotor2Config.idleMode(IdleMode.kCoast);
+    intakeMotor2Config.smartCurrentLimit(25, 25, 1000);
+    intakeMotor2.configure(intakeMotor2Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+    motorLogger1 = new MotorLogger("/funnelIntake/intakemotor1");
+    motorLogger2 = new MotorLogger("/funnelIntake/intakeMotor2");
+    
+    funnelIntakeSensor = intakeMotor1.getAnalog();
+
+  }
+  private void logMotors(){
+    motorLogger1.log(intakeMotor1);
+    motorLogger2.log(intakeMotor2);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-
+    RobotState.getInstance().funnelSensorTrig = funnelIntakeSensor.getVoltage()>2;
+    logMotors();
   }
   public void runFunnel(double speed){
-    intakeMotor.set(speed);
+    intakeMotor1.set(speed);
+    intakeMotor2.set(speed);
   }
   public void stopFunnel() {
-    intakeMotor.set(0);
+    intakeMotor1.set(0);
+    intakeMotor2.set(0);
   }
+
 }
