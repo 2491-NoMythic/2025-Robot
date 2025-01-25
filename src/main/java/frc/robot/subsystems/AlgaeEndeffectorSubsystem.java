@@ -17,12 +17,14 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.*;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class AlgaeEndeffectorSubsystem extends SubsystemBase {
   SparkMax algaeEndeffectorMotor1;
   SparkMax algaeEndeffectorMotor2;
   SparkBaseConfig algaeConfig1;
   SparkBaseConfig algaeConfig2;
   PIDController algendController;
+  int loops;
   public boolean powerSpike;
   /** Creates a new AlgaeEndDefectorSubsystem. */
   public AlgaeEndeffectorSubsystem() {
@@ -47,25 +49,34 @@ public class AlgaeEndeffectorSubsystem extends SubsystemBase {
       ALGAE_ENDEFFECTOR_KFF_2));
     algaeConfig2.idleMode(IdleMode.kCoast);
     algaeConfig2.smartCurrentLimit(ALGAE_ENDEFFECTOR_CURRENT_LIMIT, ALGAE_ENDEFFECTOR_CURRENT_LIMIT, 1000);
+    algaeConfig2.follow(algaeEndeffectorMotor1);
     algaeEndeffectorMotor2.configure(algaeConfig2, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     powerSpike = false;
   }
 
   public void runAlgaeEndDefector(double speed){
     algaeEndeffectorMotor1.set(speed);
-    algaeEndeffectorMotor2.set(speed);
   }
 
   public void stopAlgaeEndDefector(){
     algaeEndeffectorMotor1.set(0);
-    algaeEndeffectorMotor2.set(0);
+  }
+
+  public SparkMax getMotor(){
+    return algaeEndeffectorMotor1;
   }
   public void powerCheck(){
+
+    SmartDashboard.putNumber("AlgaeMotorCurrent",algaeEndeffectorMotor1.getOutputCurrent());
     //if we are at 80%+ percent of the current limit, assume it's becuse we have an algae
-    if(algaeEndeffectorMotor1.getOutputCurrent()>ALGAE_ENDEFFECTOR_CURRENT_LIMIT*0.8){ 
-      RobotState.getInstance().hasAlgae = true;
+    if(algaeEndeffectorMotor1.getOutputCurrent()>ALGAE_ENDEFFECTOR_CURRENT_LIMIT*0.95){ 
+      loops++;
+      if(loops > 10){
+        RobotState.getInstance().hasAlgae = true;
+      }
     }else{
       RobotState.getInstance().hasAlgae = false;
+      loops = 0;
     }
     
   }
