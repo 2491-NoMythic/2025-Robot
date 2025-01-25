@@ -51,6 +51,7 @@ import java.util.Arrays;
 import java.util.Collections;
 // import java.util.logging.Logger;
 import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.AutoLogOutput;
 
 public class DrivetrainSubsystem extends SubsystemBase {
   //These are our swerve drive kinematics and Pigeon (gyroscope)
@@ -134,10 +135,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
     DataLog log = DataLogManager.getLog();
     motorLoggers =
         new MotorLogger[] {
-          new MotorLogger(log, "/drivetrain/motorFL"),
-          new MotorLogger(log, "/drivetrain/motorFR"),
-          new MotorLogger(log, "/drivetrain/motorBL"),
-          new MotorLogger(log, "/drivetrain/motorBR"),
+          new MotorLogger("/drivetrain/motorFL"),
+          new MotorLogger("/drivetrain/motorFR"),
+          new MotorLogger( "/drivetrain/motorBL"),
+          new MotorLogger("/drivetrain/motorBR"),
         };
     // configures the odometer
     odometer =
@@ -400,6 +401,25 @@ public class DrivetrainSubsystem extends SubsystemBase {
           "No valid limelight estimate to reset from. (Drivetrain.forceUpdateOdometryWithVision)");
     }
   }
+
+  /*
+   * Logs important data for the drivetrain
+   */
+  public void logDrivetrainData(){
+    SmartDashboard.putNumber("DRIVETRAIN/Robot Angle", getOdometryRotation().getDegrees());
+    SmartDashboard.putString("DRIVETRAIN/Robot Location", getPose().getTranslation().toString());
+    SmartDashboard.putNumber("DRIVETRAIN/forward speed", getChassisSpeeds().vxMetersPerSecond);
+    SmartDashboard.putNumber(
+        "DRIVETRAIN/rotational speed", Math.toDegrees(getChassisSpeeds().omegaRadiansPerSecond));
+    SmartDashboard.putNumber(
+        "DRIVETRAIN/gyroscope rotation degrees", getPose().getRotation().getDegrees());
+    SmartDashboard.putNumber(
+        "DRIVETRAIN/degrees per second", Math.toDegrees(getChassisSpeeds().omegaRadiansPerSecond));
+
+    Logger.recordOutput("MyStates", getModuleStates());
+    Logger.recordOutput("Position", odometer.getEstimatedPosition());
+    Logger.recordOutput("Gyro", getGyroscopeRotation());
+  }
   //This is the things the subsystem does periodically. 
   @Override
   public void periodic() {
@@ -421,19 +441,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
     for (int i = 0; i < 4; i++) {
       motorLoggers[i].log(modules[i].getDriveMotor());
     }
-    // puts important data for testing features on SmartDashboard
-    SmartDashboard.putNumber("Robot Angle", getOdometryRotation().getDegrees());
-    SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
-    SmartDashboard.putNumber("DRIVETRAIN/forward speed", getChassisSpeeds().vxMetersPerSecond);
-    SmartDashboard.putNumber(
-        "DRIVETRAIN/rotational speed", Math.toDegrees(getChassisSpeeds().omegaRadiansPerSecond));
-    SmartDashboard.putNumber(
-        "DRIVETRAIN/gyroscope rotation degrees", getPose().getRotation().getDegrees());
-    SmartDashboard.putNumber(
-        "DRIVETRAIN/degrees per second", Math.toDegrees(getChassisSpeeds().omegaRadiansPerSecond));
-
-    Logger.recordOutput("MyStates", getModuleStates());
-    Logger.recordOutput("Position", odometer.getEstimatedPosition());
-    Logger.recordOutput("Gyro", getGyroscopeRotation());
+    logDrivetrainData();
   }
 }
