@@ -296,17 +296,17 @@ public class DrivetrainSubsystem extends SubsystemBase {
     if (Preferences.getBoolean("AntiTipActive", false)) {
       if (pigeon.getRoll().getValueAsDouble() > 3) {
         chassisSpeeds.vxMetersPerSecond = chassisSpeeds.vxMetersPerSecond
-            + (Math.sqrt(pigeon.getRoll().getValueAsDouble()) - 0.1);
+            + (pigeon.getRoll().getValueAsDouble()/10);
       } else if (pigeon.getRoll().getValueAsDouble() < -3) {
         chassisSpeeds.vxMetersPerSecond = chassisSpeeds.vxMetersPerSecond
-            + (-Math.sqrt(Math.abs(pigeon.getRoll().getValueAsDouble())) - 0.1);
+            + (-pigeon.getRoll().getValueAsDouble()/10);
       }
       if (pigeon.getPitch().getValueAsDouble() > 3) {
         chassisSpeeds.vyMetersPerSecond = chassisSpeeds.vyMetersPerSecond
-            + (Math.sqrt(pigeon.getPitch().getValueAsDouble()) - 0.1);
+            + (pigeon.getPitch().getValueAsDouble()/10);
       } else if (pigeon.getPitch().getValueAsDouble() < -3) {
         chassisSpeeds.vyMetersPerSecond = chassisSpeeds.vyMetersPerSecond
-            + (-Math.sqrt(Math.abs(pigeon.getPitch().getValueAsDouble())) - 0.1);
+            + (-pigeon.getPitch().getValueAsDouble()/10);
       }
     }
     

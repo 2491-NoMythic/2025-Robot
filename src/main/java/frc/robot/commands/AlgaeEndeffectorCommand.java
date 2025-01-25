@@ -11,8 +11,8 @@ import frc.robot.subsystems.AlgaeEndeffectorSubsystem;
 public class AlgaeEndeffectorCommand extends Command {
   AlgaeEndeffectorSubsystem algaeEndDefector;
   /** Creates a new AlgaeEndDefectorCommand. */
-  public AlgaeEndeffectorCommand() {
-    this.algaeEndDefector = algaeEndDefector;
+  public AlgaeEndeffectorCommand(AlgaeEndeffectorSubsystem algend) {
+    this.algaeEndDefector = algend;
     addRequirements(algaeEndDefector);
     // Use addRequirements() here to declare subsystem dependencies.
   }

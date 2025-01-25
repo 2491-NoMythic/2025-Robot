@@ -10,7 +10,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.util.datalog.DataLog;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 
-/** logs moter data to a logger */
+/** logs motor data to a logger */
 public class MotorLogger {
   // DoubleLogEntry voltage;
   // DoubleLogEntry current;
