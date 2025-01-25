@@ -211,7 +211,7 @@ public class RobotContainer {
     limelightInit();
     if (DrivetrainExists) {driveTrainInst();}
     sensorInit();     
-    lightsInst();
+    if (lightsExist) {lightsInst();}
  
     if (coralEndeffectorExists) {coralEndDefectorInst();}
     if (algaeEndeffectorExists) {algaeEndDefectorInst();}
@@ -256,7 +256,7 @@ public class RobotContainer {
 
   private void lightsInst() {
     lights = new Lights();
-    lights.setDefaultCommand(new IndicatorLights(lights, lightsExist));
+    lights.setDefaultCommand(new IndicatorLights(lights));
   }
   
   private void sensorInit() {

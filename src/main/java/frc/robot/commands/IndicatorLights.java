@@ -10,12 +10,10 @@ import frc.robot.subsystems.Lights;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class IndicatorLights extends Command {
-  boolean lightsDoExist;
   Lights lights;
   /** Creates a new IndicatorLights. */
-  public IndicatorLights(Lights lights, boolean lightsDoExist) {
+  public IndicatorLights(Lights lights) {
     this.lights = lights;
-    this.lightsDoExist = lightsDoExist;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -26,7 +24,6 @@ public class IndicatorLights extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(lightsDoExist) {
       if(RobotState.getInstance().coralSeen) {
         lights.setBL(2,1,4);
         lights.setBR(2,1,4);
@@ -37,7 +34,6 @@ public class IndicatorLights extends Command {
         lights.setFR(2,1,4);
         //TODO adjust values :3
       }
-    }
   }
 
   // Called once the command ends or is interrupted.
