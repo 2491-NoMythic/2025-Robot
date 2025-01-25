@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.ALGAE_INTAKE_SPEED;
+import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.ALGAE_SHOOT_SPEED;
 import static frc.robot.settings.Constants.DriveConstants.*;
 import static frc.robot.settings.Constants.SensorConstants.*;
 import static frc.robot.settings.Constants.PS4Driver.*;
@@ -114,6 +116,7 @@ public class RobotContainer {
   BooleanSupplier RightReefLineupSup;
   BooleanSupplier SlowFrontSup;
   BooleanSupplier AlgaeIntakeSup;
+  BooleanSupplier AlgaeShooterSup;
   BooleanSupplier ReefHeight1Supplier;
   BooleanSupplier ReefHeight2Supplier;
   BooleanSupplier ReefHeight3Supplier;
@@ -167,7 +170,7 @@ public class RobotContainer {
       RightReefLineupSup =  driverControllerXbox::getRightBumperButton;
       SlowFrontSup = ()-> driverControllerXbox.getRightTriggerAxis() > 0.1;
       AlgaeIntakeSup = driverControllerXbox::getAButton; //TODO change to actual
-
+      AlgaeShooterSup = driverControllerXbox::getXButton;
       ReefHeight1Supplier = ()->operatorControllerXbox.getPOV() == 0;
       ReefHeight2Supplier = ()->operatorControllerXbox.getPOV() == 90;
       ReefHeight3Supplier = ()->operatorControllerXbox.getPOV() == 180;
@@ -186,6 +189,7 @@ public class RobotContainer {
       RightReefLineupSup = driverControllerPS4::getR1Button;
       SlowFrontSup = ()->driverControllerPS4.getR2Axis()>-0.5;
       AlgaeIntakeSup = driverControllerPS4::getCrossButton; //TODO change to actual
+      AlgaeShooterSup = driverControllerPS4::getSquareButton;
 
       ZeroGyroSup = driverControllerPS4::getPSButton;
 
@@ -299,9 +303,6 @@ public class RobotContainer {
       new LineUp(driveTrain, LeftReefLineupSup,0.3)));
     
     new Trigger(SlowFrontSup).whileTrue(approachReef);
-
-    if(algaeIntakeExists) {new Trigger(AlgaeIntakeSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector));}
-    
     InstantCommand setOffsets = new InstantCommand(driveTrain::setEncoderOffsets) {
       public boolean runsWhenDisabled() {
         return true;
@@ -310,6 +311,8 @@ public class RobotContainer {
 
     SmartDashboard.putData("set offsets", setOffsets);
     SmartDashboard.putData(new InstantCommand(driveTrain::forceUpdateOdometryWithVision));
+    SmartDashboard.putNumber("speedOut", ALGAE_SHOOT_SPEED);
+    SmartDashboard.putNumber("speedIn", ALGAE_INTAKE_SPEED);
 
     new Trigger(ReefHeight1Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef1));
     new Trigger(ReefHeight2Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef2));
@@ -318,8 +321,9 @@ public class RobotContainer {
     new Trigger(CoralIntakeHeightSupplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.HumanPlayer));
 
     }
-    if(algaeEndeffectorExists) {
-      new Trigger(AlgaeIntakeSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector));
+    if (algaeEndeffectorExists) {
+      new Trigger(AlgaeIntakeSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector, ALGAE_INTAKE_SPEED));
+      new Trigger(AlgaeShooterSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector, ALGAE_SHOOT_SPEED));
     }
     /*
      * bindings:
@@ -433,7 +437,9 @@ public class RobotContainer {
   }
 
   public void teleopPeriodic() {
-    SmartDashboard.putData(driveTrain.getCurrentCommand());
+    if(DrivetrainExists) {
+      SmartDashboard.putData(driveTrain.getCurrentCommand());
+    }
   }
   public void robotInit(){
     if (elevatorExists){
