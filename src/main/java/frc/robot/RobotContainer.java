@@ -121,6 +121,7 @@ public class RobotContainer {
   BooleanSupplier ReefHeight2Supplier;
   BooleanSupplier ReefHeight3Supplier;
   BooleanSupplier ReefHeight4Supplier;
+  BooleanSupplier CoralPlaceTeleSupplier;
   BooleanSupplier CoralIntakeHeightSupplier;
   DoubleSupplier ControllerYAxisSupplier;
   DoubleSupplier ControllerXAxisSupplier;
@@ -171,6 +172,8 @@ public class RobotContainer {
       SlowFrontSup = ()-> driverControllerXbox.getRightTriggerAxis() > 0.1;
       AlgaeIntakeSup = driverControllerXbox::getAButton; //TODO change to actual
       AlgaeShooterSup = driverControllerXbox::getXButton;
+      CoralPlaceTeleSupplier = ()-> driverControllerXbox.getPOV() == 0;;
+
       ReefHeight1Supplier = ()->operatorControllerXbox.getPOV() == 0;
       ReefHeight2Supplier = ()->operatorControllerXbox.getPOV() == 90;
       ReefHeight3Supplier = ()->operatorControllerXbox.getPOV() == 180;
@@ -190,6 +193,7 @@ public class RobotContainer {
       SlowFrontSup = ()->driverControllerPS4.getR2Axis()>-0.5;
       AlgaeIntakeSup = driverControllerPS4::getCrossButton; //TODO change to actual
       AlgaeShooterSup = driverControllerPS4::getSquareButton;
+      CoralPlaceTeleSupplier = ()-> driverControllerPS4.getPOV() == 0;
 
       ZeroGyroSup = driverControllerPS4::getPSButton;
 
@@ -324,6 +328,19 @@ public class RobotContainer {
     if (algaeEndeffectorExists) {
       new Trigger(AlgaeIntakeSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector, ALGAE_INTAKE_SPEED));
       new Trigger(AlgaeShooterSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector, ALGAE_SHOOT_SPEED));
+    }
+
+    if(elevatorExists && coralEndeffectorExists){
+      new Trigger(CoralPlaceTeleSupplier).whileTrue(
+          new PlaceCoralCommand(elevator,
+              ()-> RobotState.getInstance().deliveringCoralHeight,
+              distanceSensors,
+              driveTrain,
+              ControllerXAxisSupplier,
+              ControllerYAxisSupplier,
+              ControllerZAxisSupplier,
+              coralEndDefector,
+              LeftReefLineupSup));
     }
     /*
      * bindings:
