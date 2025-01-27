@@ -44,6 +44,21 @@ public class Lights extends SubsystemBase {
     setLights(0, LEDBuffer.getLength(), 0, 0, 0);
   }
 
+  //TODO: adjust start/end values
+  public void setFR(int R, int G, int B) {
+    setLights(24, 91, R, G, B);
+  }
+  public void setFL(int R, int G, int B) {
+    setLights(24, 91, R, G, B);
+  }
+  public void setBR(int R, int G, int B) {
+    setLights(24, 91, R, G, B);
+  }
+  public void setBL(int R, int G, int B) {
+    setLights(24, 91, R, G, B);
+  }
+  //TODO: adjust start/end values
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

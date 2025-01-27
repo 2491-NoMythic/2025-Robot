@@ -5,7 +5,10 @@
 package frc.robot.settings;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
+import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -28,10 +31,19 @@ public final class Constants {
 
   private Constants() {}
 
-  public static final int LOOPS_VALID_FOR_SHOT = 20;
+  public static final class SensorConstants {
+    public static final int FAR_LEFT_DIST_SENSOR_ID = 1;
+    public static final int MIDDLE_LEFT_DIST_SENSOR_ID = 2;
+    public static final int MIDDLE_RIGHT_DIST_SENSOR_ID = 3;
+    public static final int FAR_RIGHT_DIST_SENSOR_ID = 4;
+    public static final  int ELEVATOR_SENSOR_ID = 2491;
 
+    public static final double RANGE_TO_SEE_REEF = 200; // in millimeters, the distance that will trigger the time of flight sensors to report that we are or aren't in front of the reef
+    public static final double SLOW_DOWN_RANGE = 1500;
+
+  }
   public static final class DriveConstants {
-
+    public static final double BUMPER_TO_SENSOR = 100; // in milliqmeters
     public static final Pose2d DRIVE_ODOMETRY_ORIGIN = new Pose2d(5.0, 5.0, new Rotation2d());
     /** The bumper-to-bumper width of the robot. */
     public static final double DRIVETRAIN_ROBOT_WIDTH_METERS = 0.83;
@@ -203,32 +215,9 @@ public final class Constants {
   }
 
   public static final class CTREConfigs {
-    public TalonFXConfiguration driveMotorConfig;
-    public TalonFXConfiguration steerMotorConfig;
-    public CANcoderConfiguration steerEncoderConfig;
-    public Pigeon2Configuration pigeon2Config;
-
-    public CTREConfigs() {
-      driveMotorConfig = new TalonFXConfiguration();
-      steerMotorConfig = new TalonFXConfiguration();
-      steerEncoderConfig = new CANcoderConfiguration();
-      pigeon2Config = new Pigeon2Configuration();
-
-      // Steer motor.
-      steerMotorConfig.Feedback.RotorToSensorRatio = 1 / DriveConstants.DRIVETRAIN_STEER_REDUCTION;
-      steerMotorConfig.MotorOutput.Inverted = DriveConstants.DRIVETRAIN_STEER_INVERTED;
-      // steerMotorConfig.MotorOutput.DutyCycleNeutralDeadband = 0.05;
-      steerMotorConfig.Slot0.kP = DriveConstants.k_STEER_P;
-      steerMotorConfig.Slot0.kI = DriveConstants.k_STEER_I;
-      steerMotorConfig.Slot0.kD = DriveConstants.k_STEER_D;
-      steerMotorConfig.Slot0.kS = DriveConstants.k_STEER_FF_S;
-      steerMotorConfig.Slot0.kV = DriveConstants.k_STEER_FF_V;
-      steerMotorConfig.Voltage.PeakForwardVoltage = 12;
-      steerMotorConfig.Voltage.PeakReverseVoltage = -12;
-      steerMotorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
-
-      steerMotorConfig.ClosedLoopGeneral.ContinuousWrap = true;
-      // Drive motor.
+    // Drive motor.
+    private static TalonFXConfiguration getDriveMotorConfig() {
+      TalonFXConfiguration driveMotorConfig = new TalonFXConfiguration();
       driveMotorConfig.Feedback.SensorToMechanismRatio =
           1 / DriveConstants.DRIVETRAIN_DRIVE_REDUCTION;
       driveMotorConfig.MotorOutput.Inverted = DriveConstants.DRIVETRAIN_DRIVE_INVERTED;
@@ -246,22 +235,53 @@ public final class Constants {
       driveMotorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
       driveMotorConfig.CurrentLimits.StatorCurrentLimitEnable = false;
       /*
-       * the following does this:
-       * the current is always limited to 50 Amps. If the limit has been needed (motor is demanding more than 50, but limit stops it) for more than 0.8 seconds, than
-       * limit changes to DRIVE_CURRENT_LIMIT, which is 30 amps. this lower limit is enabled until the demanded current drops below the lower limit, then the 50 amp limit is enabled
-       */
+      * the following does this:
+      * the current is always limited to 50 Amps. If the limit has been needed (motor is demanding more than 50, but limit stops it) for more than 0.8 seconds, than
+      * limit changes to DRIVE_CURRENT_LIMIT, which is 30 amps. this lower limit is enabled until the demanded current drops below the lower limit, then the 50 amp limit is enabled
+      */
       driveMotorConfig.CurrentLimits.SupplyCurrentLimit = 50;
       driveMotorConfig.CurrentLimits.SupplyCurrentLowerLimit = DriveConstants.DRIVE_CURRENT_LIMIT;
       driveMotorConfig.CurrentLimits.SupplyCurrentLowerTime = 0.8;
+      return driveMotorConfig;
+    }
+      // Steer motor.
+      private static TalonFXConfiguration getSteerMotorConfig(){
+        TalonFXConfiguration steerMotorConfig = new TalonFXConfiguration();
+        steerMotorConfig.Feedback.RotorToSensorRatio = 1 / DriveConstants.DRIVETRAIN_STEER_REDUCTION;
+        steerMotorConfig.MotorOutput.Inverted = DriveConstants.DRIVETRAIN_STEER_INVERTED;
+        // steerMotorConfig.MotorOutput.DutyCycleNeutralDeadband = 0.05;
+        steerMotorConfig.Slot0.kP = DriveConstants.k_STEER_P;
+        steerMotorConfig.Slot0.kI = DriveConstants.k_STEER_I;
+        steerMotorConfig.Slot0.kD = DriveConstants.k_STEER_D;
+        steerMotorConfig.Slot0.kS = DriveConstants.k_STEER_FF_S;
+        steerMotorConfig.Slot0.kV = DriveConstants.k_STEER_FF_V;
+        steerMotorConfig.Voltage.PeakForwardVoltage = 12;
+        steerMotorConfig.Voltage.PeakReverseVoltage = -12;
+        steerMotorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
 
+        steerMotorConfig.ClosedLoopGeneral.ContinuousWrap = true;
+        return steerMotorConfig;
+      }
       //  Steer encoder.
-      steerEncoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
+      private static CANcoderConfiguration getSteerEncoderConfig(){
+        CANcoderConfiguration steerEncoderConfig = new CANcoderConfiguration();
+        steerEncoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
+        return steerEncoderConfig;
+      }
 
       // Pigeon 2.
-      pigeon2Config.MountPose.MountPosePitch = 0;
-      pigeon2Config.MountPose.MountPoseRoll = 0;
-      pigeon2Config.MountPose.MountPoseYaw = 0;
-    }
+      private static Pigeon2Configuration getPigeon2Config(){
+        Pigeon2Configuration pigeon2Config = new Pigeon2Configuration();
+        pigeon2Config.MountPose.MountPosePitch = 0;
+        pigeon2Config.MountPose.MountPoseRoll = 0;
+        pigeon2Config.MountPose.MountPoseYaw = 0;
+        return pigeon2Config;
+      }
+      public static final TalonFXConfiguration driveMotorConfig = getDriveMotorConfig();
+      public static final TalonFXConfiguration steerMotorConfig = getSteerMotorConfig();
+      public static final CANcoderConfiguration steerEncoderConfig = getSteerEncoderConfig();
+      public static final Pigeon2Configuration pigeon2Config = getPigeon2Config();
+    
   }
 
   public final class PS4Driver {
@@ -327,27 +347,88 @@ public final class Constants {
     // Welcome, to  Pathconstantic Park
     // Here the fine beasts of the Pathplanner Period reside, after being brought back through DNA
   }
-  public final class CoralIntakeConstants{
-    public static final int CORAL_INTAKE_MOTOR_1_ID = 9;
-    public static final int CORAL_INTAKE_MOTOR_2_ID = 10;
-  }
-  public final class AlgaeIntakeConstants{
-    public static final int ALGAE_INTAKE_MOTOR_1_ID = 11;
-    public static final int ALGAE_INTAKE_MOTOR_2_ID = 12;
-  }
-  public final class CoralEndDefectorConstants{
-    public static final int CORAL_END_DEFECTOR_MOTOR_1_ID = 13;
-  }
-  public final class AlgaeEndDefectorConstants{
-    public static final int ALGAE_END_DEFECTOR_MOTOR_1_ID = 14;
-  }
-  public final class ElevatorConstants{
-    public static final int ELEVATOR_MOTOR_1_ID = 15;
-  }
-  public final class ClimberConstants{
-    public static final int CLIMBER_MOTOR_1_ID = 16;
-    public static final int CLIMBER_MOTOR_2_ID = 17;
 
+  public final class CoralEndeffectorConstants{
+    public static final int CORAL_ENDEFFECTOR_MOTOR = 9;
+
+    public static final double CORAL_ENDEFFECTOR_KP = 0.001;
+    public static final double CORAL_ENDEFFECTOR_KI = 0;
+    public static final double CORAL_ENDEFFECTOR_KD = 0;
+    public static final double CORAL_ENDEFFECTOR_KFF = 0;
+    
+    public static final double CORAL_ENDEFFECTOR_SPEED = 2491.0;
+  }
+
+  public final class AlgaeEndeffectorConstants{
+    public static final int ALGAE_ENDEFFECTOR_MOTOR_1_ID = 40;
+    public static final int ALGAE_ENDEFFECTOR_MOTOR_2_ID = 41;
+    
+    public static final int ALGAE_ENDEFFECTOR_CURRENT_LIMIT = 25;
+    public static final double ALGAE_INTAKE_SPEED = 1;
+    public static final double ALGAE_SHOOT_SPEED = -1;
+    public static final double ALGAE_ENDEFFECTOR_KP_1 = 0.0003;
+    public static final double ALGAE_ENDEFFECTOR_KI_1 = 0;
+    //2 volts ~= 1760 rpm
+    //4 volts ~= 3670 rpm
+    //1 volt ~= 815 rpm
+    public static final double ALGAE_ENDEFFECTOR_KP_2 = 0.0002;
+    public static final double ALGAE_ENDEFFECTOR_KI_2 = 0;
+    public static final double ALGAE_ENDEFFECTOR_KD_2 = 0;
+    public static final double ALGAE_ENDEFFECTOR_KFF_2 = 0.000091;
+    //2 volts ~= 1822 rpm
+    //4 volts ~= 3750 rpm
+    //1 volt ~= 870 rpm
+    public static final double ALGAE_ENDEFFECTOR_KD_1 = 0;
+    public static final double ALGAE_ENDEFFECTOR_KFF_1 = 0.000095;
+  }
+  
+  public final class ElevatorConstants{
+    public static final int ELEVATOR_MOTOR_1_ID = 13;
+    public static final int ELEVATOR_MOTOR_2_ID = 14;
+    public static final double HUMAN_PLAYER_STATION_MILLIMETERS = 2491;
+    public static final double REEF_LEVEL_1_MILLIMETERS = 2491;
+    public static final double REEF_LEVEL_2_MILLIMETERS = 2491;
+    public static final double REEF_LEVEL_3_MILLIMETERS = 2491;
+    public static final double REEF_LEVEL_4_MILLIMETERS = 2491;
+    public static final double ELEVATOR_MILLIMETERS_TO_ROTATIONS = 2491;
+  }
+
+  public final class ClimberConstants{
+    public static final int CLIMBER_MOTOR_1_ID = 2491;
+    public static final int CLIMBER_MOTOR_2_ID = 2491;
+
+    public static final TalonFXConfiguration ClimberMotorConfig = new TalonFXConfiguration()
+    .withSlot0(new Slot0Configs()
+      .withKP(1)
+      .withKI(0)
+      .withKD(0)
+      .withKV(0))
+    .withCurrentLimits(new CurrentLimitsConfigs()
+      .withSupplyCurrentLimit(100)
+      .withSupplyCurrentLimitEnable(true));
+  }
+
+  public final class FunnelConstants{
+    public static final int FUNNEL_INTAKE_MOTOR_1_ID = 2491;
+    public static final int FUNNEL_INTAKE_MOTOR_2_ID = 2491;
+    public static final int FUNNEL_ROTATOR_MOTOR_ID = 2491;
+
+    public static final double FUNNEL_INTAKE_1_KP = 2491;
+    public static final double FUNNEL_INTAKE_1_KI = 2491;
+    public static final double FUNNEL_INTAKE_1_KD = 2491;
+    public static final double FUNNEL_INTAKE_1_KFF = 2491;
+
+    public static final double FUNNEL_INTAKE_2_KP = 2491;
+    public static final double FUNNEL_INTAKE_2_KI = 2491;
+    public static final double FUNNEL_INTAKE_2_KD = 2491;
+    public static final double FUNNEL_INTAKE_2_KFF = 2491;
+
+    public static final double FUNNEL_ROTATOR_KP = 2491;
+    public static final double FUNNEL_ROTATOR_KI = 2491;
+    public static final double FUNNEL_ROTATOR_KD = 2491;
+    public static final double FUNNEL_ROTATOR_KFF = 2491;
+    public static final int FUNNEL_ROTATOR_SUPPLY_CURRENT_LIMIT = 2491;
+    public static final double FUNNEL_ROTATOR_GEAR_RATIO = 2491;
   }
 
   public final class AutoAlignToReefConstants {
@@ -356,19 +437,20 @@ public final class Constants {
     public static final double AUTO_AIM_ROBOT_kD = 0.0;
     public static final double ROBOT_ANGLE_TOLERANCE = 0.5;
   }
-   public final class FieldConstants{
-public static final int RED_REEF_ANGLE_0 = 0;
-public static final int RED_REEF_ANGLE_1 = 60;
-public static final int RED_REEF_ANGLE_2 = 120;
-public static final int RED_REEF_ANGLE_3 = 180;
-public static final int RED_REEF_ANGLE_4 = 240;
-public static final int RED_REEF_ANGLE_5 = 300;
+  public final class FieldConstants{
+    public static final int RED_REEF_ANGLE_0 = 0;
+    public static final int RED_REEF_ANGLE_1 = 60;
+    public static final int RED_REEF_ANGLE_2 = 120;
+    public static final int RED_REEF_ANGLE_3 = 180;
+    public static final int RED_REEF_ANGLE_4 = 240;
+    public static final int RED_REEF_ANGLE_5 = 300;
 
-public static final int BLUE_REEF_ANGLE_0 = 0;
-public static final int BLUE_REEF_ANGLE_1 = 60;
-public static final int BLUE_REEF_ANGLE_2 = 120;
-public static final int BLUE_REEF_ANGLE_3 = 180;
-public static final int BLUE_REEF_ANGLE_4 = 240;
-public static final int BLUE_REEF_ANGLE_5 = 300;
+    public static final int BLUE_REEF_ANGLE_0 = 0;
+    public static final int BLUE_REEF_ANGLE_1 = 60;
+    public static final int BLUE_REEF_ANGLE_2 = 120;
+    public static final int BLUE_REEF_ANGLE_3 = 180;
+    public static final int BLUE_REEF_ANGLE_4 = 240;
+    public static final int BLUE_REEF_ANGLE_5 = 300;
    }
 }
+

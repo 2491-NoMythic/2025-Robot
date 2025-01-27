@@ -4,15 +4,26 @@
 
 package frc.robot.commands;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.settings.Constants.ElevatorConstants;
+import frc.robot.settings.ElevatorEnums;
+
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ElevatorCommand extends Command {
   ElevatorSubsystem elevator;
-  /** Creates a new ElevatorCommand. */
-  public ElevatorCommand() {
+  ElevatorEnums level;
+  Supplier<ElevatorEnums> levelSupplier;
+  /** Creates a new ElevatorCommand. 
+   * @param elevator elevator subsystem
+   * @param level level of reef, human player station is 0. 
+  */
+  public ElevatorCommand(ElevatorSubsystem elevator, Supplier<ElevatorEnums> levelSupplier) {
     this.elevator = elevator;
+    this.levelSupplier = levelSupplier;
     addRequirements(elevator);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -24,14 +35,12 @@ public class ElevatorCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    elevator.runElevator(1);
-
+  elevator.setElevatorPosition(levelSupplier.get());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    elevator.stopElevator();
 
   }
 

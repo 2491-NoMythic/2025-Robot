@@ -4,36 +4,41 @@
 
 package frc.robot.commands;
 
+import frc.robot.subsystems.RobotState;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.CoralIntakeSubsystem;
+import frc.robot.subsystems.Lights;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class CoralIntakeCommand extends Command {
-  CoralIntakeSubsystem coralIntake;
-  /** Creates a new IntakeCommand. */
-  public CoralIntakeCommand() {
+public class IndicatorLights extends Command {
+  Lights lights;
+  /** Creates a new IndicatorLights. */
+  public IndicatorLights(Lights lights) {
+    this.lights = lights;
     // Use addRequirements() here to declare subsystem dependencies.
-    this.coralIntake = coralIntake;
-    addRequirements(coralIntake);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    coralIntake.runCoralIntake(1);
+      if(RobotState.getInstance().coralSeen) {
+        lights.setBL(2,1,4);
+        lights.setBR(2,1,4);
+        //TODO adjust values plz
+      }
+      if(RobotState.getInstance().hasAlgae) {
+        lights.setFL(2,1,4);
+        lights.setFR(2,1,4);
+        //TODO adjust values :3
+      }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    coralIntake.stopCoralIntake();
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

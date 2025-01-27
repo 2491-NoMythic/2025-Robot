@@ -5,20 +5,19 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.AlgaeEndeffectorSubsystem;
-import frc.robot.subsystems.RobotState;
+import frc.robot.subsystems.FunnelRotator;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class AlgaeIntakeCommand extends Command {
-  AlgaeEndeffectorSubsystem algaeEndeffector;
-  double shootSpeed;
-  /** Creates a new AlgaeIntakeCommand. */
-  public AlgaeIntakeCommand(AlgaeEndeffectorSubsystem algaeEndeffector, double shootSpeed) {
-    this.algaeEndeffector = algaeEndeffector;
-    this.shootSpeed = shootSpeed;
-    addRequirements(algaeEndeffector);
-    // Use addRequirements() here to declare subsystem dependencies.
+public class FunnelRotatorCommand extends Command {
+  FunnelRotator rotator;
+  double position;
+  /** Creates a new FunnelRotatorCommand. */
+  public FunnelRotatorCommand(FunnelRotator rotator, double position) {
+    this.rotator = rotator;
+    addRequirements(rotator);
+    this.position = position;
 
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
@@ -28,26 +27,18 @@ public class AlgaeIntakeCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
-    algaeEndeffector.runAlgaeEndDefector(shootSpeed);
-
+    rotator.setFunnelRotator(position);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    algaeEndeffector.stopAlgaeEndDefector();
-
+    rotator.stopRotating();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(shootSpeed > 0) {
-      return RobotState.getInstance().hasAlgae;
-    }
-    else{
-      return false;
-    }
-}
+    return false;
+  }
 }

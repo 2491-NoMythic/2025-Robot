@@ -10,6 +10,7 @@ import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 public class Drive extends Command {
+
   private final DrivetrainSubsystem drivetrain;
   private final BooleanSupplier robotCentricMode;
   private final DoubleSupplier translationXSupplier;
@@ -53,6 +54,9 @@ public class Drive extends Command {
     } else {
       invert = 1;
     }
+    //The two statements are mostly identical, taking X, Y, and Rotation suppliers 
+    //and multiplying them by maximum velocties and inversions
+    //The only difference is that one is relative to the field, and the other to the robot. 
     if (robotCentricMode.getAsBoolean()) {
       drivetrain.drive(
           new ChassisSpeeds(
@@ -78,7 +82,7 @@ public class Drive extends Command {
               drivetrain.getPose().getRotation()));
     }
   }
-
+            
   @Override
   public void end(boolean interrupted) {
     drivetrain.drive(new ChassisSpeeds(0.0, 0.0, 0.0));
