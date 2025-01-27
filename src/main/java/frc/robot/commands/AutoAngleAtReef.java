@@ -111,7 +111,7 @@ public class AutoAngleAtReef extends Command {
         break;
       case 10:
       case 18:
-        desiredRobotAngle = 0REEF_ANGLE_0;
+        desiredRobotAngle = REEF_ANGLE_0;
         break;
       case 3:
       case 4:
