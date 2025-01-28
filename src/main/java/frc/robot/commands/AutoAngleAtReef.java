@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.settings.Constants.AutoAlignToReefConstants;
 import static frc.robot.settings.Constants.Vision.*;
+import static frc.robot.settings.Constants.FieldConstants.*;
 import frc.robot.settings.Constants.DriveConstants;
 import frc.robot.settings.Constants.Vision;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -100,34 +101,34 @@ public class AutoAngleAtReef extends Command {
       case 15:
       case 16:
       case 22:
-        desiredRobotAngle = 120;
+        desiredRobotAngle = REEF_ANGLE_2;
         break;
       case 5:
       case 11:
       case 12:
       case 17:
-        desiredRobotAngle = 60;
+        desiredRobotAngle = REEF_ANGLE_1;
         break;
       case 10:
       case 18:
-        desiredRobotAngle = 0;
+        desiredRobotAngle = 0REEF_ANGLE_0;
         break;
       case 3:
       case 4:
       case 9:
       case 13:
       case 19:
-        desiredRobotAngle = -60;
+        desiredRobotAngle = -REEF_ANGLE_1;
         break;
       case 2:
       case 8:
       case 14:
       case 20:
-        desiredRobotAngle = -120;
+        desiredRobotAngle = -REEF_ANGLE_2;
         break;
       case 7:
       case 21:
-        desiredRobotAngle = 180;
+        desiredRobotAngle = REEF_ANGLE_3;
         break;
     }
     

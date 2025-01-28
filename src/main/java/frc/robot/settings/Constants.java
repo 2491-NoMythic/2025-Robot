@@ -438,19 +438,11 @@ public final class Constants {
     public static final double ROBOT_ANGLE_TOLERANCE = 0.5;
   }
   public final class FieldConstants{
-    public static final int RED_REEF_ANGLE_0 = 0;
-    public static final int RED_REEF_ANGLE_1 = 60;
-    public static final int RED_REEF_ANGLE_2 = 120;
-    public static final int RED_REEF_ANGLE_3 = 180;
-    public static final int RED_REEF_ANGLE_4 = 240;
-    public static final int RED_REEF_ANGLE_5 = 300;
-
-    public static final int BLUE_REEF_ANGLE_0 = 0;
-    public static final int BLUE_REEF_ANGLE_1 = 60;
-    public static final int BLUE_REEF_ANGLE_2 = 120;
-    public static final int BLUE_REEF_ANGLE_3 = 180;
-    public static final int BLUE_REEF_ANGLE_4 = 240;
-    public static final int BLUE_REEF_ANGLE_5 = 300;
+    //used for the autoAngleAtReefCommand
+    public static final int REEF_ANGLE_0 = 0;
+    public static final int REEF_ANGLE_1 = 60;
+    public static final int REEF_ANGLE_2 = 120;
+    public static final int REEF_ANGLE_3 = 180;
    }
 }
 
