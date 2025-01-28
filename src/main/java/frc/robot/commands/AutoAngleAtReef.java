@@ -64,7 +64,7 @@ public class AutoAngleAtReef extends Command {
   @Override
   public void execute() {
     //sets our desired angle to our current angle so that if no april tag is seen our robot won't try to change it's rotation at all
-    double desiredRobotAngle = m_drivetrain.getHeadingDegrees();
+    double desiredRobotAngle = m_drivetrain.headingAsDegrees();
     //step 1: determine which tag ID is the closest tag that our robot sees
     //if a limelight is not connected, it's pose returned will be (0, 0, 0). Becuase of this we check for connection and set the distance to a very high number if there is no connection
     Pose3d poseA = LimelightHelpers.getTargetPose3d_RobotSpace(Vision.APRILTAG_LIMELIGHTA_NAME);
@@ -133,12 +133,12 @@ public class AutoAngleAtReef extends Command {
     }
     
     SmartDashboard.putNumber("AIMROBOT/closest tag", tagClosestInt);
-    SmartDashboard.putNumber("AIMROBOT/current Heading", m_drivetrain.getHeadingDegrees() % 360);
+    SmartDashboard.putNumber("AIMROBOT/current Heading", m_drivetrain.headingAsDegrees() % 360);
     SmartDashboard.putNumber("AIMROBOT/desired angle", desiredRobotAngle);
     
   //finally, calculate our rotation speed based on our desired angle and our speedController, 
   //UNLESS the driver is pushing the rotation joystick more than a third of it's max tilt, then driver has control over rotation too:
-    currentHeading = m_drivetrain.getHeadingDegrees();
+    currentHeading = m_drivetrain.headingAsDegrees();
     if (Math.abs(rotationSupplier.getAsDouble()) > 0.3) {
       rotationSpeed = rotationSupplier.getAsDouble() * DriveConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND;
     } else {
