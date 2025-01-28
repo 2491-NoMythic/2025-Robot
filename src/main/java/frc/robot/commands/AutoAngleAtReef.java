@@ -30,6 +30,7 @@ public class AutoAngleAtReef extends Command {
   DoubleSupplier translationYSupplier;
   double rotationSpeed;
   BooleanSupplier AlignToReef;
+  double desiredRobotAngle;
 
   /**
    * a command to automatically aim the robot at the reef if a limelight can see
@@ -58,13 +59,14 @@ public class AutoAngleAtReef extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+  //sets our desired angle to our current angle so that if no april tag is seen our robot won't try to change it's rotation at all
+    desiredRobotAngle = m_drivetrain.headingAsDegrees();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //sets our desired angle to our current angle so that if no april tag is seen our robot won't try to change it's rotation at all
-    double desiredRobotAngle = m_drivetrain.headingAsDegrees();
+
     //step 1: determine which tag ID is the closest tag that our robot sees
     //if a limelight is not connected, it's pose returned will be (0, 0, 0). Becuase of this we check for connection and set the distance to a very high number if there is no connection
     Pose3d poseA = LimelightHelpers.getTargetPose3d_RobotSpace(Vision.APRILTAG_LIMELIGHTA_NAME);
