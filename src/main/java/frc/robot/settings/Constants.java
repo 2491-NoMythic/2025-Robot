@@ -320,7 +320,31 @@ public final class Constants {
     public static final double DEADBAND_LARGE = 0.1;
   }
 
-  public final class Field {}
+  public final class Field {
+//naming scheme is the same as for the reefSideEnums
+    private static final double centerYCoord = 4;
+    private static final double blueRightYCoord = 3.3;
+    private static final double blueLeftYCoord = 4.73;
+    private static final double blueBackXCoord = 4.1;
+    private static final double blueFrontXCoord = 4.93;
+    public static final Pose2d BLUE_FRONT_LEFT_REEFSIDE_POSE = new Pose2d(blueFrontXCoord, blueLeftYCoord, new Rotation2d());
+    public static final Pose2d BLUE_FRONT_RIGHT_REEFSIDE_POSE = new Pose2d(blueFrontXCoord, blueRightYCoord, new Rotation2d());
+    public static final Pose2d BLUE_FRONT_CENTER_REEFSIDE_POSE = new Pose2d(5.34, centerYCoord, new Rotation2d());
+    public static final Pose2d BLUE_BACK_CENTER_REEFSIDE_POSE = new Pose2d(3.64, centerYCoord, new Rotation2d());
+    public static final Pose2d BLUE_BACK_RIGHT_REEFSIDE_POSE = new Pose2d(blueBackXCoord, blueRightYCoord, new Rotation2d());
+    public static final Pose2d BLUE_BACK_LEFT_REEFSIDE_POSE = new Pose2d(blueBackXCoord, blueLeftYCoord, new Rotation2d());
+
+    private static final double redRightYCoord = blueLeftYCoord;
+    private static final double redLeftYCoord = blueRightYCoord;
+    private static final double redBackXCoord = 13.5;
+    private static final double redFrontXCoord = 12.68;
+    public static final Pose2d RED_FRONT_LEFT_REEFSIDE_POSE = new Pose2d(redFrontXCoord, redLeftYCoord, new Rotation2d());
+    public static final Pose2d RED_FRONT_RIGHT_REEFSIDE_POSE = new Pose2d(redFrontXCoord, redRightYCoord, new Rotation2d());
+    public static final Pose2d RED_FRONT_CENTER_REEFSIDE_POSE = new Pose2d(5.34, centerYCoord, new Rotation2d());
+    public static final Pose2d RED_BACK_CENTER_REEFSIDE_POSE = new Pose2d(3.64, centerYCoord, new Rotation2d());
+    public static final Pose2d RED_BACK_RIGHT_REEFSIDE_POSE = new Pose2d(redBackXCoord, redRightYCoord, new Rotation2d());
+    public static final Pose2d RED_BACK_LEFT_REEFSIDE_POSE = new Pose2d(redBackXCoord, redLeftYCoord, new Rotation2d());
+  }
 
   public final class Vision {
     public static final String APRILTAG_LIMELIGHTA_NAME = "limelight-aprila";

@@ -22,6 +22,7 @@ import static frc.robot.settings.Constants.DriveConstants.FR_STEER_MOTOR_ID;
 import static frc.robot.settings.Constants.Vision.APRILTAG_LIMELIGHTA_NAME;
 import static frc.robot.settings.Constants.Vision.APRILTAG_LIMELIGHTB_NAME;
 import static frc.robot.settings.Constants.Vision.APRILTAG_LIMELIGHTC_NAME;
+import static frc.robot.settings.Constants.Field.*;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.util.PathPlannerLogging;
@@ -46,6 +47,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
 import frc.robot.LimelightHelpers.PoseEstimate;
 import frc.robot.helpers.MotorLogger;
+import frc.robot.helpers.MythicalMath;
+import frc.robot.settings.ReefSideEnum;
 import frc.robot.settings.Constants.DriveConstants;
 import java.util.Arrays;
 import java.util.Collections;
@@ -405,7 +408,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   /*
    * Logs important data for the drivetrain
    */
-  public void logDrivetrainData(){
+  private void logDrivetrainData(){
     SmartDashboard.putNumber("DRIVETRAIN/Robot Angle", getOdometryRotation().getDegrees());
     SmartDashboard.putString("DRIVETRAIN/Robot Location", getPose().getTranslation().toString());
     SmartDashboard.putNumber("DRIVETRAIN/forward speed", getChassisSpeeds().vxMetersPerSecond);
@@ -419,6 +422,50 @@ public class DrivetrainSubsystem extends SubsystemBase {
     Logger.recordOutput("MyStates", getModuleStates());
     Logger.recordOutput("Position", odometer.getEstimatedPosition());
     Logger.recordOutput("Gyro", getGyroscopeRotation());
+  }
+
+  private void updateClosestReefSide() {
+    Pose2d robotPose = getPose();
+    final double closeThreshold = 1.7;
+    Pose2d frontCenterPose;
+    Pose2d frontLeftPose;
+    Pose2d frontRightPose;
+    Pose2d backCenterPose;
+    Pose2d backRightPose;
+    Pose2d backLeftPose;
+    if(DriverStation.getAlliance().get() == Alliance.Red) {
+      frontCenterPose = RED_FRONT_CENTER_REEFSIDE_POSE;
+      frontLeftPose = RED_FRONT_LEFT_REEFSIDE_POSE;
+      frontRightPose = RED_FRONT_RIGHT_REEFSIDE_POSE;
+      backCenterPose = RED_BACK_CENTER_REEFSIDE_POSE;
+      backLeftPose = RED_BACK_LEFT_REEFSIDE_POSE;
+      backRightPose = RED_BACK_RIGHT_REEFSIDE_POSE;
+    } else {
+      frontCenterPose = BLUE_FRONT_CENTER_REEFSIDE_POSE;
+      frontLeftPose = BLUE_FRONT_LEFT_REEFSIDE_POSE;
+      frontRightPose = BLUE_FRONT_RIGHT_REEFSIDE_POSE;
+      backCenterPose = BLUE_BACK_CENTER_REEFSIDE_POSE;
+      backLeftPose = BLUE_BACK_LEFT_REEFSIDE_POSE;
+      backRightPose = BLUE_BACK_RIGHT_REEFSIDE_POSE;
+    }
+    if(MythicalMath.distanceBetweenTwoPoses(robotPose, frontCenterPose) < closeThreshold) {
+      RobotState.getInstance().closestReefSide = ReefSideEnum.frontCenter;
+    }
+    if(MythicalMath.distanceBetweenTwoPoses(robotPose, frontLeftPose) < closeThreshold) {
+      RobotState.getInstance().closestReefSide = ReefSideEnum.frontCenter;
+    }
+    if(MythicalMath.distanceBetweenTwoPoses(robotPose, frontRightPose) < closeThreshold) {
+      RobotState.getInstance().closestReefSide = ReefSideEnum.frontCenter;
+    }
+    if(MythicalMath.distanceBetweenTwoPoses(robotPose, backCenterPose) < closeThreshold) {
+      RobotState.getInstance().closestReefSide = ReefSideEnum.frontCenter;
+    }
+    if(MythicalMath.distanceBetweenTwoPoses(robotPose, backRightPose) < closeThreshold) {
+      RobotState.getInstance().closestReefSide = ReefSideEnum.frontCenter;
+    }
+    if(MythicalMath.distanceBetweenTwoPoses(robotPose, backLeftPose) < closeThreshold) {
+      RobotState.getInstance().closestReefSide = ReefSideEnum.frontCenter;
+    }
   }
   //This is the things the subsystem does periodically. 
   @Override
@@ -442,5 +489,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
       motorLoggers[i].log(modules[i].getDriveMotor());
     }
     logDrivetrainData();
+    updateClosestReefSide();
   }
 }
