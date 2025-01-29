@@ -423,16 +423,18 @@ public class DrivetrainSubsystem extends SubsystemBase {
     Logger.recordOutput("Position", odometer.getEstimatedPosition());
     Logger.recordOutput("Gyro", getGyroscopeRotation());
   }
-
+/**
+ * this method updates the closest ReefSide value in robot state by finding the distance to each reefSide, then finding the smallest of those, then using that to update RobotState
+ */
   private void updateClosestReefSide() {
     Pose2d robotPose = getPose();
-    final double closeThreshold = 1.7;
     Pose2d frontCenterPose;
     Pose2d frontLeftPose;
     Pose2d frontRightPose;
     Pose2d backCenterPose;
     Pose2d backRightPose;
     Pose2d backLeftPose;
+  //sets the positions of the reef sides based on our alliance
     if(DriverStation.getAlliance().get() == Alliance.Red) {
       frontCenterPose = RED_FRONT_CENTER_REEFSIDE_POSE;
       frontLeftPose = RED_FRONT_LEFT_REEFSIDE_POSE;
@@ -448,24 +450,23 @@ public class DrivetrainSubsystem extends SubsystemBase {
       backLeftPose = BLUE_BACK_LEFT_REEFSIDE_POSE;
       backRightPose = BLUE_BACK_RIGHT_REEFSIDE_POSE;
     }
-    if(MythicalMath.distanceBetweenTwoPoses(robotPose, frontCenterPose) < closeThreshold) {
-      RobotState.getInstance().closestReefSide = ReefSideEnum.frontCenter;
-    }
-    if(MythicalMath.distanceBetweenTwoPoses(robotPose, frontLeftPose) < closeThreshold) {
-      RobotState.getInstance().closestReefSide = ReefSideEnum.frontCenter;
-    }
-    if(MythicalMath.distanceBetweenTwoPoses(robotPose, frontRightPose) < closeThreshold) {
-      RobotState.getInstance().closestReefSide = ReefSideEnum.frontCenter;
-    }
-    if(MythicalMath.distanceBetweenTwoPoses(robotPose, backCenterPose) < closeThreshold) {
-      RobotState.getInstance().closestReefSide = ReefSideEnum.frontCenter;
-    }
-    if(MythicalMath.distanceBetweenTwoPoses(robotPose, backRightPose) < closeThreshold) {
-      RobotState.getInstance().closestReefSide = ReefSideEnum.frontCenter;
-    }
-    if(MythicalMath.distanceBetweenTwoPoses(robotPose, backLeftPose) < closeThreshold) {
-      RobotState.getInstance().closestReefSide = ReefSideEnum.frontCenter;
-    }
+//finds the distnaces to each reef side
+    double distanceToFrontCenter = MythicalMath.distanceBetweenTwoPoses(robotPose, frontCenterPose);
+    double distanceToFrontRight = MythicalMath.distanceBetweenTwoPoses(robotPose, frontRightPose);
+    double distanceToFrontLeft = MythicalMath.distanceBetweenTwoPoses(robotPose, frontLeftPose);
+    double distanceToBackCenter = MythicalMath.distanceBetweenTwoPoses(robotPose, backCenterPose);
+    double distanceToBackRight = MythicalMath.distanceBetweenTwoPoses(robotPose, backRightPose);
+    double distanceToBackLeft = MythicalMath.distanceBetweenTwoPoses(robotPose, backLeftPose);
+//finds the distance to a reef side that is the smallest, then sets robot state based on the distance that the minimum is equal to.
+    double closestDistance = Math.min(distanceToFrontCenter, Math.min(distanceToFrontRight, Math.min(distanceToFrontLeft, Math.min(distanceToBackRight, Math.min(distanceToBackCenter, distanceToBackLeft)))));
+    if(closestDistance == distanceToFrontCenter) {RobotState.getInstance().closestReefSide = ReefSideEnum.frontCenter;}
+    if(closestDistance == distanceToFrontRight) {RobotState.getInstance().closestReefSide = ReefSideEnum.frontRight;}
+    if(closestDistance == distanceToFrontLeft) {RobotState.getInstance().closestReefSide = ReefSideEnum.frontLeft;}
+    if(closestDistance == distanceToBackCenter) {RobotState.getInstance().closestReefSide = ReefSideEnum.backCenter;}
+    if(closestDistance == distanceToBackRight) {RobotState.getInstance().closestReefSide = ReefSideEnum.backRight;}
+    if(closestDistance == distanceToBackLeft) {RobotState.getInstance().closestReefSide = ReefSideEnum.backLeft;}
+    SmartDashboard.putString("REEFLINEUP/closest side", RobotState.getInstance().closestReefSide.toString());
+    SmartDashboard.putNumber("REEFLINEUP/closest side distance", closestDistance);
   }
   //This is the things the subsystem does periodically. 
   @Override

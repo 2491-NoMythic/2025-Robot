@@ -40,6 +40,8 @@ public class PathFindToReef extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+  //first, determine which path to use based on the robot state for the closest reef side
+  //lots of try/multi-catch becuase that is necessary when using the .fromPathFile() method
     switch (RobotState.getInstance().closestReefSide) {
       case backCenter:
       if(LeftSupplier.getAsBoolean()) {
