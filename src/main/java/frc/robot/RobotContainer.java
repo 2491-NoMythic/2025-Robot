@@ -91,7 +91,7 @@ public class RobotContainer {
   private final boolean funnelIntakeExists = Preferences.getBoolean("FunnelIntake", true);
   private final boolean funnelRotatorExists = Preferences.getBoolean("FunnelRotator", true);
   private final boolean DrivetrainExists = Preferences.getBoolean("DrivetrainExists", true);
-  private final boolean distanceSensorsExist = Preferences.getBoolean("DistanceSensors Exist", true);
+  private final boolean distanceSensorsExist = Preferences.getBoolean("DistanceSensorsExist", true);
   private final boolean lightsExist = Preferences.getBoolean("Lights Exist", true);
 
   private DrivetrainSubsystem driveTrain;
@@ -159,7 +159,7 @@ public class RobotContainer {
     Preferences.initBoolean("Climber", false);
     Preferences.initBoolean("DrivetrainExists", false);
     Preferences.initBoolean("AntiTipActive", true);
-    Preferences.initBoolean("DistanceSensors Exist", true);
+    Preferences.initBoolean("DistanceSensorsExist", true);
 
     DataLogManager.start(); // Start logging
     DriverStation.startDataLog(DataLogManager.getLog()); // Joystick Data logging
@@ -203,7 +203,7 @@ public class RobotContainer {
       ZeroGyroSup = driverControllerPS4::getPSButton;
       LeftReefLineupSup = driverControllerPS4::getL1Button;
       RightReefLineupSup = driverControllerPS4::getR1Button;
-      SlowFrontSup = ()->driverControllerPS4.getR2Axis()>-0.5;
+      SlowFrontSup = ()->driverControllerPS4.getL2Axis()>-0.5;
       AlgaeIntakeSup = driverControllerPS4::getCrossButton; //TODO change to actual
       AlgaeShooterSup = driverControllerPS4::getSquareButton;
       CoralPlaceTeleSupplier = ()-> driverControllerPS4.getPOV() == 0;
@@ -217,8 +217,8 @@ public class RobotContainer {
     }
 
     limelightInit();
-    if (DrivetrainExists) {driveTrainInst();}
     sensorInit();     
+    if (DrivetrainExists) {driveTrainInst();}
     if (lightsExist) {lightsInst();}
  
     if (coralEndeffectorExists) {coralEndDefectorInst();}
@@ -239,23 +239,23 @@ public class RobotContainer {
     defaultDriveCommand = new Drive(
         driveTrain,
         () -> false,
-        ControllerYAxisSupplier,
         ControllerXAxisSupplier,
+        ControllerYAxisSupplier,
         ControllerZAxisSupplier);
     driveTrain.setDefaultCommand(defaultDriveCommand);
     
     approachReef = new ApproachReef(
       distanceSensors,
       driveTrain,
-      ControllerYAxisSupplier,
       ControllerXAxisSupplier,
+      ControllerYAxisSupplier,
       ControllerZAxisSupplier);
       
     autoAngleAtReef = new AutoAngleAtReef(
       driveTrain, 
-      ControllerYAxisSupplier,
+      ControllerZAxisSupplier,
       ControllerXAxisSupplier,
-      ControllerZAxisSupplier);
+      ControllerYAxisSupplier);
   }
 
   private void autoInit() {
