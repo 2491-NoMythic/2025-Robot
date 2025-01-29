@@ -178,7 +178,7 @@ public class RobotContainer {
       ControllerZAxisSupplier = () -> modifyAxis(-driverControllerXbox.getRawAxis(Z_AXIS), DEADBAND_NORMAL);
       
       ZeroGyroSup = driverControllerXbox::getStartButton;
-      AutoAngleAtReefSup = ()->driverControllerXbox.getLeftTriggerAxis()>0.1;
+      AutoAngleAtReefSup = ()->driverControllerXbox.getRightTriggerAxis()>0.1;
       LeftReefLineupSup = driverControllerXbox::getLeftBumperButton;
       RightReefLineupSup =  driverControllerXbox::getRightBumperButton;
       SlowFrontSup = ()-> driverControllerXbox.getRightTriggerAxis() > 0.1;
