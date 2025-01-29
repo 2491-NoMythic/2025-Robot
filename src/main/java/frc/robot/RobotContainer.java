@@ -122,6 +122,7 @@ public class RobotContainer {
   BooleanSupplier SlowFrontSup;
   BooleanSupplier AlgaeIntakeSup;
   BooleanSupplier AlgaeShooterSup;
+  BooleanSupplier CoralIntakeSup;
   BooleanSupplier ReefHeight1Supplier;
   BooleanSupplier ReefHeight2Supplier;
   BooleanSupplier ReefHeight3Supplier;
@@ -178,7 +179,8 @@ public class RobotContainer {
       SlowFrontSup = ()-> driverControllerXbox.getRightTriggerAxis() > 0.1;
       AlgaeIntakeSup = driverControllerXbox::getAButton; //TODO change to actual
       AlgaeShooterSup = driverControllerXbox::getXButton;
-      CoralPlaceTeleSupplier = ()-> driverControllerXbox.getPOV() == 0;;
+      CoralPlaceTeleSupplier = ()-> driverControllerXbox.getPOV() == 0;
+      CoralIntakeSup = driverControllerXbox::getXButton;
 
       ReefHeight1Supplier = ()->operatorControllerXbox.getPOV() == 0;
       ReefHeight2Supplier = ()->operatorControllerXbox.getPOV() == 90;
@@ -200,6 +202,7 @@ public class RobotContainer {
       AlgaeIntakeSup = driverControllerPS4::getCrossButton; //TODO change to actual
       AlgaeShooterSup = driverControllerPS4::getSquareButton;
       CoralPlaceTeleSupplier = ()-> driverControllerPS4.getPOV() == 0;
+      CoralIntakeSup = driverControllerPS4::getSquareButton;
 
       ZeroGyroSup = driverControllerPS4::getPSButton;
 
@@ -341,7 +344,11 @@ public class RobotContainer {
       new Trigger(AlgaeIntakeSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector, ALGAE_INTAKE_SPEED));
       new Trigger(AlgaeShooterSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector, ALGAE_SHOOT_SPEED));
     }
-
+    if(coralEndeffectorExists&&funnelIntakeExists&&elevatorExists) {
+      CoralIntake coralIntake = new CoralIntake(elevator, funnelIntake, coralEndDefector);
+      new Trigger(()->(CoralIntakeSup.getAsBoolean()||driveTrain.drivetrainInIntakeZones())
+      &&!RobotState.getInstance().isCoralSeen()).whileTrue(coralIntake);
+    }
     if(elevatorExists && coralEndeffectorExists && DrivetrainExists && distanceSensorsExist){
       new Trigger(CoralPlaceTeleSupplier).whileTrue(
           new PlaceCoralCommand(elevator,

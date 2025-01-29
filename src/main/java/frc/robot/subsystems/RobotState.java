@@ -16,7 +16,6 @@ public class RobotState {
   public boolean middleLeftSensorTriggered;
   public boolean middleRightSensorTriggered;
   public boolean farRightSensorTriggered;
-  public boolean coralSeen;
   public boolean coralGone;
   public boolean hasAlgae;
   public ElevatorEnums deliveringCoralHeight;
@@ -37,6 +36,10 @@ public class RobotState {
       instance = new RobotState();
     }
     return instance;
+  }
+
+  public boolean isCoralSeen() {
+    return funnelSensorTrig || coralEndeffSensorTrig;
   }
   }
 
