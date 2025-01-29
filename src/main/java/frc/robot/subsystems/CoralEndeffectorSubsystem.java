@@ -54,6 +54,12 @@ public class CoralEndeffectorSubsystem extends SubsystemBase {
   public void stopCoralEndEffector(){
     coralEndeffectorMotor.set(0);
   }
+
+  public void setIdleMode(IdleMode idleMode) {
+    coralConfig.idleMode(idleMode);
+    coralEndeffectorMotor.configure(coralConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+  }
+
   private void logMotors(){
     motorLogger.log(coralEndeffectorMotor);
   }

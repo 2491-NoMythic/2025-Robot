@@ -6,6 +6,8 @@ package frc.robot.commands.NamedCommands;
 
 import static frc.robot.settings.Constants.ElevatorConstants.HUMAN_PLAYER_STATION_MILLIMETERS;
 
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+
 import frc.robot.subsystems.RobotState;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.ElevatorCommand;
@@ -44,6 +46,18 @@ public class CoralIntake extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+  //sets endeffector and funnel intake to brake or coast mode based on wether their sensor's detect a coral
+    if(RobotState.getInstance().funnelSensorTrig) {
+      funnelIntake.setIdleMode(IdleMode.kBrake);
+    } else {
+      funnelIntake.setIdleMode(IdleMode.kCoast);
+    }
+    if(RobotState.getInstance().coralEndeffSensorTrig) {
+      coralIntake.setIdleMode(IdleMode.kBrake);
+    } else {
+      coralIntake.setIdleMode(IdleMode.kCoast);
+    }
+
     funnelIntake.stopFunnel();
     coralIntake.stopCoralEndEffector();
   }

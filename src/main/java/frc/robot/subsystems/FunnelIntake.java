@@ -68,6 +68,13 @@ public class FunnelIntake extends SubsystemBase {
     motorLogger2.log(intakeMotor2);
   }
 
+  public void setIdleMode(IdleMode idleMode) {
+    intakeMotor1Config.idleMode(idleMode);
+    intakeMotor2Config.idleMode(idleMode);
+    intakeMotor1.configure(intakeMotor1Config, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+    intakeMotor1.configure(intakeMotor1Config, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
