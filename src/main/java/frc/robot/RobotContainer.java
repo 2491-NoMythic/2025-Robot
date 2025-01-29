@@ -334,6 +334,9 @@ public class RobotContainer {
       new Trigger(AlgaeIntakeSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector, ALGAE_INTAKE_SPEED));
       new Trigger(AlgaeShooterSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector, ALGAE_SHOOT_SPEED));
     }
+    if (climberExists){
+      new Trigger().onTrue(new InstantCommand(()->climber.climbServo(10)));
+    }
 
     if(elevatorExists && coralEndeffectorExists && DrivetrainExists && distanceSensorsExist){
       new Trigger(CoralPlaceTeleSupplier).whileTrue(

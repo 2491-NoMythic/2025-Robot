@@ -9,20 +9,28 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.settings.Constants.ClimberConstants.*;
+import edu.wpi.first.wpilibj.Servo;
 
 public class CimberSubsystem extends SubsystemBase {
   TalonFX climberMotor1;
   TalonFX climberMotor2;
-  
+  Servo climbServo;
   /** Creates a new CimberSubsystem. */
   public CimberSubsystem() {
     climberMotor1 = new TalonFX(CLIMBER_MOTOR_1_ID);
     climberMotor2 = new TalonFX(CLIMBER_MOTOR_2_ID);
+    climbServo = new Servo(CLIMBER_MOTOR_3_ID);
     climberMotor1.getConfigurator().apply(ClimberMotorConfig);
     climberMotor2.getConfigurator().apply(ClimberMotorConfig);
+    climbServo.setAngle(0-180);
   }
+
   public void runClimber(double speed){
     climberMotor1.set(speed);
+    climberMotor2.set(speed);
+  }
+  public void climbServo(double angle){
+    climbServo.setAngle(angle);
   }
   public void stopClimber(){
     climberMotor1.set(0);
