@@ -4,9 +4,13 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import com.revrobotics.spark.SparkAbsoluteEncoder;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.helpers.MotorLogger;
 
@@ -14,18 +18,21 @@ import static frc.robot.settings.Constants.ClimberConstants.*;
 
 public class CimberSubsystem extends SubsystemBase {
   TalonFX climberMotor1;
-  TalonFX climberMotor2;
+  Servo climberServo;
   MotorLogger motorLogger1;
-  MotorLogger motorLogger2;
   /** Creates a new CimberSubsystem. */
   public CimberSubsystem() {
     climberMotor1 = new TalonFX(CLIMBER_MOTOR_1_ID);
-    climberMotor2 = new TalonFX(CLIMBER_MOTOR_2_ID);
     climberMotor1.getConfigurator().apply(ClimberMotorConfig);
-    climberMotor2.getConfigurator().apply(ClimberMotorConfig);
+    climberServo = new Servo(CLIMBER_SERVO_ID);
+//TODO spend some time figuring out how to use the absolute encoder with the motor.
+    FeedbackConfigs krakenSensorConfigs = new FeedbackConfigs()
+      .withFeedbackRemoteSensorID(2491)
+      .withFeedbackSensorSource(FeedbackSensorSourceValue.RemoteCANcoder)
+      .withFeedbackRotorOffset(2491);
+    climberMotor1.getConfigurator().apply(krakenSensorConfigs);
 
     motorLogger1 = new MotorLogger("/climber/motor1");
-    motorLogger2 = new MotorLogger("/climber/motor2");
   }
   public void runClimber(double speed){
     climberMotor1.set(speed);
@@ -33,9 +40,16 @@ public class CimberSubsystem extends SubsystemBase {
   public void stopClimber(){
     climberMotor1.set(0);
   }
+  /**
+   * sets the servo to an angle between 0 and 180
+   * If angle is lower than 0, the angle will be set to 0. If greater than 180, the angle will be set to 180
+   * @param angle
+   */
+  public void setServe(double angle) {
+    climberServo.setAngle(angle);
+  }
   private void logMotors(){
     motorLogger1.log(climberMotor1);
-    motorLogger2.log(climberMotor2);
   }
   @Override
   public void periodic() {
