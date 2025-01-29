@@ -173,8 +173,8 @@ public class RobotContainer {
       ControllerZAxisSupplier = () -> modifyAxis(-driverControllerXbox.getRawAxis(Z_AXIS), DEADBAND_NORMAL);
       
       ZeroGyroSup = driverControllerXbox::getStartButton;
-      LeftReefLineupSup = driverControllerXbox::getLeftBumperButton;
-      RightReefLineupSup =  driverControllerXbox::getRightBumperButton;
+      LeftReefLineupSup = operatorControllerXbox::getLeftBumperButton;
+      RightReefLineupSup =  operatorControllerXbox::getRightBumperButton;
       SlowFrontSup = ()-> driverControllerXbox.getRightTriggerAxis() > 0.1;
       AlgaeIntakeSup = driverControllerXbox::getAButton; //TODO change to actual
       AlgaeShooterSup = driverControllerXbox::getXButton;
@@ -194,8 +194,8 @@ public class RobotContainer {
       ControllerYAxisSupplier = () -> modifyAxis(-driverControllerPS4.getRawAxis(Y_AXIS), DEADBAND_NORMAL);
       ControllerZAxisSupplier = () -> modifyAxis(-driverControllerPS4.getRawAxis(Z_AXIS), DEADBAND_NORMAL);
 
-      LeftReefLineupSup = driverControllerPS4::getL1Button;
-      RightReefLineupSup = driverControllerPS4::getR1Button;
+      LeftReefLineupSup = operatorControllerPS4::getL1Button;
+      RightReefLineupSup = operatorControllerPS4::getR1Button;
       SlowFrontSup = ()->driverControllerPS4.getR2Axis()>-0.5;
       AlgaeIntakeSup = driverControllerPS4::getCrossButton; //TODO change to actual
       AlgaeShooterSup = driverControllerPS4::getSquareButton;
@@ -304,6 +304,15 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+//all the triggers that change RobotState
+    new Trigger(LeftReefLineupSup).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringLeft = true));
+    new Trigger(RightReefLineupSup).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringLeft = false));
+    new Trigger(ReefHeight1Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef1));
+    new Trigger(ReefHeight2Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef2));
+    new Trigger(ReefHeight3Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef3));
+    new Trigger(ReefHeight4Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef4));
+    new Trigger(CoralIntakeHeightSupplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.HumanPlayer));
+
     if (DrivetrainExists){
     SmartDashboard.putData("drivetrain", driveTrain);
 
@@ -326,11 +335,6 @@ public class RobotContainer {
     SmartDashboard.putNumber("speedOut", ALGAE_SHOOT_SPEED);
     SmartDashboard.putNumber("speedIn", ALGAE_INTAKE_SPEED);
 
-    new Trigger(ReefHeight1Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef1));
-    new Trigger(ReefHeight2Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef2));
-    new Trigger(ReefHeight3Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef3));
-    new Trigger(ReefHeight4Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef4));
-    new Trigger(CoralIntakeHeightSupplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.HumanPlayer));
 
     }
     if (algaeEndeffectorExists) {
@@ -348,7 +352,7 @@ public class RobotContainer {
               ControllerYAxisSupplier,
               ControllerZAxisSupplier,
               coralEndDefector,
-              LeftReefLineupSup));
+              ()->RobotState.getInstance().deliveringLeft));
     }
     /*
      * bindings:

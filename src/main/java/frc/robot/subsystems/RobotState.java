@@ -24,8 +24,12 @@ public class RobotState {
   public boolean funnelSensorTrig;
   public boolean coralEndeffSensorTrig;
   public ReefSideEnum closestReefSide;
+  public boolean deliveringLeft;
 
   private RobotState() {
+    //sets any values that aren't periodically updated by a subsystem to a value, so that they won't return null if called before they are updated
+    deliveringLeft = true;
+    deliveringCoralHeight = ElevatorEnums.Reef1;
   }
 
   public static RobotState getInstance() {
