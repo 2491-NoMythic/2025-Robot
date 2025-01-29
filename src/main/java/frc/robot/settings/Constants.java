@@ -430,5 +430,19 @@ public final class Constants {
     public static final int FUNNEL_ROTATOR_SUPPLY_CURRENT_LIMIT = 2491;
     public static final double FUNNEL_ROTATOR_GEAR_RATIO = 2491;
   }
+
+  public final class AutoAlignToReefConstants {
+    public static final double AUTO_AIM_ROBOT_kP = 0.125;
+    public static final double AUTO_AIM_ROBOT_kI = 0.0;
+    public static final double AUTO_AIM_ROBOT_kD = 0.0;
+    public static final double ROBOT_ANGLE_TOLERANCE = 0.5;
+  }
+  public final class FieldConstants{
+    //used for the autoAngleAtReefCommand
+    public static final int REEF_ANGLE_0 = 0;
+    public static final int REEF_ANGLE_1 = 60;
+    public static final int REEF_ANGLE_2 = 120;
+    public static final int REEF_ANGLE_3 = 180;
+   }
 }
 

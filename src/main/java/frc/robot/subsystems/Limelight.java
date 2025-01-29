@@ -371,7 +371,7 @@ public class Limelight {
  * @param limelightName
  * @return a boolean of wether or not the data from the limelight is accessible. If false, limelight may not be connected
  */
-  private boolean isConnected(String limelightName) {
+  public boolean isConnected(String limelightName) {
     NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable(limelightName);
     double tx = limelightTable.getEntry("tx").getDouble(Double.NaN);
     boolean connected = !Double.isNaN(tx);
