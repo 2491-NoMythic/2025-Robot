@@ -6,11 +6,15 @@ package frc.robot.commands;
 
 import static frc.robot.settings.Constants.DriveConstants.DEFAULT_PATH_CONSTRAINTS;
 
+import java.io.IOException;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
+import org.json.simple.parser.ParseException;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.FileVersionException;
 
 import frc.robot.subsystems.RobotState;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -38,42 +42,101 @@ public class PathFindToReef extends Command {
   public void initialize() {
     switch (RobotState.getInstance().closestReefSide) {
       case backCenter:
-        if(LeftSupplier.getAsBoolean()) {
+      if(LeftSupplier.getAsBoolean()) {
+        try {
           pathToReef = AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupA"), DEFAULT_PATH_CONSTRAINTS);
-        } else {
-          pathToReef = AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupB"), DEFAULT_PATH_CONSTRAINTS);
+        } catch (FileVersionException | IOException | ParseException e) {
+          e.printStackTrace();
         }
-      case backRight:
-        if(LeftSupplier.getAsBoolean()) {
-          pathToReef = AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupC"), DEFAULT_PATH_CONSTRAINTS);
-        } else {
-          pathToReef = AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupD"), DEFAULT_PATH_CONSTRAINTS);
-        }
-      case backLeft:
-      if(LeftSupplier.getAsBoolean()) {
-        pathToReef = AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupK"), DEFAULT_PATH_CONSTRAINTS);
       } else {
-        pathToReef = AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupL"), DEFAULT_PATH_CONSTRAINTS);
+        try {
+          pathToReef = AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupB"), DEFAULT_PATH_CONSTRAINTS);
+        } catch (FileVersionException | IOException | ParseException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
       }
-      case frontCenter:
+    case backRight:
       if(LeftSupplier.getAsBoolean()) {
-        pathToReef = AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupG"), DEFAULT_PATH_CONSTRAINTS);
-      } else { 
-        pathToReef = AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupH"), DEFAULT_PATH_CONSTRAINTS);
+        try {
+          pathToReef = AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupC"), DEFAULT_PATH_CONSTRAINTS);
+        } catch (FileVersionException | IOException | ParseException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
+      } else {
+        try {
+          pathToReef = AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupD"), DEFAULT_PATH_CONSTRAINTS);
+        } catch (FileVersionException | IOException | ParseException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
       }
-      case frontRight:
-        if(LeftSupplier.getAsBoolean()) {
+    case backLeft:
+    if(LeftSupplier.getAsBoolean()) {
+      try {
+        pathToReef = AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupK"), DEFAULT_PATH_CONSTRAINTS);
+      } catch (FileVersionException | IOException | ParseException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+    } else {
+      try {
+        pathToReef = AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupL"), DEFAULT_PATH_CONSTRAINTS);
+      } catch (FileVersionException | IOException | ParseException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+    }
+    case frontCenter:
+    if(LeftSupplier.getAsBoolean()) {
+      try {
+        pathToReef = AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupG"), DEFAULT_PATH_CONSTRAINTS);
+      } catch (FileVersionException | IOException | ParseException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+    } else { 
+      try {
+        pathToReef = AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupH"), DEFAULT_PATH_CONSTRAINTS);
+      } catch (FileVersionException | IOException | ParseException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+    }
+    case frontRight:
+      if(LeftSupplier.getAsBoolean()) {
+        try {
           pathToReef = AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupE"), DEFAULT_PATH_CONSTRAINTS);
-        } else { 
+        } catch (FileVersionException | IOException | ParseException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
+      } else { 
+        try {
           pathToReef = AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupF"), DEFAULT_PATH_CONSTRAINTS);
+        } catch (FileVersionException | IOException | ParseException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
         }
-      case frontLeft:
-        if(LeftSupplier.getAsBoolean()) {
+      }
+    case frontLeft:
+      if(LeftSupplier.getAsBoolean()) {
+        try {
           pathToReef = AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupI"), DEFAULT_PATH_CONSTRAINTS);
-        } else { 
-          pathToReef = AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupJ"), DEFAULT_PATH_CONSTRAINTS);
+        } catch (FileVersionException | IOException | ParseException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
         }
-      default:
+      } else { 
+        try {
+          pathToReef = AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupJ"), DEFAULT_PATH_CONSTRAINTS);
+        } catch (FileVersionException | IOException | ParseException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
+      }
+    default:
         pathToReef = new InstantCommand(()->System.out.println("tried to run pathFindToReef, but was not close to any reefside"));
     }
     pathToReef.initialize();
