@@ -32,12 +32,13 @@ public class PlaceCoralCommand extends SequentialCommandGroup{
             DrivetrainSubsystem drivetrain, DoubleSupplier xSupplier, DoubleSupplier ySupplier, DoubleSupplier rSupplier,
             CoralEndeffectorSubsystem coralEndeffector, BooleanSupplier leftPlace){
         addCommands(
+            new PathFindToReef(drivetrain, leftPlace),
+            new ApproachReef(distanceSensors, drivetrain, xSupplier, ySupplier, rSupplier),//approaches reef while raising elevator
             new ParallelRaceGroup(
-                new ElevatorCommand(elevator, elevatorPose),
-                new ApproachReef(distanceSensors, drivetrain, xSupplier, ySupplier, rSupplier)),//approaches reef while raising elevator
-            new LineUp(drivetrain, leftPlace, 0.9),//align with reef
-            new LineUp(drivetrain, leftPlace, 0.3),//align with reef
-            new DeliverCoral(coralEndeffector)//drops coral
+                new ElevatorCommand(elevator, elevatorPose),//raises elevator to position
+                new LineUp(drivetrain, leftPlace, 0.3)),//align with reef
+            new DeliverCoral(coralEndeffector),//drops coral
+            new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.Bottom), elevator) //sets elevator back to the bottom position
         );
 
     }
