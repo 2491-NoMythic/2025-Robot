@@ -12,6 +12,7 @@ import java.util.function.Supplier;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
 
+import frc.robot.subsystems.RobotState;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.settings.ReefSideEnum;
@@ -25,9 +26,8 @@ public class PathFindToReef extends Command {
   BooleanSupplier LeftSupplier;
 
   /** Creates a new PathFindToReef. */
-  public PathFindToReef(DrivetrainSubsystem drivetrain, Supplier<ReefSideEnum> closestReefSideSupplier, BooleanSupplier LeftSup) {
+  public PathFindToReef(DrivetrainSubsystem drivetrain, BooleanSupplier LeftSup) {
     this.drivetrain = drivetrain;
-    this.closestReefSideSupplier = closestReefSideSupplier;
     this.LeftSupplier = LeftSup;
     addRequirements(drivetrain);
     // Use addRequirements() here to declare subsystem dependencies.
@@ -36,7 +36,7 @@ public class PathFindToReef extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    switch (closestReefSideSupplier.get()) {
+    switch (RobotState.getInstance().closestReefSide) {
       case backCenter:
         if(LeftSupplier.getAsBoolean()) {
           pathToReef = AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupA"), DEFAULT_PATH_CONSTRAINTS);
@@ -76,19 +76,24 @@ public class PathFindToReef extends Command {
       default:
         pathToReef = new InstantCommand(()->System.out.println("tried to run pathFindToReef, but was not close to any reefside"));
     }
+    pathToReef.initialize();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    pathToReef.execute();
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    pathToReef.end(interrupted);
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return pathToReef.isFinished();
   }
 }
