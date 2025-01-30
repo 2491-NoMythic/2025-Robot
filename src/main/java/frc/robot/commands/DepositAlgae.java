@@ -25,7 +25,8 @@ public class DepositAlgae extends Command {
     this.shootSpeed = shootSpeed;
    
     // Use addRequirements() here to declare subsystem dependencies.
-
+    addRequirements(algaeEndeffector);
+    addRequirements(elevator);
   }
 
   // Called when the command is initially scheduled.
@@ -38,7 +39,6 @@ public class DepositAlgae extends Command {
   @Override
   public void execute() {
     elevator.setElevatorPosition(PROCESSOR_HEIGHT_MILLIMETERS);
-    elevator.isElevatorAtPose();
     if(elevator.isElevatorAtPose()){
       algaeEndeffector.runAlgaeEndDefector(shootSpeed);
   }
