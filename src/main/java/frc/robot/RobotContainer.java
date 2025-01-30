@@ -34,6 +34,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AutoAngleAtReef;
+import frc.robot.commands.DepositAlgae;
 import frc.robot.settings.Constants.Vision;
 import frc.robot.commands.AlgaeEndeffectorCommand;
 import frc.robot.commands.ApproachReef;
@@ -128,6 +129,7 @@ public class RobotContainer {
   BooleanSupplier SlowFrontSup;
   BooleanSupplier AlgaeIntakeSup;
   BooleanSupplier AlgaeShooterSup;
+  BooleanSupplier AlgaeDepositSup;
   BooleanSupplier ReefHeight1Supplier;
   BooleanSupplier ReefHeight2Supplier;
   BooleanSupplier ReefHeight3Supplier;
@@ -184,6 +186,7 @@ public class RobotContainer {
       SlowFrontSup = ()-> driverControllerXbox.getRightTriggerAxis() > 0.1;
       AlgaeIntakeSup = driverControllerXbox::getAButton; //TODO change to actual
       AlgaeShooterSup = driverControllerXbox::getXButton;
+      AlgaeDepositSup = driverControllerXbox::getBButton;
       CoralPlaceTeleSupplier = ()-> driverControllerXbox.getPOV() == 0;;
 
       ReefHeight1Supplier = ()->operatorControllerXbox.getPOV() == 0;
@@ -206,6 +209,7 @@ public class RobotContainer {
       SlowFrontSup = ()->driverControllerPS4.getL2Axis()>-0.5;
       AlgaeIntakeSup = driverControllerPS4::getCrossButton; //TODO change to actual
       AlgaeShooterSup = driverControllerPS4::getSquareButton;
+      AlgaeDepositSup = driverControllerPS4::getCircleButton;
       CoralPlaceTeleSupplier = ()-> driverControllerPS4.getPOV() == 0;
       AutoAngleAtReefSup = driverControllerPS4::getR2Button;
 
@@ -363,6 +367,10 @@ public class RobotContainer {
               ControllerZAxisSupplier,
               coralEndDefector,
               LeftReefLineupSup));
+    }
+
+    if(elevatorExists && algaeEndeffectorExists){
+      new Trigger(AlgaeDepositSup).whileTrue(new DepositAlgae(algaeEndDefector,elevator, ALGAE_SHOOT_SPEED));
     }
     /*
      * bindings:
