@@ -120,11 +120,10 @@ public class RobotContainer {
   private DeliverCoral deliverCoral;
   private ApproachReef approachReef;
 
-  RobotState robotState;
   Alliance currentAlliance;
   BooleanSupplier ZeroGyroSup;
-  BooleanSupplier LeftReefLineupSup;
-  BooleanSupplier RightReefLineupSup;
+  BooleanSupplier DvLeftReefLineupSup;
+  BooleanSupplier DvRightReefLineupSup;
   BooleanSupplier SlowFrontSup;
   BooleanSupplier AlgaeIntakeSup;
   BooleanSupplier AlgaeShooterSup;
@@ -137,7 +136,8 @@ public class RobotContainer {
   DoubleSupplier ControllerYAxisSupplier;
   DoubleSupplier ControllerXAxisSupplier;
   DoubleSupplier ControllerZAxisSupplier;
-
+  BooleanSupplier OpLeftReefLineupSup;
+  BooleanSupplier OpRightReefLineupSup;
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
   /**
@@ -179,13 +179,15 @@ public class RobotContainer {
       
       ZeroGyroSup = driverControllerXbox::getStartButton;
       AutoAngleAtReefSup = ()->driverControllerXbox.getRightTriggerAxis()>0.1;
-      LeftReefLineupSup = driverControllerXbox::getLeftBumperButton;
-      RightReefLineupSup =  driverControllerXbox::getRightBumperButton;
+      DvLeftReefLineupSup = driverControllerXbox::getLeftBumperButton;
+      DvRightReefLineupSup =  driverControllerXbox::getRightBumperButton;
       SlowFrontSup = ()-> driverControllerXbox.getRightTriggerAxis() > 0.1;
       AlgaeIntakeSup = driverControllerXbox::getAButton; //TODO change to actual
       AlgaeShooterSup = driverControllerXbox::getXButton;
       CoralPlaceTeleSupplier = ()-> driverControllerXbox.getPOV() == 0;;
 
+      OpLeftReefLineupSup = operatorControllerXbox::getLeftBumperButton;
+      OpRightReefLineupSup = operatorControllerXbox::getRightBumperButton;
       ReefHeight1Supplier = ()->operatorControllerXbox.getPOV() == 0;
       ReefHeight2Supplier = ()->operatorControllerXbox.getPOV() == 90;
       ReefHeight3Supplier = ()->operatorControllerXbox.getPOV() == 180;
@@ -201,14 +203,16 @@ public class RobotContainer {
       ControllerZAxisSupplier = () -> modifyAxis(-driverControllerPS4.getRawAxis(Z_AXIS), DEADBAND_NORMAL);
 
       ZeroGyroSup = driverControllerPS4::getPSButton;
-      LeftReefLineupSup = driverControllerPS4::getL1Button;
-      RightReefLineupSup = driverControllerPS4::getR1Button;
+      DvLeftReefLineupSup = driverControllerPS4::getL1Button;
+      DvRightReefLineupSup = driverControllerPS4::getR1Button;
       SlowFrontSup = ()->driverControllerPS4.getL2Axis()>-0.5;
       AlgaeIntakeSup = driverControllerPS4::getCrossButton; //TODO change to actual
       AlgaeShooterSup = driverControllerPS4::getSquareButton;
       CoralPlaceTeleSupplier = ()-> driverControllerPS4.getPOV() == 0;
       AutoAngleAtReefSup = driverControllerPS4::getR2Button;
 
+      OpLeftReefLineupSup = operatorControllerPS4::getL1Button;
+      OpRightReefLineupSup = operatorControllerPS4::getR1Button;
       ReefHeight1Supplier = ()->operatorControllerPS4.getPOV() == 0;
       ReefHeight2Supplier = ()->operatorControllerPS4.getPOV() == 90;
       ReefHeight3Supplier = ()->operatorControllerPS4.getPOV() == 180;
@@ -321,10 +325,10 @@ public class RobotContainer {
 
     new Trigger(ZeroGyroSup).onTrue(new InstantCommand(driveTrain::zeroGyroscope));
  
-    new Trigger(()->RightReefLineupSup.getAsBoolean()||LeftReefLineupSup.getAsBoolean()).whileTrue(new SequentialCommandGroup(
-      new LineUp(driveTrain, LeftReefLineupSup,0.9),
+    new Trigger(()->DvRightReefLineupSup.getAsBoolean()||DvLeftReefLineupSup.getAsBoolean()).whileTrue(new SequentialCommandGroup(
+      new LineUp(driveTrain, DvLeftReefLineupSup,0.9),
       new WaitCommand(()->0.1),
-      new LineUp(driveTrain, LeftReefLineupSup,0.3)));
+      new LineUp(driveTrain, DvLeftReefLineupSup,0.3)));
       
     new Trigger(AutoAngleAtReefSup).whileTrue(autoAngleAtReef);
     SmartDashboard.putData(autoAngleAtReef);
@@ -362,7 +366,7 @@ public class RobotContainer {
               ControllerYAxisSupplier,
               ControllerZAxisSupplier,
               coralEndDefector,
-              LeftReefLineupSup));
+              ()-> RobotState.getInstance().placeCoralLeft));
     }
     /*
      * bindings:
@@ -489,6 +493,13 @@ public class RobotContainer {
     if(DrivetrainExists) {
       SmartDashboard.putData(driveTrain.getCurrentCommand());
     }
+    if (OpLeftReefLineupSup.getAsBoolean() == true){
+      RobotState.getInstance().placeCoralLeft = true;
+    }
+    if (OpRightReefLineupSup.getAsBoolean() == true){
+      RobotState.getInstance().placeCoralLeft = false;
+    }
+
   }
   public void robotInit(){
     if (elevatorExists){
