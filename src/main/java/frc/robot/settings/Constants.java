@@ -390,6 +390,7 @@ public final class Constants {
     public static final double REEF_LEVEL_2_MILLIMETERS = 2491;
     public static final double REEF_LEVEL_3_MILLIMETERS = 2491;
     public static final double REEF_LEVEL_4_MILLIMETERS = 2491;
+    public static final double BARGE_SHOOT_MILLIMETERS = 2491;
     public static final double PROCESSOR_HEIGHT_MILLIMETERS = 2491;
     public static final double ELEVATOR_MILLIMETERS_TO_ROTATIONS = 2491;
     public static final double ELEVATOR_THRESHOLD = 2491;
@@ -445,6 +446,10 @@ public final class Constants {
     public static final int REEF_ANGLE_1 = 60;
     public static final int REEF_ANGLE_2 = 120;
     public static final int REEF_ANGLE_3 = 180;
+    public static final double BLUE_BARGE_SHOOT_X = 2491;
+    public static final double BLUE_BARGE_SHOOT_Y = 2491;
+    public static final double RED_BARGE_SHOOT_X = 2491;
+    public static final double RED_BARGE_SHOOT_Y = 2491;
    }
 }
 

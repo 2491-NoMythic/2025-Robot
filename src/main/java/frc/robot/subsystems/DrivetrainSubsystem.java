@@ -4,6 +4,9 @@
 
 package frc.robot.subsystems;
 
+import static frc.robot.settings.Constants.DriveConstants.AUTO_AIM_ROBOT_kD;
+import static frc.robot.settings.Constants.DriveConstants.AUTO_AIM_ROBOT_kI;
+import static frc.robot.settings.Constants.DriveConstants.AUTO_AIM_ROBOT_kP;
 import static frc.robot.settings.Constants.DriveConstants.BL_DRIVE_MOTOR_ID;
 import static frc.robot.settings.Constants.DriveConstants.BL_STEER_ENCODER_ID;
 import static frc.robot.settings.Constants.DriveConstants.BL_STEER_MOTOR_ID;
@@ -19,6 +22,7 @@ import static frc.robot.settings.Constants.DriveConstants.FL_STEER_MOTOR_ID;
 import static frc.robot.settings.Constants.DriveConstants.FR_DRIVE_MOTOR_ID;
 import static frc.robot.settings.Constants.DriveConstants.FR_STEER_ENCODER_ID;
 import static frc.robot.settings.Constants.DriveConstants.FR_STEER_MOTOR_ID;
+import static frc.robot.settings.Constants.DriveConstants.ROBOT_ANGLE_TOLERANCE;
 import static frc.robot.settings.Constants.Vision.APRILTAG_LIMELIGHTA_NAME;
 import static frc.robot.settings.Constants.Vision.APRILTAG_LIMELIGHTB_NAME;
 import static frc.robot.settings.Constants.Vision.APRILTAG_LIMELIGHTC_NAME;
@@ -83,8 +87,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
   Limelight limelight;
   MotorLogger[] motorLoggers;
   PIDController speedController;
+  PIDController rotationSpeedController;
 
   public DrivetrainSubsystem() {
+    rotationSpeedController = new PIDController(AUTO_AIM_ROBOT_kP, AUTO_AIM_ROBOT_kI, AUTO_AIM_ROBOT_kD);
+    rotationSpeedController.setTolerance(ROBOT_ANGLE_TOLERANCE);
+    rotationSpeedController.enableContinuousInput(-180, 180);
     this.limelight = Limelight.getInstance();
     Preferences.initDouble("FL offset", 0);
     Preferences.initDouble("FR offset", 0);
@@ -404,7 +412,22 @@ public class DrivetrainSubsystem extends SubsystemBase {
           "No valid limelight estimate to reset from. (Drivetrain.forceUpdateOdometryWithVision)");
     }
   }
-
+  /** Prepares to rotate the robot to a specific angle
+   * @param desiredAngle the angle to rotate the robot to (in degrees relative to the field)
+   */
+  public void setRotationTarget(double desiredAngle) {
+    rotationSpeedController.setSetpoint(desiredAngle);
+  }
+  /** Applies power to the motors to rotate the robot to the angle set by 
+   * {@link #setRotationTarget(double) setRotationTarget}
+   */
+  public void moveTowardsRotationTarget(double vx, double vy) {
+    drive(new ChassisSpeeds(vx, vy, rotationSpeedController.calculate(getPose().getRotation().getDegrees()
+    )));
+  }
+  public boolean isAtRotationTarget() {
+    return rotationSpeedController.atSetpoint();
+  }
   /*
    * Logs important data for the drivetrain
    */
