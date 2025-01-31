@@ -348,7 +348,8 @@ public class RobotContainer {
     new Trigger(ReefHeight3Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef3));
     new Trigger(ReefHeight4Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef4));
     new Trigger(CoralIntakeHeightSupplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.HumanPlayer));
-
+    new Trigger(OpLeftReefLineupSup).onTrue(new InstantCommand(()->RobotState.getInstance().placeCoralLeft = true));
+    new Trigger(OpRightReefLineupSup).onTrue(new InstantCommand(()->RobotState.getInstance().placeCoralLeft = false));
     }
     if (algaeEndeffectorExists) {
       new Trigger(AlgaeIntakeSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector, ALGAE_INTAKE_SPEED));
@@ -493,13 +494,6 @@ public class RobotContainer {
     if(DrivetrainExists) {
       SmartDashboard.putData(driveTrain.getCurrentCommand());
     }
-    if (OpLeftReefLineupSup.getAsBoolean() == true){
-      RobotState.getInstance().placeCoralLeft = true;
-    }
-    if (OpRightReefLineupSup.getAsBoolean() == true){
-      RobotState.getInstance().placeCoralLeft = false;
-    }
-
   }
   public void robotInit(){
     if (elevatorExists){
