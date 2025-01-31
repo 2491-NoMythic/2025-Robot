@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.FeedbackConfigs;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
@@ -34,6 +35,9 @@ public class CimberSubsystem extends SubsystemBase {
 
     motorLogger1 = new MotorLogger("/climber/motor1");
   }
+  public void setKrakenPose(double angle) {
+    climberMotor1.setControl(new PositionVoltage(angle));
+  }
   public void runClimber(double speed){
     climberMotor1.set(speed);
   }
@@ -45,7 +49,7 @@ public class CimberSubsystem extends SubsystemBase {
    * If angle is lower than 0, the angle will be set to 0. If greater than 180, the angle will be set to 180
    * @param angle
    */
-  public void setServe(double angle) {
+  public void setServo(double angle) {
     climberServo.setAngle(angle);
   }
   private void logMotors(){
