@@ -443,6 +443,10 @@ public final class Constants {
     public static final int REEF_ANGLE_1 = 60;
     public static final int REEF_ANGLE_2 = 120;
     public static final int REEF_ANGLE_3 = 180;
+    public static final double BLUE_BARGE_SHOOT_X = 2491;
+    public static final double BLUE_BARGE_SHOOT_Y = 2491;
+    public static final double RED_BARGE_SHOOT_X = 2491;
+    public static final double RED_BARGE_SHOOT_Y = 2491;
    }
 }
 
