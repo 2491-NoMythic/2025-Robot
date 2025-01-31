@@ -35,6 +35,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AlgaeEndeffectorCommand;
 import frc.robot.commands.ApproachReef;
+import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.AlgaeIntakeCommand;
 import frc.robot.commands.Drive;
 import frc.robot.commands.IndicatorLights;
@@ -83,7 +84,7 @@ public class RobotContainer {
   private final boolean algaeIntakeExists = Preferences.getBoolean("AlgaeIntake", true);
   private final boolean algaeEndeffectorExists = Preferences.getBoolean("AlgaeEndDefector", true);
   private final boolean coralEndeffectorExists = Preferences.getBoolean("CoralEndDefector", true);
-  private final boolean climberExists = Preferences.getBoolean("Climber", true);
+  private final boolean climberExists =  true;// Preferences.getBoolean("Climber", true);
   private final boolean elevatorExists = Preferences.getBoolean("Elevator", true);
   private final boolean funnelIntakeExists = Preferences.getBoolean("FunnelIntake", true);
   private final boolean funnelRotatorExists = Preferences.getBoolean("FunnelRotator", true);
@@ -126,6 +127,7 @@ public class RobotContainer {
   BooleanSupplier ReefHeight4Supplier;
   BooleanSupplier CoralPlaceTeleSupplier;
   BooleanSupplier CoralIntakeHeightSupplier;
+  BooleanSupplier ClimberSup;
   DoubleSupplier ControllerYAxisSupplier;
   DoubleSupplier ControllerXAxisSupplier;
   DoubleSupplier ControllerZAxisSupplier;
@@ -150,7 +152,7 @@ public class RobotContainer {
     Preferences.initBoolean("AlgaeEndDefector", false);
     Preferences.initBoolean("FunnelIntake", false);
     Preferences.initBoolean("FunnelRotator", false);
-    Preferences.initBoolean("Climber", false);
+    Preferences.initBoolean("Climber", true);
     Preferences.initBoolean("DrivetrainExists", false);
     Preferences.initBoolean("AntiTipActive", true);
     Preferences.initBoolean("DistanceSensors Exist", true);
@@ -177,6 +179,7 @@ public class RobotContainer {
       AlgaeIntakeSup = driverControllerXbox::getAButton; //TODO change to actual
       AlgaeShooterSup = driverControllerXbox::getXButton;
       CoralPlaceTeleSupplier = ()-> driverControllerXbox.getPOV() == 0;;
+      ClimberSup = driverControllerXbox::getYButton;
 
       ReefHeight1Supplier = ()->operatorControllerXbox.getPOV() == 0;
       ReefHeight2Supplier = ()->operatorControllerXbox.getPOV() == 90;
@@ -198,6 +201,7 @@ public class RobotContainer {
       AlgaeIntakeSup = driverControllerPS4::getCrossButton; //TODO change to actual
       AlgaeShooterSup = driverControllerPS4::getSquareButton;
       CoralPlaceTeleSupplier = ()-> driverControllerPS4.getPOV() == 0;
+      ClimberSup = driverControllerPS4::getTriangleButton;
 
       ZeroGyroSup = driverControllerPS4::getPSButton;
 
@@ -215,7 +219,7 @@ public class RobotContainer {
  
     if (coralEndeffectorExists) {coralEndDefectorInst();}
     if (algaeEndeffectorExists) {algaeEndDefectorInst();}
-    if (climberExists) {climberInst();}
+    if (climberExists){climberInst();}
     if (elevatorExists) {elevatorInst();}
     if (funnelIntakeExists) {funnelIntakeInst();}
     if (funnelRotatorExists) {funnelRotatorInst();}
@@ -246,8 +250,11 @@ public class RobotContainer {
 
   private void autoInit() {
     registerNamedCommands();
-    autoChooser = AutoBuilder.buildAutoChooser();
-    SmartDashboard.putData("Auto Chooser", autoChooser);
+    if(DrivetrainExists){
+       autoChooser = AutoBuilder.buildAutoChooser();
+       SmartDashboard.putData("Auto Chooser", autoChooser);
+    }
+  
   }
 
   private void limelightInit() {
@@ -335,7 +342,7 @@ public class RobotContainer {
       new Trigger(AlgaeShooterSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector, ALGAE_SHOOT_SPEED));
     }
     if (climberExists){
-      new Trigger().onTrue(new InstantCommand(()->climber.climbServo(10)));
+      new Trigger(ClimberSup).whileTrue(new ClimberCommand(climber));
     }
 
     if(elevatorExists && coralEndeffectorExists && DrivetrainExists && distanceSensorsExist){

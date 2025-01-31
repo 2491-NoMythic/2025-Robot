@@ -13,7 +13,8 @@ public class IndicatorLights extends Command {
   Lights lights;
   /** Creates a new IndicatorLights. */
   public IndicatorLights(Lights lights) {
-    this.lights = lights;
+    this.lights = lights; 
+    addRequirements(lights);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 

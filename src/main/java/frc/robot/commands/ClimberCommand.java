@@ -10,7 +10,7 @@ import frc.robot.subsystems.CimberSubsystem;
 public class ClimberCommand extends Command {
  CimberSubsystem climber;
   /** Creates a new ClimberCommand. */
-  public ClimberCommand() {
+  public ClimberCommand(CimberSubsystem climber) {
     this.climber = climber;
     addRequirements(climber);
     // Use addRequirements() here to declare subsystem dependencies.
@@ -18,12 +18,14 @@ public class ClimberCommand extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    System.out.println("Working on it");
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    climber.runClimber(1);
+    climber.climbServo(100);
   }
 
   // Called once the command ends or is interrupted.
