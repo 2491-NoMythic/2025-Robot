@@ -104,6 +104,9 @@ public class ElevatorSubsystem extends SubsystemBase {
         break;
     }
   }
+  public boolean isElevatorAtPose() {
+    return elevatorMotor1.getClosedLoopError().getValueAsDouble() < ELEVATOR_THRESHOLD;
+  }
   public void stopElevator(){
     elevatorMotor1.set(0);
   }
