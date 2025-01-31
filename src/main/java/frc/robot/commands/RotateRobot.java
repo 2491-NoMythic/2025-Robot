@@ -40,7 +40,7 @@ public class RotateRobot extends Command {
   public void execute() {
     // move robot to desired angle
     this.currentHeading = m_drivetrain.getPose().getRotation().getDegrees();
-    m_drivetrain.moveTowardsRotationTarget();
+    m_drivetrain.moveTowardsRotationTarget(0,0);
     SmartDashboard.putNumber(
         "current Heading", m_drivetrain.getPose().getRotation().getDegrees() % 360);
     SmartDashboard.putNumber("difference", differenceAngle);

@@ -7,7 +7,6 @@ package frc.robot.commands;
 import java.util.Optional;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -29,12 +28,10 @@ public class LineUpBarge extends Command {
   double speedY;
   double currentX;
   double currentY;
-  ChassisSpeeds chassisSpeeds;
   /** Creates a new LineUpBarge. */
   public LineUpBarge(DrivetrainSubsystem driveTrain) {
     this.driveTrain = driveTrain;
     addRequirements(driveTrain);
-    chassisSpeeds = new ChassisSpeeds();
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -57,7 +54,11 @@ public class LineUpBarge extends Command {
     startY = driveTrain.getPose().getY();
     distanceX = desiredX - startX;
     distanceY = desiredY - startY;
-    
+  }
+
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() { 
     if(distanceX < distanceY) {
       speedY = distanceX/distanceY;
       speedX = 1 - speedY;
@@ -67,16 +68,7 @@ public class LineUpBarge extends Command {
     }
     speedX *= 5;
     speedY *= 5;
-    
-    chassisSpeeds.vxMetersPerSecond = speedX;
-    chassisSpeeds.vyMetersPerSecond = speedY;
-  }
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    driveTrain.moveTowardsRotationTarget();
-    driveTrain.drive(chassisSpeeds);
+    driveTrain.moveTowardsRotationTarget(speedX, speedY);
     currentX = driveTrain.getPose().getX();
     currentY = driveTrain.getPose().getY();
   }

@@ -421,8 +421,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
   /** Applies power to the motors to rotate the robot to the angle set by 
    * {@link #setRotationTarget(double) setRotationTarget}
    */
-  public void moveTowardsRotationTarget() {
-    drive(new ChassisSpeeds(0, 0, rotationSpeedController.calculate(getPose().getRotation().getDegrees()
+  public void moveTowardsRotationTarget(double vx, double vy) {
+    drive(new ChassisSpeeds(vx, vy, rotationSpeedController.calculate(getPose().getRotation().getDegrees()
     )));
   }
   public boolean isAtRotationTarget() {
