@@ -41,6 +41,7 @@ import frc.robot.commands.IndicatorLights;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.LineUp;
 import frc.robot.commands.MoveMeters;
+import frc.robot.commands.PathFindToReef;
 import frc.robot.commands.PlaceCoralCommand;
 import frc.robot.commands.WaitCommand;
 import frc.robot.subsystems.DistanceSensors;
@@ -199,7 +200,7 @@ public class RobotContainer {
       SlowFrontSup = ()->driverControllerPS4.getR2Axis()>-0.5;
       AlgaeIntakeSup = driverControllerPS4::getCrossButton; //TODO change to actual
       AlgaeShooterSup = driverControllerPS4::getSquareButton;
-      CoralPlaceTeleSupplier = ()-> driverControllerPS4.getPOV() == 0;
+      CoralPlaceTeleSupplier = driverControllerPS4:: getTouchpadButton;
 
       ZeroGyroSup = driverControllerPS4::getPSButton;
 
@@ -233,16 +234,16 @@ public class RobotContainer {
     defaultDriveCommand = new Drive(
         driveTrain,
         () -> false,
-        ControllerYAxisSupplier,
         ControllerXAxisSupplier,
+        ControllerYAxisSupplier,
         ControllerZAxisSupplier);
     driveTrain.setDefaultCommand(defaultDriveCommand);
     
     approachReef = new ApproachReef(
       distanceSensors,
       driveTrain,
-      ControllerYAxisSupplier,
       ControllerXAxisSupplier,
+      ControllerYAxisSupplier,
       ControllerZAxisSupplier);
   }
 
@@ -317,12 +318,9 @@ public class RobotContainer {
     SmartDashboard.putData("drivetrain", driveTrain);
 
     new Trigger(ZeroGyroSup).onTrue(new InstantCommand(driveTrain::zeroGyroscope));
- 
-    new Trigger(()->RightReefLineupSup.getAsBoolean()||LeftReefLineupSup.getAsBoolean()).whileTrue(new SequentialCommandGroup(
-      new LineUp(driveTrain, LeftReefLineupSup,0.9),
-      new WaitCommand(()->0.1),
-      new LineUp(driveTrain, LeftReefLineupSup,0.3)));
 
+    new Trigger(CoralPlaceTeleSupplier).whileTrue(new PathFindToReef(driveTrain, ()->RobotState.getInstance().deliveringLeft));
+      SmartDashboard.putData("autoDrive command", new PathFindToReef(driveTrain, ()->RobotState.getInstance().deliveringLeft));
     new Trigger(SlowFrontSup).whileTrue(approachReef);
     InstantCommand setOffsets = new InstantCommand(driveTrain::setEncoderOffsets) {
       public boolean runsWhenDisabled() {

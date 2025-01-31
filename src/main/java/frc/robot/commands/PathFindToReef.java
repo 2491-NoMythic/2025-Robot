@@ -33,7 +33,7 @@ public class PathFindToReef extends Command {
   public PathFindToReef(DrivetrainSubsystem drivetrain, BooleanSupplier LeftSup) {
     this.drivetrain = drivetrain;
     this.LeftSupplier = LeftSup;
-    addRequirements(drivetrain);
+    addRequirements();
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -159,6 +159,7 @@ public class PathFindToReef extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return pathToReef.isFinished();
+    // return pathToReef.isFinished();
+    return false;
   }
 }
