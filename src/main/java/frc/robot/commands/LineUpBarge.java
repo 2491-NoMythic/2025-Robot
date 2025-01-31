@@ -34,6 +34,7 @@ public class LineUpBarge extends Command {
   public LineUpBarge(DrivetrainSubsystem driveTrain) {
     this.driveTrain = driveTrain;
     addRequirements(driveTrain);
+    chassisSpeeds = new ChassisSpeeds();
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
