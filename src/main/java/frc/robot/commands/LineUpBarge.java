@@ -18,8 +18,6 @@ import frc.robot.settings.Constants.FieldConstants;
 public class LineUpBarge extends Command {
   boolean isRed;
   DrivetrainSubsystem driveTrain;
-  double startY;
-  double startX;
   double distanceX;
   double desiredX;
   double distanceY;
@@ -50,15 +48,15 @@ public class LineUpBarge extends Command {
       desiredX = FieldConstants.BLUE_BARGE_SHOOT_X;
       desiredY = FieldConstants.BLUE_BARGE_SHOOT_Y;
     }
-    startX = driveTrain.getPose().getX();
-    startY = driveTrain.getPose().getY();
-    distanceX = desiredX - startX;
-    distanceY = desiredY - startY;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() { 
+  public void execute() {
+    currentX = driveTrain.getPose().getX();
+    currentY = driveTrain.getPose().getY();
+    distanceX = desiredX - currentX;
+    distanceY = desiredY - currentY;
     if(distanceX < distanceY) {
       speedY = distanceX/distanceY;
       speedX = 1 - speedY;
@@ -69,8 +67,6 @@ public class LineUpBarge extends Command {
     speedX *= 5;
     speedY *= 5;
     driveTrain.moveTowardsRotationTarget(speedX, speedY);
-    currentX = driveTrain.getPose().getX();
-    currentY = driveTrain.getPose().getY();
   }
 
   // Called once the command ends or is interrupted.
