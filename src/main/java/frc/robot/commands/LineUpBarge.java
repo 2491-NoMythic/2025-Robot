@@ -54,8 +54,8 @@ public class LineUpBarge extends Command {
     }
     startX = driveTrain.getPose().getX();
     startY = driveTrain.getPose().getY();
-    distanceX = desiredX + startX;
-    distanceY = desiredY + startY;
+    distanceX = desiredX - startX;
+    distanceY = desiredY - startY;
     
     if(distanceX < distanceY) {
       speedY = distanceX/distanceY;
