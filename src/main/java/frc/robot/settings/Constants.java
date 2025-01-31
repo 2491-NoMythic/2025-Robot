@@ -390,6 +390,7 @@ public final class Constants {
     public static final double REEF_LEVEL_2_MILLIMETERS = 2491;
     public static final double REEF_LEVEL_3_MILLIMETERS = 2491;
     public static final double REEF_LEVEL_4_MILLIMETERS = 2491;
+    public static final double BARGE_SHOOT_MILLIMETERS = 2491;
     public static final double ELEVATOR_MILLIMETERS_TO_ROTATIONS = 2491;
   }
 
