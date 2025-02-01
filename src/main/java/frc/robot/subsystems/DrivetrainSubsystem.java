@@ -4,6 +4,9 @@
 
 package frc.robot.subsystems;
 
+import static frc.robot.settings.Constants.DriveConstants.AUTO_AIM_ROBOT_kD;
+import static frc.robot.settings.Constants.DriveConstants.AUTO_AIM_ROBOT_kI;
+import static frc.robot.settings.Constants.DriveConstants.AUTO_AIM_ROBOT_kP;
 import static frc.robot.settings.Constants.DriveConstants.BL_DRIVE_MOTOR_ID;
 import static frc.robot.settings.Constants.DriveConstants.BL_STEER_ENCODER_ID;
 import static frc.robot.settings.Constants.DriveConstants.BL_STEER_MOTOR_ID;
@@ -19,6 +22,7 @@ import static frc.robot.settings.Constants.DriveConstants.FL_STEER_MOTOR_ID;
 import static frc.robot.settings.Constants.DriveConstants.FR_DRIVE_MOTOR_ID;
 import static frc.robot.settings.Constants.DriveConstants.FR_STEER_ENCODER_ID;
 import static frc.robot.settings.Constants.DriveConstants.FR_STEER_MOTOR_ID;
+import static frc.robot.settings.Constants.DriveConstants.ROBOT_ANGLE_TOLERANCE;
 import static frc.robot.settings.Constants.Vision.APRILTAG_LIMELIGHTA_NAME;
 import static frc.robot.settings.Constants.Vision.APRILTAG_LIMELIGHTB_NAME;
 import static frc.robot.settings.Constants.Vision.APRILTAG_LIMELIGHTC_NAME;
@@ -30,6 +34,7 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -50,6 +55,8 @@ import frc.robot.helpers.MotorLogger;
 import frc.robot.helpers.MythicalMath;
 import frc.robot.settings.ReefSideEnum;
 import frc.robot.settings.Constants.DriveConstants;
+import frc.robot.settings.Constants.Vision;
+
 import java.util.Arrays;
 import java.util.Collections;
 // import java.util.logging.Logger;
@@ -83,8 +90,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
   Limelight limelight;
   MotorLogger[] motorLoggers;
   PIDController speedController;
+  PIDController rotationSpeedController;
 
   public DrivetrainSubsystem() {
+    rotationSpeedController = new PIDController(AUTO_AIM_ROBOT_kP, AUTO_AIM_ROBOT_kI, AUTO_AIM_ROBOT_kD);
+    rotationSpeedController.setTolerance(ROBOT_ANGLE_TOLERANCE);
+    rotationSpeedController.enableContinuousInput(-180, 180);
     this.limelight = Limelight.getInstance();
     Preferences.initDouble("FL offset", 0);
     Preferences.initDouble("FR offset", 0);
@@ -404,7 +415,22 @@ public class DrivetrainSubsystem extends SubsystemBase {
           "No valid limelight estimate to reset from. (Drivetrain.forceUpdateOdometryWithVision)");
     }
   }
-
+  /** Prepares to rotate the robot to a specific angle
+   * @param desiredAngle the angle to rotate the robot to (in degrees relative to the field)
+   */
+  public void setRotationTarget(double desiredAngle) {
+    rotationSpeedController.setSetpoint(desiredAngle);
+  }
+  /** Applies power to the motors to rotate the robot to the angle set by 
+   * {@link #setRotationTarget(double) setRotationTarget}
+   */
+  public void moveTowardsRotationTarget(double vx, double vy) {
+    drive(new ChassisSpeeds(vx, vy, rotationSpeedController.calculate(getPose().getRotation().getDegrees()
+    )));
+  }
+  public boolean isAtRotationTarget() {
+    return rotationSpeedController.atSetpoint();
+  }
   /*
    * Logs important data for the drivetrain
    */
@@ -471,6 +497,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
   //This is the things the subsystem does periodically. 
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("pose2d X", getPose().getX());
+    SmartDashboard.putNumber("pose2d Y", getPose().getY());
     updateOdometry();
     // sets the robot orientation for each of the limelights, which is required for the
     if (Preferences.getBoolean("Use Limelight", false)) {
@@ -492,4 +520,5 @@ public class DrivetrainSubsystem extends SubsystemBase {
     logDrivetrainData();
     updateClosestReefSide();
   }
+
 }

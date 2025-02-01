@@ -63,4 +63,13 @@ public class MythicalMath {
   public static double distanceBetweenTwoPoses(Pose2d pose1, Pose2d pose2) {
     return pose1.getTranslation().getDistance(pose2.getTranslation());
   }
+  public static Double getSmallest(Double a, Double b, Double c) {
+    // Replace null values with Double.MAX_VALUE (a very large number)
+    double valA = (a != null) ? a : Double.MAX_VALUE;
+    double valB = (b != null) ? b : Double.MAX_VALUE;
+    double valC = (c != null) ? c : Double.MAX_VALUE;
+
+    // Find the smallest value
+    return Math.min(valA, Math.min(valB, valC));
+}
 }

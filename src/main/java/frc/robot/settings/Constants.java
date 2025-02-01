@@ -422,12 +422,14 @@ public final class Constants {
     public static final double REEF_LEVEL_2_MILLIMETERS = 2491;
     public static final double REEF_LEVEL_3_MILLIMETERS = 2491;
     public static final double REEF_LEVEL_4_MILLIMETERS = 2491;
+    public static final double BARGE_SHOOT_MILLIMETERS = 2491;
     public static final double ELEVATOR_MILLIMETERS_TO_ROTATIONS = 2491;
+    public static final double ELEVATOR_THRESHOLD = 2491;
   }
 
   public final class ClimberConstants{
     public static final int CLIMBER_MOTOR_1_ID = 2491;
-    public static final int CLIMBER_MOTOR_2_ID = 2491;
+    public static final int CLIMBER_SERVO_ID = 2491;
 
     public static final TalonFXConfiguration ClimberMotorConfig = new TalonFXConfiguration()
     .withSlot0(new Slot0Configs()
@@ -462,5 +464,21 @@ public final class Constants {
     public static final int FUNNEL_ROTATOR_SUPPLY_CURRENT_LIMIT = 2491;
     public static final double FUNNEL_ROTATOR_GEAR_RATIO = 2491;
   }
+
+  public final class AutoAlignToReefConstants {
+    public static final double AUTO_AIM_ROBOT_kP = 0.125;
+    public static final double AUTO_AIM_ROBOT_kI = 0.0;
+    public static final double AUTO_AIM_ROBOT_kD = 0.0;
+    public static final double ROBOT_ANGLE_TOLERANCE = 0.5;
+  }
+  public final class FieldConstants{
+    //used for the autoAngleAtReefCommand
+    public static final int REEF_ANGLE_0 = 0;
+    public static final int REEF_ANGLE_1 = 60;
+    public static final int REEF_ANGLE_2 = 120;
+    public static final int REEF_ANGLE_3 = 180;
+    public static final double BLUE_BARGE_SHOOT_X = 2491; //TODO: change these values
+    public static final double RED_BARGE_SHOOT_X = 2491; //TODO: change these values
+   }
 }
 

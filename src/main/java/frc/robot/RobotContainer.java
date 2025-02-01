@@ -6,8 +6,8 @@ package frc.robot;
 
 import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.ALGAE_INTAKE_SPEED;
 import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.ALGAE_SHOOT_SPEED;
+import static frc.robot.settings.Constants.CoralEndeffectorConstants.CORAL_ENDEFFECTOR_SPEED;
 import static frc.robot.settings.Constants.DriveConstants.*;
-import static frc.robot.settings.Constants.SensorConstants.*;
 import static frc.robot.settings.Constants.PS4Driver.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -35,6 +35,10 @@ import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.AutoAngleAtReef;
+import frc.robot.commands.ClimberCommand;
+import frc.robot.commands.DepositAlgae;
+import frc.robot.settings.Constants.Vision;
 import frc.robot.commands.AlgaeEndeffectorCommand;
 import frc.robot.commands.ApproachReef;
 import frc.robot.commands.AlgaeIntakeCommand;
@@ -44,6 +48,7 @@ import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.LineUp;
 import frc.robot.commands.MoveMeters;
 import frc.robot.commands.PlaceCoralNoPath;
+import frc.robot.commands.ShootInBarge;
 import frc.robot.commands.WaitCommand;
 import frc.robot.subsystems.DistanceSensors;
 import frc.robot.commands.NamedCommands.CoralIntake;
@@ -58,7 +63,7 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelIntake;
 import frc.robot.subsystems.FunnelRotator;
-import frc.robot.subsystems.CimberSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.RobotState;
@@ -85,10 +90,8 @@ public class RobotContainer {
   // preferences are information saved on the Rio. They are initialized once, then
   // gotten every time
   // we run the code.
-  private final boolean useDetectorLimelight = Preferences.getBoolean("Detector Limelight", true);
   private final boolean useXboxController = Preferences.getBoolean("Xbox Controller", true);
-  private final boolean coralIntakeExists = Preferences.getBoolean("CoralIntake", true);
-  private final boolean algaeIntakeExists = Preferences.getBoolean("AlgaeIntake", true);
+  
   private final boolean algaeEndeffectorExists = Preferences.getBoolean("AlgaeEndDefector", true);
   private final boolean coralEndeffectorExists = Preferences.getBoolean("CoralEndDefector", true);
   private final boolean climberExists = Preferences.getBoolean("Climber", true);
@@ -96,11 +99,12 @@ public class RobotContainer {
   private final boolean funnelIntakeExists = Preferences.getBoolean("FunnelIntake", true);
   private final boolean funnelRotatorExists = Preferences.getBoolean("FunnelRotator", true);
   private final boolean DrivetrainExists = Preferences.getBoolean("DrivetrainExists", true);
-  private final boolean distanceSensorsExist = Preferences.getBoolean("DistanceSensors Exist", true);
+  private final boolean distanceSensorsExist = Preferences.getBoolean("DistanceSensorsExist", true);
   private final boolean lightsExist = Preferences.getBoolean("Lights Exist", true);
+  private final boolean LimelightExists = Preferences.getBoolean("Limelight Exists", true);
+  private final boolean SensorsExist = Preferences.getBoolean("Sensors Exist", true);
 
   private DrivetrainSubsystem driveTrain;
-  private ElevatorCommand elevatorDefaultCommand;
   private Drive defaultDriveCommand;
   private Lights lights;
   private XboxController driverControllerXbox;
@@ -113,33 +117,44 @@ public class RobotContainer {
   private DistanceSensors distanceSensors;
   private CoralEndeffectorSubsystem coralEndDefector;
   private AlgaeEndeffectorSubsystem algaeEndDefector;
-  private CimberSubsystem climber;
+  private ClimberSubsystem climber;
   private ElevatorSubsystem elevator;
+//Commands
+  AutoAngleAtReef autoAngleAtReef;
+//Suppliers
+  BooleanSupplier AutoAngleAtReefSup;
   private CoralIntake coralIntake;
   private FunnelIntake funnelIntake;
   private FunnelRotator funnelRotator;
   private DeliverCoral deliverCoral;
   private ApproachReef approachReef;
 
-  RobotState robotState;
   Alliance currentAlliance;
   BooleanSupplier ZeroGyroSup;
-  BooleanSupplier LeftReefLineupSup;
-  BooleanSupplier RightReefLineupSup;
+  BooleanSupplier DvLeftReefLineupSup;
+  BooleanSupplier DvRightReefLineupSup;
   BooleanSupplier SlowFrontSup;
   BooleanSupplier AlgaeIntakeSup;
   BooleanSupplier AlgaeShooterSup;
+  BooleanSupplier AlgaeDepositSup;
+  BooleanSupplier AlgaeBargeSup;
   BooleanSupplier ReefHeight1Supplier;
   BooleanSupplier ReefHeight2Supplier;
   BooleanSupplier ReefHeight3Supplier;
   BooleanSupplier ReefHeight4Supplier;
   BooleanSupplier CoralPlaceTeleSupplier;
+  BooleanSupplier BargeHeightSupplier;
   BooleanSupplier CoralIntakeHeightSupplier;
+  BooleanSupplier ClimbCommandSupplier;
   DoubleSupplier ControllerYAxisSupplier;
   DoubleSupplier ControllerXAxisSupplier;
   DoubleSupplier ControllerZAxisSupplier;
   Command pathFindToReef;
 
+  BooleanSupplier OpLeftReefLineupSup;
+  BooleanSupplier OpRightReefLineupSup;
+  BooleanSupplier ForceEjectCoral;
+  BooleanSupplier ForceElevator;
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
   /**
@@ -149,12 +164,8 @@ public class RobotContainer {
     // preferences are initialized IF they don't already exist on the Rio
     Preferences.initBoolean("Lights Exist", true);
     Preferences.initBoolean("CompBot", true);
-    Preferences.initBoolean("Detector Limelight", false);
     Preferences.initBoolean("Use Limelight", true);
-    Preferences.initBoolean("Use 2 Limelights", true);
     Preferences.initBoolean("Xbox Controller", true);
-    Preferences.initBoolean("CoralIntake", false);
-    Preferences.initBoolean("AlgaeIntake", false);
     Preferences.initBoolean("Elevator", false);
     Preferences.initBoolean("CoralEndDefector", false);
     Preferences.initBoolean("AlgaeEndDefector", false);
@@ -163,7 +174,9 @@ public class RobotContainer {
     Preferences.initBoolean("Climber", false);
     Preferences.initBoolean("DrivetrainExists", false);
     Preferences.initBoolean("AntiTipActive", true);
-    Preferences.initBoolean("DistanceSensors Exist", true);
+    Preferences.initBoolean("DistanceSensorsExist", true);
+    Preferences.initBoolean("LimelightExists", false);
+    Preferences.initBoolean("Sensors Exist", false);
 
     DataLogManager.start(); // Start logging
     DriverStation.startDataLog(DataLogManager.getLog()); // Joystick Data logging
@@ -173,53 +186,88 @@ public class RobotContainer {
      * define a supplier as it in both conditions of this if()else{} code.
      */
     if (useXboxController) {
+      //Controller IDs
       driverControllerXbox = new XboxController(DRIVE_CONTROLLER_ID);
       operatorControllerXbox = new XboxController(OPERATOR_CONTROLLER_ID);
-
-      ControllerXAxisSupplier = () -> modifyAxis(-driverControllerXbox.getRawAxis(1), DEADBAND_NORMAL);
-      ControllerYAxisSupplier = () -> modifyAxis(-driverControllerXbox.getRawAxis(0), DEADBAND_NORMAL);
+      
+      //Drive controls
+      ControllerXAxisSupplier = () -> modifyAxis(-driverControllerXbox.getRawAxis(X_AXIS), DEADBAND_NORMAL);
+      ControllerYAxisSupplier = () -> modifyAxis(-driverControllerXbox.getRawAxis(Y_AXIS), DEADBAND_NORMAL);
       ControllerZAxisSupplier = () -> modifyAxis(-driverControllerXbox.getRawAxis(XBOX_Z_AXIS), DEADBAND_NORMAL);
       
       ZeroGyroSup = driverControllerXbox::getStartButton;
-      LeftReefLineupSup = driverControllerXbox::getLeftBumperButton;
-      RightReefLineupSup =  driverControllerXbox::getRightBumperButton;
-      SlowFrontSup = ()-> driverControllerXbox.getRightTriggerAxis() > 0.1;
-      AlgaeIntakeSup = driverControllerXbox::getAButton; //TODO change to actual
-      AlgaeShooterSup = driverControllerXbox::getXButton;
-      CoralPlaceTeleSupplier = driverControllerXbox::getYButton;
 
+      //Automatic controls
+      AutoAngleAtReefSup = ()->driverControllerXbox.getRightTriggerAxis()>0.1;
+      DvLeftReefLineupSup = driverControllerXbox::getLeftBumperButton;
+      DvRightReefLineupSup =  driverControllerXbox::getRightBumperButton;
+      SlowFrontSup = ()-> driverControllerXbox.getRightTriggerAxis() > 0.1;
+      AlgaeDepositSup = driverControllerXbox::getBButton;
+      AlgaeBargeSup = ()-> driverControllerXbox.getPOV() == 180;
+      CoralPlaceTeleSupplier = ()-> driverControllerXbox.getPOV() == 0;
+
+      //Manual driver controls
+      AlgaeIntakeSup = driverControllerXbox::getAButton;
+      AlgaeShooterSup = driverControllerXbox::getXButton;
+
+      //operator automatic controls
+      OpLeftReefLineupSup = operatorControllerXbox::getLeftBumperButton;
+      OpRightReefLineupSup = operatorControllerXbox::getRightBumperButton;
       ReefHeight1Supplier = ()->operatorControllerXbox.getPOV() == 0;
       ReefHeight2Supplier = ()->operatorControllerXbox.getPOV() == 90;
       ReefHeight3Supplier = ()->operatorControllerXbox.getPOV() == 180;
       ReefHeight4Supplier = ()->operatorControllerXbox.getPOV() == 270;
       CoralIntakeHeightSupplier = ()->operatorControllerXbox.getStartButton();
-      
+      BargeHeightSupplier = operatorControllerXbox::getXButton;
+
+      //operator manual controls, should not be used unless other controls not working
+      ForceEjectCoral = ()-> operatorControllerXbox.getRightTriggerAxis() > 0.1;
+      ForceElevator = ()-> operatorControllerXbox.getRightTriggerAxis() > 0.1;
+      ClimbCommandSupplier = ()->operatorControllerXbox.getYButton();
     } else {
+      //Controller IDs
       driverControllerPS4 = new PS4Controller(DRIVE_CONTROLLER_ID);
       operatorControllerPS4 = new PS4Controller(OPERATOR_CONTROLLER_ID);
 
+      //Drive controls
       ControllerXAxisSupplier = () -> modifyAxis(-driverControllerPS4.getRawAxis(X_AXIS), DEADBAND_NORMAL);
       ControllerYAxisSupplier = () -> modifyAxis(-driverControllerPS4.getRawAxis(Y_AXIS), DEADBAND_NORMAL);
       ControllerZAxisSupplier = () -> modifyAxis(-driverControllerPS4.getRawAxis(PS4_Z_AXIS), DEADBAND_NORMAL);
 
-      LeftReefLineupSup = operatorControllerPS4::getL1Button;
-      RightReefLineupSup = operatorControllerPS4::getR1Button;
-      SlowFrontSup = ()->driverControllerPS4.getR2Axis()>-0.5;
-      AlgaeIntakeSup = driverControllerPS4::getCrossButton; //TODO change to actual
-      AlgaeShooterSup = driverControllerPS4::getSquareButton;
-      CoralPlaceTeleSupplier = driverControllerPS4::getTriangleButton;
-
       ZeroGyroSup = driverControllerPS4::getPSButton;
 
+      //Automatic driver controls
+      AutoAngleAtReefSup = ()->driverControllerPS4.getR2Button();
+      DvLeftReefLineupSup = driverControllerPS4::getL1Button;
+      DvRightReefLineupSup = driverControllerPS4::getR1Button;
+      SlowFrontSup = ()->driverControllerPS4.getL2Axis()>-0.5;
+      AlgaeIntakeSup = driverControllerPS4::getCrossButton;
+      AlgaeBargeSup = ()-> driverControllerPS4.getPOV() == 180;
+      CoralPlaceTeleSupplier = ()-> driverControllerPS4.getPOV() == 0;
+      AutoAngleAtReefSup = driverControllerPS4::getR2Button;
+
+      //manual driver controls
+      AlgaeShooterSup = driverControllerPS4::getSquareButton;
+      AlgaeDepositSup = driverControllerPS4::getCircleButton;
+
+      //automatic operator controls
+      OpLeftReefLineupSup = operatorControllerPS4::getL1Button;
+      OpRightReefLineupSup = operatorControllerPS4::getR1Button;
       ReefHeight1Supplier = ()->operatorControllerPS4.getPOV() == 0;
       ReefHeight2Supplier = ()->operatorControllerPS4.getPOV() == 90;
       ReefHeight3Supplier = ()->operatorControllerPS4.getPOV() == 180;
       ReefHeight4Supplier = ()->operatorControllerPS4.getPOV() == 270;
       CoralIntakeHeightSupplier = ()->operatorControllerPS4.getOptionsButton();
+      BargeHeightSupplier = operatorControllerPS4::getTriangleButton;
+      ClimbCommandSupplier = ()->operatorControllerPS4.getTriangleButton();
+
+      //manual operator controls, should not be used unless other controls do not work
+      ForceEjectCoral = operatorControllerPS4::getR2Button;
+      ForceElevator = operatorControllerPS4::getL2Button;
     }
 
-    limelightInit();
-    sensorInit();     
+    if (LimelightExists) {limelightInit();}
+    if (SensorsExist) {sensorInit();}   
     if (DrivetrainExists) {
       driveTrainInst();
       configureDriveTrain();
@@ -249,12 +297,19 @@ public class RobotContainer {
         ControllerZAxisSupplier);
     driveTrain.setDefaultCommand(defaultDriveCommand);
     
-    approachReef = new ApproachReef(
+    if(SensorsExist) {
+      approachReef = new ApproachReef(
       distanceSensors,
       driveTrain,
       ControllerXAxisSupplier,
       ControllerYAxisSupplier,
       ControllerZAxisSupplier);
+    }
+    autoAngleAtReef = new AutoAngleAtReef(
+      driveTrain, 
+      ControllerZAxisSupplier,
+      ControllerXAxisSupplier,
+      ControllerYAxisSupplier);
   }
 
   private void autoInit() {
@@ -285,12 +340,11 @@ public class RobotContainer {
   }
 
   private void climberInst() {
-    climber = new CimberSubsystem();
+    climber = new ClimberSubsystem();
   }
 
   private void elevatorInst() {
     elevator = new ElevatorSubsystem();
-    elevatorDefaultCommand = new ElevatorCommand(elevator,()-> ElevatorEnums.HumanPlayer);
   }
 
   private void funnelIntakeInst() {
@@ -316,20 +370,23 @@ public class RobotContainer {
    */
   private void configureBindings() {
 //all the triggers that change RobotState
-    new Trigger(LeftReefLineupSup).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringLeft = true));
-    new Trigger(RightReefLineupSup).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringLeft = false));
     new Trigger(ReefHeight1Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef1));
     new Trigger(ReefHeight2Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef2));
     new Trigger(ReefHeight3Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef3));
     new Trigger(ReefHeight4Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef4));
-
+    new Trigger(CoralIntakeHeightSupplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.HumanPlayer));
+    new Trigger(BargeHeightSupplier).onTrue(new InstantCommand(()-> RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Barge));
+    new Trigger(OpLeftReefLineupSup).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringLeft = true));
+    new Trigger(OpRightReefLineupSup).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringLeft = false));
+    
     if (DrivetrainExists){
     SmartDashboard.putData("drivetrain", driveTrain);
-
     new Trigger(ZeroGyroSup).onTrue(new InstantCommand(driveTrain::zeroGyroscope));
     if(!(elevatorExists&&coralEndeffectorExists&&distanceSensorsExist)) {
       new Trigger(CoralPlaceTeleSupplier).whileTrue(pathFindToReef);
     }
+    new Trigger(AutoAngleAtReefSup).whileTrue(autoAngleAtReef);
+    SmartDashboard.putData(autoAngleAtReef);
     
     new Trigger(SlowFrontSup).whileTrue(approachReef);
     InstantCommand setOffsets = new InstantCommand(driveTrain::setEncoderOffsets) {
@@ -337,19 +394,25 @@ public class RobotContainer {
         return true;
       };
     };
-        
-        SmartDashboard.putData("set offsets", setOffsets);
+  
+    SmartDashboard.putData("set offsets", setOffsets);
     SmartDashboard.putData(new InstantCommand(driveTrain::forceUpdateOdometryWithVision));
-    SmartDashboard.putNumber("speedOut", ALGAE_SHOOT_SPEED);
-    SmartDashboard.putNumber("speedIn", ALGAE_INTAKE_SPEED);
-
-
+    }
+    
+    if (elevatorExists){
+      new Trigger(ReefHeight1Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef1));
+      new Trigger(ReefHeight2Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef2));
+      new Trigger(ReefHeight3Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef3));
+      new Trigger(ReefHeight4Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef4));
+      new Trigger(CoralIntakeHeightSupplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.HumanPlayer));
     }
     if (algaeEndeffectorExists) {
       new Trigger(AlgaeIntakeSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector, ALGAE_INTAKE_SPEED));
       new Trigger(AlgaeShooterSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector, ALGAE_SHOOT_SPEED));
     }
-
+    if (climberExists){
+      new Trigger(ClimbCommandSupplier).whileTrue(new ClimberCommand(climber));
+    }
     if(elevatorExists && coralEndeffectorExists && DrivetrainExists && distanceSensorsExist){
       new Trigger(CoralPlaceTeleSupplier).whileTrue(
           new SequentialCommandGroup(
@@ -366,11 +429,32 @@ public class RobotContainer {
               ()->RobotState.getInstance().deliveringLeft))
           );
     }
+
+    if(elevatorExists && algaeEndeffectorExists){
+      new Trigger(AlgaeDepositSup).whileTrue(new DepositAlgae(algaeEndDefector,elevator, ALGAE_SHOOT_SPEED));
+
+    }
+
+    if(elevatorExists){
+      new Trigger(ForceElevator).whileTrue(new InstantCommand(()-> elevator.setElevatorPosition(RobotState.getInstance().deliveringCoralHeight)));
+    }
+
+    if(coralEndeffectorExists){
+      new Trigger(ForceEjectCoral).whileTrue(new InstantCommand(()->coralEndDefector.runCoralEndEffector(CORAL_ENDEFFECTOR_SPEED)));
+    }
+    if (useXboxController) {
+      new Trigger(AlgaeBargeSup)
+          .whileTrue(new ShootInBarge(driveTrain, elevator, algaeEndDefector, () -> driverControllerXbox.getLeftY()));
+    } else {
+      new Trigger(AlgaeBargeSup)
+          .whileTrue(new ShootInBarge(driveTrain, elevator, algaeEndDefector, () -> driverControllerPS4.getLeftY()));
+    }}
     /*
      * bindings:
      * PS4: zero the gyroscope
+     * R2/RightTrigger: auto angle at reef
      */
-  }
+
 
   // Schedule `exampleMethodCommand` when the Xbox controller's B button is
   // pressed,
@@ -567,6 +651,9 @@ public class RobotContainer {
         currentAlliance == null ? "null" : currentAlliance == Alliance.Red ? "Red" : "Blue");
     if (Preferences.getBoolean("Use Limelight", false)) {
       limelight.updateLoggingWithPoses();
+      SmartDashboard.putBoolean("LIMELIGHT/isConnectedA", Limelight.getInstance().isConnected(Vision.APRILTAG_LIMELIGHTA_NAME));
+      SmartDashboard.putBoolean("LIMELIGHT/isConnectedB", Limelight.getInstance().isConnected(Vision.APRILTAG_LIMELIGHTB_NAME));
+      SmartDashboard.putBoolean("LIMELIGHT/isConnectedC", Limelight.getInstance().isConnected(Vision.APRILTAG_LIMELIGHTC_NAME));
     }
     SmartDashboard.putBoolean("REEFLINEUP/deliveringLeft", RobotState.getInstance().deliveringLeft);
   }
