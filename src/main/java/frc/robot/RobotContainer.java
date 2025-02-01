@@ -412,7 +412,7 @@ public class RobotContainer {
      * PS4: zero the gyroscope
      * R2/RightTrigger: auto angle at reef
      */
-  }
+
 
   // Schedule `exampleMethodCommand` when the Xbox controller's B button is
   // pressed,
