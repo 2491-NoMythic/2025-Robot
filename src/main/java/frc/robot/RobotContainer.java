@@ -14,7 +14,8 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.FileVersionException;
 import com.playingwithfusion.TimeOfFlight;
 import com.playingwithfusion.jni.TimeOfFlightJNI;
 
@@ -65,6 +66,8 @@ import frc.robot.subsystems.RobotState;
 import java.io.IOException;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
+
+import org.json.simple.parser.ParseException;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -177,7 +180,7 @@ public class RobotContainer {
 
       ControllerSidewaysAxisSupplier = () -> modifyAxis(-driverControllerXbox.getRawAxis(X_AXIS), DEADBAND_NORMAL);
       ControllerForwardsAxisSupplier = () -> modifyAxis(-driverControllerXbox.getRawAxis(Y_AXIS), DEADBAND_NORMAL);
-      ControllerZAxisSupplier = () -> modifyAxis(-driverControllerXbox.getRawAxis(Z_AXIS), DEADBAND_NORMAL);
+      ControllerZAxisSupplier = () -> modifyAxis(-driverControllerXbox.getRawAxis(4), DEADBAND_NORMAL);
       
       ZeroGyroSup = driverControllerXbox::getStartButton;
       AutoAngleAtReefSup = ()->driverControllerXbox.getRightTriggerAxis()>0.1;
@@ -327,6 +330,12 @@ public class RobotContainer {
     if (DrivetrainExists){
     SmartDashboard.putData("drivetrain", driveTrain);
 
+    try {
+      new Trigger(CoralPlaceTeleSupplier).whileTrue(AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("TestingPath"), DEFAULT_PATH_CONSTRAINTS));
+    } catch (FileVersionException | IOException | ParseException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
     new Trigger(ZeroGyroSup).onTrue(new InstantCommand(driveTrain::zeroGyroscope));
     SmartDashboard.putData("zero gyro", new InstantCommand(driveTrain::zeroGyroscope));
  
