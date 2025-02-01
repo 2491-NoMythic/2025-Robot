@@ -94,7 +94,6 @@ public class RobotContainer {
   private final boolean SensorsExist = Preferences.getBoolean("Sensors Exist", true);
 
   private DrivetrainSubsystem driveTrain;
-  private ElevatorCommand elevatorDefaultCommand;
   private Drive defaultDriveCommand;
   private Lights lights;
   private XboxController driverControllerXbox;
@@ -304,7 +303,6 @@ public class RobotContainer {
 
   private void elevatorInst() {
     elevator = new ElevatorSubsystem();
-    elevatorDefaultCommand = new ElevatorCommand(elevator,()-> ElevatorEnums.HumanPlayer);
   }
 
   private void funnelIntakeInst() {
