@@ -302,11 +302,17 @@ public final class Constants {
      */
     public static final int Y_AXIS = 1;
     /**
+     * Right stick Y-axis for xbox controllers.
+     *
+     * <p>Left = -1 || Right = 1
+     */
+    public static final int XBOX_Z_AXIS = 4;
+    /**
      * Right stick Z-axis.
      *
      * <p>Left = -1 || Right = 1
      */
-    public static final int Z_AXIS = 2;
+    public static final int PS4_Z_AXIS = 2;
     /**
      * Right stick Z-rotate.
      *

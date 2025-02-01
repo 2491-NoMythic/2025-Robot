@@ -178,7 +178,7 @@ public class RobotContainer {
 
       ControllerXAxisSupplier = () -> modifyAxis(-driverControllerXbox.getRawAxis(X_AXIS), DEADBAND_NORMAL);
       ControllerYAxisSupplier = () -> modifyAxis(-driverControllerXbox.getRawAxis(Y_AXIS), DEADBAND_NORMAL);
-      ControllerZAxisSupplier = () -> modifyAxis(-driverControllerXbox.getRawAxis(Z_AXIS), DEADBAND_NORMAL);
+      ControllerZAxisSupplier = () -> modifyAxis(-driverControllerXbox.getRawAxis(XBOX_Z_AXIS), DEADBAND_NORMAL);
       
       ZeroGyroSup = driverControllerXbox::getStartButton;
       LeftReefLineupSup = driverControllerXbox::getLeftBumperButton;
@@ -200,7 +200,7 @@ public class RobotContainer {
 
       ControllerXAxisSupplier = () -> modifyAxis(-driverControllerPS4.getRawAxis(X_AXIS), DEADBAND_NORMAL);
       ControllerYAxisSupplier = () -> modifyAxis(-driverControllerPS4.getRawAxis(Y_AXIS), DEADBAND_NORMAL);
-      ControllerZAxisSupplier = () -> modifyAxis(-driverControllerPS4.getRawAxis(Z_AXIS), DEADBAND_NORMAL);
+      ControllerZAxisSupplier = () -> modifyAxis(-driverControllerPS4.getRawAxis(PS4_Z_AXIS), DEADBAND_NORMAL);
 
       LeftReefLineupSup = operatorControllerPS4::getL1Button;
       RightReefLineupSup = operatorControllerPS4::getR1Button;
@@ -219,12 +219,12 @@ public class RobotContainer {
     }
 
     limelightInit();
+    sensorInit();     
     if (DrivetrainExists) {
+      commandSelectorInst();
       driveTrainInst();
       configureDriveTrain();
     }
-    commandSelectorInst();
-    sensorInit();     
     if (lightsExist) {lightsInst();}
     
     if (coralEndeffectorExists) {coralEndDefectorInst();}
