@@ -276,6 +276,8 @@ public class RobotContainer {
 
   private void algaeEndDefectorInst() {
     algaeEndDefector = new AlgaeEndeffectorSubsystem();
+    System.out.println("Algae");
+
   }
 
   private void climberInst() {

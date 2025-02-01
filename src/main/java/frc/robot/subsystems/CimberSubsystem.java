@@ -17,23 +17,23 @@ public class CimberSubsystem extends SubsystemBase {
   Servo climbServo;
   /** Creates a new CimberSubsystem. */
   public CimberSubsystem() {
-    climberMotor1 = new TalonFX(CLIMBER_MOTOR_1_ID);
-    climberMotor2 = new TalonFX(CLIMBER_MOTOR_2_ID);
+    //climberMotor1 = new TalonFX(CLIMBER_MOTOR_1_ID);
+    //climberMotor2 = new TalonFX(CLIMBER_MOTOR_2_ID);
     climbServo = new Servo(CLIMBER_MOTOR_3_ID);
-    climberMotor1.getConfigurator().apply(ClimberMotorConfig);
-    climberMotor2.getConfigurator().apply(ClimberMotorConfig);
-    climbServo.setAngle(0-180);
+    //climberMotor1.getConfigurator().apply(ClimberMotorConfig);
+    //climberMotor2.getConfigurator().apply(ClimberMotorConfig);
+    climbServo.setAngle(0);
   }
 
   public void runClimber(double speed){
-    climberMotor1.set(speed);
-    climberMotor2.set(speed);
+    //climberMotor1.set(speed);
+    //climberMotor2.set(speed);
   }
   public void climbServo(double angle){
     climbServo.setAngle(angle);
   }
   public void stopClimber(){
-    climberMotor1.set(0);
+    climbServo.set(0);
   }
 
   @Override

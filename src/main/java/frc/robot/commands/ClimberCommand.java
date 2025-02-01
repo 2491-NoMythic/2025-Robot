@@ -26,6 +26,7 @@ public class ClimberCommand extends Command {
   @Override
   public void execute() {
     climber.climbServo(100);
+    System.out.print("Going to 100");
   }
 
   // Called once the command ends or is interrupted.
