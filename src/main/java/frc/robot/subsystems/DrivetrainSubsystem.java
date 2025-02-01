@@ -485,12 +485,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
     double distanceToBackLeft = MythicalMath.distanceBetweenTwoPoses(robotPose, backLeftPose);
 //finds the distance to a reef side that is the smallest, then sets robot state based on the distance that the minimum is equal to.
     double closestDistance = Math.min(distanceToFrontCenter, Math.min(distanceToFrontRight, Math.min(distanceToFrontLeft, Math.min(distanceToBackRight, Math.min(distanceToBackCenter, distanceToBackLeft)))));
-    if(closestDistance == distanceToFrontCenter) {RobotState.getInstance().closestReefSide = ReefSideEnum.frontCenter;}
-    if(closestDistance == distanceToFrontRight) {RobotState.getInstance().closestReefSide = ReefSideEnum.frontRight;}
-    if(closestDistance == distanceToFrontLeft) {RobotState.getInstance().closestReefSide = ReefSideEnum.frontLeft;}
-    if(closestDistance == distanceToBackCenter) {RobotState.getInstance().closestReefSide = ReefSideEnum.backCenter;}
-    if(closestDistance == distanceToBackRight) {RobotState.getInstance().closestReefSide = ReefSideEnum.backRight;}
-    if(closestDistance == distanceToBackLeft) {RobotState.getInstance().closestReefSide = ReefSideEnum.backLeft;}
+    if(closestDistance == distanceToFrontCenter) {RobotState.getInstance().closestReefSide = ReefSideEnum.middleClose;}
+    if(closestDistance == distanceToFrontRight) {RobotState.getInstance().closestReefSide = ReefSideEnum.processorClose;}
+    if(closestDistance == distanceToFrontLeft) {RobotState.getInstance().closestReefSide = ReefSideEnum.bargeClose;}
+    if(closestDistance == distanceToBackCenter) {RobotState.getInstance().closestReefSide = ReefSideEnum.middleFar;}
+    if(closestDistance == distanceToBackRight) {RobotState.getInstance().closestReefSide = ReefSideEnum.processorFar;}
+    if(closestDistance == distanceToBackLeft) {RobotState.getInstance().closestReefSide = ReefSideEnum.bargeFar;}
     SmartDashboard.putString("REEFLINEUP/closest side", RobotState.getInstance().closestReefSide.toString());
     SmartDashboard.putNumber("REEFLINEUP/closest side distance", closestDistance);
   }

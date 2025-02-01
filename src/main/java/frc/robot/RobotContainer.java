@@ -382,9 +382,6 @@ public class RobotContainer {
     if (DrivetrainExists){
     SmartDashboard.putData("drivetrain", driveTrain);
     new Trigger(ZeroGyroSup).onTrue(new InstantCommand(driveTrain::zeroGyroscope));
-    if(!(elevatorExists&&coralEndeffectorExists&&distanceSensorsExist)) {
-      new Trigger(CoralPlaceTeleSupplier).whileTrue(pathFindToReef);
-    }
     new Trigger(AutoAngleAtReefSup).whileTrue(autoAngleAtReef);
     SmartDashboard.putData(autoAngleAtReef);
     
@@ -413,7 +410,7 @@ public class RobotContainer {
     if (climberExists){
       new Trigger(ClimbCommandSupplier).whileTrue(new ClimberCommand(climber));
     }
-    if(elevatorExists && coralEndeffectorExists && DrivetrainExists && distanceSensorsExist){
+    if(elevatorExists && coralEndeffectorExists && distanceSensorsExist){
       new Trigger(CoralPlaceTeleSupplier).whileTrue(
           new SequentialCommandGroup(
             pathFindToReef,
@@ -428,6 +425,8 @@ public class RobotContainer {
               coralEndDefector,
               ()->RobotState.getInstance().deliveringLeft))
           );
+    } else {
+      new Trigger(CoralPlaceTeleSupplier).whileTrue(pathFindToReef);
     }
 
     if(elevatorExists && algaeEndeffectorExists){
@@ -589,37 +588,37 @@ public class RobotContainer {
   }
   public static CommandSelectorEnum selectCommand(BooleanSupplier LeftSupplier) {
     switch(RobotState.getInstance().closestReefSide) {
-      case backCenter:
+      case middleFar:
         if(LeftSupplier.getAsBoolean()) {
           return CommandSelectorEnum.BackCenterReefLeft;
         } else {
           return CommandSelectorEnum.BackCenterReefRight;
         }
-      case backRight:
+      case processorFar:
         if(LeftSupplier.getAsBoolean()) {
           return CommandSelectorEnum.BackRightReefLeft;
         } else {
           return CommandSelectorEnum.BackRightReefRight;
         }
-      case backLeft:
+      case bargeFar:
         if(LeftSupplier.getAsBoolean()) {
           return CommandSelectorEnum.BackLeftReefLeft;
         } else {
           return CommandSelectorEnum.BackLeftReefRight;
         }
-      case frontCenter:
+      case middleClose:
         if(LeftSupplier.getAsBoolean()) {
           return CommandSelectorEnum.FrontCenterReefLeft;
         } else { 
           return CommandSelectorEnum.FrontCenterReefRight;
         }
-      case frontRight:
+      case processorClose:
         if(LeftSupplier.getAsBoolean()) {
           return CommandSelectorEnum.FrontRightReefLeft;
         } else { 
           return CommandSelectorEnum.FrontRightReefRight;
         }
-      case frontLeft:
+      case bargeClose:
         if(LeftSupplier.getAsBoolean()) {
           return CommandSelectorEnum.FrontLeftReefLeft;
         } else { 

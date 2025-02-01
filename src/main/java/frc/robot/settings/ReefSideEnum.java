@@ -9,11 +9,11 @@ package frc.robot.settings;
  * being the sides closest to the alliance wall, and back being the sides further from the alliance wall.
  * none is for when you are not within the threshold (as declared in drivetrainsubsystem) that marks you as close enough to a reef side to begin lineup*/
 public enum ReefSideEnum {
-    backLeft,
-    backCenter,
-    backRight,
-    frontRight,
-    frontCenter,
-    frontLeft,
+    bargeFar,
+    middleFar,
+    processorFar,
+    processorClose,
+    middleClose,
+    bargeClose,
     none
 }
