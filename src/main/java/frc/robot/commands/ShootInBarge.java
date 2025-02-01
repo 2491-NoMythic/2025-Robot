@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.settings.ElevatorEnums;
@@ -19,15 +21,17 @@ public class ShootInBarge extends SequentialCommandGroup {
   DrivetrainSubsystem drivetrainSubsystem;
   ElevatorSubsystem elevatorSubsystem;
   AlgaeEndeffectorSubsystem algaeSubsystem;
+  DoubleSupplier controllerSupplier;
 
   public ShootInBarge(DrivetrainSubsystem drivetrainSubsystem, ElevatorSubsystem elevatorSubsystem,
-      AlgaeEndeffectorSubsystem algaeSubsystem) {
+      AlgaeEndeffectorSubsystem algaeSubsystem, DoubleSupplier controllerSupplier) {
     this.drivetrainSubsystem = drivetrainSubsystem;
     this.elevatorSubsystem = elevatorSubsystem;
     this.algaeSubsystem = algaeSubsystem;
+    this.controllerSupplier = controllerSupplier;
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new LineUpBarge(drivetrainSubsystem),
+    addCommands(new LineUpBarge(drivetrainSubsystem, controllerSupplier),
        new ElevatorCommand(elevatorSubsystem, () -> ElevatorEnums.Barge),
        (new AlgaeIntakeCommand(algaeSubsystem, 1)));
   }

@@ -5,6 +5,8 @@
 package frc.robot.commands;
 
 import java.util.Optional;
+import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -12,6 +14,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.settings.Constants.DriveConstants;
 import frc.robot.settings.Constants.FieldConstants;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -22,9 +25,11 @@ public class LineUpBarge extends Command {
   double desiredX;
   double speedX;
   double currentX;
+  DoubleSupplier controllerSupplier;
   /** Creates a new LineUpBarge. */
-  public LineUpBarge(DrivetrainSubsystem driveTrain) {
+  public LineUpBarge(DrivetrainSubsystem driveTrain, DoubleSupplier controllerSupplier) {
     this.driveTrain = driveTrain;
+    this.controllerSupplier = controllerSupplier;
     addRequirements(driveTrain);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -56,14 +61,15 @@ public class LineUpBarge extends Command {
       } else {
         speedX = 1;
       }
+      driveTrain.moveTowardsRotationTarget(speedX, controllerSupplier.getAsDouble() * DriveConstants.MAX_VELOCITY_METERS_PER_SECOND * -1);
     } else {
       if (currentX < desiredX) {
         speedX = 1;
       } else {
         speedX = -1;
       }
+      driveTrain.moveTowardsRotationTarget(speedX, controllerSupplier.getAsDouble() * DriveConstants.MAX_VELOCITY_METERS_PER_SECOND);
     }
-    driveTrain.moveTowardsRotationTarget(speedX, 0);
   }
 
   // Called once the command ends or is interrupted.

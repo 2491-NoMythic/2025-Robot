@@ -330,7 +330,6 @@ public class RobotContainer {
   private void configureBindings() {
     if (DrivetrainExists){
     SmartDashboard.putData("drivetrain", driveTrain);
-
     new Trigger(ZeroGyroSup).onTrue(new InstantCommand(driveTrain::zeroGyroscope));
 
  
@@ -381,8 +380,13 @@ public class RobotContainer {
 
     if(elevatorExists && algaeEndeffectorExists){
       new Trigger(AlgaeDepositSup).whileTrue(new DepositAlgae(algaeEndDefector,elevator, ALGAE_SHOOT_SPEED));
-      new Trigger(AlgaeBargeSup).whileTrue(new ShootInBarge(driveTrain, elevator, algaeEndDefector));
-    }
+    if (useXboxController) {
+      new Trigger(AlgaeBargeSup)
+          .whileTrue(new ShootInBarge(driveTrain, elevator, algaeEndDefector, () -> driverControllerXbox.getLeftY()));
+    } else {
+      new Trigger(AlgaeBargeSup)
+          .whileTrue(new ShootInBarge(driveTrain, elevator, algaeEndDefector, () -> driverControllerPS4.getLeftY()));
+    }}
     /*
      * bindings:
      * PS4: zero the gyroscope
