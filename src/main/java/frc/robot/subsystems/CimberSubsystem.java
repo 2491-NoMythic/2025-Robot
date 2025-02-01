@@ -32,6 +32,7 @@ public class CimberSubsystem extends SubsystemBase {
   public void climbServo(double angle){
     climbServo.setAngle(angle);
   }
+  
   public void stopClimber(){
     climbServo.set(0);
   }
