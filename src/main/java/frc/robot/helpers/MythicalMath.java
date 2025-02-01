@@ -54,6 +54,15 @@ public class MythicalMath {
     return new Pose2d(
         pose1.getX() + pose2.getX(), pose1.getY() + pose2.getY(), pose1.getRotation());
   }
+/**
+ * calculates the distance between two Pose2d's using the .getTranslation.getDistance(Translaiton2d) method
+ * @param pose1
+ * @param pose2
+ * @return the distance in units, will always be positive
+ */
+  public static double distanceBetweenTwoPoses(Pose2d pose1, Pose2d pose2) {
+    return pose1.getTranslation().getDistance(pose2.getTranslation());
+  }
   public static Double getSmallest(Double a, Double b, Double c) {
     // Replace null values with Double.MAX_VALUE (a very large number)
     double valA = (a != null) ? a : Double.MAX_VALUE;

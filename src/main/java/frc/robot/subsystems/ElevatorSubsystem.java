@@ -111,6 +111,12 @@ public class ElevatorSubsystem extends SubsystemBase {
       case HumanPlayer:
         setElevatorPosition(HUMAN_PLAYER_STATION_MILLIMETERS);
         break;
+      case Bottom:
+        setElevatorPosition(BOTTOM_MILLIMETERS);
+        break;
+      case AlgaeInProcessor:
+        setElevatorPosition(PROCESSOR_HEIGHT_MILLIMETERS);
+        break;
       case Barge:
         setElevatorPosition(BARGE_SHOOT_MILLIMETERS);
         break;

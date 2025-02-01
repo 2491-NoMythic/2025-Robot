@@ -26,6 +26,7 @@ import static frc.robot.settings.Constants.DriveConstants.ROBOT_ANGLE_TOLERANCE;
 import static frc.robot.settings.Constants.Vision.APRILTAG_LIMELIGHTA_NAME;
 import static frc.robot.settings.Constants.Vision.APRILTAG_LIMELIGHTB_NAME;
 import static frc.robot.settings.Constants.Vision.APRILTAG_LIMELIGHTC_NAME;
+import static frc.robot.settings.Constants.Field.*;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.util.PathPlannerLogging;
@@ -51,6 +52,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
 import frc.robot.LimelightHelpers.PoseEstimate;
 import frc.robot.helpers.MotorLogger;
+import frc.robot.helpers.MythicalMath;
+import frc.robot.settings.ReefSideEnum;
 import frc.robot.settings.Constants.DriveConstants;
 import frc.robot.settings.Constants.Vision;
 
@@ -431,7 +434,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   /*
    * Logs important data for the drivetrain
    */
-  public void logDrivetrainData(){
+  private void logDrivetrainData(){
     SmartDashboard.putNumber("DRIVETRAIN/Robot Angle", getOdometryRotation().getDegrees());
     SmartDashboard.putString("DRIVETRAIN/Robot Location", getPose().getTranslation().toString());
     SmartDashboard.putNumber("DRIVETRAIN/forward speed", getChassisSpeeds().vxMetersPerSecond);
@@ -445,6 +448,51 @@ public class DrivetrainSubsystem extends SubsystemBase {
     Logger.recordOutput("MyStates", getModuleStates());
     Logger.recordOutput("Position", odometer.getEstimatedPosition());
     Logger.recordOutput("Gyro", getGyroscopeRotation());
+  }
+/**
+ * this method updates the closest ReefSide value in robot state by finding the distance to each reefSide, then finding the smallest of those, then using that to update RobotState
+ */
+  private void updateClosestReefSide() {
+    Pose2d robotPose = getPose();
+    Pose2d frontCenterPose;
+    Pose2d frontLeftPose;
+    Pose2d frontRightPose;
+    Pose2d backCenterPose;
+    Pose2d backRightPose;
+    Pose2d backLeftPose;
+  //sets the positions of the reef sides based on our alliance
+    if(DriverStation.getAlliance().get() == Alliance.Red) {
+      frontCenterPose = RED_FRONT_CENTER_REEFSIDE_POSE;
+      frontLeftPose = RED_FRONT_LEFT_REEFSIDE_POSE;
+      frontRightPose = RED_FRONT_RIGHT_REEFSIDE_POSE;
+      backCenterPose = RED_BACK_CENTER_REEFSIDE_POSE;
+      backLeftPose = RED_BACK_LEFT_REEFSIDE_POSE;
+      backRightPose = RED_BACK_RIGHT_REEFSIDE_POSE;
+    } else {
+      frontCenterPose = BLUE_FRONT_CENTER_REEFSIDE_POSE;
+      frontLeftPose = BLUE_FRONT_LEFT_REEFSIDE_POSE;
+      frontRightPose = BLUE_FRONT_RIGHT_REEFSIDE_POSE;
+      backCenterPose = BLUE_BACK_CENTER_REEFSIDE_POSE;
+      backLeftPose = BLUE_BACK_LEFT_REEFSIDE_POSE;
+      backRightPose = BLUE_BACK_RIGHT_REEFSIDE_POSE;
+    }
+//finds the distnaces to each reef side
+    double distanceToFrontCenter = MythicalMath.distanceBetweenTwoPoses(robotPose, frontCenterPose);
+    double distanceToFrontRight = MythicalMath.distanceBetweenTwoPoses(robotPose, frontRightPose);
+    double distanceToFrontLeft = MythicalMath.distanceBetweenTwoPoses(robotPose, frontLeftPose);
+    double distanceToBackCenter = MythicalMath.distanceBetweenTwoPoses(robotPose, backCenterPose);
+    double distanceToBackRight = MythicalMath.distanceBetweenTwoPoses(robotPose, backRightPose);
+    double distanceToBackLeft = MythicalMath.distanceBetweenTwoPoses(robotPose, backLeftPose);
+//finds the distance to a reef side that is the smallest, then sets robot state based on the distance that the minimum is equal to.
+    double closestDistance = Math.min(distanceToFrontCenter, Math.min(distanceToFrontRight, Math.min(distanceToFrontLeft, Math.min(distanceToBackRight, Math.min(distanceToBackCenter, distanceToBackLeft)))));
+    if(closestDistance == distanceToFrontCenter) {RobotState.getInstance().closestReefSide = ReefSideEnum.middleClose;}
+    if(closestDistance == distanceToFrontRight) {RobotState.getInstance().closestReefSide = ReefSideEnum.processorClose;}
+    if(closestDistance == distanceToFrontLeft) {RobotState.getInstance().closestReefSide = ReefSideEnum.bargeClose;}
+    if(closestDistance == distanceToBackCenter) {RobotState.getInstance().closestReefSide = ReefSideEnum.middleFar;}
+    if(closestDistance == distanceToBackRight) {RobotState.getInstance().closestReefSide = ReefSideEnum.processorFar;}
+    if(closestDistance == distanceToBackLeft) {RobotState.getInstance().closestReefSide = ReefSideEnum.bargeFar;}
+    SmartDashboard.putString("REEFLINEUP/closest side", RobotState.getInstance().closestReefSide.toString());
+    SmartDashboard.putNumber("REEFLINEUP/closest side distance", closestDistance);
   }
   //This is the things the subsystem does periodically. 
   @Override
@@ -470,6 +518,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
       motorLoggers[i].log(modules[i].getDriveMotor());
     }
     logDrivetrainData();
+    updateClosestReefSide();
   }
 
 }

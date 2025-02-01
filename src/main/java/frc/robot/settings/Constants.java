@@ -302,11 +302,17 @@ public final class Constants {
      */
     public static final int Y_AXIS = 1;
     /**
+     * Right stick Y-axis for xbox controllers.
+     *
+     * <p>Left = -1 || Right = 1
+     */
+    public static final int XBOX_Z_AXIS = 4;
+    /**
      * Right stick Z-axis.
      *
      * <p>Left = -1 || Right = 1
      */
-    public static final int Z_AXIS = 2;
+    public static final int PS4_Z_AXIS = 2;
     /**
      * Right stick Z-rotate.
      *
@@ -320,7 +326,31 @@ public final class Constants {
     public static final double DEADBAND_LARGE = 0.1;
   }
 
-  public final class Field {}
+  public final class Field {
+//naming scheme is the same as for the reefSideEnums
+    private static final double centerYCoord = 4;
+    private static final double blueRightYCoord = 3.3;
+    private static final double blueLeftYCoord = 4.73;
+    private static final double blueBackXCoord = 4.93;
+    private static final double blueFrontXCoord = 4.1;
+    public static final Pose2d BLUE_FRONT_LEFT_REEFSIDE_POSE = new Pose2d(blueFrontXCoord, blueLeftYCoord, new Rotation2d());
+    public static final Pose2d BLUE_FRONT_RIGHT_REEFSIDE_POSE = new Pose2d(blueFrontXCoord, blueRightYCoord, new Rotation2d());
+    public static final Pose2d BLUE_FRONT_CENTER_REEFSIDE_POSE = new Pose2d(3.64, centerYCoord, new Rotation2d());
+    public static final Pose2d BLUE_BACK_CENTER_REEFSIDE_POSE = new Pose2d(5.34, centerYCoord, new Rotation2d());
+    public static final Pose2d BLUE_BACK_RIGHT_REEFSIDE_POSE = new Pose2d(blueBackXCoord, blueRightYCoord, new Rotation2d());
+    public static final Pose2d BLUE_BACK_LEFT_REEFSIDE_POSE = new Pose2d(blueBackXCoord, blueLeftYCoord, new Rotation2d());
+
+    private static final double redRightYCoord = blueLeftYCoord;
+    private static final double redLeftYCoord = blueRightYCoord;
+    private static final double redBackXCoord = 12.68;
+    private static final double redFrontXCoord = 13.5;
+    public static final Pose2d RED_FRONT_LEFT_REEFSIDE_POSE = new Pose2d(redFrontXCoord, redLeftYCoord, new Rotation2d());
+    public static final Pose2d RED_FRONT_RIGHT_REEFSIDE_POSE = new Pose2d(redFrontXCoord, redRightYCoord, new Rotation2d());
+    public static final Pose2d RED_FRONT_CENTER_REEFSIDE_POSE = new Pose2d(13.9, centerYCoord, new Rotation2d());
+    public static final Pose2d RED_BACK_CENTER_REEFSIDE_POSE = new Pose2d(12.225, centerYCoord, new Rotation2d());
+    public static final Pose2d RED_BACK_RIGHT_REEFSIDE_POSE = new Pose2d(redBackXCoord, redRightYCoord, new Rotation2d());
+    public static final Pose2d RED_BACK_LEFT_REEFSIDE_POSE = new Pose2d(redBackXCoord, redLeftYCoord, new Rotation2d());
+  }
 
   public final class Vision {
     public static final String APRILTAG_LIMELIGHTA_NAME = "limelight-aprila";
@@ -386,12 +416,13 @@ public final class Constants {
     public static final int ELEVATOR_MOTOR_1_ID = 13;
     public static final int ELEVATOR_MOTOR_2_ID = 14;
     public static final double HUMAN_PLAYER_STATION_MILLIMETERS = 2491;
+    public static final double BOTTOM_MILLIMETERS = 2491;
+    public static final double PROCESSOR_HEIGHT_MILLIMETERS = 2491;
     public static final double REEF_LEVEL_1_MILLIMETERS = 2491;
     public static final double REEF_LEVEL_2_MILLIMETERS = 2491;
     public static final double REEF_LEVEL_3_MILLIMETERS = 2491;
     public static final double REEF_LEVEL_4_MILLIMETERS = 2491;
     public static final double BARGE_SHOOT_MILLIMETERS = 2491;
-    public static final double PROCESSOR_HEIGHT_MILLIMETERS = 2491;
     public static final double ELEVATOR_MILLIMETERS_TO_ROTATIONS = 2491;
     public static final double ELEVATOR_THRESHOLD = 2491;
   }

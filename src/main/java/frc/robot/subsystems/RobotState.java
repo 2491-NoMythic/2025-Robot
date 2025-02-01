@@ -2,7 +2,7 @@ package frc.robot.subsystems;
 
 import javax.print.attribute.standard.MediaSize.Other;
 import frc.robot.settings.ReefOffsetEnums;
-
+import frc.robot.settings.ReefSideEnum;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.settings.ElevatorEnums;
@@ -23,8 +23,13 @@ public class RobotState {
   public ReefOffsetEnums reefOffset;
   public boolean funnelSensorTrig;
   public boolean coralEndeffSensorTrig;
-  public boolean placeCoralLeft;
+  public ReefSideEnum closestReefSide;
+  public boolean deliveringLeft;
+
   private RobotState() {
+    //sets any values that aren't periodically updated by a subsystem to a value, so that they won't return null if called before they are updated
+    deliveringLeft = true;
+    deliveringCoralHeight = ElevatorEnums.Reef1;
   }
 
   public static RobotState getInstance() {
