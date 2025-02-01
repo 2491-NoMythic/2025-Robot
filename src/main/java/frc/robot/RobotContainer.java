@@ -176,8 +176,8 @@ public class RobotContainer {
       driverControllerXbox = new XboxController(DRIVE_CONTROLLER_ID);
       operatorControllerXbox = new XboxController(OPERATOR_CONTROLLER_ID);
 
-      ControllerXAxisSupplier = () -> modifyAxis(-driverControllerXbox.getRawAxis(X_AXIS), DEADBAND_NORMAL);
-      ControllerYAxisSupplier = () -> modifyAxis(-driverControllerXbox.getRawAxis(Y_AXIS), DEADBAND_NORMAL);
+      ControllerXAxisSupplier = () -> modifyAxis(-driverControllerXbox.getRawAxis(1), DEADBAND_NORMAL);
+      ControllerYAxisSupplier = () -> modifyAxis(-driverControllerXbox.getRawAxis(0), DEADBAND_NORMAL);
       ControllerZAxisSupplier = () -> modifyAxis(-driverControllerXbox.getRawAxis(XBOX_Z_AXIS), DEADBAND_NORMAL);
       
       ZeroGyroSup = driverControllerXbox::getStartButton;
@@ -221,9 +221,9 @@ public class RobotContainer {
     limelightInit();
     sensorInit();     
     if (DrivetrainExists) {
-      commandSelectorInst();
       driveTrainInst();
       configureDriveTrain();
+      commandSelectorInst();
     }
     if (lightsExist) {lightsInst();}
     
@@ -376,11 +376,6 @@ public class RobotContainer {
   // pressed,
   // cancelling on release.
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
   private void configureDriveTrain() {
     try {
       AutoBuilder.configure(

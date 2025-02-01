@@ -47,7 +47,7 @@
   "reversed": false,
   "folder": "ReefSideLineup",
   "idealStartingState": {
-    "velocity": 0,
+    "velocity": 0.5,
     "rotation": 0.0
   },
   "useDefaultConstraints": true
