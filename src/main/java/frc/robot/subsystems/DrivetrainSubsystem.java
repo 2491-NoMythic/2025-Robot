@@ -449,6 +449,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
   //This is the things the subsystem does periodically. 
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("pose2d X", getPose().getX());
+    SmartDashboard.putNumber("pose2d Y", getPose().getY());
     updateOdometry();
     // sets the robot orientation for each of the limelights, which is required for the
     if (Preferences.getBoolean("Use Limelight", false)) {
