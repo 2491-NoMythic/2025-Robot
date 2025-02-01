@@ -19,14 +19,12 @@ public class ClimberCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("Working on it");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    climber.climbServo(100);
-    System.out.print("Going to 100");
+    climber.climbServo(90);
   }
 
   // Called once the command ends or is interrupted.
