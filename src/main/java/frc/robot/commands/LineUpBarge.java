@@ -20,12 +20,8 @@ public class LineUpBarge extends Command {
   DrivetrainSubsystem driveTrain;
   double distanceX;
   double desiredX;
-  double distanceY;
-  double desiredY;
   double speedX;
-  double speedY;
   double currentX;
-  double currentY;
   /** Creates a new LineUpBarge. */
   public LineUpBarge(DrivetrainSubsystem driveTrain) {
     this.driveTrain = driveTrain;
@@ -41,12 +37,10 @@ public class LineUpBarge extends Command {
     if(isRed){
       driveTrain.setRotationTarget(180);
       desiredX = FieldConstants.RED_BARGE_SHOOT_X;
-      desiredY = FieldConstants.RED_BARGE_SHOOT_Y;
     }
     else{
       driveTrain.setRotationTarget(0);
       desiredX = FieldConstants.BLUE_BARGE_SHOOT_X;
-      desiredY = FieldConstants.BLUE_BARGE_SHOOT_Y;
     }
   }
 
@@ -54,19 +48,22 @@ public class LineUpBarge extends Command {
   @Override
   public void execute() {
     currentX = driveTrain.getPose().getX();
-    currentY = driveTrain.getPose().getY();
-    distanceX = desiredX - currentX;
-    distanceY = desiredY - currentY;
-    if(distanceX < distanceY) {
-      speedY = distanceX/distanceY;
-      speedX = 1 - speedY;
+    SmartDashboard.putNumber("currentX", currentX);
+    SmartDashboard.putNumber("desiredX", desiredX);
+    if (isRed) {
+      if (currentX < desiredX) {
+        speedX = -1;
+      } else {
+        speedX = 1;
+      }
     } else {
-      speedX = distanceY/distanceX;
-      speedY = 1 - speedX;
+      if (currentX < desiredX) {
+        speedX = 1;
+      } else {
+        speedX = -1;
+      }
     }
-    speedX *= 5;
-    speedY *= 5;
-    driveTrain.moveTowardsRotationTarget(speedX, speedY);
+    driveTrain.moveTowardsRotationTarget(speedX, 0);
   }
 
   // Called once the command ends or is interrupted.
@@ -79,7 +76,6 @@ public class LineUpBarge extends Command {
   @Override
   public boolean isFinished() {
    return driveTrain.isAtRotationTarget()
-    && (Math.abs(currentX - desiredX) < 0.2)
-    && (Math.abs(currentY - desiredY) < 0.2);
+    && (Math.abs(currentX - desiredX) < 0.2);
   }
 }

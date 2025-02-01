@@ -45,6 +45,7 @@ import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.LineUp;
 import frc.robot.commands.MoveMeters;
 import frc.robot.commands.PlaceCoralCommand;
+import frc.robot.commands.ShootInBarge;
 import frc.robot.commands.WaitCommand;
 import frc.robot.subsystems.DistanceSensors;
 import frc.robot.commands.NamedCommands.CoralIntake;
@@ -129,6 +130,7 @@ public class RobotContainer {
   BooleanSupplier AlgaeIntakeSup;
   BooleanSupplier AlgaeShooterSup;
   BooleanSupplier AlgaeDepositSup;
+  BooleanSupplier AlgaeBargeSup;
   BooleanSupplier ReefHeight1Supplier;
   BooleanSupplier ReefHeight2Supplier;
   BooleanSupplier ReefHeight3Supplier;
@@ -187,7 +189,8 @@ public class RobotContainer {
       AlgaeIntakeSup = driverControllerXbox::getAButton; //TODO change to actual
       AlgaeShooterSup = driverControllerXbox::getXButton;
       AlgaeDepositSup = driverControllerXbox::getBButton;
-      CoralPlaceTeleSupplier = ()-> driverControllerXbox.getPOV() == 0;;
+      AlgaeBargeSup = ()-> driverControllerXbox.getPOV() == 180;
+      CoralPlaceTeleSupplier = ()-> driverControllerXbox.getPOV() == 0;
 
       OpLeftReefLineupSup = operatorControllerXbox::getLeftBumperButton;
       OpRightReefLineupSup = operatorControllerXbox::getRightBumperButton;
@@ -212,6 +215,7 @@ public class RobotContainer {
       AlgaeIntakeSup = driverControllerPS4::getCrossButton; //TODO change to actual
       AlgaeShooterSup = driverControllerPS4::getSquareButton;
       AlgaeDepositSup = driverControllerPS4::getCircleButton;
+      AlgaeBargeSup = ()-> driverControllerPS4.getPOV() == 180;
       CoralPlaceTeleSupplier = ()-> driverControllerPS4.getPOV() == 0;
       AutoAngleAtReefSup = driverControllerPS4::getR2Button;
 
@@ -328,6 +332,7 @@ public class RobotContainer {
     SmartDashboard.putData("drivetrain", driveTrain);
 
     new Trigger(ZeroGyroSup).onTrue(new InstantCommand(driveTrain::zeroGyroscope));
+
  
     new Trigger(()->DvRightReefLineupSup.getAsBoolean()||DvLeftReefLineupSup.getAsBoolean()).whileTrue(new SequentialCommandGroup(
       new LineUp(driveTrain, DvLeftReefLineupSup,0.9),
@@ -376,6 +381,7 @@ public class RobotContainer {
 
     if(elevatorExists && algaeEndeffectorExists){
       new Trigger(AlgaeDepositSup).whileTrue(new DepositAlgae(algaeEndDefector,elevator, ALGAE_SHOOT_SPEED));
+      new Trigger(AlgaeBargeSup).whileTrue(new ShootInBarge(driveTrain, elevator, algaeEndDefector));
     }
     /*
      * bindings:
