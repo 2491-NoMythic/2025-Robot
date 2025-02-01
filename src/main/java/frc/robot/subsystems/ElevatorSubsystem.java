@@ -4,12 +4,15 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.ForwardLimitValue;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.helpers.MotorLogger;
 import frc.robot.settings.ElevatorEnums;
@@ -24,6 +27,9 @@ public class ElevatorSubsystem extends SubsystemBase {
   private double zeroPoint;
   MotorLogger motorLogger1;
   MotorLogger motorLogger2;
+  private StatusSignal<ForwardLimitValue> upperLimit = elevatorMotor1.getForwardLimit();  
+  private StatusSignal<ForwardLimitValue> lowerLimit = elevatorMotor2.getForwardLimit();
+
   /** Creates a new ElevatorSubsystem. */
   public ElevatorSubsystem() {
     elevatorMotor1 = new TalonFX(ELEVATOR_MOTOR_1_ID);
@@ -75,6 +81,18 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     logMotors();
+    if(upperLimit.getValue() == ForwardLimitValue.ClosedToGround){
+      RobotState.getInstance().isUpperLimitTrig = true;
+    }
+    else{
+      RobotState.getInstance().isUpperLimitTrig = false;
+    }
+    if(lowerLimit.getValue() == ForwardLimitValue.ClosedToGround){
+      RobotState.getInstance().isLowerLimitTrig = true;
+    }
+    else{
+      RobotState.getInstance().isLowerLimitTrig = false;
+    } 
   }
   /**
    * Creates a zero from input

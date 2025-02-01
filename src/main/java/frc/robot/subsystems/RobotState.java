@@ -24,6 +24,9 @@ public class RobotState {
   public boolean funnelSensorTrig;
   public boolean coralEndeffSensorTrig;
   public boolean placeCoralLeft;
+  public boolean isUpperLimitTrig;
+  public boolean isLowerLimitTrig;
+
   private RobotState() {
   }
 
