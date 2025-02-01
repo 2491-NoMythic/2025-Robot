@@ -7,16 +7,12 @@ package frc.robot;
 import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.ALGAE_INTAKE_SPEED;
 import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.ALGAE_SHOOT_SPEED;
 import static frc.robot.settings.Constants.DriveConstants.*;
-import static frc.robot.settings.Constants.SensorConstants.*;
 import static frc.robot.settings.Constants.PS4Driver.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-
-import com.playingwithfusion.TimeOfFlight;
-import com.playingwithfusion.jni.TimeOfFlightJNI;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -85,8 +81,6 @@ public class RobotContainer {
   // we run the code.
   private final boolean useXboxController = Preferences.getBoolean("Xbox Controller", true);
   
-  private final boolean coralIntakeExists = Preferences.getBoolean("CoralIntake", true);
-  private final boolean algaeIntakeExists = Preferences.getBoolean("AlgaeIntake", true);
   private final boolean algaeEndeffectorExists = Preferences.getBoolean("AlgaeEndDefector", true);
   private final boolean coralEndeffectorExists = Preferences.getBoolean("CoralEndDefector", true);
   private final boolean climberExists = Preferences.getBoolean("Climber", true);
@@ -157,8 +151,6 @@ public class RobotContainer {
     Preferences.initBoolean("CompBot", true);
     Preferences.initBoolean("Use Limelight", true);
     Preferences.initBoolean("Xbox Controller", true);
-    Preferences.initBoolean("CoralIntake", false);
-    Preferences.initBoolean("AlgaeIntake", false);
     Preferences.initBoolean("Elevator", false);
     Preferences.initBoolean("CoralEndDefector", false);
     Preferences.initBoolean("AlgaeEndDefector", false);
