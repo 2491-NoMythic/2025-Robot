@@ -7,16 +7,12 @@ package frc.robot;
 import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.ALGAE_INTAKE_SPEED;
 import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.ALGAE_SHOOT_SPEED;
 import static frc.robot.settings.Constants.DriveConstants.*;
-import static frc.robot.settings.Constants.SensorConstants.*;
 import static frc.robot.settings.Constants.PS4Driver.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-
-import com.playingwithfusion.TimeOfFlight;
-import com.playingwithfusion.jni.TimeOfFlightJNI;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -85,8 +81,6 @@ public class RobotContainer {
   // we run the code.
   private final boolean useXboxController = Preferences.getBoolean("Xbox Controller", true);
   
-  private final boolean coralIntakeExists = Preferences.getBoolean("CoralIntake", true);
-  private final boolean algaeIntakeExists = Preferences.getBoolean("AlgaeIntake", true);
   private final boolean algaeEndeffectorExists = Preferences.getBoolean("AlgaeEndDefector", true);
   private final boolean coralEndeffectorExists = Preferences.getBoolean("CoralEndDefector", true);
   private final boolean climberExists = Preferences.getBoolean("Climber", true);
@@ -96,9 +90,10 @@ public class RobotContainer {
   private final boolean DrivetrainExists = Preferences.getBoolean("DrivetrainExists", true);
   private final boolean distanceSensorsExist = Preferences.getBoolean("DistanceSensorsExist", true);
   private final boolean lightsExist = Preferences.getBoolean("Lights Exist", true);
+  private final boolean LimelightExists = Preferences.getBoolean("Limelight Exists", true);
+  private final boolean SensorsExist = Preferences.getBoolean("Sensors Exist", true);
 
   private DrivetrainSubsystem driveTrain;
-  private ElevatorCommand elevatorDefaultCommand;
   private Drive defaultDriveCommand;
   private Lights lights;
   private XboxController driverControllerXbox;
@@ -155,8 +150,6 @@ public class RobotContainer {
     Preferences.initBoolean("CompBot", true);
     Preferences.initBoolean("Use Limelight", true);
     Preferences.initBoolean("Xbox Controller", true);
-    Preferences.initBoolean("CoralIntake", false);
-    Preferences.initBoolean("AlgaeIntake", false);
     Preferences.initBoolean("Elevator", false);
     Preferences.initBoolean("CoralEndDefector", false);
     Preferences.initBoolean("AlgaeEndDefector", false);
@@ -166,6 +159,8 @@ public class RobotContainer {
     Preferences.initBoolean("DrivetrainExists", false);
     Preferences.initBoolean("AntiTipActive", true);
     Preferences.initBoolean("DistanceSensorsExist", true);
+    Preferences.initBoolean("LimelightExists", false);
+    Preferences.initBoolean("Sensors Exist", false);
 
     DataLogManager.start(); // Start logging
     DriverStation.startDataLog(DataLogManager.getLog()); // Joystick Data logging
@@ -233,8 +228,8 @@ public class RobotContainer {
 
     }
 
-    limelightInit();
-    sensorInit();     
+    if (LimelightExists) {limelightInit();}
+    if (SensorsExist) {sensorInit();}   
     if (DrivetrainExists) {driveTrainInst();}
     if (lightsExist) {lightsInst();}
  
@@ -308,7 +303,6 @@ public class RobotContainer {
 
   private void elevatorInst() {
     elevator = new ElevatorSubsystem();
-    elevatorDefaultCommand = new ElevatorCommand(elevator,()-> ElevatorEnums.HumanPlayer);
   }
 
   private void funnelIntakeInst() {
@@ -356,13 +350,15 @@ public class RobotContainer {
     SmartDashboard.putData("set offsets", setOffsets);
     SmartDashboard.putData(new InstantCommand(driveTrain::forceUpdateOdometryWithVision));
 
-    new Trigger(ReefHeight1Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef1));
-    new Trigger(ReefHeight2Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef2));
-    new Trigger(ReefHeight3Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef3));
-    new Trigger(ReefHeight4Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef4));
-    new Trigger(CoralIntakeHeightSupplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.HumanPlayer));
     new Trigger(OpLeftReefLineupSup).onTrue(new InstantCommand(()->RobotState.getInstance().placeCoralLeft = true));
     new Trigger(OpRightReefLineupSup).onTrue(new InstantCommand(()->RobotState.getInstance().placeCoralLeft = false));
+    }
+    if (elevatorExists){
+      new Trigger(ReefHeight1Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef1));
+      new Trigger(ReefHeight2Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef2));
+      new Trigger(ReefHeight3Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef3));
+      new Trigger(ReefHeight4Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef4));
+      new Trigger(CoralIntakeHeightSupplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.HumanPlayer));
     }
     if (algaeEndeffectorExists) {
       new Trigger(AlgaeIntakeSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector, ALGAE_INTAKE_SPEED));
@@ -394,11 +390,6 @@ public class RobotContainer {
       new Trigger(AlgaeBargeSup)
           .whileTrue(new ShootInBarge(driveTrain, elevator, algaeEndDefector, () -> driverControllerPS4.getLeftY()));
     }}
-    /*
-     * bindings:
-     * PS4: zero the gyroscope
-     * R2/RightTrigger: auto angle at reef
-     */
   }
 
   // Schedule `exampleMethodCommand` when the Xbox controller's B button is
