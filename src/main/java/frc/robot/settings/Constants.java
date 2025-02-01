@@ -46,17 +46,17 @@ public final class Constants {
     public static final double BUMPER_TO_SENSOR = 100; // in milliqmeters
     public static final Pose2d DRIVE_ODOMETRY_ORIGIN = new Pose2d(5.0, 5.0, new Rotation2d());
     /** The bumper-to-bumper width of the robot. */
-    public static final double DRIVETRAIN_ROBOT_WIDTH_METERS = 0.83;
+    public static final double DRIVETRAIN_ROBOT_WIDTH_METERS = 0.89;
     /**
      * The left-to-right distance between the drivetrain wheels Should be measured from center to
      * center.
      */
-    public static final double DRIVETRAIN_TRACKWIDTH_METERS = 0.52705;
+    public static final double DRIVETRAIN_TRACKWIDTH_METERS = 0.5779;
     /**
      * The front-to-back distance between the drivetrain wheels. Should be measured from center to
      * center.
      */
-    public static final double DRIVETRAIN_WHEELBASE_METERS = 0.52705;
+    public static final double DRIVETRAIN_WHEELBASE_METERS = 0.6297;
 
     /** The diameter of the module's wheel in meters. */
     public static final double DRIVETRAIN_WHEEL_DIAMETER = 0.092; // 0.098;
@@ -67,7 +67,7 @@ public final class Constants {
      * about these.
      */
     public static final double DRIVETRAIN_DRIVE_REDUCTION =
-        (15.0 / 50.0) * (28.0 / 16.0) * (15.0 / 45.0);
+        (13.0 / 50.0) * (28.0 / 16.0) * (15.0 / 45.0);
 
     /**
      * Whether the drive motor should be counterclockwise or clockwise positive. If there is an odd
@@ -85,8 +85,7 @@ public final class Constants {
      * Whether the steer motor should be counterclockwise or clockwise positive. If there is an odd
      * number of gear reductions this is typically clockwise-positive.
      */
-    public static final InvertedValue DRIVETRAIN_STEER_INVERTED =
-        InvertedValue.CounterClockwise_Positive;
+    public static final InvertedValue DRIVETRAIN_STEER_INVERTED = InvertedValue.Clockwise_Positive;
 
     /**
      * How many meters the wheels travel per rotation.

@@ -135,8 +135,8 @@ public class RobotContainer {
   BooleanSupplier ReefHeight4Supplier;
   BooleanSupplier CoralPlaceTeleSupplier;
   BooleanSupplier CoralIntakeHeightSupplier;
-  DoubleSupplier ControllerYAxisSupplier;
-  DoubleSupplier ControllerXAxisSupplier;
+  DoubleSupplier ControllerForwardsAxisSupplier;
+  DoubleSupplier ControllerSidewaysAxisSupplier;
   DoubleSupplier ControllerZAxisSupplier;
   BooleanSupplier OpLeftReefLineupSup;
   BooleanSupplier OpRightReefLineupSup;
@@ -175,8 +175,8 @@ public class RobotContainer {
       operatorControllerXbox = new XboxController(OPERATOR_CONTROLLER_ID);
       
 
-      ControllerXAxisSupplier = () -> modifyAxis(-driverControllerXbox.getRawAxis(X_AXIS), DEADBAND_NORMAL);
-      ControllerYAxisSupplier = () -> modifyAxis(-driverControllerXbox.getRawAxis(Y_AXIS), DEADBAND_NORMAL);
+      ControllerSidewaysAxisSupplier = () -> modifyAxis(-driverControllerXbox.getRawAxis(X_AXIS), DEADBAND_NORMAL);
+      ControllerForwardsAxisSupplier = () -> modifyAxis(-driverControllerXbox.getRawAxis(Y_AXIS), DEADBAND_NORMAL);
       ControllerZAxisSupplier = () -> modifyAxis(-driverControllerXbox.getRawAxis(Z_AXIS), DEADBAND_NORMAL);
       
       ZeroGyroSup = driverControllerXbox::getStartButton;
@@ -201,8 +201,8 @@ public class RobotContainer {
       operatorControllerPS4 = new PS4Controller(OPERATOR_CONTROLLER_ID);
       AutoAngleAtReefSup = ()->driverControllerPS4.getR2Button();
 
-      ControllerXAxisSupplier = () -> modifyAxis(-driverControllerPS4.getRawAxis(X_AXIS), DEADBAND_NORMAL);
-      ControllerYAxisSupplier = () -> modifyAxis(-driverControllerPS4.getRawAxis(Y_AXIS), DEADBAND_NORMAL);
+      ControllerSidewaysAxisSupplier = () -> modifyAxis(-driverControllerPS4.getRawAxis(X_AXIS), DEADBAND_NORMAL);
+      ControllerForwardsAxisSupplier = () -> modifyAxis(-driverControllerPS4.getRawAxis(Y_AXIS), DEADBAND_NORMAL);
       ControllerZAxisSupplier = () -> modifyAxis(-driverControllerPS4.getRawAxis(Z_AXIS), DEADBAND_NORMAL);
 
       ZeroGyroSup = driverControllerPS4::getPSButton;
@@ -247,23 +247,23 @@ public class RobotContainer {
     defaultDriveCommand = new Drive(
         driveTrain,
         () -> false,
-        ControllerXAxisSupplier,
-        ControllerYAxisSupplier,
+        ControllerForwardsAxisSupplier,
+        ControllerSidewaysAxisSupplier,
         ControllerZAxisSupplier);
-    driveTrain.setDefaultCommand(defaultDriveCommand);
+        driveTrain.setDefaultCommand(defaultDriveCommand);
     
     approachReef = new ApproachReef(
       distanceSensors,
       driveTrain,
-      ControllerXAxisSupplier,
-      ControllerYAxisSupplier,
+      ControllerForwardsAxisSupplier,
+      ControllerSidewaysAxisSupplier,
       ControllerZAxisSupplier);
       
     autoAngleAtReef = new AutoAngleAtReef(
       driveTrain, 
       ControllerZAxisSupplier,
-      ControllerXAxisSupplier,
-      ControllerYAxisSupplier);
+      ControllerForwardsAxisSupplier,
+      ControllerSidewaysAxisSupplier);
   }
 
   private void autoInit() {
@@ -328,6 +328,7 @@ public class RobotContainer {
     SmartDashboard.putData("drivetrain", driveTrain);
 
     new Trigger(ZeroGyroSup).onTrue(new InstantCommand(driveTrain::zeroGyroscope));
+    SmartDashboard.putData("zero gyro", new InstantCommand(driveTrain::zeroGyroscope));
  
     new Trigger(()->DvRightReefLineupSup.getAsBoolean()||DvLeftReefLineupSup.getAsBoolean()).whileTrue(new SequentialCommandGroup(
       new LineUp(driveTrain, DvLeftReefLineupSup,0.9),
@@ -367,8 +368,8 @@ public class RobotContainer {
               ()-> RobotState.getInstance().deliveringCoralHeight,
               distanceSensors,
               driveTrain,
-              ControllerXAxisSupplier,
-              ControllerYAxisSupplier,
+              ControllerSidewaysAxisSupplier,
+              ControllerForwardsAxisSupplier,
               ControllerZAxisSupplier,
               coralEndDefector,
               ()-> RobotState.getInstance().placeCoralLeft));
