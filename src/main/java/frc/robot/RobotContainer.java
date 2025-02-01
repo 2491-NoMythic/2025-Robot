@@ -14,7 +14,8 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.FileVersionException;
 import com.playingwithfusion.TimeOfFlight;
 import com.playingwithfusion.jni.TimeOfFlightJNI;
 
@@ -30,6 +31,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -41,14 +43,15 @@ import frc.robot.commands.IndicatorLights;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.LineUp;
 import frc.robot.commands.MoveMeters;
-import frc.robot.commands.PathFindToReef;
-import frc.robot.commands.PlaceCoralCommand;
+import frc.robot.commands.PlaceCoralNoPath;
 import frc.robot.commands.WaitCommand;
 import frc.robot.subsystems.DistanceSensors;
 import frc.robot.commands.NamedCommands.CoralIntake;
 import frc.robot.commands.NamedCommands.DeliverCoral;
 import frc.robot.settings.SensorNameEnums;
+import frc.robot.settings.CommandSelectorEnum;
 import frc.robot.settings.ElevatorEnums;
+import frc.robot.settings.ReefSideEnum;
 import frc.robot.subsystems.AlgaeEndeffectorSubsystem;
 import frc.robot.subsystems.CoralEndeffectorSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -61,8 +64,11 @@ import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.RobotState;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
+
+import org.json.simple.parser.ParseException;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -132,6 +138,7 @@ public class RobotContainer {
   DoubleSupplier ControllerYAxisSupplier;
   DoubleSupplier ControllerXAxisSupplier;
   DoubleSupplier ControllerZAxisSupplier;
+  Command pathFindToReef;
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
@@ -174,12 +181,12 @@ public class RobotContainer {
       ControllerZAxisSupplier = () -> modifyAxis(-driverControllerXbox.getRawAxis(Z_AXIS), DEADBAND_NORMAL);
       
       ZeroGyroSup = driverControllerXbox::getStartButton;
-      LeftReefLineupSup = operatorControllerXbox::getLeftBumperButton;
-      RightReefLineupSup =  operatorControllerXbox::getRightBumperButton;
+      LeftReefLineupSup = driverControllerXbox::getLeftBumperButton;
+      RightReefLineupSup =  driverControllerXbox::getRightBumperButton;
       SlowFrontSup = ()-> driverControllerXbox.getRightTriggerAxis() > 0.1;
       AlgaeIntakeSup = driverControllerXbox::getAButton; //TODO change to actual
       AlgaeShooterSup = driverControllerXbox::getXButton;
-      CoralPlaceTeleSupplier = ()-> driverControllerXbox.getPOV() == 0;;
+      CoralPlaceTeleSupplier = driverControllerXbox::getYButton;
 
       ReefHeight1Supplier = ()->operatorControllerXbox.getPOV() == 0;
       ReefHeight2Supplier = ()->operatorControllerXbox.getPOV() == 90;
@@ -200,7 +207,7 @@ public class RobotContainer {
       SlowFrontSup = ()->driverControllerPS4.getR2Axis()>-0.5;
       AlgaeIntakeSup = driverControllerPS4::getCrossButton; //TODO change to actual
       AlgaeShooterSup = driverControllerPS4::getSquareButton;
-      CoralPlaceTeleSupplier = driverControllerPS4:: getTouchpadButton;
+      CoralPlaceTeleSupplier = driverControllerPS4::getTriangleButton;
 
       ZeroGyroSup = driverControllerPS4::getPSButton;
 
@@ -212,18 +219,21 @@ public class RobotContainer {
     }
 
     limelightInit();
-    if (DrivetrainExists) {driveTrainInst();}
+    if (DrivetrainExists) {
+      driveTrainInst();
+      configureDriveTrain();
+    }
+    commandSelectorInst();
     sensorInit();     
     if (lightsExist) {lightsInst();}
- 
+    
     if (coralEndeffectorExists) {coralEndDefectorInst();}
     if (algaeEndeffectorExists) {algaeEndDefectorInst();}
     if (climberExists) {climberInst();}
     if (elevatorExists) {elevatorInst();}
     if (funnelIntakeExists) {funnelIntakeInst();}
     if (funnelRotatorExists) {funnelRotatorInst();}
-
-    if (DrivetrainExists) {configureDriveTrain();}
+    
     configureBindings(); // Configure the trigger bindings
     autoInit();
   }
@@ -312,23 +322,23 @@ public class RobotContainer {
     new Trigger(ReefHeight2Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef2));
     new Trigger(ReefHeight3Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef3));
     new Trigger(ReefHeight4Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef4));
-    new Trigger(CoralIntakeHeightSupplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.HumanPlayer));
 
     if (DrivetrainExists){
     SmartDashboard.putData("drivetrain", driveTrain);
 
     new Trigger(ZeroGyroSup).onTrue(new InstantCommand(driveTrain::zeroGyroscope));
-
-    new Trigger(CoralPlaceTeleSupplier).whileTrue(new PathFindToReef(driveTrain, ()->RobotState.getInstance().deliveringLeft));
-      SmartDashboard.putData("autoDrive command", new PathFindToReef(driveTrain, ()->RobotState.getInstance().deliveringLeft));
+    if(!(elevatorExists&&coralEndeffectorExists&&distanceSensorsExist)) {
+      new Trigger(CoralPlaceTeleSupplier).whileTrue(pathFindToReef);
+    }
+    
     new Trigger(SlowFrontSup).whileTrue(approachReef);
     InstantCommand setOffsets = new InstantCommand(driveTrain::setEncoderOffsets) {
       public boolean runsWhenDisabled() {
         return true;
       };
     };
-
-    SmartDashboard.putData("set offsets", setOffsets);
+        
+        SmartDashboard.putData("set offsets", setOffsets);
     SmartDashboard.putData(new InstantCommand(driveTrain::forceUpdateOdometryWithVision));
     SmartDashboard.putNumber("speedOut", ALGAE_SHOOT_SPEED);
     SmartDashboard.putNumber("speedIn", ALGAE_INTAKE_SPEED);
@@ -342,15 +352,19 @@ public class RobotContainer {
 
     if(elevatorExists && coralEndeffectorExists && DrivetrainExists && distanceSensorsExist){
       new Trigger(CoralPlaceTeleSupplier).whileTrue(
-          new PlaceCoralCommand(elevator,
-              ()-> RobotState.getInstance().deliveringCoralHeight,
+          new SequentialCommandGroup(
+            pathFindToReef,
+            new PlaceCoralNoPath(
+              elevator,
+              ()->RobotState.getInstance().deliveringCoralHeight,
               distanceSensors,
               driveTrain,
               ControllerXAxisSupplier,
               ControllerYAxisSupplier,
               ControllerZAxisSupplier,
               coralEndDefector,
-              ()->RobotState.getInstance().deliveringLeft));
+              ()->RobotState.getInstance().deliveringLeft))
+          );
     }
     /*
      * bindings:
@@ -425,14 +439,14 @@ public class RobotContainer {
     if(elevatorExists&&funnelIntakeExists&&coralEndeffectorExists) {
       coralIntake = new CoralIntake(elevator, funnelIntake, coralEndDefector);
       coralIntakeNamedCommand = coralIntake;
-      deliverCoralLeft1NamedCommand = new PlaceCoralCommand(elevator, ()->ElevatorEnums.Reef1, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true);
-      deliverCoralLeft2NamedCommand = new PlaceCoralCommand(elevator, ()->ElevatorEnums.Reef2, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true);
-      deliverCoralLeft3NamedCommand = new PlaceCoralCommand(elevator, ()->ElevatorEnums.Reef3, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true);
-      deliverCoralLeft4NamedCommand = new PlaceCoralCommand(elevator, ()->ElevatorEnums.Reef4, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true);
-      deliverCoralRight1NamedCommand = new PlaceCoralCommand(elevator, ()->ElevatorEnums.Reef1, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->false);
-      deliverCoralRight2NamedCommand = new PlaceCoralCommand(elevator, ()->ElevatorEnums.Reef2, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->false);
-      deliverCoralRight3NamedCommand = new PlaceCoralCommand(elevator, ()->ElevatorEnums.Reef3, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->false);
-      deliverCoralRight4NamedCommand = new PlaceCoralCommand(elevator, ()->ElevatorEnums.Reef4, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->false);
+      deliverCoralLeft1NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef1, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true);
+      deliverCoralLeft2NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef2, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true);
+      deliverCoralLeft3NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef3, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true);
+      deliverCoralLeft4NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef4, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true);
+      deliverCoralRight1NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef1, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->false);
+      deliverCoralRight2NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef2, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->false);
+      deliverCoralRight3NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef3, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->false);
+      deliverCoralRight4NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef4, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->false);
     } else {
       coralIntakeNamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
       deliverCoralLeft1NamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
@@ -469,6 +483,75 @@ public class RobotContainer {
     }
   }
 
+  private void commandSelectorInst() {
+    try {
+      pathFindToReef = new SelectCommand<>(
+        Map.ofEntries(
+          Map.entry(CommandSelectorEnum.FrontCenterReefLeft, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupA"), DEFAULT_PATH_CONSTRAINTS)),
+          Map.entry(CommandSelectorEnum.FrontCenterReefRight, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupB"), DEFAULT_PATH_CONSTRAINTS)),
+          Map.entry(CommandSelectorEnum.FrontRightReefLeft, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupC"), DEFAULT_PATH_CONSTRAINTS)),
+          Map.entry(CommandSelectorEnum.FrontRightReefRight, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupD"), DEFAULT_PATH_CONSTRAINTS)),
+          Map.entry(CommandSelectorEnum.BackRightReefLeft, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupE"), DEFAULT_PATH_CONSTRAINTS)),
+          Map.entry(CommandSelectorEnum.BackRightReefRight, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupF"), DEFAULT_PATH_CONSTRAINTS)),
+          Map.entry(CommandSelectorEnum.BackCenterReefLeft, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupG"), DEFAULT_PATH_CONSTRAINTS)),
+          Map.entry(CommandSelectorEnum.BackCenterReefRight, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupH"), DEFAULT_PATH_CONSTRAINTS)),
+          Map.entry(CommandSelectorEnum.BackLeftReefLeft, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupI"), DEFAULT_PATH_CONSTRAINTS)),
+          Map.entry(CommandSelectorEnum.BackLeftReefRight, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupJ"), DEFAULT_PATH_CONSTRAINTS)),
+          Map.entry(CommandSelectorEnum.FrontLeftReefLeft, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupK"), DEFAULT_PATH_CONSTRAINTS)),
+          Map.entry(CommandSelectorEnum.FrontLeftReefRight, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupL"), DEFAULT_PATH_CONSTRAINTS)),
+          Map.entry(CommandSelectorEnum.NoClosestSide, new InstantCommand(()->System.out.println("No Closest Reef Side")))
+          ), 
+          ()->selectCommand(()->RobotState.getInstance().deliveringLeft));
+        } catch (FileVersionException | IOException | ParseException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+          pathFindToReef = new InstantCommand(()->System.out.println("Error thrown while creating path!!"));
+        }
+  }
+  public static CommandSelectorEnum selectCommand(BooleanSupplier LeftSupplier) {
+    switch(RobotState.getInstance().closestReefSide) {
+      case backCenter:
+        if(LeftSupplier.getAsBoolean()) {
+          return CommandSelectorEnum.BackCenterReefLeft;
+        } else {
+          return CommandSelectorEnum.BackCenterReefRight;
+        }
+      case backRight:
+        if(LeftSupplier.getAsBoolean()) {
+          return CommandSelectorEnum.BackRightReefLeft;
+        } else {
+          return CommandSelectorEnum.BackRightReefRight;
+        }
+      case backLeft:
+        if(LeftSupplier.getAsBoolean()) {
+          return CommandSelectorEnum.BackLeftReefLeft;
+        } else {
+          return CommandSelectorEnum.BackLeftReefRight;
+        }
+      case frontCenter:
+        if(LeftSupplier.getAsBoolean()) {
+          return CommandSelectorEnum.FrontCenterReefLeft;
+        } else { 
+          return CommandSelectorEnum.FrontCenterReefRight;
+        }
+      case frontRight:
+        if(LeftSupplier.getAsBoolean()) {
+          return CommandSelectorEnum.FrontRightReefLeft;
+        } else { 
+          return CommandSelectorEnum.FrontRightReefRight;
+        }
+      case frontLeft:
+        if(LeftSupplier.getAsBoolean()) {
+          return CommandSelectorEnum.FrontLeftReefLeft;
+        } else { 
+          return CommandSelectorEnum.FrontLeftReefRight;
+        }
+      default:
+          return CommandSelectorEnum.NoClosestSide;
+    } 
+
+}
+
   public void teleopInit() {
   }
 
@@ -490,7 +573,7 @@ public class RobotContainer {
     if (Preferences.getBoolean("Use Limelight", false)) {
       limelight.updateLoggingWithPoses();
     }
-
+    SmartDashboard.putBoolean("REEFLINEUP/deliveringLeft", RobotState.getInstance().deliveringLeft);
   }
 
   public void disabledPeriodic() {
