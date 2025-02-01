@@ -17,12 +17,12 @@ import frc.robot.helpers.MotorLogger;
 
 import static frc.robot.settings.Constants.ClimberConstants.*;
 
-public class CimberSubsystem extends SubsystemBase {
+public class ClimberSubsystem extends SubsystemBase {
   TalonFX climberMotor1;
   Servo climberServo;
   MotorLogger motorLogger1;
   /** Creates a new CimberSubsystem. */
-  public CimberSubsystem() {
+  public ClimberSubsystem() {
     climberMotor1 = new TalonFX(CLIMBER_MOTOR_1_ID);
     climberMotor1.getConfigurator().apply(ClimberMotorConfig);
     climberServo = new Servo(CLIMBER_SERVO_ID);
@@ -37,9 +37,6 @@ public class CimberSubsystem extends SubsystemBase {
   }
   public void setKrakenPose(double angle) {
     climberMotor1.setControl(new PositionVoltage(angle));
-  }
-  public void runClimber(double speed){
-    climberMotor1.set(speed);
   }
   public void stopClimber(){
     climberMotor1.set(0);
