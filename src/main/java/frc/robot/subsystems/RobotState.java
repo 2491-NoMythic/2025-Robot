@@ -23,7 +23,7 @@ public class RobotState {
   public ReefOffsetEnums reefOffset;
   public boolean funnelSensorTrig;
   public boolean coralEndeffSensorTrig;
-
+  public boolean placeCoralLeft;
   private RobotState() {
   }
 

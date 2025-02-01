@@ -99,7 +99,13 @@ public class ElevatorSubsystem extends SubsystemBase {
       case HumanPlayer:
         setElevatorPosition(HUMAN_PLAYER_STATION_MILLIMETERS);
         break;
+      case Barge:
+        setElevatorPosition(BARGE_SHOOT_MILLIMETERS);
+        break;
     }
+  }
+  public boolean isElevatorAtPose() {
+    return elevatorMotor1.getClosedLoopError().getValueAsDouble() < ELEVATOR_THRESHOLD;
   }
   public void stopElevator(){
     elevatorMotor1.set(0);
