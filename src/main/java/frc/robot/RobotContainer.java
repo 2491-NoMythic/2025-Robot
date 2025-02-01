@@ -90,19 +90,19 @@ public class RobotContainer {
   // preferences are information saved on the Rio. They are initialized once, then
   // gotten every time
   // we run the code.
-  private final boolean useXboxController = Preferences.getBoolean("Xbox Controller", true);
-  
-  private final boolean algaeEndeffectorExists = Preferences.getBoolean("AlgaeEndDefector", true);
-  private final boolean coralEndeffectorExists = Preferences.getBoolean("CoralEndDefector", true);
-  private final boolean climberExists = Preferences.getBoolean("Climber", true);
-  private final boolean elevatorExists = Preferences.getBoolean("Elevator", true);
-  private final boolean funnelIntakeExists = Preferences.getBoolean("FunnelIntake", true);
-  private final boolean funnelRotatorExists = Preferences.getBoolean("FunnelRotator", true);
-  private final boolean DrivetrainExists = Preferences.getBoolean("DrivetrainExists", true);
-  private final boolean distanceSensorsExist = Preferences.getBoolean("DistanceSensorsExist", true);
-  private final boolean lightsExist = Preferences.getBoolean("Lights Exist", true);
-  private final boolean LimelightExists = Preferences.getBoolean("Limelight Exists", true);
-  private final boolean SensorsExist = Preferences.getBoolean("Sensors Exist", true);
+  private boolean useXboxController;
+
+  private boolean algaeEndeffectorExists;
+  private boolean coralEndeffectorExists;
+  private boolean climberExists;
+  private boolean elevatorExists;
+  private boolean funnelIntakeExists;
+  private boolean funnelRotatorExists;
+  private boolean DrivetrainExists;
+  private boolean distanceSensorsExist;
+  private boolean lightsExist;
+  private boolean LimelightExists;
+  private boolean SensorsExist;
 
   private DrivetrainSubsystem driveTrain;
   private Drive defaultDriveCommand;
@@ -177,6 +177,19 @@ public class RobotContainer {
     Preferences.initBoolean("DistanceSensorsExist", true);
     Preferences.initBoolean("LimelightExists", false);
     Preferences.initBoolean("Sensors Exist", false);
+
+    useXboxController = Preferences.getBoolean("Xbox Controller", true);
+    algaeEndeffectorExists = Preferences.getBoolean("AlgaeEndDefector", true);
+    coralEndeffectorExists = Preferences.getBoolean("CoralEndDefector", true);
+    climberExists = Preferences.getBoolean("Climber", true);
+    elevatorExists = Preferences.getBoolean("Elevator", true);
+    funnelIntakeExists = Preferences.getBoolean("FunnelIntake", true);
+    funnelRotatorExists = Preferences.getBoolean("FunnelRotator", true);
+    DrivetrainExists = Preferences.getBoolean("DrivetrainExists", true);
+    distanceSensorsExist = Preferences.getBoolean("DistanceSensorsExist", true);
+    lightsExist = Preferences.getBoolean("Lights Exist", true);
+    LimelightExists = Preferences.getBoolean("Limelight Exists", true);
+    SensorsExist = Preferences.getBoolean("Sensors Exist", true);  
 
     DataLogManager.start(); // Start logging
     DriverStation.startDataLog(DataLogManager.getLog()); // Joystick Data logging
