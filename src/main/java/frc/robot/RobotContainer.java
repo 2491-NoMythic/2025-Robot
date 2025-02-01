@@ -438,7 +438,6 @@ public class RobotContainer {
      * R2/RightTrigger: auto angle at reef
      */
 
-  }
 
   // Schedule `exampleMethodCommand` when the Xbox controller's B button is
   // pressed,
