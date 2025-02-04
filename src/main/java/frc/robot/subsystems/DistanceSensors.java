@@ -45,9 +45,13 @@ public class DistanceSensors  extends SubsystemBase{
     farRight = new TimeOfFlight(FAR_RIGHT_DIST_SENSOR_ID);
     SmartDashboard.putNumber("SENSOR/farLeftSampleTime", farLeft.getSampleTime());
     farLeft.setRangingMode(RangingMode.Short, 24);
+    farLeft.setRangeOfInterest(10, 10, 12, 12);
     middleLeft.setRangingMode(RangingMode.Short, 24);
+    middleLeft.setRangeOfInterest(10, 10, 12, 12);
     middleRight.setRangingMode(RangingMode.Short, 24);
+    middleRight.setRangeOfInterest(10, 10, 12, 12);
     farRight.setRangingMode(RangingMode.Short, 24);
+    farRight.setRangeOfInterest(10, 10, 12, 12);
   }
 /**
  * a method that returns the distance sensed by the given sensor, as shown below. If a sensor senses nothing within it's range, It returns 0.0 <br>

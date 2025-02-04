@@ -81,8 +81,8 @@ public class LineUp extends Command {
 
       case ALIGNED_LEFT:
         if(movingLeft.getAsBoolean()) {
-           drivetrain.stop();
           drivetrain.pointWheelsInward();
+           drivetrain.stop();
           finished = true;
         } else {
           drivetrain.drive(new ChassisSpeeds(0, speed, 0));
@@ -101,8 +101,8 @@ public class LineUp extends Command {
         if(movingLeft.getAsBoolean()) {
           drivetrain.drive(new ChassisSpeeds(0, -speed, 0));
         } else {
-          drivetrain.stop();
           drivetrain.pointWheelsInward();
+          drivetrain.stop();
           finished = true;
         }   
         break;
