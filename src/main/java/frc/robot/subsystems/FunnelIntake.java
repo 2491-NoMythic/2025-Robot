@@ -17,6 +17,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 
 import static frc.robot.settings.Constants.FunnelConstants.*;
 
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.helpers.MotorLogger;
@@ -72,7 +73,9 @@ public class FunnelIntake extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     RobotState.getInstance().funnelSensorTrig = funnelIntakeSensor.getVoltage()>2;
+    if(Preferences.getBoolean("Motor Logging", false)){
     logMotors();
+    }
   }
   public void runFunnel(double speed){
     intakeMotor1.set(speed);

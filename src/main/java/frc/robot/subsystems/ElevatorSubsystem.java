@@ -74,7 +74,9 @@ public class ElevatorSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    if(Preferences.getBoolean("Motor Logging", false)){
     logMotors();
+    }
   }
   /**
    * Creates a zero from input
