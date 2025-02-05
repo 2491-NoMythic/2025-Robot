@@ -10,6 +10,8 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.ForwardLimitSourceValue;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.helpers.MotorLogger;
 import frc.robot.settings.ElevatorEnums;
@@ -24,10 +26,12 @@ public class ElevatorSubsystem extends SubsystemBase {
   private double zeroPoint;
   MotorLogger motorLogger1;
   MotorLogger motorLogger2;
+  double limitSwitch;
   /** Creates a new ElevatorSubsystem. */
   public ElevatorSubsystem() {
     elevatorMotor1 = new TalonFX(ELEVATOR_MOTOR_1_ID);
     elevatorMotor2 = new TalonFX(ELEVATOR_MOTOR_2_ID);
+    limitSwitch = elevatorMotor1.getForwardLimit().getValueAsDouble();
     if (Preferences.getBoolean("CompBot", true)){  
       eleMotorConfig = new TalonFXConfiguration()
       .withSlot0(new Slot0Configs()
@@ -75,6 +79,9 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     logMotors();
+    if(limitSwitch > 0.1){
+      setZero(BOTTOM_MILLIMETERS);
+    }
   }
   /**
    * Creates a zero from input
