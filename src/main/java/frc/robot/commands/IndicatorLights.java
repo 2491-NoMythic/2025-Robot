@@ -1,21 +1,24 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.RobotState;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Lights;
+import frc.robot.subsystems.RobotState;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class IndicatorLights extends Command {
-  Lights lights;
   /** Creates a new IndicatorLights. */
+
+  Lights lights;
+  Timer timer;
+
   public IndicatorLights(Lights lights) {
-    this.lights = lights;
-    addRequirements(lights);
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(lights);
+    this.lights =lights;
+    timer = new Timer();
+    timer.start();
   }
 
   // Called when the command is initially scheduled.
@@ -25,21 +28,35 @@ public class IndicatorLights extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      if(RobotState.getInstance().coralSeen) {
-        lights.setBL(2,1,4);
-        lights.setBR(2,1,4);
-        //TODO adjust values plz
-      }
-      if(RobotState.getInstance().hasAlgae) {
-        lights.setFL(2,1,4);
-        lights.setFR(2,1,4);
-        //TODO adjust values :3
-      }
+    boolean limelightsUpdated = RobotState.getInstance().LimelightsUpdated;
+    boolean coralSeen = RobotState.getInstance().coralSeen;
+    double coralTimer = timer.get();
+
+    if(limelightsUpdated) {
+      //TODO: adjust these when we know what the lights are like
+      lights.setLights(0, 10, 0, 40, 0);
+    } else {
+      //TODO: adjust these when we know what the lights are like
+      lights.setLights(0, 10, 50, 0, 0);
+    }
+    if (coralSeen) {
+        if (coralTimer<2) {
+            if (coralTimer%0.2==0.1) {
+                lights.setLights(0, 10, 255, 255, 255);
+            }
+            else {
+                lights.setLights(0, 10, 0, 0, 0);
+            }
+        }
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    lights.lightsOut();
+    lights.dataSetter();
+  }
 
   // Returns true when the command should end.
   @Override
