@@ -39,23 +39,18 @@ public class CoralIntake extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    funnelIntake.runFunnel(2491); //TODO: change this value appropriately
     coralIntake.runCoralEndEffector(0.3);
-    funnelIntake.runFunnel(2491);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
   //sets endeffector and funnel intake to brake or coast mode based on wether their sensor's detect a coral
-    if(RobotState.getInstance().funnelSensorTrig) {
+    if(RobotState.getInstance().funnelSensorTrig || RobotState.getInstance().coralEndeffSensorTrig) {
       funnelIntake.setIdleMode(IdleMode.kBrake);
     } else {
       funnelIntake.setIdleMode(IdleMode.kCoast);
-    }
-    if(RobotState.getInstance().coralEndeffSensorTrig) {
-      coralIntake.setIdleMode(IdleMode.kBrake);
-    } else {
-      coralIntake.setIdleMode(IdleMode.kCoast);
     }
 
     funnelIntake.stopFunnel();
