@@ -49,6 +49,9 @@ public class IndicatorLights extends Command {
             }
         }
     }
+    if () {
+        
+    }
   }
 
   // Called once the command ends or is interrupted.
