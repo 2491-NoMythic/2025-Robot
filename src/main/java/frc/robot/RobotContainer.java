@@ -20,12 +20,14 @@ import com.playingwithfusion.TimeOfFlight;
 import com.playingwithfusion.jni.TimeOfFlightJNI;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -155,6 +157,8 @@ public class RobotContainer {
   BooleanSupplier OpRightReefLineupSup;
   BooleanSupplier ForceEjectCoral;
   BooleanSupplier ForceElevator;
+
+  Timer AutoTimer = new Timer();
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
   /**
@@ -506,6 +510,16 @@ public class RobotContainer {
 
   public void autonomousInit() {
     SmartDashboard.putNumber("autos ran", SmartDashboard.getNumber("autos ran", 0) + 1);
+    AutoTimer.reset();
+    AutoTimer.start();
+  }
+
+  public void autonomousPeriodic(){
+    if(AutoTimer.get() < 1){
+      driveTrain.drive(new ChassisSpeeds(2,0,0);
+    }else{
+      driveTrain.stop();
+    }
   }
 
   private double modifyAxis(double value, double deadband) {
