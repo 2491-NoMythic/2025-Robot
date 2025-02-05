@@ -86,7 +86,7 @@ public final class Constants {
      * number of gear reductions this is typically clockwise-positive.
      */
     public static final InvertedValue DRIVETRAIN_STEER_INVERTED =
-        InvertedValue.CounterClockwise_Positive;
+        InvertedValue.Clockwise_Positive;
 
     /**
      * How many meters the wheels travel per rotation.
