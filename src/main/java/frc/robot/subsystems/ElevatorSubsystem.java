@@ -26,12 +26,11 @@ public class ElevatorSubsystem extends SubsystemBase {
   private double zeroPoint;
   MotorLogger motorLogger1;
   MotorLogger motorLogger2;
-  double limitSwitch;
+
   /** Creates a new ElevatorSubsystem. */
   public ElevatorSubsystem() {
     elevatorMotor1 = new TalonFX(ELEVATOR_MOTOR_1_ID);
     elevatorMotor2 = new TalonFX(ELEVATOR_MOTOR_2_ID);
-    limitSwitch = elevatorMotor1.getForwardLimit().getValueAsDouble();
     if (Preferences.getBoolean("CompBot", true)){  
       eleMotorConfig = new TalonFXConfiguration()
       .withSlot0(new Slot0Configs()
@@ -79,7 +78,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     logMotors();
-    if(limitSwitch > 0.1){
+    if(elevatorMotor1.getForwardLimit().getValueAsDouble() > 0.1){
       setZero(BOTTOM_MILLIMETERS);
     }
   }
