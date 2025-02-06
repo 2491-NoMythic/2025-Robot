@@ -103,6 +103,7 @@ public class RobotContainer {
   private boolean lightsExist;
   private boolean LimelightExists;
   private boolean SensorsExist;
+  private boolean useMotorLogger;
 
   private DrivetrainSubsystem driveTrain;
   private Drive defaultDriveCommand;
@@ -177,6 +178,7 @@ public class RobotContainer {
     Preferences.initBoolean("DistanceSensorsExist", true);
     Preferences.initBoolean("LimelightExists", false);
     Preferences.initBoolean("Sensors Exist", false);
+    Preferences.initBoolean("Motor Logging", true);
 
     useXboxController = Preferences.getBoolean("Xbox Controller", true);
     algaeEndeffectorExists = Preferences.getBoolean("AlgaeEndDefector", true);
@@ -190,6 +192,7 @@ public class RobotContainer {
     lightsExist = Preferences.getBoolean("Lights Exist", true);
     LimelightExists = Preferences.getBoolean("Limelight Exists", true);
     SensorsExist = Preferences.getBoolean("Sensors Exist", true);  
+    useMotorLogger = Preferences.getBoolean("Motor Logging", true);
 
     DataLogManager.start(); // Start logging
     DriverStation.startDataLog(DataLogManager.getLog()); // Joystick Data logging

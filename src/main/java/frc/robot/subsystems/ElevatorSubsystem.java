@@ -77,7 +77,9 @@ public class ElevatorSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    if(Preferences.getBoolean("Motor Logging", false)){
     logMotors();
+    }
     if(elevatorMotor1.getForwardLimit().getValueAsDouble() > 0.1){
       setZero(BOTTOM_MILLIMETERS);
     }
