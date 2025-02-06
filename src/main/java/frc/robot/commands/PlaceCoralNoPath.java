@@ -25,24 +25,33 @@ import frc.robot.subsystems.AlgaeEndeffectorSubsystem;
 public class PlaceCoralNoPath extends SequentialCommandGroup{
 
     
-    public PlaceCoralNoPath(ElevatorSubsystem elevator, Supplier<ElevatorEnums> elevatorPose, DistanceSensors distanceSensors,
-            DrivetrainSubsystem drivetrain, DoubleSupplier xSupplier, DoubleSupplier ySupplier, DoubleSupplier rSupplier,
-            CoralEndeffectorSubsystem coralEndeffector, BooleanSupplier leftPlace,AlgaeEndeffectorSubsystem algaeEndeffectorSubsystem){
+    public PlaceCoralNoPath(
+        ElevatorSubsystem elevator,
+        Supplier<ElevatorEnums> elevatorPose,
+        DistanceSensors distanceSensors,
+        DrivetrainSubsystem drivetrain,
+        DoubleSupplier xSupplier,
+        DoubleSupplier ySupplier,
+        DoubleSupplier rSupplier,
+        CoralEndeffectorSubsystem coralEndeffector,
+        BooleanSupplier leftPlace,
+        AlgaeEndeffectorSubsystem algaeEndeffectorSubsystem,
+        BooleanSupplier shouldAlgae)
+    {
         addCommands(
             new ApproachReef(distanceSensors, drivetrain, xSupplier, ySupplier, rSupplier),//approaches reef while raising elevator
             new LineUp(drivetrain, leftPlace, 0.3),//align with reef
-            new ParallelCommandGroup(
-                new AlgaeIntakeCommand(algaeEndeffectorSubsystem,ALGAE_INTAKE_SPEED),
+            new ParallelRaceGroup(
+                //elevator command will stop this so modify it
+                new AlgaeIntakeCommand(algaeEndeffectorSubsystem, () -> shouldAlgae.getAsBoolean() ? ALGAE_INTAKE_SPEED : 0),
                 new SequentialCommandGroup(
                     new ElevatorCommand(elevator, elevatorPose),//raises elevator to position
                     new DeliverCoral(coralEndeffector),//drops coral
                     new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.Bottom), elevator) //sets elevator back to the bottom position
                 )
 
-            ),
-            new ElevatorCommand(elevator, elevatorPose),//raises elevator to position
-            new DeliverCoral(coralEndeffector),//drops coral
-            new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.Bottom), elevator) //sets elevator back to the bottom position
+            )
+          
         );
 
     }

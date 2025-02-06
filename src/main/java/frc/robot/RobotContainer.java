@@ -149,12 +149,14 @@ public class RobotContainer {
   DoubleSupplier ControllerYAxisSupplier;
   DoubleSupplier ControllerXAxisSupplier;
   DoubleSupplier ControllerZAxisSupplier;
+
   Command pathFindToReef;
 
   BooleanSupplier OpLeftReefLineupSup;
   BooleanSupplier OpRightReefLineupSup;
   BooleanSupplier ForceEjectCoral;
   BooleanSupplier ForceElevator;
+  BooleanSupplier shouldAlgae;
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
   /**
@@ -219,6 +221,7 @@ public class RobotContainer {
       ReefHeight4Supplier = ()->operatorControllerXbox.getPOV() == 270;
       CoralIntakeHeightSupplier = ()->operatorControllerXbox.getStartButton();
       BargeHeightSupplier = operatorControllerXbox::getXButton;
+      shouldAlgae = operatorControllerXbox::getAButtonPressed;
 
       //operator manual controls, should not be used unless other controls not working
       ForceEjectCoral = ()-> operatorControllerXbox.getRightTriggerAxis() > 0.1;
@@ -260,6 +263,7 @@ public class RobotContainer {
       CoralIntakeHeightSupplier = ()->operatorControllerPS4.getOptionsButton();
       BargeHeightSupplier = operatorControllerPS4::getTriangleButton;
       ClimbCommandSupplier = ()->operatorControllerPS4.getTriangleButton();
+      shouldAlgae = operatorControllerPS4::getCircleButton;
 
       //manual operator controls, should not be used unless other controls do not work
       ForceEjectCoral = operatorControllerPS4::getR2Button;
@@ -404,8 +408,8 @@ public class RobotContainer {
       new Trigger(CoralIntakeHeightSupplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.HumanPlayer));
     }
     if (algaeEndeffectorExists) {
-      new Trigger(AlgaeIntakeSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector, ALGAE_INTAKE_SPEED));
-      new Trigger(AlgaeShooterSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector, ALGAE_SHOOT_SPEED));
+      new Trigger(AlgaeIntakeSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector, ()->ALGAE_INTAKE_SPEED));
+      new Trigger(AlgaeShooterSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector, ()->ALGAE_SHOOT_SPEED));
     }
     if (climberExists){
       new Trigger(ClimbCommandSupplier).whileTrue(new ClimberCommand(climber));
@@ -423,7 +427,9 @@ public class RobotContainer {
               ControllerYAxisSupplier,
               ControllerZAxisSupplier,
               coralEndDefector,
-              ()->RobotState.getInstance().deliveringLeft))
+              ()->RobotState.getInstance().deliveringLeft,
+              algaeEndDefector,
+              shouldAlgae))
           );
     } else {
       new Trigger(CoralPlaceTeleSupplier).whileTrue(pathFindToReef);
@@ -513,18 +519,34 @@ public class RobotContainer {
     Command deliverCoralRight2NamedCommand;
     Command deliverCoralRight3NamedCommand;
     Command deliverCoralRight4NamedCommand;
+    Command deliverCoralLeft1NamedCommandWithAlgae;
+    Command deliverCoralLeft2NamedCommandWithAlgae;
+    Command deliverCoralLeft3NamedCommandWithAlgae;
+    Command deliverCoralLeft4NamedCommandWithAlgae;
+    Command deliverCoralRight1NamedCommandWithAlgae;
+    Command deliverCoralRight2NamedCommandWithAlgae;
+    Command deliverCoralRight3NamedCommandWithAlgae;
+    Command deliverCoralRight4NamedCommandWithAlgae;
     Command elevatorResetNamedCommand;
     if(elevatorExists&&funnelIntakeExists&&coralEndeffectorExists) {
       coralIntake = new CoralIntake(elevator, funnelIntake, coralEndDefector);
       coralIntakeNamedCommand = coralIntake;
-      deliverCoralLeft1NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef1, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true);
-      deliverCoralLeft2NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef2, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true);
-      deliverCoralLeft3NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef3, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true);
-      deliverCoralLeft4NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef4, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true);
-      deliverCoralRight1NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef1, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->false);
-      deliverCoralRight2NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef2, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->false);
-      deliverCoralRight3NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef3, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->false);
-      deliverCoralRight4NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef4, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->false);
+      deliverCoralLeft1NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef1, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true,algaeEndDefector, ()-> false);
+      deliverCoralLeft2NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef2, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true,algaeEndDefector, ()-> false);
+      deliverCoralLeft3NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef3, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true,algaeEndDefector, ()-> false);
+      deliverCoralLeft4NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef4, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true,algaeEndDefector, ()-> false);
+      deliverCoralRight1NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef1, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->false,algaeEndDefector, ()->false);
+      deliverCoralRight2NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef2, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->false,algaeEndDefector, ()->false);
+      deliverCoralRight3NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef3, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->false,algaeEndDefector, ()->false);
+      deliverCoralRight4NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef4, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->false,algaeEndDefector, ()->false);
+      deliverCoralLeft1NamedCommandWithAlgae = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef1, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true,algaeEndDefector, ()->true);
+      deliverCoralLeft2NamedCommandWithAlgae = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef2, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true,algaeEndDefector, ()->true);
+      deliverCoralLeft3NamedCommandWithAlgae = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef3, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true,algaeEndDefector, ()->true);
+      deliverCoralLeft4NamedCommandWithAlgae = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef4, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true,algaeEndDefector, ()->true);
+      deliverCoralRight1NamedCommandWithAlgae = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef1, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->false,algaeEndDefector, ()->true);
+      deliverCoralRight2NamedCommandWithAlgae = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef2, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->false,algaeEndDefector, ()->true);
+      deliverCoralRight3NamedCommandWithAlgae = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef3, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->false,algaeEndDefector, ()->true);
+      deliverCoralRight4NamedCommandWithAlgae = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef4, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->false,algaeEndDefector, ()->true);
     } else {
       coralIntakeNamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
       deliverCoralLeft1NamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
@@ -535,6 +557,14 @@ public class RobotContainer {
       deliverCoralRight2NamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
       deliverCoralRight3NamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
       deliverCoralRight4NamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
+      deliverCoralLeft1NamedCommandWithAlgae = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
+      deliverCoralLeft2NamedCommandWithAlgae = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
+      deliverCoralLeft3NamedCommandWithAlgae = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
+      deliverCoralLeft4NamedCommandWithAlgae = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
+      deliverCoralRight1NamedCommandWithAlgae = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
+      deliverCoralRight2NamedCommandWithAlgae = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
+      deliverCoralRight3NamedCommandWithAlgae = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
+      deliverCoralRight4NamedCommandWithAlgae = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
     }
 
     if(elevatorExists) {
@@ -552,6 +582,14 @@ public class RobotContainer {
     NamedCommands.registerCommand("DeliverCoralRight2", deliverCoralRight2NamedCommand);
     NamedCommands.registerCommand("DeliverCoralRight3", deliverCoralRight3NamedCommand);
     NamedCommands.registerCommand("DeliverCoralRight4", deliverCoralRight4NamedCommand);
+    NamedCommands.registerCommand("DeliverCoralLeft1Algae", deliverCoralLeft1NamedCommandWithAlgae);
+    NamedCommands.registerCommand("DeliverCoralLeft2Algae", deliverCoralLeft2NamedCommandWithAlgae);
+    NamedCommands.registerCommand("DeliverCoralLeft3Algae", deliverCoralLeft3NamedCommandWithAlgae);
+    NamedCommands.registerCommand("DeliverCoralLeft4Algae", deliverCoralLeft4NamedCommandWithAlgae);
+    NamedCommands.registerCommand("DeliverCoralRight1Algae", deliverCoralRight1NamedCommandWithAlgae);
+    NamedCommands.registerCommand("DeliverCoralRight2Algae", deliverCoralRight2NamedCommandWithAlgae);
+    NamedCommands.registerCommand("DeliverCoralRight3Algae", deliverCoralRight3NamedCommandWithAlgae);
+    NamedCommands.registerCommand("DeliverCoralRight4Algae", deliverCoralRight4NamedCommandWithAlgae);
     NamedCommands.registerCommand("ElevatorReset", elevatorResetNamedCommand);
   }
 

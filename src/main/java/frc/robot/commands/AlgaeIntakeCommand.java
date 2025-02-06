@@ -4,6 +4,11 @@
 
 package frc.robot.commands;
 
+import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.ALGAE_INTAKE_SPEED;
+
+import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.AlgaeEndeffectorSubsystem;
 import frc.robot.subsystems.RobotState;
@@ -11,9 +16,10 @@ import frc.robot.subsystems.RobotState;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class AlgaeIntakeCommand extends Command {
   AlgaeEndeffectorSubsystem algaeEndeffector;
-  double shootSpeed;
+  DoubleSupplier shootSpeed;
+  boolean algaeDetected;
   /** Creates a new AlgaeIntakeCommand. */
-  public AlgaeIntakeCommand(AlgaeEndeffectorSubsystem algaeEndeffector, double shootSpeed) {
+  public AlgaeIntakeCommand(AlgaeEndeffectorSubsystem algaeEndeffector, DoubleSupplier shootSpeed) {
     this.algaeEndeffector = algaeEndeffector;
     this.shootSpeed = shootSpeed;
     addRequirements(algaeEndeffector);
@@ -23,14 +29,25 @@ public class AlgaeIntakeCommand extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    algaeDetected = false;
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
-    algaeEndeffector.runAlgaeEndDefector(shootSpeed);
-
+    // This command is meant to be used with a parallel race group. 
+    // if we returned true from isFinished we would cancel the rest of the commands.
+    // so instead handle finishing internally.
+    if (RobotState.getInstance().hasAlgae) {
+      algaeDetected = true;
+    }
+    if (algaeDetected) {
+      algaeEndeffector.stopAlgaeEndDefector();
+    }
+    else {
+      algaeEndeffector.runAlgaeEndDefector(shootSpeed.getAsDouble());
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -43,11 +60,6 @@ public class AlgaeIntakeCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(shootSpeed > 0) {
-      return RobotState.getInstance().hasAlgae;
-    }
-    else{
       return false;
     }
-}
 }
