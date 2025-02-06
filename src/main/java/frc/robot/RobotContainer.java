@@ -178,7 +178,7 @@ public class RobotContainer {
     Preferences.initBoolean("DistanceSensorsExist", true);
     Preferences.initBoolean("LimelightExists", false);
     Preferences.initBoolean("Sensors Exist", false);
-    Preferences.initBoolean("Motor Logging", false);
+    Preferences.initBoolean("Motor Logging", true);
 
     useXboxController = Preferences.getBoolean("Xbox Controller", true);
     algaeEndeffectorExists = Preferences.getBoolean("AlgaeEndDefector", true);
