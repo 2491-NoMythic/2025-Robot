@@ -327,8 +327,10 @@ public class RobotContainer {
 
   private void autoInit() {
     registerNamedCommands();
+    if(DrivetrainExists){
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
+    }
   }
 
   private void limelightInit() {
@@ -438,7 +440,7 @@ public class RobotContainer {
               coralEndDefector,
               ()->RobotState.getInstance().deliveringLeft))
           );
-    } else {
+    } else if(DrivetrainExists) {
       new Trigger(CoralPlaceTeleSupplier).whileTrue(pathFindToReef);
     }
 
@@ -454,10 +456,10 @@ public class RobotContainer {
     if(coralEndeffectorExists){
       new Trigger(ForceEjectCoral).whileTrue(new InstantCommand(()->coralEndDefector.runCoralEndEffector(CORAL_ENDEFFECTOR_SPEED)));
     }
-    if (useXboxController) {
+    if (useXboxController && algaeEndeffectorExists) {
       new Trigger(AlgaeBargeSup)
           .whileTrue(new ShootInBarge(driveTrain, elevator, algaeEndDefector, () -> driverControllerXbox.getLeftY()));
-    } else {
+    } else if(algaeEndeffectorExists) {
       new Trigger(AlgaeBargeSup)
           .whileTrue(new ShootInBarge(driveTrain, elevator, algaeEndDefector, () -> driverControllerPS4.getLeftY()));
     }}
