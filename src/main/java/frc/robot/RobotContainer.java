@@ -310,7 +310,7 @@ public class RobotContainer {
         ControllerZAxisSupplier);
     driveTrain.setDefaultCommand(defaultDriveCommand);
     
-    if(true) {
+    if(SensorsExist) {
       approachReef = new ApproachReef(
       distanceSensors,
       driveTrain,
