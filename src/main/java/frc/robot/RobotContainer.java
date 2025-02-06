@@ -53,6 +53,7 @@ import frc.robot.commands.WaitCommand;
 import frc.robot.subsystems.DistanceSensors;
 import frc.robot.commands.NamedCommands.CoralIntake;
 import frc.robot.commands.NamedCommands.DeliverCoral;
+import frc.robot.commands.NamedCommands.EjectCoral;
 import frc.robot.settings.SensorNameEnums;
 import frc.robot.settings.CommandSelectorEnum;
 import frc.robot.settings.ElevatorEnums;
@@ -450,11 +451,11 @@ public class RobotContainer {
     }
 
     if(elevatorExists){
-      new Trigger(ForceElevator).whileTrue(new InstantCommand(()-> elevator.setElevatorPosition(RobotState.getInstance().deliveringCoralHeight)));
+      new Trigger(ForceElevator).onTrue(new InstantCommand(()-> elevator.setElevatorPosition(RobotState.getInstance().deliveringCoralHeight)));
     }
 
     if(coralEndeffectorExists){
-      new Trigger(ForceEjectCoral).whileTrue(new InstantCommand(()->coralEndDefector.runCoralEndEffector(CORAL_ENDEFFECTOR_SPEED)));
+      new Trigger(ForceEjectCoral).whileTrue(new EjectCoral(coralEndDefector));
     }
     if (useXboxController && algaeEndeffectorExists) {
       new Trigger(AlgaeBargeSup)
