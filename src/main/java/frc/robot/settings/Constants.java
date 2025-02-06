@@ -379,14 +379,14 @@ public final class Constants {
   }
 
   public final class CoralEndeffectorConstants{
-    public static final int CORAL_ENDEFFECTOR_MOTOR = 9;
+    public static final int CORAL_ENDEFFECTOR_MOTOR = 20;
 
     public static final double CORAL_ENDEFFECTOR_KP = 0.001;
     public static final double CORAL_ENDEFFECTOR_KI = 0;
     public static final double CORAL_ENDEFFECTOR_KD = 0;
     public static final double CORAL_ENDEFFECTOR_KFF = 0;
     
-    public static final double CORAL_ENDEFFECTOR_SPEED = 2491.0;
+    public static final double CORAL_ENDEFFECTOR_SPEED = 0.5;
   }
 
   public final class AlgaeEndeffectorConstants{
