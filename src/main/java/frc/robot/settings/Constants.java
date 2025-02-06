@@ -363,7 +363,7 @@ public final class Constants {
     public static final double ALLOWABLE_POSE_DIFFERENCE = 0.5;
     public static final double MAX_TAG_DISTANCE = 3.5;
 
-    public static final Translation2d FIELD_CORNER = new Translation2d(16.54, 8.02);
+    public static final Translation2d FIELD_CORNER = new Translation2d(17.54, 8.02);
 
     // how many degrees back is your limelight rotated from perfectly vertical?
     public static final double limelightMountAngleDegrees = 22.0;

@@ -27,6 +27,7 @@ import static frc.robot.settings.Constants.Field.*;
 import static frc.robot.settings.Constants.Vision.APRILTAG_LIMELIGHTA_NAME;
 import static frc.robot.settings.Constants.Vision.APRILTAG_LIMELIGHTB_NAME;
 import static frc.robot.settings.Constants.Vision.APRILTAG_LIMELIGHTC_NAME;
+import static frc.robot.settings.Constants.Vision.FIELD_CORNER;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -60,6 +61,7 @@ import frc.robot.LimelightHelpers.PoseEstimate;
 import frc.robot.helpers.MotorLogger;
 import frc.robot.helpers.MythicalMath;
 import frc.robot.settings.Constants.DriveConstants;
+import frc.robot.settings.Constants;
 import frc.robot.settings.ReefSideEnum;
 
 public class DrivetrainSubsystem extends SubsystemBase {
@@ -429,6 +431,17 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
   public boolean isAtRotationTarget() {
     return rotationSpeedController.atSetpoint();
+  }
+  public boolean drivetrainInIntakeZones() {
+    boolean inIntakeZone = false;
+    double intakeZoneLength = 2;
+    double intakeZoneWidth = 1;
+    if(
+      (getPose().getY()>FIELD_CORNER.getY()-intakeZoneLength || getPose().getY()<intakeZoneLength) //robot is in the Y ranges for the intake zone
+      && (getPose().getX()>FIELD_CORNER.getX()-intakeZoneWidth || getPose().getX()<intakeZoneWidth)) { //robot is in the X ranges for the intake zone
+      inIntakeZone = true;
+    }
+    return inIntakeZone;
   }
   /*
    * Logs important data for the drivetrain

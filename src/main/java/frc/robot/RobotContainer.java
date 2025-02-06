@@ -156,6 +156,7 @@ public class RobotContainer {
   BooleanSupplier OpRightReefLineupSup;
   BooleanSupplier ForceEjectCoral;
   BooleanSupplier ForceElevator;
+  BooleanSupplier CoralIntakeSup;
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
   /**
@@ -225,6 +226,7 @@ public class RobotContainer {
       //Manual driver controls
       AlgaeIntakeSup = driverControllerXbox::getAButton;
       AlgaeShooterSup = driverControllerXbox::getXButton;
+      CoralIntakeSup = driverControllerXbox::getXButton;
 
       //operator automatic controls
       OpLeftReefLineupSup = operatorControllerXbox::getLeftBumperButton;
@@ -265,6 +267,7 @@ public class RobotContainer {
       //manual driver controls
       AlgaeShooterSup = driverControllerPS4::getSquareButton;
       AlgaeDepositSup = driverControllerPS4::getCircleButton;
+      CoralIntakeSup = driverControllerPS4::getSquareButton;
 
       //automatic operator controls
       OpLeftReefLineupSup = operatorControllerPS4::getL1Button;
@@ -408,10 +411,14 @@ public class RobotContainer {
         return true;
       };
     };
-
   
     SmartDashboard.putData("set offsets", setOffsets);
     SmartDashboard.putData(new InstantCommand(driveTrain::forceUpdateOdometryWithVision));
+    if(coralEndeffectorExists&&funnelIntakeExists&&elevatorExists) {
+      CoralIntake coralIntake = new CoralIntake(elevator, funnelIntake, coralEndDefector);
+      new Trigger(()->(CoralIntakeSup.getAsBoolean()||driveTrain.drivetrainInIntakeZones())
+      &&!RobotState.getInstance().isCoralSeen()).whileTrue(coralIntake);
+    }
     }
     
     if (elevatorExists){
