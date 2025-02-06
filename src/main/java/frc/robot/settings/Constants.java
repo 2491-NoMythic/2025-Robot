@@ -86,7 +86,7 @@ public final class Constants {
      * number of gear reductions this is typically clockwise-positive.
      */
     public static final InvertedValue DRIVETRAIN_STEER_INVERTED =
-        InvertedValue.CounterClockwise_Positive;
+        InvertedValue.Clockwise_Positive;
 
     /**
      * How many meters the wheels travel per rotation.
@@ -211,7 +211,7 @@ public final class Constants {
     public static final double ROBOT_ANGLE_TOLERANCE = 0.5;
 
     public static final PathConstraints DEFAULT_PATH_CONSTRAINTS =
-        new PathConstraints(2, 1.5, Math.toRadians(360), Math.toRadians(360));
+        new PathConstraints(1, 1, Math.toRadians(360), Math.toRadians(360));
   }
 
   public static final class CTREConfigs {
@@ -361,7 +361,7 @@ public final class Constants {
     public static final String LIMELIGHT_SHUFFLEBOARD_TAB = "Vision";
 
     public static final double ALLOWABLE_POSE_DIFFERENCE = 0.5;
-    public static final double MAX_TAG_DISTANCE = 3;
+    public static final double MAX_TAG_DISTANCE = 3.5;
 
     public static final Translation2d FIELD_CORNER = new Translation2d(16.54, 8.02);
 

@@ -397,13 +397,15 @@ public class RobotContainer {
     new Trigger(ZeroGyroSup).onTrue(new InstantCommand(driveTrain::zeroGyroscope));
     new Trigger(AutoAngleAtReefSup).whileTrue(autoAngleAtReef);
     SmartDashboard.putData(autoAngleAtReef);
-    
+    if(SensorsExist) {
     new Trigger(SlowFrontSup).whileTrue(approachReef);
+    }
     InstantCommand setOffsets = new InstantCommand(driveTrain::setEncoderOffsets) {
       public boolean runsWhenDisabled() {
         return true;
       };
     };
+
   
     SmartDashboard.putData("set offsets", setOffsets);
     SmartDashboard.putData(new InstantCommand(driveTrain::forceUpdateOdometryWithVision));
@@ -454,13 +456,15 @@ public class RobotContainer {
     if(coralEndeffectorExists){
       new Trigger(ForceEjectCoral).whileTrue(new InstantCommand(()->coralEndDefector.runCoralEndEffector(CORAL_ENDEFFECTOR_SPEED)));
     }
-    if (useXboxController) {
-      new Trigger(AlgaeBargeSup)
-          .whileTrue(new ShootInBarge(driveTrain, elevator, algaeEndDefector, () -> driverControllerXbox.getLeftY()));
-    } else {
-      new Trigger(AlgaeBargeSup)
-          .whileTrue(new ShootInBarge(driveTrain, elevator, algaeEndDefector, () -> driverControllerPS4.getLeftY()));
-    }}
+    if(algaeEndeffectorExists) {
+      if (useXboxController) {
+        new Trigger(AlgaeBargeSup)
+            .whileTrue(new ShootInBarge(driveTrain, elevator, algaeEndDefector, () -> driverControllerXbox.getLeftY()));
+      } else {
+        new Trigger(AlgaeBargeSup)
+            .whileTrue(new ShootInBarge(driveTrain, elevator, algaeEndDefector, () -> driverControllerPS4.getLeftY()));
+      }}
+    }
     /*
      * bindings:
      * PS4: zero the gyroscope
