@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.234210526315789,
-        "y": 2.273848684210526
+        "x": 5.205170454545455,
+        "y": 2.374701704545455
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.143244202385179,
-        "y": 2.5067115793023618
+        "x": 4.934606405106428,
+        "y": 2.95084566095678
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.022532894736842,
-        "y": 2.8030427631578947
+        "x": 5.0057386363636365,
+        "y": 2.7835369318181815
       },
       "prevControl": {
-        "x": 5.107151833576715,
-        "y": 2.56779898494131
+        "x": 5.244789344568326,
+        "y": 2.287481286003698
       },
       "nextControl": null,
       "isLocked": false,
@@ -48,7 +48,7 @@
   "folder": "ReefSideLineup",
   "idealStartingState": {
     "velocity": 0.5,
-    "rotation": 118.55139187296017
+    "rotation": 119.99999999999999
   },
   "useDefaultConstraints": true
 }
