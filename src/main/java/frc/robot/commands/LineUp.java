@@ -39,6 +39,7 @@ public class LineUp extends Command {
  * this command will align your robot side-to-side on one of the reef poles. 
  * @param drivetrain
  * @param movingLeft true if you are aligning on the left pole, false, if you are aligning on the right pole
+ * @param speed the speed at which the drivetrain will drive, right or left depending on sensor position
  */
   public LineUp(DrivetrainSubsystem drivetrain, BooleanSupplier movingLeft, double speed) {
     this.drivetrain = drivetrain;
@@ -73,9 +74,9 @@ public class LineUp extends Command {
     switch(reefOffset){
       case TOO_FAR_LEFT:
         if (movingLeft.getAsBoolean()) {
-          drivetrain.drive(new ChassisSpeeds(0, speed, 0));
+          drivetrain.drive(new ChassisSpeeds(0, -speed, 0));
         } else{
-          drivetrain.drive(new ChassisSpeeds(0, speed, 0));
+          drivetrain.drive(new ChassisSpeeds(0, -speed, 0));
         }
         break;
 
@@ -85,21 +86,21 @@ public class LineUp extends Command {
           drivetrain.pointWheelsInward();
           finished = true;
         } else {
-          drivetrain.drive(new ChassisSpeeds(0, speed, 0));
+          drivetrain.drive(new ChassisSpeeds(0, -speed, 0));
         }   
         break;
 
       case CENTERED:
         if(movingLeft.getAsBoolean()) {
-          drivetrain.drive(new ChassisSpeeds(0, -speed, 0));
-        } else {
           drivetrain.drive(new ChassisSpeeds(0, speed, 0));
+        } else {
+          drivetrain.drive(new ChassisSpeeds(0, -speed, 0));
         }   
         break;
 
       case ALIGNED_RIGHT:
         if(movingLeft.getAsBoolean()) {
-          drivetrain.drive(new ChassisSpeeds(0, -speed, 0));
+          drivetrain.drive(new ChassisSpeeds(0, speed, 0));
         } else {
           drivetrain.stop();
           drivetrain.pointWheelsInward();
@@ -109,9 +110,9 @@ public class LineUp extends Command {
       
       case TOO_FAR_RIGHT:
         if(movingLeft.getAsBoolean()) {
-          drivetrain.drive(new ChassisSpeeds(0, -speed, 0));
+          drivetrain.drive(new ChassisSpeeds(0, speed, 0));
         } else {
-          drivetrain.drive(new ChassisSpeeds(0, -speed, 0));
+          drivetrain.drive(new ChassisSpeeds(0, speed, 0));
         }   
         break;
 
