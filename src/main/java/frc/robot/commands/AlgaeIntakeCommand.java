@@ -18,6 +18,7 @@ public class AlgaeIntakeCommand extends Command {
   AlgaeEndeffectorSubsystem algaeEndeffector;
   DoubleSupplier shootSpeed;
   boolean algaeDetected;
+  boolean goForAlagea;
   /** Creates a new AlgaeIntakeCommand. */
   public AlgaeIntakeCommand(AlgaeEndeffectorSubsystem algaeEndeffector, DoubleSupplier shootSpeed) {
     this.algaeEndeffector = algaeEndeffector;
@@ -43,6 +44,9 @@ public class AlgaeIntakeCommand extends Command {
       algaeDetected = true;
     }
     if (algaeDetected) {
+      algaeEndeffector.stopAlgaeEndDefector();
+    }
+    if (goForAlagea = false) {
       algaeEndeffector.stopAlgaeEndDefector();
     }
     else {
