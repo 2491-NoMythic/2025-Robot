@@ -434,8 +434,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
   public boolean drivetrainInIntakeZones() {
     boolean inIntakeZone = false;
-    double intakeZoneLength = 2;
-    double intakeZoneWidth = 1;
+    double intakeZoneLength = 2;//lenth along the y axis of the "intake zone" (which we make up)
+    double intakeZoneWidth = 1; //length along the x axis of the "intake zone" (which we make up)
     if(
       (getPose().getY()>FIELD_CORNER.getY()-intakeZoneLength || getPose().getY()<intakeZoneLength) //robot is in the Y ranges for the intake zone
       && (getPose().getX()>FIELD_CORNER.getX()-intakeZoneWidth || getPose().getX()<intakeZoneWidth)) { //robot is in the X ranges for the intake zone
