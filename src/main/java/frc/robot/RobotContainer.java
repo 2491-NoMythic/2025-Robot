@@ -277,6 +277,7 @@ public class RobotContainer {
       ReefHeight4Supplier = ()->operatorControllerXbox.getPOV() == 270;
       CoralIntakeHeightSupplier = ()->operatorControllerXbox.getStartButton();
       BargeHeightSupplier = operatorControllerXbox::getXButton;
+      goForAlgae = operatorControllerXbox::getBButton;
 
       //operator manual controls, should not be used unless other controls not working
       ForceEjectCoral = ()-> operatorControllerXbox.getRightTriggerAxis() > 0.1;
@@ -295,10 +296,10 @@ public class RobotContainer {
       ReefHeight4Supplier = ()->operatorControllerPS4.getPOV() == 270;
       CoralIntakeHeightSupplier = ()->operatorControllerPS4.getOptionsButton();
       BargeHeightSupplier = operatorControllerPS4::getTriangleButton;
-      ClimbCommandSupplier = ()->operatorControllerPS4.getTriangleButton();
       goForAlgae = operatorControllerPS4::getCircleButton;
-
+      
       //manual operator controls, should not be used unless other controls do not work
+      ClimbCommandSupplier = ()->operatorControllerPS4.getTriangleButton();
       ForceEjectCoral = operatorControllerPS4::getR2Button;
       ForceElevator = operatorControllerPS4::getL2Button;
     }
