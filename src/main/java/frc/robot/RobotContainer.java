@@ -628,38 +628,39 @@ public class RobotContainer {
         }
   }
   public static CommandSelectorEnum selectCommand(BooleanSupplier LeftSupplier) {
-    switch(RobotState.getInstance().closestReefSide) {
-      case middleFar:
+    switch(RobotState.getInstance().closestReefSide){
+      case middleFar: 
+      RobotState.getInstance().pathFinding = true;
         if(LeftSupplier.getAsBoolean()) {
           return CommandSelectorEnum.BackCenterReefLeft;
         } else {
           return CommandSelectorEnum.BackCenterReefRight;
         }
-      case processorFar:
+      case processorFar:RobotState.getInstance().pathFinding = true;
         if(LeftSupplier.getAsBoolean()) {
           return CommandSelectorEnum.BackRightReefLeft;
         } else {
           return CommandSelectorEnum.BackRightReefRight;
         }
-      case bargeFar:
+      case bargeFar:RobotState.getInstance().pathFinding = true;
         if(LeftSupplier.getAsBoolean()) {
           return CommandSelectorEnum.BackLeftReefLeft;
         } else {
           return CommandSelectorEnum.BackLeftReefRight;
         }
-      case middleClose:
+      case middleClose:RobotState.getInstance().pathFinding = true;
         if(LeftSupplier.getAsBoolean()) {
           return CommandSelectorEnum.FrontCenterReefLeft;
         } else { 
           return CommandSelectorEnum.FrontCenterReefRight;
         }
-      case processorClose:
+      case processorClose:RobotState.getInstance().pathFinding = true;
         if(LeftSupplier.getAsBoolean()) {
           return CommandSelectorEnum.FrontRightReefLeft;
         } else { 
           return CommandSelectorEnum.FrontRightReefRight;
         }
-      case bargeClose:
+      case bargeClose:RobotState.getInstance().pathFinding = true;
         if(LeftSupplier.getAsBoolean()) {
           return CommandSelectorEnum.FrontLeftReefLeft;
         } else { 
@@ -677,6 +678,9 @@ public class RobotContainer {
   public void teleopPeriodic() {
     if(DrivetrainExists) {
       SmartDashboard.putData(driveTrain.getCurrentCommand());
+    }
+    if (elevatorExists) {
+      SmartDashboard.putData(elevator.getCurrentCommand());
     }
   }
   public void robotInit(){

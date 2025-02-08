@@ -54,6 +54,7 @@ public class LineUp extends Command {
   public void initialize() {
     notSensed = false;
     finished = false;
+    RobotState.getInstance().sensorLineUp = true;
   }
 
   // Called every time the scheduler runs while the command is scheduled.

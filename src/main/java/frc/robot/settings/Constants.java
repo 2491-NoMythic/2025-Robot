@@ -37,6 +37,8 @@ public final class Constants {
     public static final int MIDDLE_RIGHT_DIST_SENSOR_ID = 3;
     public static final int FAR_RIGHT_DIST_SENSOR_ID = 4;
     public static final  int ELEVATOR_SENSOR_ID = 2491;
+    public static final  int FUNNEL_SENSOR_ID = 2491;
+    public static final  int INTAKE_SENSOR_ID = 2491;
 
     public static final double RANGE_TO_SEE_REEF = 200; // in millimeters, the distance that will trigger the time of flight sensors to report that we are or aren't in front of the reef
     public static final double SLOW_DOWN_RANGE = 1500;
@@ -480,5 +482,39 @@ public final class Constants {
     public static final double BLUE_BARGE_SHOOT_X = 2491; //TODO: change these values
     public static final double RED_BARGE_SHOOT_X = 2491; //TODO: change these values
    }
+public final class LightConstants{
+  public static final int LEFT_ELEVATOR_LIGHTS_START = 2491;
+  public static final int LEFT_ELEVATOR_LIGHTS_END = 2491;
+  public static final int RIGHT_ELEVATOR_LIGHTS_START = 2491;
+  public static final int RIGHT_ELEVATOR_LIGHTS_END = 2491;
+
+  public static final int FUNNEL_LIGHTS_START = 2491;
+  public static final int FUNNEL_LIGHTS_END = 2491;
+
+  public static final int DRIVETRAIN_LIGHTS_START = 2491;
+  public static final int DRIVETRAIN_LIGHTS_END = 2491;
+
+
+  public static final int HEIGHT4_START = 2491;
+  public static final int HEIGHT4_END = 2491;
+
+  public static final int HEIGHT3_START = 2491;
+  public static final int HEIGHT3_END = 2491;
+
+  public static final int HEIGHT2_START = 2491;
+  public static final int HEIGHT2_END = 2491;
+
+  public static final int HEIGHT1_START = 2491;
+  public static final int HEIGHT1_END = 2491;
+
+
+  public static final int ELEVATOR_L_TOP_START = 2491;
+  public static final int ELEVATOR_L_TOP_END = 2491;
+
+  public static final int ELEVATOR_R_TOP_START = 2491;
+  public static final int ELEVATOR_R_TOP_END = 2491;
+
 }
+
+  }
 

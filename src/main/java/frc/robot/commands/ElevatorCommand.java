@@ -6,9 +6,11 @@ package frc.robot.commands;
 
 import java.util.function.Supplier;
 
+import frc.robot.subsystems.RobotState;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.settings.Constants.ElevatorConstants;
+import frc.robot.Robot;
 import frc.robot.settings.ElevatorEnums;
 
 
@@ -30,7 +32,9 @@ public class ElevatorCommand extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    RobotState.getInstance().raiseElevator = true;
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -41,7 +45,7 @@ public class ElevatorCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-
+    RobotState.getInstance().raiseElevator = false;
   }
 
   // Returns true when the command should end.

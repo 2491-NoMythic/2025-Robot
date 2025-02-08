@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.settings.Constants.LightConstants;
 
 public class Lights extends SubsystemBase {
   /** Creates a new SubsystemLights. */
@@ -45,17 +46,17 @@ public class Lights extends SubsystemBase {
   }
 
   //TODO: adjust start/end values
-  public void setFR(int R, int G, int B) {
-    setLights(24, 91, R, G, B);
+  public void setElevatorleft(int R, int G, int B) {
+    setLights(LightConstants.LEFT_ELEVATOR_LIGHTS_START, LightConstants.LEFT_ELEVATOR_LIGHTS_END, R, G, B);
   }
-  public void setFL(int R, int G, int B) {
-    setLights(24, 91, R, G, B);
+  public void setElevatorRight(int R, int G, int B) {
+    setLights(LightConstants.RIGHT_ELEVATOR_LIGHTS_START, LightConstants.RIGHT_ELEVATOR_LIGHTS_END, R, G, B);
   }
-  public void setBR(int R, int G, int B) {
-    setLights(24, 91, R, G, B);
+  public void setFunnel(int R, int G, int B) {
+    setLights(LightConstants.FUNNEL_LIGHTS_START, LightConstants.FUNNEL_LIGHTS_END, R, G, B);
   }
-  public void setBL(int R, int G, int B) {
-    setLights(24, 91, R, G, B);
+  public void setDrivetrain(int R, int G, int B) {
+    setLights(LightConstants.DRIVETRAIN_LIGHTS_START, LightConstants.DRIVETRAIN_LIGHTS_END, R, G, B);
   }
   //TODO: adjust start/end values
 
