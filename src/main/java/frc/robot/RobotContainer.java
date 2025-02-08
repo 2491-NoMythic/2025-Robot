@@ -53,6 +53,7 @@ import frc.robot.commands.WaitCommand;
 import frc.robot.subsystems.DistanceSensors;
 import frc.robot.commands.NamedCommands.CoralIntake;
 import frc.robot.commands.NamedCommands.DeliverCoral;
+import frc.robot.commands.autos.PlaceCoralNoOdometry;
 import frc.robot.settings.SensorNameEnums;
 import frc.robot.settings.CommandSelectorEnum;
 import frc.robot.settings.ElevatorEnums;
@@ -72,6 +73,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 import org.json.simple.parser.ParseException;
 
@@ -332,6 +334,21 @@ public class RobotContainer {
   private void autoInit() {
     registerNamedCommands();
     autoChooser = AutoBuilder.buildAutoChooser();
+    //change these two booleans to modify where the NoOdometry command will place coral
+    BooleanSupplier leftPlace = ()->true;
+    Supplier<ElevatorEnums> elevatorHeightSupplier= ()->ElevatorEnums.Reef2;
+    if(DrivetrainExists) {
+      autoChooser.addOption("moveForwardNoOdometry", new MoveMeters(driveTrain, 2, 1, 0, 0));
+    }
+    if(DrivetrainExists&&elevatorExists&&distanceSensorsExist&&coralEndeffectorExists) {
+      autoChooser.addOption("placeCoralNoOdometry", new PlaceCoralNoOdometry(
+        driveTrain,
+        elevator,
+        coralEndDefector,
+        distanceSensors,
+        leftPlace,
+        elevatorHeightSupplier));
+    }
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
