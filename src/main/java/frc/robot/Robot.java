@@ -38,7 +38,7 @@ public class Robot extends LoggedRobot {
     // autonomous chooser on the dashboard.
 
     Logger.recordMetadata("ProjectName", "MyProject"); // Set a metadata value
-
+    
     if (isReal()) {
       // the following indented code is from ChatGPT, and checks if a USB stick is pluged in. If it
       // can locate the USB

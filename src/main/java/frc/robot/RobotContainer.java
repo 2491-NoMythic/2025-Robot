@@ -8,6 +8,7 @@ import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.ALGAE_INTAK
 import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.ALGAE_SHOOT_SPEED;
 import static frc.robot.settings.Constants.CoralEndeffectorConstants.CORAL_ENDEFFECTOR_SPEED;
 import static frc.robot.settings.Constants.DriveConstants.*;
+import static frc.robot.settings.Constants.FunnelConstants.FUNNEL_INTAKE_SPEED;
 import static frc.robot.settings.Constants.PS4Driver.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -156,6 +157,7 @@ public class RobotContainer {
   BooleanSupplier OpRightReefLineupSup;
   BooleanSupplier ForceEjectCoral;
   BooleanSupplier ForceElevator;
+  BooleanSupplier ManualCoralIntake;
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
   /**
@@ -163,9 +165,9 @@ public class RobotContainer {
    */
   public RobotContainer() {
     // preferences are initialized IF they don't already exist on the Rio
-    Preferences.initBoolean("Lights Exist", true);
-    Preferences.initBoolean("CompBot", true);
-    Preferences.initBoolean("Use Limelight", true);
+    Preferences.initBoolean("Lights Exist", false);
+    Preferences.initBoolean("CompBot", false);
+    Preferences.initBoolean("Use Limelight", false);
     Preferences.initBoolean("Xbox Controller", true);
     Preferences.initBoolean("Elevator", false);
     Preferences.initBoolean("CoralEndDefector", false);
@@ -175,14 +177,14 @@ public class RobotContainer {
     Preferences.initBoolean("Climber", false);
     Preferences.initBoolean("DrivetrainExists", false);
     Preferences.initBoolean("AntiTipActive", true);
-    Preferences.initBoolean("DistanceSensorsExist", true);
+    Preferences.initBoolean("DistanceSensorsExist", false);
     Preferences.initBoolean("LimelightExists", false);
     Preferences.initBoolean("Sensors Exist", false);
     Preferences.initBoolean("Motor Logging", true);
 
     useXboxController = Preferences.getBoolean("Xbox Controller", true);
     algaeEndeffectorExists = Preferences.getBoolean("AlgaeEndDefector", true);
-    coralEndeffectorExists = Preferences.getBoolean("CoralEndDefector", true);
+    coralEndeffectorExists = Preferences.getBoolean("CoralEndDefector", false);
     climberExists = Preferences.getBoolean("Climber", true);
     elevatorExists = Preferences.getBoolean("Elevator", true);
     funnelIntakeExists = Preferences.getBoolean("FunnelIntake", true);
@@ -225,6 +227,7 @@ public class RobotContainer {
       //Manual driver controls
       AlgaeIntakeSup = driverControllerXbox::getAButton;
       AlgaeShooterSup = driverControllerXbox::getXButton;
+      ManualCoralIntake = driverControllerXbox::getAButton;
 
       //operator automatic controls
       OpLeftReefLineupSup = operatorControllerXbox::getLeftBumperButton;
@@ -265,6 +268,7 @@ public class RobotContainer {
       //manual driver controls
       AlgaeShooterSup = driverControllerPS4::getSquareButton;
       AlgaeDepositSup = driverControllerPS4::getCircleButton;
+      ManualCoralIntake = driverControllerPS4:: getCrossButton;
 
       //automatic operator controls
       OpLeftReefLineupSup = operatorControllerPS4::getL1Button;
@@ -330,8 +334,10 @@ public class RobotContainer {
 
   private void autoInit() {
     registerNamedCommands();
-    autoChooser = AutoBuilder.buildAutoChooser();
-    SmartDashboard.putData("Auto Chooser", autoChooser);
+    if(DrivetrainExists){
+      autoChooser = AutoBuilder.buildAutoChooser();
+      SmartDashboard.putData("Auto Chooser", autoChooser);
+    }
   }
 
   private void limelightInit() {
@@ -467,6 +473,10 @@ public class RobotContainer {
         new Trigger(AlgaeBargeSup)
             .whileTrue(new ShootInBarge(driveTrain, elevator, algaeEndDefector, () -> driverControllerPS4.getLeftY()));
       }}
+      if(funnelIntakeExists){
+        new Trigger(ManualCoralIntake).onTrue(new InstantCommand(() -> funnelIntake.runFunnel(FUNNEL_INTAKE_SPEED)))
+            .onFalse(new InstantCommand(() -> funnelIntake.stopFunnel()));
+      }
     }
     /*
      * bindings:

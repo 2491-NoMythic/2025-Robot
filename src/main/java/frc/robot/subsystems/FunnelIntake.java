@@ -4,9 +4,11 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.spark.SparkAnalogSensor;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -78,9 +80,10 @@ public class FunnelIntake extends SubsystemBase {
     }
   }
   public void runFunnel(double speed){
-    intakeMotor1.set(speed);
-    intakeMotor2.set(speed);
+    intakeMotor1.getClosedLoopController().setReference(speed, ControlType.kVelocity);
+    intakeMotor2.getClosedLoopController().setReference(speed, ControlType.kVelocity);
   }
+
   public void stopFunnel() {
     intakeMotor1.set(0);
     intakeMotor2.set(0);
