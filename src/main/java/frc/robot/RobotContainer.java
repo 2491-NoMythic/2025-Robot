@@ -279,10 +279,10 @@ public class RobotContainer {
       ForceEjectCoral = ()-> operatorControllerXbox.getRightTriggerAxis() > 0.1;
       ForceElevator = ()-> operatorControllerXbox.getRightTriggerAxis() > 0.1;
       ClimbCommandSupplier = ()->operatorControllerXbox.getYButton();
+      
+    } else if (OCTEnum == ControllerEnums.PS4Controller){
       //Controller IDs
       operatorControllerPS4 = new PS4Controller(OPERATOR_CONTROLLER_ID);
-
-    } else if (OCTEnum == ControllerEnums.PS4Controller){
       //automatic operator controls
       OpLeftReefLineupSup = operatorControllerPS4::getL1Button;
       OpRightReefLineupSup = operatorControllerPS4::getR1Button;
