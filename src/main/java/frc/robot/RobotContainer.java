@@ -54,6 +54,7 @@ import frc.robot.commands.WaitCommand;
 import frc.robot.subsystems.DistanceSensors;
 import frc.robot.commands.NamedCommands.CoralIntake;
 import frc.robot.commands.NamedCommands.DeliverCoral;
+import frc.robot.commands.NamedCommands.EjectCoral;
 import frc.robot.commands.autos.PlaceCoralNoOdometry;
 import frc.robot.settings.SensorNameEnums;
 import frc.robot.settings.CommandSelectorEnum;
@@ -350,6 +351,7 @@ public class RobotContainer {
 
   private void autoInit() {
     registerNamedCommands();
+    if(DrivetrainExists){
     autoChooser = AutoBuilder.buildAutoChooser();
     //change these two booleans to modify where the NoOdometry command will place coral
     BooleanSupplier leftPlace = ()->true;
@@ -368,6 +370,7 @@ public class RobotContainer {
         algaeEndDefector));
     }
     SmartDashboard.putData("Auto Chooser", autoChooser);
+    }
   }
 
   private void limelightInit() {
@@ -490,7 +493,7 @@ public class RobotContainer {
               goForAlgae))
 
           );
-    } else {
+    } else if(DrivetrainExists) {
       new Trigger(CoralPlaceTeleSupplier).whileTrue(pathFindToReef);
     }
 
@@ -500,17 +503,19 @@ public class RobotContainer {
     }
 
     if(elevatorExists){
-      new Trigger(ForceElevator).whileTrue(new InstantCommand(()-> elevator.setElevatorPosition(RobotState.getInstance().deliveringCoralHeight)));
+      new Trigger(ForceElevator).onTrue(new InstantCommand(()-> elevator.setElevatorPosition(RobotState.getInstance().deliveringCoralHeight)));
     }
 
     if(coralEndeffectorExists){
-      new Trigger(ForceEjectCoral).whileTrue(new InstantCommand(()->coralEndDefector.runCoralEndEffector(CORAL_ENDEFFECTOR_SPEED)));
+      new Trigger(ForceEjectCoral).whileTrue(new EjectCoral(coralEndDefector));
     }
+
     if(algaeEndeffectorExists) {
         new Trigger(AlgaeBargeSup)
             .whileTrue(new ShootInBarge(driveTrain, elevator, algaeEndDefector, AlgaeDriveSup));
       }
     }
+
     /*
      * bindings:
      * PS4: zero the gyroscope
