@@ -40,7 +40,7 @@ public final class Constants {
 
     public static final double RANGE_TO_SEE_REEF_FLAT_SENSORS = 200; // in millimeters, the distance that will trigger the time of flight sensors to report that we are or aren't in front of the reef
     public static final double RANGE_TO_SEE_REEF_ANGLED_SENSORS = 210; // in millimeters, the distance that will trigger the time of flight sensors to report that we are or aren't in front of the reef
-    public static final double RANGE_TO_SEE_REEF_ANGLED_AND_SPACED_SENSORS = 350; // in millimeters, the distance that will trigger the time of flight sensors to report that we are or aren't in front of the reef
+    public static final double RANGE_TO_SEE_REEF_ANGLED_AND_SPACED_SENSORS = 500; // in millimeters, the distance that will trigger the time of flight sensors to report that we are or aren't in front of the reef
     public static final double SLOW_DOWN_RANGE = 1500;
 
   }

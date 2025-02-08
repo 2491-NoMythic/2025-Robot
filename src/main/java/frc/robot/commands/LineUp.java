@@ -74,7 +74,7 @@ public class LineUp extends Command {
     switch(reefOffset){
       case TOO_FAR_LEFT:
         if (movingLeft.getAsBoolean()) {
-          drivetrain.drive(new ChassisSpeeds(0, -speed, 0));
+          drivetrain.drive(new ChassisSpeeds(0, -speed/1.5, 0));
         } else{
           drivetrain.drive(new ChassisSpeeds(0, -speed, 0));
         }
@@ -112,7 +112,7 @@ public class LineUp extends Command {
         if(movingLeft.getAsBoolean()) {
           drivetrain.drive(new ChassisSpeeds(0, speed, 0));
         } else {
-          drivetrain.drive(new ChassisSpeeds(0, speed, 0));
+          drivetrain.drive(new ChassisSpeeds(0, speed/1.5, 0));
         }   
         break;
 
