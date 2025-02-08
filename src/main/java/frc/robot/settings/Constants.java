@@ -38,7 +38,9 @@ public final class Constants {
     public static final int FAR_RIGHT_DIST_SENSOR_ID = 4;
     public static final  int ELEVATOR_SENSOR_ID = 2491;
 
-    public static final double RANGE_TO_SEE_REEF = 200; // in millimeters, the distance that will trigger the time of flight sensors to report that we are or aren't in front of the reef
+    public static final double RANGE_TO_SEE_REEF_FLAT_SENSORS = 200; // in millimeters, the distance that will trigger the time of flight sensors to report that we are or aren't in front of the reef
+    public static final double RANGE_TO_SEE_REEF_ANGLED_SENSORS = 210; // in millimeters, the distance that will trigger the time of flight sensors to report that we are or aren't in front of the reef
+    public static final double RANGE_TO_SEE_REEF_ANGLED_AND_SPACED_SENSORS = 500; // in millimeters, the distance that will trigger the time of flight sensors to report that we are or aren't in front of the reef
     public static final double SLOW_DOWN_RANGE = 1500;
 
   }
@@ -51,15 +53,15 @@ public final class Constants {
      * The left-to-right distance between the drivetrain wheels Should be measured from center to
      * center.
      */
-    public static final double DRIVETRAIN_TRACKWIDTH_METERS = 0.52705;
+    public static final double DRIVETRAIN_TRACKWIDTH_METERS = 0.58;
     /**
      * The front-to-back distance between the drivetrain wheels. Should be measured from center to
      * center.
      */
-    public static final double DRIVETRAIN_WHEELBASE_METERS = 0.52705;
+    public static final double DRIVETRAIN_WHEELBASE_METERS = 0.63;
 
     /** The diameter of the module's wheel in meters. */
-    public static final double DRIVETRAIN_WHEEL_DIAMETER = 0.092; // 0.098;
+    public static final double DRIVETRAIN_WHEEL_DIAMETER = 0.097; // 0.098;
 
     /**
      * The overall drive reduction of the module. Multiplying motor rotations by this value should
@@ -67,7 +69,7 @@ public final class Constants {
      * about these.
      */
     public static final double DRIVETRAIN_DRIVE_REDUCTION =
-        (15.0 / 50.0) * (28.0 / 16.0) * (15.0 / 45.0);
+        (13.0 / 50.0) * (28.0 / 16.0) * (15.0 / 45.0);
 
     /**
      * Whether the drive motor should be counterclockwise or clockwise positive. If there is an odd
@@ -199,8 +201,8 @@ public final class Constants {
     public static final double k_XY_I = 0.0;
     public static final double k_XY_D = 0.0;
 
-    public static final double k_THETA_P = 4;
-    public static final double k_THETA_I = 5.0;
+    public static final double k_THETA_P = 8;
+    public static final double k_THETA_I = 0.0;
     public static final double k_THETA_D = 0.0;
     public static final double k_THETA_TOLORANCE_DEGREES = 2.0;
     public static final double k_THETA_TOLORANCE_DEG_PER_SEC = 10;
@@ -363,7 +365,9 @@ public final class Constants {
     public static final double ALLOWABLE_POSE_DIFFERENCE = 0.5;
     public static final double MAX_TAG_DISTANCE = 3.5;
 
-    public static final Translation2d FIELD_CORNER = new Translation2d(16.54, 8.02);
+    public static final Translation2d FIELD_CORNER = new Translation2d(17.54, 8.02);
+    public static final Translation2d FIELD_CORNER_FOR_INTAKE = new Translation2d(16.65, 7.5);
+
 
     // how many degrees back is your limelight rotated from perfectly vertical?
     public static final double limelightMountAngleDegrees = 22.0;
@@ -379,14 +383,14 @@ public final class Constants {
   }
 
   public final class CoralEndeffectorConstants{
-    public static final int CORAL_ENDEFFECTOR_MOTOR = 9;
+    public static final int CORAL_ENDEFFECTOR_MOTOR = 20;
 
     public static final double CORAL_ENDEFFECTOR_KP = 0.001;
     public static final double CORAL_ENDEFFECTOR_KI = 0;
     public static final double CORAL_ENDEFFECTOR_KD = 0;
     public static final double CORAL_ENDEFFECTOR_KFF = 0;
     
-    public static final double CORAL_ENDEFFECTOR_SPEED = 2491.0;
+    public static final double CORAL_ENDEFFECTOR_SPEED = 0.5;
   }
 
   public final class AlgaeEndeffectorConstants{
