@@ -46,13 +46,13 @@ public class PlaceCoralNoPath extends SequentialCommandGroup{
                 //elevator command will stop this so modify it
                 new AlgaeIntakeCommand(algaeEndeffectorSubsystem, () -> goForAlagea ? ALGAE_INTAKE_SPEED : 0),
                 new SequentialCommandGroup(
-                    new ElevatorCommand(elevator, elevatorPose),//raises elevator to position
+                    new ParallelRaceGroup(
+                        new ElevatorCommand(elevator, elevatorPose),//raises elevator to position)
+                        new WaitUntil(()->elevator.isElevatorAtPose()))),
                     new DeliverCoral(coralEndeffector),//drops coral
                     new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.Bottom), elevator) //sets elevator back to the bottom position
                 )
 
-            )
-          
         );
 
     }
