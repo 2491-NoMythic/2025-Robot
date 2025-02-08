@@ -33,6 +33,6 @@ public class ShootInBarge extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(new LineUpBarge(drivetrainSubsystem, controllerSupplier),
        new ElevatorCommand(elevatorSubsystem, () -> ElevatorEnums.Barge),
-       (new AlgaeIntakeCommand(algaeSubsystem, 1)));
+       (new AlgaeIntakeCommand(algaeSubsystem, ()->-1)));
   }
 }

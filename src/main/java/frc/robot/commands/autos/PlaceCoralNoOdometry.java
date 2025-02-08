@@ -17,6 +17,7 @@ import frc.robot.commands.MoveMeters;
 import frc.robot.commands.PlaceCoralNoPath;
 import frc.robot.commands.WaitUntil;
 import frc.robot.settings.ElevatorEnums;
+import frc.robot.subsystems.AlgaeEndeffectorSubsystem;
 import frc.robot.subsystems.CoralEndeffectorSubsystem;
 import frc.robot.subsystems.DistanceSensors;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -27,7 +28,7 @@ import frc.robot.subsystems.ElevatorSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class PlaceCoralNoOdometry extends SequentialCommandGroup {
   /** Creates a new PlaceCoralNoOdometry. */
-  public PlaceCoralNoOdometry(DrivetrainSubsystem drivetrain, ElevatorSubsystem elevator, CoralEndeffectorSubsystem coralEndEffector, DistanceSensors distanceSensors, BooleanSupplier movingLeft, Supplier<ElevatorEnums> heightsupplier) {
+  public PlaceCoralNoOdometry(DrivetrainSubsystem drivetrain, ElevatorSubsystem elevator, CoralEndeffectorSubsystem coralEndEffector, DistanceSensors distanceSensors, BooleanSupplier movingLeft, Supplier<ElevatorEnums> heightsupplier, AlgaeEndeffectorSubsystem algaeEndEffector) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
@@ -35,7 +36,7 @@ public class PlaceCoralNoOdometry extends SequentialCommandGroup {
         new MoveMeters(drivetrain, 2, 0.5, 0, 0),
         new WaitUntil(()->frc.robot.subsystems.RobotState.getInstance().middleLeftSensorTriggered && frc.robot.subsystems.RobotState.getInstance().middleRightSensorTriggered)
       ),
-      new PlaceCoralNoPath(elevator, heightsupplier, distanceSensors, drivetrain, ()->0, ()->0, ()->0, coralEndEffector, movingLeft)
+      new PlaceCoralNoPath(elevator, heightsupplier, distanceSensors, drivetrain, ()->0, ()->0, ()->0, coralEndEffector, movingLeft, algaeEndEffector, ()->true)
     );
   }
 }
