@@ -19,6 +19,7 @@ import frc.robot.helpers.MotorLogger;
 
 import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.*;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class AlgaeEndeffectorSubsystem extends SubsystemBase {
   SparkMax algaeEndeffectorMotor1;
@@ -93,7 +94,9 @@ public class AlgaeEndeffectorSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    if(Preferences.getBoolean("Motor Logging", false)){
     logMotors();
+    }
     powerCheck();
   }
 }
