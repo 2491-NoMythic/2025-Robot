@@ -51,15 +51,15 @@ public final class Constants {
      * The left-to-right distance between the drivetrain wheels Should be measured from center to
      * center.
      */
-    public static final double DRIVETRAIN_TRACKWIDTH_METERS = 0.52705;
+    public static final double DRIVETRAIN_TRACKWIDTH_METERS = 0.58;
     /**
      * The front-to-back distance between the drivetrain wheels. Should be measured from center to
      * center.
      */
-    public static final double DRIVETRAIN_WHEELBASE_METERS = 0.52705;
+    public static final double DRIVETRAIN_WHEELBASE_METERS = 0.63;
 
     /** The diameter of the module's wheel in meters. */
-    public static final double DRIVETRAIN_WHEEL_DIAMETER = 0.092; // 0.098;
+    public static final double DRIVETRAIN_WHEEL_DIAMETER = 0.097; // 0.098;
 
     /**
      * The overall drive reduction of the module. Multiplying motor rotations by this value should
@@ -67,7 +67,7 @@ public final class Constants {
      * about these.
      */
     public static final double DRIVETRAIN_DRIVE_REDUCTION =
-        (15.0 / 50.0) * (28.0 / 16.0) * (15.0 / 45.0);
+        (13.0 / 50.0) * (28.0 / 16.0) * (15.0 / 45.0);
 
     /**
      * Whether the drive motor should be counterclockwise or clockwise positive. If there is an odd
@@ -199,8 +199,8 @@ public final class Constants {
     public static final double k_XY_I = 0.0;
     public static final double k_XY_D = 0.0;
 
-    public static final double k_THETA_P = 4;
-    public static final double k_THETA_I = 5.0;
+    public static final double k_THETA_P = 8;
+    public static final double k_THETA_I = 0.0;
     public static final double k_THETA_D = 0.0;
     public static final double k_THETA_TOLORANCE_DEGREES = 2.0;
     public static final double k_THETA_TOLORANCE_DEG_PER_SEC = 10;
