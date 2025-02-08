@@ -447,19 +447,19 @@ public final class Constants {
   }
 
   public final class FunnelConstants{
-    public static final int FUNNEL_INTAKE_MOTOR_1_ID = 21;
-    public static final int FUNNEL_INTAKE_MOTOR_2_ID = 22;
+    public static final int FUNNEL_SLANT_MOTOR_ID = 21;
+    public static final int FUNNEL_STRAIGHT_MOTOR_ID = 22;
     public static final int FUNNEL_ROTATOR_MOTOR_ID = 2491;
 
-    public static final double FUNNEL_INTAKE_1_KP = 2491;
-    public static final double FUNNEL_INTAKE_1_KI = 2491;
-    public static final double FUNNEL_INTAKE_1_KD = 2491;
-    public static final double FUNNEL_INTAKE_1_KFF = 2491;
+    public static final double FUNNEL_SLANT_MOTOR_KP = 0.000031;
+    public static final double FUNNEL_SLANT_MOTOR_KI = 0;
+    public static final double FUNNEL_SLANT_MOTOR_KD = 0;
+    public static final double FUNNEL_SLANT_MOTOR_KFF = 0.0001315;
 
-    public static final double FUNNEL_INTAKE_2_KP = 2491;
-    public static final double FUNNEL_INTAKE_2_KI = 2491;
-    public static final double FUNNEL_INTAKE_2_KD = 2491;
-    public static final double FUNNEL_INTAKE_2_KFF = 2491;
+    public static final double FUNNEL_STRAIGHT_MOTOR_KP = 0.0001;
+    public static final double FUNNEL_STRAIGHT_MOTOR_KI = 0;
+    public static final double FUNNEL_STRAIGHT_MOTOR_KD = 0;
+    public static final double FUNNEL_STRAIGHT_MOTOR_KFF = 0.000116;
 
     public static final double FUNNEL_ROTATOR_KP = 2491;
     public static final double FUNNEL_ROTATOR_KI = 2491;
@@ -467,7 +467,7 @@ public final class Constants {
     public static final double FUNNEL_ROTATOR_KFF = 2491;
     public static final int FUNNEL_ROTATOR_SUPPLY_CURRENT_LIMIT = 2491;
     public static final double FUNNEL_ROTATOR_GEAR_RATIO = 2491;
-    public static final double FUNNEL_INTAKE_SPEED = 0.2491;
+    public static final double FUNNEL_INTAKE_SPEED = 1600;
   }
 
   public final class AutoAlignToReefConstants {
