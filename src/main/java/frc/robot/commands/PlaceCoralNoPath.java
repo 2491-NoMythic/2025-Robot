@@ -26,9 +26,11 @@ public class PlaceCoralNoPath extends SequentialCommandGroup{
             CoralEndeffectorSubsystem coralEndeffector, BooleanSupplier leftPlace){
         addCommands(
             new ApproachReef(distanceSensors, drivetrain, xSupplier, ySupplier, rSupplier),//approaches reef while raising elevator
+            new LineUp(drivetrain, leftPlace, 0.3),//align with reef
             new ParallelRaceGroup(
                 new ElevatorCommand(elevator, elevatorPose),//raises elevator to position
-                new LineUp(drivetrain, leftPlace, 0.3)),//align with reef
+                new WaitUntil(()->elevator.isElevatorAtPose()), //sets elevator back to the bottom position
+                new LineUp(drivetrain, leftPlace, 0.8)),//align with reef
             new DeliverCoral(coralEndeffector),//drops coral
             new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.Bottom), elevator) //sets elevator back to the bottom position
         );

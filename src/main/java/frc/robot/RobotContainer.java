@@ -54,6 +54,7 @@ import frc.robot.commands.WaitCommand;
 import frc.robot.subsystems.DistanceSensors;
 import frc.robot.commands.NamedCommands.CoralIntake;
 import frc.robot.commands.NamedCommands.DeliverCoral;
+import frc.robot.commands.autos.PlaceCoralNoOdometry;
 import frc.robot.settings.SensorNameEnums;
 import frc.robot.settings.CommandSelectorEnum;
 import frc.robot.settings.ElevatorEnums;
@@ -73,6 +74,7 @@ import java.lang.ModuleLayer.Controller;
 import java.util.Map;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 import org.json.simple.parser.ParseException;
 
@@ -160,6 +162,7 @@ public class RobotContainer {
   BooleanSupplier OpRightReefLineupSup;
   BooleanSupplier ForceEjectCoral;
   BooleanSupplier ForceElevator;
+  BooleanSupplier CoralIntakeSup;
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
   /**
@@ -182,7 +185,6 @@ public class RobotContainer {
     Preferences.initBoolean("AntiTipActive", true);
     Preferences.initBoolean("DistanceSensorsExist", true);
     Preferences.initBoolean("LimelightExists", false);
-    Preferences.initBoolean("Sensors Exist", false);
     Preferences.initBoolean("Motor Logging", true);
 
     driverControllerTypeString = Preferences.getString("Driver Controller Type", "XboxController");
@@ -199,7 +201,6 @@ public class RobotContainer {
     distanceSensorsExist = Preferences.getBoolean("DistanceSensorsExist", true);
     lightsExist = Preferences.getBoolean("Lights Exist", true);
     LimelightExists = Preferences.getBoolean("Limelight Exists", true);
-    SensorsExist = Preferences.getBoolean("Sensors Exist", true);  
     useMotorLogger = Preferences.getBoolean("Motor Logging", true);
 
     DataLogManager.start(); // Start logging
@@ -233,7 +234,10 @@ public class RobotContainer {
       //Manual driver controls
       AlgaeIntakeSup = driverControllerXbox::getAButton;
       AlgaeShooterSup = driverControllerXbox::getXButton;
+       CoralIntakeSup = driverControllerXbox::getXButton;
+
     } else if (DCTEnum == ControllerEnums.PS4Controller) {
+
       driverControllerPS4 = new PS4Controller(DRIVE_CONTROLLER_ID);
       //Drive controls
       ControllerSidewaysAxisSupplier = () -> modifyAxis(-driverControllerPS4.getRawAxis(X_AXIS), DEADBAND_NORMAL);
@@ -256,6 +260,8 @@ public class RobotContainer {
       //manual driver controls
       AlgaeShooterSup = driverControllerPS4::getSquareButton;
       AlgaeDepositSup = driverControllerPS4::getCircleButton;
+      CoralIntakeSup = driverControllerPS4::getSquareButton;
+
     } 
     if (OCTEnum == ControllerEnums.XboxController) {
       operatorControllerXbox = new XboxController(OPERATOR_CONTROLLER_ID);
@@ -295,7 +301,7 @@ public class RobotContainer {
     }
 
     if (LimelightExists) {limelightInit();}
-    if (SensorsExist) {sensorInit();}   
+    if (distanceSensorsExist) {sensorInit();}   
     if (DrivetrainExists) {
       driveTrainInst();
       configureDriveTrain();
@@ -325,7 +331,7 @@ public class RobotContainer {
         ControllerZAxisSupplier);
     driveTrain.setDefaultCommand(defaultDriveCommand);
     
-    if(SensorsExist) {
+    if(distanceSensorsExist) {
       approachReef = new ApproachReef(
       distanceSensors,
       driveTrain,
@@ -343,6 +349,21 @@ public class RobotContainer {
   private void autoInit() {
     registerNamedCommands();
     autoChooser = AutoBuilder.buildAutoChooser();
+    //change these two booleans to modify where the NoOdometry command will place coral
+    BooleanSupplier leftPlace = ()->true;
+    Supplier<ElevatorEnums> elevatorHeightSupplier= ()->ElevatorEnums.Reef2;
+    if(DrivetrainExists) {
+      autoChooser.addOption("moveForwardNoOdometry", new MoveMeters(driveTrain, 2, 1, 0, 0));
+    }
+    if(DrivetrainExists&&elevatorExists&&distanceSensorsExist&&coralEndeffectorExists) {
+      autoChooser.addOption("placeCoralNoOdometry", new PlaceCoralNoOdometry(
+        driveTrain,
+        elevator,
+        coralEndDefector,
+        distanceSensors,
+        leftPlace,
+        elevatorHeightSupplier));
+    }
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
@@ -412,18 +433,26 @@ public class RobotContainer {
     new Trigger(ZeroGyroSup).onTrue(new InstantCommand(driveTrain::zeroGyroscope));
     new Trigger(AutoAngleAtReefSup).whileTrue(autoAngleAtReef);
     SmartDashboard.putData(autoAngleAtReef);
-    if(SensorsExist) {
+    if(distanceSensorsExist) {
     new Trigger(SlowFrontSup).whileTrue(approachReef);
+    new Trigger(DvLeftReefLineupSup).or(DvRightReefLineupSup).whileTrue(new LineUp(driveTrain, DvLeftReefLineupSup, 0.8));
     }
     InstantCommand setOffsets = new InstantCommand(driveTrain::setEncoderOffsets) {
       public boolean runsWhenDisabled() {
         return true;
       };
     };
-
   
     SmartDashboard.putData("set offsets", setOffsets);
     SmartDashboard.putData(new InstantCommand(driveTrain::forceUpdateOdometryWithVision));
+    if(coralEndeffectorExists&&funnelIntakeExists&&elevatorExists) {
+      Command coralIntake = new CoralIntake(elevator, funnelIntake, coralEndDefector);
+      new Trigger(()->(CoralIntakeSup.getAsBoolean()||driveTrain.drivetrainInIntakeZones())&&!RobotState.getInstance().isCoralSeen()).whileTrue(coralIntake);
+    } else {
+      new Trigger(()->(CoralIntakeSup.getAsBoolean()||driveTrain.drivetrainInIntakeZones())&&!RobotState.getInstance().isCoralSeen())
+      .onTrue(new InstantCommand(()->SmartDashboard.putBoolean("INTAKE/in intake zone", true)))
+      .onFalse(new InstantCommand(()->SmartDashboard.putBoolean("INTAKE/in intake zone", false)));
+    }
     }
     
     if (elevatorExists){
