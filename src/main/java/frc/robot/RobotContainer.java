@@ -156,6 +156,7 @@ public class RobotContainer {
   BooleanSupplier OpRightReefLineupSup;
   BooleanSupplier ForceEjectCoral;
   BooleanSupplier ForceElevator;
+  BooleanSupplier PlaceCoralNoPathSup;
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
   /**
@@ -225,6 +226,7 @@ public class RobotContainer {
       //Manual driver controls
       AlgaeIntakeSup = driverControllerXbox::getAButton;
       AlgaeShooterSup = driverControllerXbox::getXButton;
+      PlaceCoralNoPathSup = driverControllerXbox::getYButton;
 
       //operator automatic controls
       OpLeftReefLineupSup = operatorControllerXbox::getLeftBumperButton;
@@ -265,6 +267,7 @@ public class RobotContainer {
       //manual driver controls
       AlgaeShooterSup = driverControllerPS4::getSquareButton;
       AlgaeDepositSup = driverControllerPS4::getCircleButton;
+      PlaceCoralNoPathSup = driverControllerPS4::getTriangleButton;
 
       //automatic operator controls
       OpLeftReefLineupSup = operatorControllerPS4::getL1Button;
@@ -443,8 +446,19 @@ public class RobotContainer {
               coralEndDefector,
               ()->RobotState.getInstance().deliveringLeft))
           );
+      new Trigger(PlaceCoralNoPathSup).whileTrue(new PlaceCoralNoPath(
+        elevator,
+        ()->RobotState.getInstance().deliveringCoralHeight,
+        distanceSensors,
+        driveTrain,
+        ControllerSidewaysAxisSupplier,
+        ControllerForwardAxisSupplier,
+        ControllerZAxisSupplier,
+        coralEndDefector,
+        ()->RobotState.getInstance().deliveringLeft));
     } else {
       new Trigger(CoralPlaceTeleSupplier).whileTrue(pathFindToReef);
+      
     }
 
     if(elevatorExists && algaeEndeffectorExists){
