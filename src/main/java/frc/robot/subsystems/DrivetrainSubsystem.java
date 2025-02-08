@@ -325,7 +325,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
             + (-pigeon.getPitch().getValueAsDouble()/10);
       }
     }
-    
+      if (Preferences.getBoolean ("Safe Elevator Driving",false && RobotState.getInstance().elevatorIsHigh)){
+       chassisSpeeds.vxMetersPerSecond = chassisSpeeds.vxMetersPerSecond / 2; 
+       chassisSpeeds.vyMetersPerSecond = chassisSpeeds.vyMetersPerSecond / 2; 
+      }
     SwerveModuleState[] desiredStates =
         kinematics.toSwerveModuleStates(ChassisSpeeds.discretize(chassisSpeeds, 0.02));
     double maxSpeed = Collections.max(Arrays.asList(desiredStates)).speedMetersPerSecond;
