@@ -505,7 +505,9 @@ public class RobotContainer {
         ControllerForwardAxisSupplier,
         ControllerZAxisSupplier,
         coralEndDefector,
-        ()->RobotState.getInstance().deliveringLeft));
+        ()->RobotState.getInstance().deliveringLeft, 
+        algaeEndDefector,
+        goForAlgae));
 
     } else if(DrivetrainExists) {
       new Trigger(CoralPlaceTeleSupplier).whileTrue(pathFindToReef);
