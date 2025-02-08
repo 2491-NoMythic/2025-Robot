@@ -225,16 +225,16 @@ public class RobotContainer {
       AutoAngleAtReefSup = ()->driverControllerXbox.getRightTriggerAxis()>0.1;
       DvLeftReefLineupSup = driverControllerXbox::getLeftBumperButton;
       DvRightReefLineupSup =  driverControllerXbox::getRightBumperButton;
-      SlowFrontSup = ()-> driverControllerXbox.getRightTriggerAxis() > 0.1;
-      AlgaeDepositSup = driverControllerXbox::getBButton;
+      SlowFrontSup = ()-> driverControllerXbox.getLeftTriggerAxis() > 0.1;
       AlgaeBargeSup = ()-> driverControllerXbox.getPOV() == 180;
       AlgaeDriveSup = ()-> driverControllerXbox.getLeftY();
       CoralPlaceTeleSupplier = ()-> driverControllerXbox.getPOV() == 0;
 
       //Manual driver controls
+      AlgaeDepositSup = driverControllerXbox::getBButton;
       AlgaeIntakeSup = driverControllerXbox::getAButton;
-      AlgaeShooterSup = driverControllerXbox::getXButton;
-       CoralIntakeSup = driverControllerXbox::getXButton;
+      AlgaeShooterSup = driverControllerXbox::getYButton;
+      CoralIntakeSup = driverControllerXbox::getXButton;
 
     } else if (DCTEnum == ControllerEnums.PS4Controller) {
 
@@ -251,15 +251,14 @@ public class RobotContainer {
       DvLeftReefLineupSup = driverControllerPS4::getL1Button;
       DvRightReefLineupSup = driverControllerPS4::getR1Button;
       SlowFrontSup = ()->driverControllerPS4.getL2Axis()>-0.5;
-      AlgaeIntakeSup = driverControllerPS4::getCrossButton;
       AlgaeBargeSup = ()-> driverControllerPS4.getPOV() == 180;
       AlgaeDriveSup = ()-> driverControllerPS4.getLeftY();
       CoralPlaceTeleSupplier = ()-> driverControllerPS4.getPOV() == 0;
-      AutoAngleAtReefSup = driverControllerPS4::getR2Button;
 
       //manual driver controls
-      AlgaeShooterSup = driverControllerPS4::getSquareButton;
       AlgaeDepositSup = driverControllerPS4::getCircleButton;
+      AlgaeIntakeSup = driverControllerPS4::getCrossButton;
+      AlgaeShooterSup = driverControllerPS4::getTriangleButton;
       CoralIntakeSup = driverControllerPS4::getSquareButton;
 
     } 
