@@ -165,6 +165,7 @@ public class RobotContainer {
   BooleanSupplier ForceEjectCoral;
   BooleanSupplier ForceElevator;
   BooleanSupplier ManualCoralIntake;
+  BooleanSupplier PlaceCoralNoPathSup;
   BooleanSupplier goForAlgae;
   BooleanSupplier CoralIntakeSup;
 
@@ -231,7 +232,6 @@ public class RobotContainer {
       DvLeftReefLineupSup = driverControllerXbox::getLeftBumperButton;
       DvRightReefLineupSup =  driverControllerXbox::getRightBumperButton;
       SlowFrontSup = ()-> driverControllerXbox.getLeftTriggerAxis() > 0.1;
-      AlgaeBargeSup = ()-> driverControllerXbox.getPOV() == 180;
       AlgaeDriveSup = ()-> driverControllerXbox.getLeftY();
       CoralPlaceTeleSupplier = ()-> driverControllerXbox.getPOV() == 0;
 
@@ -239,7 +239,8 @@ public class RobotContainer {
       AlgaeDepositSup = driverControllerXbox::getBButton;
       AlgaeIntakeSup = driverControllerXbox::getAButton;
       ManualCoralIntake = driverControllerXbox::getAButton;
-      AlgaeShooterSup = driverControllerXbox::getYButton;
+      AlgaeShooterSup = ()-> driverControllerXbox.getPOV() == 180;
+      PlaceCoralNoPathSup = driverControllerXbox::getYButton;
       CoralIntakeSup = driverControllerXbox::getXButton;
 
     } else if (DCTEnum == ControllerEnums.PS4Controller) {
@@ -258,17 +259,16 @@ public class RobotContainer {
       DvLeftReefLineupSup = driverControllerPS4::getL1Button;
       DvRightReefLineupSup = driverControllerPS4::getR1Button;
       SlowFrontSup = ()->driverControllerPS4.getL2Axis()>-0.5;
-      AlgaeBargeSup = ()-> driverControllerPS4.getPOV() == 180;
       AlgaeDriveSup = ()-> driverControllerPS4.getLeftY();
       CoralPlaceTeleSupplier = ()-> driverControllerPS4.getPOV() == 0;
 
       //manual driver controls
       AlgaeDepositSup = driverControllerPS4::getCircleButton;
       ManualCoralIntake = driverControllerPS4:: getCrossButton;
+      PlaceCoralNoPathSup = driverControllerPS4::getTriangleButton;
       AlgaeIntakeSup = driverControllerPS4::getCrossButton;
-      AlgaeShooterSup = driverControllerPS4::getTriangleButton;
+      AlgaeShooterSup =  ()-> driverControllerPS4.getPOV() == 180;
       CoralIntakeSup = driverControllerPS4::getSquareButton;
-
     } 
     if (OCTEnum == ControllerEnums.XboxController) {
       operatorControllerXbox = new XboxController(OPERATOR_CONTROLLER_ID);
@@ -282,6 +282,7 @@ public class RobotContainer {
       ReefHeight4Supplier = ()->operatorControllerXbox.getPOV() == 270;
       CoralIntakeHeightSupplier = ()->operatorControllerXbox.getStartButton();
       BargeHeightSupplier = operatorControllerXbox::getXButton;
+      AlgaeBargeSup = operatorControllerXbox::getBButton;
 
 
       //operator manual controls, should not be used unless other controls not working
@@ -301,8 +302,9 @@ public class RobotContainer {
       ReefHeight4Supplier = ()->operatorControllerPS4.getPOV() == 270;
       CoralIntakeHeightSupplier = ()->operatorControllerPS4.getOptionsButton();
       BargeHeightSupplier = operatorControllerPS4::getTriangleButton;
-      ClimbCommandSupplier = ()->operatorControllerPS4.getTriangleButton();
+      ClimbCommandSupplier = ()->operatorControllerPS4.getSquareButton();
       goForAlgae = operatorControllerPS4::getCircleButton;
+      AlgaeBargeSup = operatorControllerPS4::getCrossButton;
 
       //manual operator controls, should not be used unless other controls do not work
       ForceEjectCoral = operatorControllerPS4::getR2Button;
@@ -500,8 +502,22 @@ public class RobotContainer {
               goForAlgae))
 
           );
+      new Trigger(PlaceCoralNoPathSup).whileTrue(new PlaceCoralNoPath(
+        elevator,
+        ()->RobotState.getInstance().deliveringCoralHeight,
+        distanceSensors,
+        driveTrain,
+        ControllerSidewaysAxisSupplier,
+        ControllerForwardAxisSupplier,
+        ControllerZAxisSupplier,
+        coralEndDefector,
+        ()->RobotState.getInstance().deliveringLeft, 
+        algaeEndDefector,
+        goForAlgae));
+
     } else if(DrivetrainExists) {
       new Trigger(CoralPlaceTeleSupplier).whileTrue(pathFindToReef);
+      
     }
 
     if(elevatorExists && algaeEndeffectorExists){
