@@ -39,6 +39,7 @@ import frc.robot.commands.AutoAngleAtReef;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.DepositAlgae;
 import frc.robot.settings.Constants.Vision;
+import frc.robot.settings.ControllerEnums;
 import frc.robot.commands.AlgaeEndeffectorCommand;
 import frc.robot.commands.ApproachReef;
 import frc.robot.commands.AlgaeIntakeCommand;
@@ -68,8 +69,8 @@ import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.RobotState;
-
 import java.io.IOException;
+import java.lang.ModuleLayer.Controller;
 import java.util.Map;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
@@ -92,8 +93,10 @@ public class RobotContainer {
   // preferences are information saved on the Rio. They are initialized once, then
   // gotten every time
   // we run the code.
-  private boolean useXboxController;
-
+  private String driverControllerTypeString;
+  private String operatorControllerTypeString;
+  private ControllerEnums DCTEnum;
+  private ControllerEnums OCTEnum;
   private boolean algaeEndeffectorExists;
   private boolean coralEndeffectorExists;
   private boolean climberExists;
@@ -152,7 +155,7 @@ public class RobotContainer {
   DoubleSupplier ControllerForwardAxisSupplier;
   DoubleSupplier ControllerSidewaysAxisSupplier;
   DoubleSupplier ControllerZAxisSupplier;
-
+  DoubleSupplier AlgaeDriveSup;
   Command pathFindToReef;
 
   BooleanSupplier OpLeftReefLineupSup;
@@ -171,7 +174,8 @@ public class RobotContainer {
     Preferences.initBoolean("Lights Exist", true);
     Preferences.initBoolean("CompBot", true);
     Preferences.initBoolean("Use Limelight", true);
-    Preferences.initBoolean("Xbox Controller", true);
+    Preferences.getString("Driver Controller Type", "XboxController");
+    Preferences.getString("Operator Controller Type", "ButtonBoard");
     Preferences.initBoolean("Elevator", false);
     Preferences.initBoolean("CoralEndDefector", false);
     Preferences.initBoolean("AlgaeEndDefector", false);
@@ -184,7 +188,10 @@ public class RobotContainer {
     Preferences.initBoolean("LimelightExists", false);
     Preferences.initBoolean("Motor Logging", true);
 
-    useXboxController = Preferences.getBoolean("Xbox Controller", true);
+    driverControllerTypeString = Preferences.getString("Driver Controller Type", "XboxController");
+    operatorControllerTypeString = Preferences.getString("Operator Controller Type", "ButtonBoard");
+    DCTEnum = ControllerEnums.valueOf(driverControllerTypeString);
+    OCTEnum = ControllerEnums.valueOf(operatorControllerTypeString);
     algaeEndeffectorExists = Preferences.getBoolean("AlgaeEndDefector", true);
     coralEndeffectorExists = Preferences.getBoolean("CoralEndDefector", true);
     climberExists = Preferences.getBoolean("Climber", true);
@@ -204,10 +211,9 @@ public class RobotContainer {
      * controllers and all our bindings. any time you want to use/create a binding,
      * define a supplier as it in both conditions of this if()else{} code.
      */
-    if (useXboxController) {
+    if (DCTEnum == ControllerEnums.XboxController) {
       //Controller IDs
       driverControllerXbox = new XboxController(DRIVE_CONTROLLER_ID);
-      operatorControllerXbox = new XboxController(OPERATOR_CONTROLLER_ID);
       
       //Drive controls
       ControllerSidewaysAxisSupplier = () -> modifyAxis(-driverControllerXbox.getRawAxis(X_AXIS), DEADBAND_NORMAL);
@@ -220,36 +226,21 @@ public class RobotContainer {
       AutoAngleAtReefSup = ()->driverControllerXbox.getRightTriggerAxis()>0.1;
       DvLeftReefLineupSup = driverControllerXbox::getLeftBumperButton;
       DvRightReefLineupSup =  driverControllerXbox::getRightBumperButton;
-      SlowFrontSup = ()-> driverControllerXbox.getRightTriggerAxis() > 0.1;
-      AlgaeDepositSup = driverControllerXbox::getBButton;
+      SlowFrontSup = ()-> driverControllerXbox.getLeftTriggerAxis() > 0.1;
       AlgaeBargeSup = ()-> driverControllerXbox.getPOV() == 180;
+      AlgaeDriveSup = ()-> driverControllerXbox.getLeftY();
       CoralPlaceTeleSupplier = ()-> driverControllerXbox.getPOV() == 0;
 
       //Manual driver controls
+      AlgaeDepositSup = driverControllerXbox::getBButton;
       AlgaeIntakeSup = driverControllerXbox::getAButton;
-      AlgaeShooterSup = driverControllerXbox::getXButton;
+      AlgaeShooterSup = driverControllerXbox::getYButton;
       CoralIntakeSup = driverControllerXbox::getXButton;
 
-      //operator automatic controls
-      OpLeftReefLineupSup = operatorControllerXbox::getLeftBumperButton;
-      OpRightReefLineupSup = operatorControllerXbox::getRightBumperButton;
-      ReefHeight1Supplier = ()->operatorControllerXbox.getPOV() == 0;
-      ReefHeight2Supplier = ()->operatorControllerXbox.getPOV() == 90;
-      ReefHeight3Supplier = ()->operatorControllerXbox.getPOV() == 180;
-      ReefHeight4Supplier = ()->operatorControllerXbox.getPOV() == 270;
-      CoralIntakeHeightSupplier = ()->operatorControllerXbox.getStartButton();
-      BargeHeightSupplier = operatorControllerXbox::getXButton;
-      goForAlgae = operatorControllerXbox::getAButton;
+    } else if (DCTEnum == ControllerEnums.PS4Controller) {
 
-      //operator manual controls, should not be used unless other controls not working
-      ForceEjectCoral = ()-> operatorControllerXbox.getRightTriggerAxis() > 0.1;
-      ForceElevator = ()-> operatorControllerXbox.getRightTriggerAxis() > 0.1;
-      ClimbCommandSupplier = ()->operatorControllerXbox.getYButton();
-    } else {
-      //Controller IDs
+
       driverControllerPS4 = new PS4Controller(DRIVE_CONTROLLER_ID);
-      operatorControllerPS4 = new PS4Controller(OPERATOR_CONTROLLER_ID);
-
       //Drive controls
       ControllerSidewaysAxisSupplier = () -> modifyAxis(-driverControllerPS4.getRawAxis(X_AXIS), DEADBAND_NORMAL);
       ControllerForwardAxisSupplier = () -> modifyAxis(-driverControllerPS4.getRawAxis(Y_AXIS), DEADBAND_NORMAL);
@@ -262,16 +253,38 @@ public class RobotContainer {
       DvLeftReefLineupSup = driverControllerPS4::getL1Button;
       DvRightReefLineupSup = driverControllerPS4::getR1Button;
       SlowFrontSup = ()->driverControllerPS4.getL2Axis()>-0.5;
-      AlgaeIntakeSup = driverControllerPS4::getCrossButton;
       AlgaeBargeSup = ()-> driverControllerPS4.getPOV() == 180;
+      AlgaeDriveSup = ()-> driverControllerPS4.getLeftY();
       CoralPlaceTeleSupplier = ()-> driverControllerPS4.getPOV() == 0;
-      AutoAngleAtReefSup = driverControllerPS4::getR2Button;
 
       //manual driver controls
-      AlgaeShooterSup = driverControllerPS4::getSquareButton;
       AlgaeDepositSup = driverControllerPS4::getCircleButton;
+      AlgaeIntakeSup = driverControllerPS4::getCrossButton;
+      AlgaeShooterSup = driverControllerPS4::getTriangleButton;
       CoralIntakeSup = driverControllerPS4::getSquareButton;
 
+    } 
+    if (OCTEnum == ControllerEnums.XboxController) {
+      operatorControllerXbox = new XboxController(OPERATOR_CONTROLLER_ID);
+
+      //operator automatic controls
+      OpLeftReefLineupSup = operatorControllerXbox::getLeftBumperButton;
+      OpRightReefLineupSup = operatorControllerXbox::getRightBumperButton;
+      ReefHeight1Supplier = ()->operatorControllerXbox.getPOV() == 0;
+      ReefHeight2Supplier = ()->operatorControllerXbox.getPOV() == 90;
+      ReefHeight3Supplier = ()->operatorControllerXbox.getPOV() == 180;
+      ReefHeight4Supplier = ()->operatorControllerXbox.getPOV() == 270;
+      CoralIntakeHeightSupplier = ()->operatorControllerXbox.getStartButton();
+      BargeHeightSupplier = operatorControllerXbox::getXButton;
+
+      //operator manual controls, should not be used unless other controls not working
+      ForceEjectCoral = ()-> operatorControllerXbox.getRightTriggerAxis() > 0.1;
+      ForceElevator = ()-> operatorControllerXbox.getRightTriggerAxis() > 0.1;
+      ClimbCommandSupplier = ()->operatorControllerXbox.getYButton();
+      
+    } else if (OCTEnum == ControllerEnums.PS4Controller){
+      //Controller IDs
+      operatorControllerPS4 = new PS4Controller(OPERATOR_CONTROLLER_ID);
       //automatic operator controls
       OpLeftReefLineupSup = operatorControllerPS4::getL1Button;
       OpRightReefLineupSup = operatorControllerPS4::getR1Button;
@@ -494,13 +507,9 @@ public class RobotContainer {
       new Trigger(ForceEjectCoral).whileTrue(new InstantCommand(()->coralEndDefector.runCoralEndEffector(CORAL_ENDEFFECTOR_SPEED)));
     }
     if(algaeEndeffectorExists) {
-      if (useXboxController) {
         new Trigger(AlgaeBargeSup)
-            .whileTrue(new ShootInBarge(driveTrain, elevator, algaeEndDefector, () -> driverControllerXbox.getLeftY()));
-      } else {
-        new Trigger(AlgaeBargeSup)
-            .whileTrue(new ShootInBarge(driveTrain, elevator, algaeEndDefector, () -> driverControllerPS4.getLeftY()));
-      }}
+            .whileTrue(new ShootInBarge(driveTrain, elevator, algaeEndDefector, AlgaeDriveSup));
+      }
     }
     /*
      * bindings:
