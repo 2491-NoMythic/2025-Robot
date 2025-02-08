@@ -336,15 +336,18 @@ public class RobotContainer {
     //change these two booleans to modify where the NoOdometry command will place coral
     BooleanSupplier leftPlace = ()->true;
     Supplier<ElevatorEnums> elevatorHeightSupplier= ()->ElevatorEnums.Reef2;
-
-    autoChooser.addOption("moveForwardNoOdometry", new MoveMeters(driveTrain, 2, 1, 0, 0));
-    autoChooser.addOption("placeCoralNoOdometry", new PlaceCoralNoOdometry(
-      driveTrain,
-      elevator,
-      coralEndDefector,
-      distanceSensors,
-      leftPlace,
-      elevatorHeightSupplier));
+    if(DrivetrainExists) {
+      autoChooser.addOption("moveForwardNoOdometry", new MoveMeters(driveTrain, 2, 1, 0, 0));
+    }
+    if(DrivetrainExists&&elevatorExists&&distanceSensorsExist&&coralEndeffectorExists) {
+      autoChooser.addOption("placeCoralNoOdometry", new PlaceCoralNoOdometry(
+        driveTrain,
+        elevator,
+        coralEndDefector,
+        distanceSensors,
+        leftPlace,
+        elevatorHeightSupplier));
+    }
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
