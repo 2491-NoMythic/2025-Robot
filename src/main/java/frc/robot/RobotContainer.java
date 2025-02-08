@@ -8,6 +8,7 @@ import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.ALGAE_INTAK
 import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.ALGAE_SHOOT_SPEED;
 import static frc.robot.settings.Constants.CoralEndeffectorConstants.CORAL_ENDEFFECTOR_SPEED;
 import static frc.robot.settings.Constants.DriveConstants.*;
+import static frc.robot.settings.Constants.FunnelConstants.FUNNEL_INTAKE_SPEED;
 import static frc.robot.settings.Constants.PS4Driver.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -163,9 +164,11 @@ public class RobotContainer {
   BooleanSupplier OpRightReefLineupSup;
   BooleanSupplier ForceEjectCoral;
   BooleanSupplier ForceElevator;
+  BooleanSupplier ManualCoralIntake;
   BooleanSupplier PlaceCoralNoPathSup;
   BooleanSupplier goForAlgae;
   BooleanSupplier CoralIntakeSup;
+
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
   /**
@@ -186,7 +189,7 @@ public class RobotContainer {
     Preferences.initBoolean("Climber", false);
     Preferences.initBoolean("DrivetrainExists", false);
     Preferences.initBoolean("AntiTipActive", true);
-    Preferences.initBoolean("DistanceSensorsExist", true);
+    Preferences.initBoolean("DistanceSensorsExist", false);
     Preferences.initBoolean("LimelightExists", false);
     Preferences.initBoolean("Motor Logging", true);
 
@@ -195,7 +198,7 @@ public class RobotContainer {
     DCTEnum = ControllerEnums.valueOf(driverControllerTypeString);
     OCTEnum = ControllerEnums.valueOf(operatorControllerTypeString);
     algaeEndeffectorExists = Preferences.getBoolean("AlgaeEndDefector", true);
-    coralEndeffectorExists = Preferences.getBoolean("CoralEndDefector", true);
+    coralEndeffectorExists = Preferences.getBoolean("CoralEndDefector", false);
     climberExists = Preferences.getBoolean("Climber", true);
     elevatorExists = Preferences.getBoolean("Elevator", true);
     funnelIntakeExists = Preferences.getBoolean("FunnelIntake", true);
@@ -235,6 +238,7 @@ public class RobotContainer {
       //Manual driver controls
       AlgaeDepositSup = driverControllerXbox::getBButton;
       AlgaeIntakeSup = driverControllerXbox::getAButton;
+      ManualCoralIntake = ()->driverControllerXbox.getPOV() == 90;
       AlgaeShooterSup = ()-> driverControllerXbox.getPOV() == 180;
       PlaceCoralNoPathSup = driverControllerXbox::getYButton;
       CoralIntakeSup = driverControllerXbox::getXButton;
@@ -260,6 +264,7 @@ public class RobotContainer {
 
       //manual driver controls
       AlgaeDepositSup = driverControllerPS4::getCircleButton;
+      ManualCoralIntake = driverControllerPS4:: getOptionsButton;
       PlaceCoralNoPathSup = driverControllerPS4::getTriangleButton;
       AlgaeIntakeSup = driverControllerPS4::getCrossButton;
       AlgaeShooterSup =  ()-> driverControllerPS4.getPOV() == 180;
@@ -278,6 +283,7 @@ public class RobotContainer {
       CoralIntakeHeightSupplier = ()->operatorControllerXbox.getStartButton();
       BargeHeightSupplier = operatorControllerXbox::getXButton;
       AlgaeBargeSup = operatorControllerXbox::getBButton;
+
 
       //operator manual controls, should not be used unless other controls not working
       ForceEjectCoral = ()-> operatorControllerXbox.getRightTriggerAxis() > 0.1;
@@ -354,7 +360,9 @@ public class RobotContainer {
   private void autoInit() {
     registerNamedCommands();
     if(DrivetrainExists){
-    autoChooser = AutoBuilder.buildAutoChooser();
+      autoChooser = AutoBuilder.buildAutoChooser();
+      SmartDashboard.putData("Auto Chooser", autoChooser);
+    }
     //change these two booleans to modify where the NoOdometry command will place coral
     BooleanSupplier leftPlace = ()->true;
     Supplier<ElevatorEnums> elevatorHeightSupplier= ()->ElevatorEnums.Reef2;
@@ -373,7 +381,6 @@ public class RobotContainer {
     }
     SmartDashboard.putData("Auto Chooser", autoChooser);
     }
-  }
 
   private void limelightInit() {
     limelight = Limelight.getInstance();
@@ -528,9 +535,13 @@ public class RobotContainer {
 
     if(algaeEndeffectorExists) {
         new Trigger(AlgaeBargeSup)
-            .whileTrue(new ShootInBarge(driveTrain, elevator, algaeEndDefector, AlgaeDriveSup));
+            .whileTrue(new ShootInBarge(driveTrain, elevator, algaeEndDefector, () -> driverControllerPS4.getLeftY()));
       }
-    }
+      if(funnelIntakeExists){
+        new Trigger(ManualCoralIntake).onTrue(new InstantCommand(() -> funnelIntake.runFunnel(FUNNEL_INTAKE_SPEED)))
+            .onFalse(new InstantCommand(() -> funnelIntake.stopFunnel()));
+      }
+  }
 
     /*
      * bindings:

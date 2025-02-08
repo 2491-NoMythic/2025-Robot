@@ -447,8 +447,8 @@ public final class Constants {
   }
 
   public final class FunnelConstants{
-    public static final int FUNNEL_INTAKE_MOTOR_1_ID = 2491;
-    public static final int FUNNEL_INTAKE_MOTOR_2_ID = 2491;
+    public static final int FUNNEL_INTAKE_MOTOR_1_ID = 21;
+    public static final int FUNNEL_INTAKE_MOTOR_2_ID = 22;
     public static final int FUNNEL_ROTATOR_MOTOR_ID = 2491;
 
     public static final double FUNNEL_INTAKE_1_KP = 2491;
@@ -467,6 +467,7 @@ public final class Constants {
     public static final double FUNNEL_ROTATOR_KFF = 2491;
     public static final int FUNNEL_ROTATOR_SUPPLY_CURRENT_LIMIT = 2491;
     public static final double FUNNEL_ROTATOR_GEAR_RATIO = 2491;
+    public static final double FUNNEL_INTAKE_SPEED = 0.2491;
   }
 
   public final class AutoAlignToReefConstants {
