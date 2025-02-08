@@ -520,12 +520,12 @@ public class RobotContainer {
     if(algaeEndeffectorExists) {
         new Trigger(AlgaeBargeSup)
             .whileTrue(new ShootInBarge(driveTrain, elevator, algaeEndDefector, () -> driverControllerPS4.getLeftY()));
-      }}
+      }
       if(funnelIntakeExists){
         new Trigger(ManualCoralIntake).onTrue(new InstantCommand(() -> funnelIntake.runFunnel(FUNNEL_INTAKE_SPEED)))
             .onFalse(new InstantCommand(() -> funnelIntake.stopFunnel()));
       }
-    
+  }
 
     /*
      * bindings:
@@ -773,4 +773,4 @@ public class RobotContainer {
 
   public void disabledInit() {
   }
-
+}
