@@ -414,14 +414,14 @@ public class RobotContainer {
   
     SmartDashboard.putData("set offsets", setOffsets);
     SmartDashboard.putData(new InstantCommand(driveTrain::forceUpdateOdometryWithVision));
-    Command coralIntake;
     if(coralEndeffectorExists&&funnelIntakeExists&&elevatorExists) {
-      coralIntake = new CoralIntake(elevator, funnelIntake, coralEndDefector);
+      Command coralIntake = new CoralIntake(elevator, funnelIntake, coralEndDefector);
+      new Trigger(()->(CoralIntakeSup.getAsBoolean()||driveTrain.drivetrainInIntakeZones())&&!RobotState.getInstance().isCoralSeen()).whileTrue(coralIntake);
     } else {
-      coralIntake = new InstantCommand(()->SmartDashboard.putBoolean("INTAKE/in intake zone", true));
+      new Trigger(()->(CoralIntakeSup.getAsBoolean()||driveTrain.drivetrainInIntakeZones())&&!RobotState.getInstance().isCoralSeen())
+      .onTrue(new InstantCommand(()->SmartDashboard.putBoolean("INTAKE/in intake zone", true)))
+      .onFalse(new InstantCommand(()->SmartDashboard.putBoolean("INTAKE/in intake zone", true)));
     }
-    new Trigger(()->(CoralIntakeSup.getAsBoolean()||driveTrain.drivetrainInIntakeZones())
-    &&!RobotState.getInstance().isCoralSeen()).onTrue(coralIntake).whileFalse(new InstantCommand(()->SmartDashboard.putBoolean("INTAKE/in intake zone", false)));
     }
     
     if (elevatorExists){
