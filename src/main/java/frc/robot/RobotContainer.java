@@ -420,7 +420,7 @@ public class RobotContainer {
     } else {
       new Trigger(()->(CoralIntakeSup.getAsBoolean()||driveTrain.drivetrainInIntakeZones())&&!RobotState.getInstance().isCoralSeen())
       .onTrue(new InstantCommand(()->SmartDashboard.putBoolean("INTAKE/in intake zone", true)))
-      .onFalse(new InstantCommand(()->SmartDashboard.putBoolean("INTAKE/in intake zone", true)));
+      .onFalse(new InstantCommand(()->SmartDashboard.putBoolean("INTAKE/in intake zone", false)));
     }
     }
     
