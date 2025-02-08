@@ -192,6 +192,7 @@ public class RobotContainer {
     Preferences.initBoolean("DistanceSensorsExist", false);
     Preferences.initBoolean("LimelightExists", false);
     Preferences.initBoolean("Motor Logging", true);
+    Preferences.initBoolean("Safe Elevator Driving", true);
 
     driverControllerTypeString = Preferences.getString("Driver Controller Type", "XboxController");
     operatorControllerTypeString = Preferences.getString("Operator Controller Type", "ButtonBoard");
