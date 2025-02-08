@@ -177,7 +177,6 @@ public class RobotContainer {
     Preferences.initBoolean("AntiTipActive", true);
     Preferences.initBoolean("DistanceSensorsExist", true);
     Preferences.initBoolean("LimelightExists", false);
-    Preferences.initBoolean("Sensors Exist", false);
     Preferences.initBoolean("Motor Logging", true);
 
     useXboxController = Preferences.getBoolean("Xbox Controller", true);
@@ -191,7 +190,6 @@ public class RobotContainer {
     distanceSensorsExist = Preferences.getBoolean("DistanceSensorsExist", true);
     lightsExist = Preferences.getBoolean("Lights Exist", true);
     LimelightExists = Preferences.getBoolean("Limelight Exists", true);
-    SensorsExist = Preferences.getBoolean("Sensors Exist", true);  
     useMotorLogger = Preferences.getBoolean("Motor Logging", true);
 
     DataLogManager.start(); // Start logging
@@ -283,7 +281,7 @@ public class RobotContainer {
     }
 
     if (LimelightExists) {limelightInit();}
-    if (SensorsExist) {sensorInit();}   
+    if (distanceSensorsExist) {sensorInit();}   
     if (DrivetrainExists) {
       driveTrainInst();
       configureDriveTrain();
@@ -313,7 +311,7 @@ public class RobotContainer {
         ControllerZAxisSupplier);
     driveTrain.setDefaultCommand(defaultDriveCommand);
     
-    if(SensorsExist) {
+    if(distanceSensorsExist) {
       approachReef = new ApproachReef(
       distanceSensors,
       driveTrain,
@@ -400,8 +398,9 @@ public class RobotContainer {
     new Trigger(ZeroGyroSup).onTrue(new InstantCommand(driveTrain::zeroGyroscope));
     new Trigger(AutoAngleAtReefSup).whileTrue(autoAngleAtReef);
     SmartDashboard.putData(autoAngleAtReef);
-    if(SensorsExist) {
+    if(distanceSensorsExist) {
     new Trigger(SlowFrontSup).whileTrue(approachReef);
+    new Trigger(DvLeftReefLineupSup).or(DvRightReefLineupSup).whileTrue(new LineUp(driveTrain, DvLeftReefLineupSup, 0.8));
     }
     InstantCommand setOffsets = new InstantCommand(driveTrain::setEncoderOffsets) {
       public boolean runsWhenDisabled() {
