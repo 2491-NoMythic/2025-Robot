@@ -98,9 +98,9 @@ public class Limelight {
     Boolean poseATrust = false;
     Boolean poseBTrust = false;
     Boolean poseCTrust = false;
-    if(isConnected(APRILTAG_LIMELIGHTA_NAME)) {poseATrust = isValid(APRILTAG_LIMELIGHTA_NAME, poseA);}
-    if(isConnected(APRILTAG_LIMELIGHTB_NAME)) {poseBTrust = isValid(APRILTAG_LIMELIGHTB_NAME, poseB);}
-    if(isConnected(APRILTAG_LIMELIGHTC_NAME)) {poseCTrust = isValid(APRILTAG_LIMELIGHTC_NAME, poseC);}
+    if(isConnected(APRILTAG_LIMELIGHTA_NAME)&&getClosestTagDist(APRILTAG_LIMELIGHTA_NAME)<MAX_TAG_DISTANCE) {poseATrust = isValid(APRILTAG_LIMELIGHTA_NAME, poseA);}
+    if(isConnected(APRILTAG_LIMELIGHTB_NAME)&&getClosestTagDist(APRILTAG_LIMELIGHTA_NAME)<MAX_TAG_DISTANCE) {poseBTrust = isValid(APRILTAG_LIMELIGHTB_NAME, poseB);}
+    if(isConnected(APRILTAG_LIMELIGHTC_NAME)&&getClosestTagDist(APRILTAG_LIMELIGHTA_NAME)<MAX_TAG_DISTANCE) {poseCTrust = isValid(APRILTAG_LIMELIGHTC_NAME, poseC);}
     // if the limelight positions will be merged, let SmartDashboard know!
     boolean mergingPoses = false;
     if (poseATrust && poseBTrust || poseBTrust && poseCTrust || poseATrust && poseCTrust) {

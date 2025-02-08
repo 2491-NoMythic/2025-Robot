@@ -23,18 +23,26 @@ import static frc.robot.settings.Constants.DriveConstants.FR_DRIVE_MOTOR_ID;
 import static frc.robot.settings.Constants.DriveConstants.FR_STEER_ENCODER_ID;
 import static frc.robot.settings.Constants.DriveConstants.FR_STEER_MOTOR_ID;
 import static frc.robot.settings.Constants.DriveConstants.ROBOT_ANGLE_TOLERANCE;
+import static frc.robot.settings.Constants.Field.*;
 import static frc.robot.settings.Constants.Vision.APRILTAG_LIMELIGHTA_NAME;
 import static frc.robot.settings.Constants.Vision.APRILTAG_LIMELIGHTB_NAME;
 import static frc.robot.settings.Constants.Vision.APRILTAG_LIMELIGHTC_NAME;
-import static frc.robot.settings.Constants.Field.*;
+import static frc.robot.settings.Constants.Vision.FIELD_CORNER;
+import static frc.robot.settings.Constants.Vision.FIELD_CORNER_FOR_INTAKE;
+
+import java.util.Arrays;
+import java.util.Collections;
+
+// import java.util.logging.Logger;
+import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.util.PathPlannerLogging;
+
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -53,15 +61,9 @@ import frc.robot.LimelightHelpers;
 import frc.robot.LimelightHelpers.PoseEstimate;
 import frc.robot.helpers.MotorLogger;
 import frc.robot.helpers.MythicalMath;
-import frc.robot.settings.ReefSideEnum;
 import frc.robot.settings.Constants.DriveConstants;
-import frc.robot.settings.Constants.Vision;
-
-import java.util.Arrays;
-import java.util.Collections;
-// import java.util.logging.Logger;
-import org.littletonrobotics.junction.Logger;
-import org.littletonrobotics.junction.AutoLogOutput;
+import frc.robot.settings.Constants;
+import frc.robot.settings.ReefSideEnum;
 
 public class DrivetrainSubsystem extends SubsystemBase {
   //These are our swerve drive kinematics and Pigeon (gyroscope)
@@ -431,6 +433,17 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public boolean isAtRotationTarget() {
     return rotationSpeedController.atSetpoint();
   }
+  public boolean drivetrainInIntakeZones() {
+    boolean inIntakeZone = false;
+    double intakeZoneLength = 3;//lenth along the y axis of the "intake zone" (which we make up)
+    double intakeZoneWidth = 1.7; //length along the x axis of the "intake zone" (which we make up)
+    if(
+      (getPose().getY()>FIELD_CORNER_FOR_INTAKE.getY()-intakeZoneLength || getPose().getY()<intakeZoneLength) //robot is in the Y ranges for the intake zone
+      && (getPose().getX()>FIELD_CORNER_FOR_INTAKE.getX()-intakeZoneWidth || getPose().getX()<intakeZoneWidth)) { //robot is in the X ranges for the intake zone
+      inIntakeZone = true;
+    }
+    return inIntakeZone;
+  }
   /*
    * Logs important data for the drivetrain
    */
@@ -514,11 +527,15 @@ public class DrivetrainSubsystem extends SubsystemBase {
     m_field.setRobotPose(odometer.getEstimatedPosition());
     RobotState.getInstance().odometerOrientation = getOdometryRotation().getDegrees();
     // updates logging for all drive motors on the swerve modules
+
     for (int i = 0; i < 4; i++) {
+      if(Preferences.getBoolean("Motor Logging", false)){
       motorLoggers[i].log(modules[i].getDriveMotor());
+      }
     }
     logDrivetrainData();
     updateClosestReefSide();
+    SmartDashboard.putBoolean("DRIVETRAIN/inIntakeZone", drivetrainInIntakeZones());
   }
 
 }
