@@ -238,7 +238,7 @@ public class RobotContainer {
       //Manual driver controls
       AlgaeDepositSup = driverControllerXbox::getBButton;
       AlgaeIntakeSup = driverControllerXbox::getAButton;
-      ManualCoralIntake = driverControllerXbox::getAButton;
+      ManualCoralIntake = ()->driverControllerXbox.getPOV() == 90;
       AlgaeShooterSup = ()-> driverControllerXbox.getPOV() == 180;
       PlaceCoralNoPathSup = driverControllerXbox::getYButton;
       CoralIntakeSup = driverControllerXbox::getXButton;
@@ -264,7 +264,7 @@ public class RobotContainer {
 
       //manual driver controls
       AlgaeDepositSup = driverControllerPS4::getCircleButton;
-      ManualCoralIntake = driverControllerPS4:: getCrossButton;
+      ManualCoralIntake = driverControllerPS4:: getOptionsButton;
       PlaceCoralNoPathSup = driverControllerPS4::getTriangleButton;
       AlgaeIntakeSup = driverControllerPS4::getCrossButton;
       AlgaeShooterSup =  ()-> driverControllerPS4.getPOV() == 180;
