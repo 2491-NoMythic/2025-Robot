@@ -421,7 +421,7 @@ public class RobotContainer {
       coralIntake = new InstantCommand(()->SmartDashboard.putBoolean("INTAKE/in intake zone", true));
     }
     new Trigger(()->(CoralIntakeSup.getAsBoolean()||driveTrain.drivetrainInIntakeZones())
-    &&!RobotState.getInstance().isCoralSeen()).whileTrue(coralIntake).onFalse(new InstantCommand(()->SmartDashboard.putBoolean("INTAKE/in intake zone", false)));
+    &&!RobotState.getInstance().isCoralSeen()).onTrue(coralIntake).whileFalse(new InstantCommand(()->SmartDashboard.putBoolean("INTAKE/in intake zone", false)));
     }
     
     if (elevatorExists){
