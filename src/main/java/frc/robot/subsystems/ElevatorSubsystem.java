@@ -129,7 +129,7 @@ public class ElevatorSubsystem extends SubsystemBase {
       case HumanPlayer:
         setElevatorPosition(HUMAN_PLAYER_STATION_MILLIMETERS);
         if(elevatorMotor1.getClosedLoopError().getValueAsDouble() < ELEVATOR_THRESHOLD){
-          RobotState.getInstance().elevatorIsHigh = true;
+          RobotState.getInstance().elevatorIsHigh = false;
         }
         break;
       case Bottom:
