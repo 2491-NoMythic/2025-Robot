@@ -157,13 +157,13 @@ public class DistanceSensors  extends SubsystemBase{
   }
 
   private void updateForReefApproach() {
-    if(middleLeft.getRange() == 0) {
+    if(middleRight.getRange() == 0) {
       loopsSensed = 0;
     } else {
       loopsSensed++;
     }
     if(loopsSensed>10) {
-      distanceOfFrontDistancer = middleLeft.getRange();
+      distanceOfFrontDistancer = middleRight.getRange();
     } else {
       distanceOfFrontDistancer = 0;
     }
@@ -226,19 +226,19 @@ public class DistanceSensors  extends SubsystemBase{
     SmartDashboard.putNumber("SENSOR/VALIDRANGE/far right", getValidRange(SensorNameEnums.FarRight));
     //update Robot State with sensor readings
     RobotState.getInstance().farLeftSensorTriggered = 
-      farLeft.getRange()<RANGE_TO_SEE_REEF //sensor senses that we are close enough to the reef to deliver a coral
+      farLeft.getRange()<RANGE_TO_SEE_REEF_ANGLED_AND_SPACED_SENSORS //sensor senses that we are close enough to the reef to deliver a coral
       && farLeft.getRange()>0 //the sensor does not read (which it sometimes reads when there is nothing within it's sensing range)
       && loopsFLValid>loopsNeededForValid; //the sensor has given a consistent, smoothly changing reading for at least x loops of the code, meaning it isn't just blinking static
     RobotState.getInstance().middleLeftSensorTriggered = 
-      middleLeft.getRange()<RANGE_TO_SEE_REEF
+      middleLeft.getRange()<RANGE_TO_SEE_REEF_FLAT_SENSORS
       && middleLeft.getRange()>0
       && loopsMLValid>loopsNeededForValid;
     RobotState.getInstance().middleRightSensorTriggered =
-      middleRight.getRange()<RANGE_TO_SEE_REEF
+      middleRight.getRange()<RANGE_TO_SEE_REEF_FLAT_SENSORS
       && middleRight.getRange()>0
       && loopsFRValid>loopsNeededForValid;
     RobotState.getInstance().farRightSensorTriggered =
-      farRight.getRange()<RANGE_TO_SEE_REEF
+      farRight.getRange()<RANGE_TO_SEE_REEF_FLAT_SENSORS
       && farRight.getRange()>0
       && loopsMRValid>loopsNeededForValid;
     RobotState.getInstance().reefOffset = calcOffset(

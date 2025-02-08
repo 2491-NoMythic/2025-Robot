@@ -25,7 +25,7 @@ public class IndicatorLights extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      if(RobotState.getInstance().coralSeen) {
+      if(RobotState.getInstance().isCoralSeen()) {
         lights.setBL(2,1,4);
         lights.setBR(2,1,4);
         //TODO adjust values plz

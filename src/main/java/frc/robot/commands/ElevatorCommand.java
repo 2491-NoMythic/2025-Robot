@@ -30,12 +30,13 @@ public class ElevatorCommand extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    elevator.setElevatorPosition(levelSupplier.get());
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-  elevator.setElevatorPosition(levelSupplier.get());
   }
 
   // Called once the command ends or is interrupted.
