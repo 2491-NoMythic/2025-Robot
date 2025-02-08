@@ -379,7 +379,6 @@ public class RobotContainer {
     }
     SmartDashboard.putData("Auto Chooser", autoChooser);
     }
-  }
 
   private void limelightInit() {
     limelight = Limelight.getInstance();
@@ -526,7 +525,7 @@ public class RobotContainer {
         new Trigger(ManualCoralIntake).onTrue(new InstantCommand(() -> funnelIntake.runFunnel(FUNNEL_INTAKE_SPEED)))
             .onFalse(new InstantCommand(() -> funnelIntake.stopFunnel()));
       }
-    }
+    
 
     /*
      * bindings:
@@ -774,4 +773,4 @@ public class RobotContainer {
 
   public void disabledInit() {
   }
-}
+
