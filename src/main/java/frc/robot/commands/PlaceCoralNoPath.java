@@ -30,7 +30,7 @@ public class PlaceCoralNoPath extends SequentialCommandGroup{
             new ParallelRaceGroup(
                 new ElevatorCommand(elevator, elevatorPose),//raises elevator to position
                 new WaitUntil(()->elevator.isElevatorAtPose()), //sets elevator back to the bottom position
-                new LineUp(drivetrain, leftPlace, 0.8))),//align with reef
+                new LineUp(drivetrain, leftPlace, 0.8)),//align with reef
             new DeliverCoral(coralEndeffector),//drops coral
             new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.Bottom), elevator) //sets elevator back to the bottom position
         );
