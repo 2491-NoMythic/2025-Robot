@@ -86,7 +86,7 @@ public class ApproachReef extends Command {
     SmartDashboard.putNumber("SLOWFRONT/controller input speed", speeds.vxMetersPerSecond);
   //dont use the calculated speed unless it is between -1 and 0 (we don't want to go too fast)
     if(distance<1300) {
-      speeds.vxMetersPerSecond = Math.max(-2, calculatedSpeed);
+      speeds.vxMetersPerSecond = Math.min(2, -calculatedSpeed);
     }
   //drive using controller inputs + calculated forward speed
     drivetrain.drive(speeds);

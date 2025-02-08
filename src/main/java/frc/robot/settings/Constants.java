@@ -38,7 +38,9 @@ public final class Constants {
     public static final int FAR_RIGHT_DIST_SENSOR_ID = 4;
     public static final  int ELEVATOR_SENSOR_ID = 2491;
 
-    public static final double RANGE_TO_SEE_REEF = 200; // in millimeters, the distance that will trigger the time of flight sensors to report that we are or aren't in front of the reef
+    public static final double RANGE_TO_SEE_REEF_FLAT_SENSORS = 200; // in millimeters, the distance that will trigger the time of flight sensors to report that we are or aren't in front of the reef
+    public static final double RANGE_TO_SEE_REEF_ANGLED_SENSORS = 210; // in millimeters, the distance that will trigger the time of flight sensors to report that we are or aren't in front of the reef
+    public static final double RANGE_TO_SEE_REEF_ANGLED_AND_SPACED_SENSORS = 500; // in millimeters, the distance that will trigger the time of flight sensors to report that we are or aren't in front of the reef
     public static final double SLOW_DOWN_RANGE = 1500;
 
   }
@@ -363,7 +365,9 @@ public final class Constants {
     public static final double ALLOWABLE_POSE_DIFFERENCE = 0.5;
     public static final double MAX_TAG_DISTANCE = 3.5;
 
-    public static final Translation2d FIELD_CORNER = new Translation2d(16.54, 8.02);
+    public static final Translation2d FIELD_CORNER = new Translation2d(17.54, 8.02);
+    public static final Translation2d FIELD_CORNER_FOR_INTAKE = new Translation2d(16.65, 7.5);
+
 
     // how many degrees back is your limelight rotated from perfectly vertical?
     public static final double limelightMountAngleDegrees = 22.0;
