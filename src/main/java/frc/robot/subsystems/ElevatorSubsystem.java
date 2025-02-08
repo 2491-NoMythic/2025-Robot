@@ -15,6 +15,7 @@ import com.ctre.phoenix6.signals.ForwardLimitSourceValue;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.helpers.MotorLogger;
 import frc.robot.settings.ElevatorEnums;
+import frc.robot.subsystems.RobotState;
 
 import static frc.robot.settings.Constants.ElevatorConstants.*;
 import edu.wpi.first.wpilibj.Preferences;
@@ -109,15 +110,27 @@ public class ElevatorSubsystem extends SubsystemBase {
         break;
       case Reef2:
         setElevatorPosition(REEF_LEVEL_2_MILLIMETERS);
+        if(elevatorMotor1.getClosedLoopError().getValueAsDouble() < ELEVATOR_THRESHOLD){
+          RobotState.getInstance().elevatorIsHigh = true;
+        }
         break;
       case Reef3:
         setElevatorPosition(REEF_LEVEL_3_MILLIMETERS);
+        if(elevatorMotor1.getClosedLoopError().getValueAsDouble() < ELEVATOR_THRESHOLD){
+          RobotState.getInstance().elevatorIsHigh = true;
+        }
         break;
       case Reef4:
         setElevatorPosition(REEF_LEVEL_4_MILLIMETERS);
+        if(elevatorMotor1.getClosedLoopError().getValueAsDouble() < ELEVATOR_THRESHOLD){
+          RobotState.getInstance().elevatorIsHigh = true;
+        }
         break;
       case HumanPlayer:
         setElevatorPosition(HUMAN_PLAYER_STATION_MILLIMETERS);
+        if(elevatorMotor1.getClosedLoopError().getValueAsDouble() < ELEVATOR_THRESHOLD){
+          RobotState.getInstance().elevatorIsHigh = true;
+        }
         break;
       case Bottom:
         setElevatorPosition(BOTTOM_MILLIMETERS);
