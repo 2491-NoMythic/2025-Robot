@@ -26,49 +26,51 @@ import frc.robot.helpers.MotorLogger;
 
 public class FunnelIntake extends SubsystemBase {
   /** Creates a new Funnelintake. */
-  SparkMax intakeMotor1;
-  SparkMax intakeMotor2;
-  SparkBaseConfig intakeMotor1Config;
-  SparkBaseConfig intakeMotor2Config;
-  MotorLogger motorLogger1;
-  MotorLogger motorLogger2;
+  SparkMax funnelSlantMotor;
+  SparkMax funnelStraightMotor;
+  SparkBaseConfig slantMotorConfig;
+  SparkBaseConfig straightMotorConfig;
+  MotorLogger slantMotorLogger;
+  MotorLogger straightMotorLogger;
   SparkAnalogSensor funnelIntakeSensor;
 
   
   public FunnelIntake() {
-    intakeMotor1 = new SparkMax(FUNNEL_INTAKE_MOTOR_1_ID, MotorType.kBrushless);
-    intakeMotor1Config = new SparkMaxConfig();
-    intakeMotor1Config.apply(new ClosedLoopConfig().pidf(
-      FUNNEL_INTAKE_1_KP,
-      FUNNEL_INTAKE_1_KI,
-      FUNNEL_INTAKE_1_KD,
-      FUNNEL_INTAKE_1_KFF));
+    funnelSlantMotor = new SparkMax(FUNNEL_SLANT_MOTOR_ID, MotorType.kBrushless);
+    slantMotorConfig = new SparkMaxConfig();
+    slantMotorConfig.apply(new ClosedLoopConfig().pidf(
+      FUNNEL_SLANT_MOTOR_KP,
+      FUNNEL_SLANT_MOTOR_KI,
+      FUNNEL_SLANT_MOTOR_KD,
+      FUNNEL_SLANT_MOTOR_KFF));
 
-    intakeMotor1Config.idleMode(IdleMode.kCoast);
-    intakeMotor1Config.smartCurrentLimit(25, 25, 1000);
-    intakeMotor1.configure(intakeMotor1Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    slantMotorConfig.idleMode(IdleMode.kCoast);
+    slantMotorConfig.inverted(true);
+    slantMotorConfig.smartCurrentLimit(25, 25, 1000);
+    funnelSlantMotor.configure(slantMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-    intakeMotor2 = new SparkMax(FUNNEL_INTAKE_MOTOR_2_ID,MotorType.kBrushless);
-    intakeMotor2Config = new SparkMaxConfig();
-    intakeMotor2Config.apply(new ClosedLoopConfig().pidf(
-      FUNNEL_INTAKE_2_KP,
-      FUNNEL_INTAKE_2_KI,
-      FUNNEL_INTAKE_2_KD,
-      FUNNEL_INTAKE_2_KFF));
+    funnelStraightMotor = new SparkMax(FUNNEL_STRAIGHT_MOTOR_ID,MotorType.kBrushless);
+    straightMotorConfig = new SparkMaxConfig();
+    straightMotorConfig.apply(new ClosedLoopConfig().pidf(
+      FUNNEL_STRAIGHT_MOTOR_KP,
+      FUNNEL_STRAIGHT_MOTOR_KI,
+      FUNNEL_STRAIGHT_MOTOR_KD,
+      FUNNEL_STRAIGHT_MOTOR_KFF));
 
-    intakeMotor2Config.idleMode(IdleMode.kCoast);
-    intakeMotor2Config.smartCurrentLimit(25, 25, 1000);
-    intakeMotor2.configure(intakeMotor2Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    straightMotorConfig.idleMode(IdleMode.kCoast);
+    straightMotorConfig.inverted(false);
+    straightMotorConfig.smartCurrentLimit(25, 25, 1000);
+    funnelStraightMotor.configure(straightMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-    motorLogger1 = new MotorLogger("/funnelIntake/intakemotor1");
-    motorLogger2 = new MotorLogger("/funnelIntake/intakeMotor2");
+    slantMotorLogger = new MotorLogger("/funnelIntake/slantMotor");
+    straightMotorLogger = new MotorLogger("/funnelIntake/straightMotor");
     
-    funnelIntakeSensor = intakeMotor1.getAnalog();
+    funnelIntakeSensor = funnelSlantMotor.getAnalog();
 
   }
   private void logMotors(){
-    motorLogger1.log(intakeMotor1);
-    motorLogger2.log(intakeMotor2);
+    slantMotorLogger.log(funnelSlantMotor);
+    straightMotorLogger.log(funnelStraightMotor);
   }
 
   @Override
@@ -80,13 +82,13 @@ public class FunnelIntake extends SubsystemBase {
     }
   }
   public void runFunnel(double speed){
-    intakeMotor1.getClosedLoopController().setReference(speed, ControlType.kVelocity);
-    intakeMotor2.getClosedLoopController().setReference(speed, ControlType.kVelocity);
+    funnelSlantMotor.getClosedLoopController().setReference(speed*(2.0/3), ControlType.kVelocity);
+    funnelStraightMotor.getClosedLoopController().setReference(speed, ControlType.kVelocity);
   }
 
   public void stopFunnel() {
-    intakeMotor1.set(0);
-    intakeMotor2.set(0);
+    funnelSlantMotor.set(0);
+    funnelStraightMotor.set(0);
   }
 
 }

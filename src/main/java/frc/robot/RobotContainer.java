@@ -178,8 +178,8 @@ public class RobotContainer {
     Preferences.initBoolean("Lights Exist", true);
     Preferences.initBoolean("CompBot", true);
     Preferences.initBoolean("Use Limelight", true);
-    Preferences.getString("Driver Controller Type", "XboxController");
-    Preferences.getString("Operator Controller Type", "ButtonBoard");
+    Preferences.initString("Driver Controller Type", "PS4Controller");
+    Preferences.initString("Operator Controller Type", "PS4Controller");
     Preferences.initBoolean("Elevator", false);
     Preferences.initBoolean("CoralEndDefector", false);
     Preferences.initBoolean("AlgaeEndDefector", false);
@@ -360,14 +360,11 @@ public class RobotContainer {
     if(DrivetrainExists){
       autoChooser = AutoBuilder.buildAutoChooser();
       SmartDashboard.putData("Auto Chooser", autoChooser);
-    }
     //change these two booleans to modify where the NoOdometry command will place coral
     BooleanSupplier leftPlace = ()->true;
     Supplier<ElevatorEnums> elevatorHeightSupplier= ()->ElevatorEnums.Reef2;
-    if(DrivetrainExists) {
-      autoChooser.addOption("moveForwardNoOdometry", new MoveMeters(driveTrain, 2, 1, 0, 0));
-    }
-    if(DrivetrainExists&&elevatorExists&&distanceSensorsExist&&coralEndeffectorExists&&algaeEndeffectorExists) {
+    autoChooser.addOption("moveForwardNoOdometry", new MoveMeters(driveTrain, 2, 1, 0, 0));
+    if(elevatorExists&&distanceSensorsExist&&coralEndeffectorExists&&algaeEndeffectorExists) {
       autoChooser.addOption("placeCoralNoOdometry", new PlaceCoralNoOdometry(
         driveTrain,
         elevator,
@@ -379,6 +376,7 @@ public class RobotContainer {
     }
     SmartDashboard.putData("Auto Chooser", autoChooser);
     }
+  }
 
   private void limelightInit() {
     limelight = Limelight.getInstance();
@@ -520,12 +518,12 @@ public class RobotContainer {
     if(algaeEndeffectorExists) {
         new Trigger(AlgaeBargeSup)
             .whileTrue(new ShootInBarge(driveTrain, elevator, algaeEndDefector, () -> driverControllerPS4.getLeftY()));
-      }}
+      }
       if(funnelIntakeExists){
         new Trigger(ManualCoralIntake).onTrue(new InstantCommand(() -> funnelIntake.runFunnel(FUNNEL_INTAKE_SPEED)))
             .onFalse(new InstantCommand(() -> funnelIntake.stopFunnel()));
       }
-    
+  }
 
     /*
      * bindings:
@@ -773,4 +771,5 @@ public class RobotContainer {
 
   public void disabledInit() {
   }
+}
 
