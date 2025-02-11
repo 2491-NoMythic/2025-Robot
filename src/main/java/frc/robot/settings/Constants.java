@@ -391,6 +391,8 @@ public final class Constants {
     public static final double CORAL_ENDEFFECTOR_KFF = 0;
     
     public static final double CORAL_ENDEFFECTOR_SPEED = 0.5;
+      /** this is the speed that the EndEffector motors should run at when they should be slow enough to stop the coral where it is the moment the sensor is triggered */
+      public static final double CORAL_ENDEFFECTOR_ADJUSTING_INTAKE_SPEED = 150;
   }
 
   public final class AlgaeEndeffectorConstants{
@@ -468,6 +470,8 @@ public final class Constants {
     public static final int FUNNEL_ROTATOR_SUPPLY_CURRENT_LIMIT = 2491;
     public static final double FUNNEL_ROTATOR_GEAR_RATIO = 2491;
     public static final double FUNNEL_INTAKE_SPEED = 1600;
+    /** this is the speed that the funnel motors should run at when they should be slow enough to stop the coral where it is the moent the sensor is triggered */
+    public static final double FUNNEL_ADJUSTING_INTAKE_SPEED = 150;
   }
 
   public final class AutoAlignToReefConstants {
