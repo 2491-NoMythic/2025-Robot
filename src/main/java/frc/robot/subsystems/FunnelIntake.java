@@ -81,9 +81,9 @@ public class FunnelIntake extends SubsystemBase {
     logMotors();
     }
   }
-  public void runFunnel(double speed){
-    funnelSlantMotor.getClosedLoopController().setReference(speed*(2.0/3), ControlType.kVelocity);
-    funnelStraightMotor.getClosedLoopController().setReference(speed, ControlType.kVelocity);
+  public void runFunnel(double RPM){
+    funnelSlantMotor.getClosedLoopController().setReference(RPM*(2.0/3), ControlType.kVelocity);
+    funnelStraightMotor.getClosedLoopController().setReference(RPM, ControlType.kVelocity);
   }
 
   public void stopFunnel() {
