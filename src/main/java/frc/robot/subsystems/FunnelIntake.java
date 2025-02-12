@@ -20,6 +20,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import static frc.robot.settings.Constants.FunnelConstants.*;
 
 import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.helpers.MotorLogger;
@@ -33,6 +34,7 @@ public class FunnelIntake extends SubsystemBase {
   MotorLogger slantMotorLogger;
   MotorLogger straightMotorLogger;
   SparkAnalogSensor funnelIntakeSensor;
+  Timer y;
 
   
   public FunnelIntake() {
@@ -84,11 +86,18 @@ public class FunnelIntake extends SubsystemBase {
   public void runFunnel(double speed){
     funnelSlantMotor.getClosedLoopController().setReference(speed*(2.0/3), ControlType.kVelocity);
     funnelStraightMotor.getClosedLoopController().setReference(speed, ControlType.kVelocity);
+    System.out.println("run");
   }
-
+   public void runFunnelSine( ){
+    y.start();
+    funnelSlantMotor.getClosedLoopController().setReference(Math.abs(Math.sin(y.get())*(2.0/3)), ControlType.kVelocity);
+    funnelStraightMotor.getClosedLoopController().setReference(Math.abs(Math.sin(y.get())), ControlType.kVelocity);
+   }
   public void stopFunnel() {
     funnelSlantMotor.set(0);
     funnelStraightMotor.set(0);
+    y.stop();                                                                                                                                                                                                                                       
+    y.reset();
   }
 
 }

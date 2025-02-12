@@ -7,6 +7,7 @@ package frc.robot.commands.NamedCommands;
 import static frc.robot.settings.Constants.ElevatorConstants.HUMAN_PLAYER_STATION_MILLIMETERS;
 
 import frc.robot.subsystems.RobotState;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.subsystems.CoralEndeffectorSubsystem;
@@ -19,6 +20,7 @@ public class CoralIntake extends Command {
   ElevatorSubsystem elevatorSubsystem;
   FunnelIntake funnelIntake;  
   CoralEndeffectorSubsystem coralIntake;
+  Timer y;
   
   public CoralIntake(ElevatorSubsystem elevatorSubsystem, FunnelIntake funnelIntake, CoralEndeffectorSubsystem coralIntake) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -32,13 +34,14 @@ public class CoralIntake extends Command {
   @Override
   public void initialize() {
     elevatorSubsystem.setElevatorPosition(HUMAN_PLAYER_STATION_MILLIMETERS);
+    y.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     coralIntake.runCoralEndEffector(0.3);
-    funnelIntake.runFunnel(2491);
+    funnelIntake.runFunnelSine();
   }
 
   // Called once the command ends or is interrupted.
@@ -46,11 +49,13 @@ public class CoralIntake extends Command {
   public void end(boolean interrupted) {
     funnelIntake.stopFunnel();
     coralIntake.stopCoralEndEffector();
+    y.stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    y.reset();
     return RobotState.getInstance().isCoralSeen();
   }
 }
