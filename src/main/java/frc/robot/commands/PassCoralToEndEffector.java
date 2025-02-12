@@ -39,7 +39,9 @@ public class PassCoralToEndEffector extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    RobotState.getInstance().coralLineupRunning = true;
+    RobotState.getInstance().coralLineupRunning = false;
+    funnelIntake.stopFunnel();
+    coralEndEffector.stopCoralEndEffector();
   }
 
   // Returns true when the command should end.
