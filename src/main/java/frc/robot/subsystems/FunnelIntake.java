@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.helpers.MotorLogger;
+import frc.robot.settings.Constants;
 
 public class FunnelIntake extends SubsystemBase {
   /** Creates a new Funnelintake. */
@@ -91,8 +92,8 @@ public class FunnelIntake extends SubsystemBase {
   }
    public void runFunnelSine( ){
     y.start();
-    funnelSlantMotor.getClosedLoopController().setReference(Math.abs(Math.sin(y.get())*(2.0/3) * 10), ControlType.kVelocity);
-    funnelStraightMotor.getClosedLoopController().setReference(Math.abs(Math.sin(y.get()) * 10), ControlType.kVelocity);
+    funnelSlantMotor.getClosedLoopController().setReference(Math.abs(Math.sin(y.get())*(2.0/3) * FUNNEL_INTAKE_SPEED), ControlType.kVelocity);
+    funnelStraightMotor.getClosedLoopController().setReference(Math.abs(Math.sin(y.get()) * FUNNEL_INTAKE_SPEED), ControlType.kVelocity);
    }
   public void stopFunnel() {
     funnelSlantMotor.set(0);
