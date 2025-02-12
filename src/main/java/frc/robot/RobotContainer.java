@@ -234,20 +234,16 @@ public class RobotContainer {
       AutoAngleAtReefSup = ()->driverControllerXbox.getAButton();
       DvLeftReefLineupSup = driverControllerXbox::getLeftBumperButton;
       DvRightReefLineupSup =  driverControllerXbox::getRightBumperButton;
-      SlowFrontSup = ()-> driverControllerXbox.getLeftTriggerAxis() > 0.1;
       AlgaeDriveSup = ()-> driverControllerXbox.getLeftY();
       CoralPlaceTeleSupplier = ()-> driverControllerXbox.getRightTriggerAxis() > 0.1;
       PlaceCoralNoPathSup = ()->driverControllerXbox.getAButton();
-      
 
       //Manual driver controls
       AlgaeDepositSup = driverControllerXbox::getBButton;
-      AlgaeIntakeSup = driverControllerXbox::getAButton;
       ManualCoralIntake = ()->driverControllerXbox.getPOV() == 90;
       AlgaeShooterSup = ()-> driverControllerXbox.getPOV() == 180;
-      PlaceCoralNoPathSup = driverControllerXbox::getYButton;
       CoralIntakeSup = driverControllerXbox::getXButton;
-      FunnelRotatorCommand = driverControllerXbox::getRightStickButton;
+      FunnelRotatorCommand = driverControllerXbox::getBButton;
       
 
     } else if (DCTEnum == ControllerEnums.PS4Controller) {
