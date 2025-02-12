@@ -33,7 +33,6 @@ public class ElevatorCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotState.getInstance().raiseElevator = true;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -45,7 +44,6 @@ public class ElevatorCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    RobotState.getInstance().raiseElevator = false;
   }
 
   // Returns true when the command should end.

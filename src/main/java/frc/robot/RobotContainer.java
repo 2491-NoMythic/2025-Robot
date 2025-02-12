@@ -419,6 +419,7 @@ public class RobotContainer {
     if(elevatorExists && coralEndeffectorExists && distanceSensorsExist){
       new Trigger(CoralPlaceTeleSupplier).whileTrue(
           new SequentialCommandGroup(
+            new InstantCommand(()->RobotState.getInstance().reefLineupRunning = true),
             pathFindToReef,
             new PlaceCoralNoPath(
               elevator,
@@ -432,11 +433,12 @@ public class RobotContainer {
               ()->RobotState.getInstance().deliveringLeft,
               algaeEndDefector,
               shouldAlgae,
-              goForAlagea))
+              goForAlgae),
+            new InstantCommand(()->RobotState.getInstance().reefLineupRunning = false))
 
           );
     } else {
-      new Trigger(CoralPlaceTeleSupplier).whileTrue(pathFindToReef);
+      new Trigger(CoralPlaceTeleSupplier).whileTrue(pathFindToReef).onTrue(new InstantCommand(()->RobotState.getInstance().reefLineupRunning = true)).onFalse(new InstantCommand(()->RobotState.getInstance().reefLineupRunning = false));
     }
 
     if(elevatorExists && algaeEndeffectorExists){
@@ -630,38 +632,37 @@ public class RobotContainer {
   }
   public static CommandSelectorEnum selectCommand(BooleanSupplier LeftSupplier) {
     switch(RobotState.getInstance().closestReefSide){
-      case middleFar: 
-      RobotState.getInstance().pathFinding = true;
+      case middleFar:
         if(LeftSupplier.getAsBoolean()) {
           return CommandSelectorEnum.BackCenterReefLeft;
         } else {
           return CommandSelectorEnum.BackCenterReefRight;
         }
-      case processorFar:RobotState.getInstance().pathFinding = true;
+      case processorFar:
         if(LeftSupplier.getAsBoolean()) {
           return CommandSelectorEnum.BackRightReefLeft;
         } else {
           return CommandSelectorEnum.BackRightReefRight;
         }
-      case bargeFar:RobotState.getInstance().pathFinding = true;
+      case bargeFar:
         if(LeftSupplier.getAsBoolean()) {
           return CommandSelectorEnum.BackLeftReefLeft;
         } else {
           return CommandSelectorEnum.BackLeftReefRight;
         }
-      case middleClose:RobotState.getInstance().pathFinding = true;
+      case middleClose:
         if(LeftSupplier.getAsBoolean()) {
           return CommandSelectorEnum.FrontCenterReefLeft;
         } else { 
           return CommandSelectorEnum.FrontCenterReefRight;
         }
-      case processorClose:RobotState.getInstance().pathFinding = true;
+      case processorClose:
         if(LeftSupplier.getAsBoolean()) {
           return CommandSelectorEnum.FrontRightReefLeft;
         } else { 
           return CommandSelectorEnum.FrontRightReefRight;
         }
-      case bargeClose:RobotState.getInstance().pathFinding = true;
+      case bargeClose:
         if(LeftSupplier.getAsBoolean()) {
           return CommandSelectorEnum.FrontLeftReefLeft;
         } else { 

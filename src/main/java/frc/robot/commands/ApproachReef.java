@@ -56,9 +56,7 @@ public class ApproachReef extends Command {
       invert = -1;
     } else {
       invert = 1;
-    }
-    RobotState.getInstance().sensorApproach = true;
-    
+    }    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -99,7 +97,6 @@ public class ApproachReef extends Command {
   @Override
   public void end(boolean interrupted) {
     drivetrain.pointWheelsInward();
-    RobotState.getInstance().sensorApproach = false;
   }
 
   // Returns true when the command should end.

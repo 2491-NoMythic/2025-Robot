@@ -11,7 +11,6 @@ public class RobotState {
   private static RobotState instance;
   public boolean LimelightsUpdated;
   public boolean lightsReset;
-  public boolean odometerUpdated;
   public double odometerOrientation;
   public boolean farLeftSensorTriggered;
   public boolean middleLeftSensorTriggered;
@@ -27,18 +26,16 @@ public class RobotState {
   public ReefSideEnum closestReefSide;
   public boolean deliveringLeft;
   public boolean goForAlgae;
-  
-  public boolean pathFinding;
-  public boolean sensorApproach;
-  public boolean sensorLineUp;
-  public boolean raiseElevator; 
+  public boolean reefLineupRunning;
   public boolean bargeLineUp;
   public boolean bargeShoot;
+  public boolean inIntakeZone;
   
-  {
+  public RobotState(){
     //sets any values that aren't periodically updated by a subsystem to a value, so that they won't return null if called before they are updated
     deliveringLeft = true;
     deliveringCoralHeight = ElevatorEnums.Reef1;
+    reefLineupRunning = false;
   }
 
   public static RobotState getInstance() {

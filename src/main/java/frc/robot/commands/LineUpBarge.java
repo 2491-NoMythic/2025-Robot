@@ -77,7 +77,7 @@ public class LineUpBarge extends Command {
   @Override
   public void end(boolean interrupted) {
     driveTrain.stop();
-    RobotState.getInstance().bargeLineUp = true;
+    RobotState.getInstance().bargeLineUp = false;
   }
   
   // Returns true when the command should end.

@@ -396,13 +396,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
       }
       if (!doRejectUpdate) {
         odometer.addVisionMeasurement(estimate.pose, estimate.timestampSeconds);
+        RobotState.getInstance().LimelightsUpdated = true;
+      } else {
+        RobotState.getInstance().LimelightsUpdated = false;
       }
-      RobotState.getInstance().LimelightsUpdated = true;
-    } else {
-      RobotState.getInstance().LimelightsUpdated = false;
-    }
-      RobotState.getInstance().odometerUpdated = true;
   }
+}
   /**
    * Set the odometry using the current apriltag estimate, disregarding the pose trustworthyness.
    *
