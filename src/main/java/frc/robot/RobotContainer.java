@@ -231,12 +231,14 @@ public class RobotContainer {
       ZeroGyroSup = driverControllerXbox::getStartButton;
 
       //Automatic controls
-      AutoAngleAtReefSup = ()->driverControllerXbox.getRightTriggerAxis()>0.1;
+      AutoAngleAtReefSup = ()->driverControllerXbox.getAButton();
       DvLeftReefLineupSup = driverControllerXbox::getLeftBumperButton;
       DvRightReefLineupSup =  driverControllerXbox::getRightBumperButton;
       SlowFrontSup = ()-> driverControllerXbox.getLeftTriggerAxis() > 0.1;
       AlgaeDriveSup = ()-> driverControllerXbox.getLeftY();
-      CoralPlaceTeleSupplier = ()-> driverControllerXbox.getPOV() == 0;
+      CoralPlaceTeleSupplier = ()-> driverControllerXbox.getRightTriggerAxis() > 0.1;
+      PlaceCoralNoPathSup = ()->driverControllerXbox.getAButton();
+      
 
       //Manual driver controls
       AlgaeDepositSup = driverControllerXbox::getBButton;
@@ -263,8 +265,6 @@ public class RobotContainer {
       AutoAngleAtReefSup = ()->driverControllerPS4.getR2Button();
       DvLeftReefLineupSup = driverControllerPS4::getL1Button;
       DvRightReefLineupSup = driverControllerPS4::getR1Button;
-      SlowFrontSup = ()->driverControllerPS4.getL2Axis()>-0.5;
-      AlgaeDriveSup = ()-> driverControllerPS4.getLeftY();
       CoralPlaceTeleSupplier = ()-> driverControllerPS4.getPOV() == 0;
 
       //manual driver controls
@@ -287,14 +287,13 @@ public class RobotContainer {
       ReefHeight3Supplier = ()->operatorControllerXbox.getPOV() == 180;
       ReefHeight4Supplier = ()->operatorControllerXbox.getPOV() == 270;
       CoralIntakeHeightSupplier = ()->operatorControllerXbox.getStartButton();
-      BargeHeightSupplier = operatorControllerXbox::getXButton;
-      AlgaeBargeSup = operatorControllerXbox::getBButton;
+      ClimbCommandSupplier = operatorControllerXbox::getXButton;
+      AlgaeBargeSup = operatorControllerXbox::getYButton;
+      goForAlgae = operatorControllerXbox::getAButton;
 
 
       //operator manual controls, should not be used unless other controls not working
       ForceEjectCoral = ()-> operatorControllerXbox.getRightTriggerAxis() > 0.1;
-      ForceElevator = ()-> operatorControllerXbox.getRightTriggerAxis() > 0.1;
-      ClimbCommandSupplier = ()->operatorControllerXbox.getYButton();
       
     } else if (OCTEnum == ControllerEnums.PS4Controller){
       //Controller IDs
