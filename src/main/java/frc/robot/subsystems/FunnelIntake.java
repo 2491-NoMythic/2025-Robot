@@ -91,13 +91,13 @@ public class FunnelIntake extends SubsystemBase {
   }
    public void runFunnelSine( ){
     y.start();
-    funnelSlantMotor.getClosedLoopController().setReference(Math.abs(Math.sin(y.get())*(2.0/3)), ControlType.kVelocity);
-    funnelStraightMotor.getClosedLoopController().setReference(Math.abs(Math.sin(y.get())), ControlType.kVelocity);
+    funnelSlantMotor.getClosedLoopController().setReference(Math.abs(Math.sin(y.get())*(2.0/3) * 10), ControlType.kVelocity);
+    funnelStraightMotor.getClosedLoopController().setReference(Math.abs(Math.sin(y.get()) * 10), ControlType.kVelocity);
    }
   public void stopFunnel() {
     funnelSlantMotor.set(0);
     funnelStraightMotor.set(0);
-    y.stop();                                                                                                                                                                                                                                       
+    y.stop();                                                                                                                                            
     y.reset();
   }
 

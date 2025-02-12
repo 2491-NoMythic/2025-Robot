@@ -537,7 +537,7 @@ public class RobotContainer {
             .whileTrue(new ShootInBarge(driveTrain, elevator, algaeEndDefector, () -> driverControllerPS4.getLeftY()));
       }
       if (funnelIntakeExists) {
-        new Trigger(ManualCoralIntake).onTrue(new InstantCommand(() -> funnelIntake.runFunnel(FUNNEL_INTAKE_SPEED)))
+        new Trigger(ManualCoralIntake).onTrue(new InstantCommand(() -> funnelIntake.runFunnelSine()))
             .onFalse(new InstantCommand(() -> funnelIntake.stopFunnel()));
       }
   }
