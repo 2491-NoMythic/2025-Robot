@@ -47,6 +47,7 @@ import frc.robot.commands.AlgaeIntakeCommand;
 import frc.robot.commands.Drive;
 import frc.robot.commands.IndicatorLights;
 import frc.robot.commands.ElevatorCommand;
+import frc.robot.commands.FunnelRotatorCommand;
 import frc.robot.commands.LineUp;
 import frc.robot.commands.MoveMeters;
 import frc.robot.commands.PlaceCoralNoPath;
@@ -168,6 +169,7 @@ public class RobotContainer {
   BooleanSupplier PlaceCoralNoPathSup;
   BooleanSupplier goForAlgae;
   BooleanSupplier CoralIntakeSup;
+  BooleanSupplier FunnelRotatorCommand;
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
@@ -243,6 +245,8 @@ public class RobotContainer {
       AlgaeShooterSup = ()-> driverControllerXbox.getPOV() == 180;
       PlaceCoralNoPathSup = driverControllerXbox::getYButton;
       CoralIntakeSup = driverControllerXbox::getXButton;
+      FunnelRotatorCommand = driverControllerXbox::getRightStickButton;
+      
 
     } else if (DCTEnum == ControllerEnums.PS4Controller) {
 
@@ -270,6 +274,7 @@ public class RobotContainer {
       AlgaeIntakeSup = driverControllerPS4::getCrossButton;
       AlgaeShooterSup =  ()-> driverControllerPS4.getPOV() == 180;
       CoralIntakeSup = driverControllerPS4::getSquareButton;
+      FunnelRotatorCommand = driverControllerPS4::getShareButton;
     } 
     if (OCTEnum == ControllerEnums.XboxController) {
       operatorControllerXbox = new XboxController(OPERATOR_CONTROLLER_ID);
