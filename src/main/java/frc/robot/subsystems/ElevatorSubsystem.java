@@ -146,6 +146,9 @@ public class ElevatorSubsystem extends SubsystemBase {
   public boolean isElevatorAtPose() {
     return elevatorMotor1.getClosedLoopError().getValueAsDouble() < ELEVATOR_THRESHOLD;
   }
+  public double getPIDTarget() {
+    return elevatorMotor1.getClosedLoopReference().getValueAsDouble();
+  }
   public void stopElevator(){
     elevatorMotor1.set(0);
   }

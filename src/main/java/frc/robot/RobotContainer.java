@@ -8,6 +8,7 @@ import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.ALGAE_INTAK
 import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.ALGAE_SHOOT_SPEED;
 import static frc.robot.settings.Constants.CoralEndeffectorConstants.CORAL_ENDEFFECTOR_SPEED;
 import static frc.robot.settings.Constants.DriveConstants.*;
+import static frc.robot.settings.Constants.ElevatorConstants.HUMAN_PLAYER_STATION_MILLIMETERS;
 import static frc.robot.settings.Constants.FunnelConstants.FUNNEL_INTAKE_SPEED;
 import static frc.robot.settings.Constants.PS4Driver.*;
 
@@ -491,7 +492,7 @@ public class RobotContainer {
       new Trigger(()->
         !RobotState.getInstance().coralAligned &&
         RobotState.getInstance().funnelSensorTrig &&
-        !(elevator.isElevatorAtPose() && RobotState.getInstance().deliveringCoralHeight == ElevatorEnums.HumanPlayer) &&
+        !(elevator.isElevatorAtPose() && elevator.getPIDTarget() == HUMAN_PLAYER_STATION_MILLIMETERS) &&
         !RobotState.getInstance().coralLineupRunning)
           .onTrue(new LineupCoralInFunnel(funnelIntake));
       //if the coral hasn't been aligned, but has traveled all the way through to the coralEndEffector, lineup the coral in the endeffector
@@ -500,20 +501,11 @@ public class RobotContainer {
       RobotState.getInstance().coralEndeffSensorTrig &&
       !RobotState.getInstance().coralLineupRunning)
         .onTrue(new LineupCoralInEndEffector(coralEndDefector));
-      //if the coral has been aligned, is in the funnel, and the elevator is in place, pass the coral to the endeffector
+      //if the coral is in the funnel, and the elevator is in place, pass the coral to the endeffector
       new Trigger(()->
-        RobotState.getInstance().coralAligned &&
         RobotState.getInstance().funnelSensorTrig &&
         elevator.isElevatorAtPose() &&
-        RobotState.getInstance().deliveringCoralHeight == ElevatorEnums.HumanPlayer &&
-        !RobotState.getInstance().coralLineupRunning)
-          .onTrue(new PassCoralToEndEffector(coralEndDefector, funnelIntake));
-      //if the coral hasn't been aligned and is in the funnel, but the elevator is in place, pass it onto the End Effector
-      new Trigger(()->
-        !RobotState.getInstance().coralAligned &&
-        RobotState.getInstance().funnelSensorTrig &&
-        elevator.isElevatorAtPose() &&
-        RobotState.getInstance().deliveringCoralHeight == ElevatorEnums.HumanPlayer &&
+        elevator.getPIDTarget() == HUMAN_PLAYER_STATION_MILLIMETERS &&
         !RobotState.getInstance().coralLineupRunning)
           .onTrue(new PassCoralToEndEffector(coralEndDefector, funnelIntake));
       //if no coral alignment code is running, and no coral is detected by sensors, assume that the coral is out of our robot, and set coralAligned to false
