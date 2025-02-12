@@ -38,6 +38,7 @@ public class FunnelIntake extends SubsystemBase {
 
   
   public FunnelIntake() {
+    y = new Timer();
     funnelSlantMotor = new SparkMax(FUNNEL_SLANT_MOTOR_ID, MotorType.kBrushless);
     slantMotorConfig = new SparkMaxConfig();
     slantMotorConfig.apply(new ClosedLoopConfig().pidf(
