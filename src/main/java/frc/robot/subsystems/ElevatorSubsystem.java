@@ -10,9 +10,12 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.ForwardLimitSourceValue;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.helpers.MotorLogger;
 import frc.robot.settings.ElevatorEnums;
+import frc.robot.subsystems.RobotState;
 
 import static frc.robot.settings.Constants.ElevatorConstants.*;
 import edu.wpi.first.wpilibj.Preferences;
@@ -24,6 +27,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   private double zeroPoint;
   MotorLogger motorLogger1;
   MotorLogger motorLogger2;
+
   /** Creates a new ElevatorSubsystem. */
   public ElevatorSubsystem() {
     elevatorMotor1 = new TalonFX(ELEVATOR_MOTOR_1_ID);
@@ -74,7 +78,12 @@ public class ElevatorSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    if(Preferences.getBoolean("Motor Logging", false)){
     logMotors();
+    }
+    if(elevatorMotor1.getForwardLimit().getValueAsDouble() > 0.1){
+      setZero(BOTTOM_MILLIMETERS);
+    }
   }
   /**
    * Creates a zero from input
@@ -101,15 +110,27 @@ public class ElevatorSubsystem extends SubsystemBase {
         break;
       case Reef2:
         setElevatorPosition(REEF_LEVEL_2_MILLIMETERS);
+        if(elevatorMotor1.getClosedLoopError().getValueAsDouble() < ELEVATOR_THRESHOLD){
+          RobotState.getInstance().elevatorIsHigh = true;
+        }
         break;
       case Reef3:
         setElevatorPosition(REEF_LEVEL_3_MILLIMETERS);
+        if(elevatorMotor1.getClosedLoopError().getValueAsDouble() < ELEVATOR_THRESHOLD){
+          RobotState.getInstance().elevatorIsHigh = true;
+        }
         break;
       case Reef4:
         setElevatorPosition(REEF_LEVEL_4_MILLIMETERS);
+        if(elevatorMotor1.getClosedLoopError().getValueAsDouble() < ELEVATOR_THRESHOLD){
+          RobotState.getInstance().elevatorIsHigh = true;
+        }
         break;
       case HumanPlayer:
         setElevatorPosition(HUMAN_PLAYER_STATION_MILLIMETERS);
+        if(elevatorMotor1.getClosedLoopError().getValueAsDouble() < ELEVATOR_THRESHOLD){
+          RobotState.getInstance().elevatorIsHigh = false;
+        }
         break;
       case Bottom:
         setElevatorPosition(BOTTOM_MILLIMETERS);
@@ -124,6 +145,9 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
   public boolean isElevatorAtPose() {
     return elevatorMotor1.getClosedLoopError().getValueAsDouble() < ELEVATOR_THRESHOLD;
+  }
+  public double getPIDTarget() {
+    return elevatorMotor1.getClosedLoopReference().getValueAsDouble();
   }
   public void stopElevator(){
     elevatorMotor1.set(0);

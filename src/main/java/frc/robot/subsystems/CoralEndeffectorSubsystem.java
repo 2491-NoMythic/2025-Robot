@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.spark.SparkAnalogSensor;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -15,6 +16,7 @@ import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.helpers.MotorLogger;
 
@@ -47,12 +49,15 @@ public class CoralEndeffectorSubsystem extends SubsystemBase {
    * a method to set the speeds of both motors on the end effector. speeds are percentage of full power, from -1 to 1.
    * @param speed the speed for motor1
    */
-  public void runCoralEndEffector(double speed){
+  public void set(double speed){
     coralEndeffectorMotor.set(speed);
 
   }
   public void stopCoralEndEffector(){
     coralEndeffectorMotor.set(0);
+  }
+  public void runCoralEndEffector(double RPM) {
+    coralEndeffectorMotor.getClosedLoopController().setReference(RPM, ControlType.kVelocity);
   }
   private void logMotors(){
     motorLogger.log(coralEndeffectorMotor);
@@ -61,6 +66,8 @@ public class CoralEndeffectorSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     RobotState.getInstance().coralEndeffSensorTrig = coralEndeffSensor.getVoltage()>2;
+    if(Preferences.getBoolean("Motor Logging", false)){
     logMotors();
+    }
   }
 }

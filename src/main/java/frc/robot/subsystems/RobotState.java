@@ -16,8 +16,6 @@ public class RobotState {
   public boolean middleLeftSensorTriggered;
   public boolean middleRightSensorTriggered;
   public boolean farRightSensorTriggered;
-  public boolean coralSeen;
-  public boolean coralGone;
   public boolean hasAlgae;
   public ElevatorEnums deliveringCoralHeight;
   public ReefOffsetEnums reefOffset;
@@ -28,11 +26,14 @@ public class RobotState {
   public boolean goForAlgae;
   public boolean reefLineupRunning;
   public boolean bargeLineUp;
-  public boolean bargeShoot;
   public boolean inIntakeZone;
-  
+  public boolean elevatorIsHigh;
+  public boolean coralLineupRunning;
+  public boolean coralAligned;
+
   public RobotState(){
     //sets any values that aren't periodically updated by a subsystem to a value, so that they won't return null if called before they are updated
+    coralLineupRunning = false;
     deliveringLeft = true;
     deliveringCoralHeight = ElevatorEnums.Reef1;
     reefLineupRunning = false;
@@ -43,6 +44,10 @@ public class RobotState {
       instance = new RobotState();
     }
     return instance;
+  }
+
+  public boolean isCoralSeen() {
+    return funnelSensorTrig||coralEndeffSensorTrig||coralLineupRunning;
   }
   }
 

@@ -51,6 +51,6 @@ public class CoralIntake extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return RobotState.getInstance().coralSeen;
+    return RobotState.getInstance().isCoralSeen();
   }
 }
