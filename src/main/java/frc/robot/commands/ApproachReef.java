@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.settings.Constants.DriveConstants;
 import frc.robot.subsystems.DistanceSensors;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.RobotState;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ApproachReef extends Command {
@@ -55,7 +56,7 @@ public class ApproachReef extends Command {
       invert = -1;
     } else {
       invert = 1;
-    }
+    }    
   }
 
   // Called every time the scheduler runs while the command is scheduled.

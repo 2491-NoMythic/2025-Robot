@@ -290,7 +290,8 @@ public class RobotContainer {
       ReefHeight4Supplier = ()->operatorControllerXbox.getPOV() == 270;
       CoralIntakeHeightSupplier = ()->operatorControllerXbox.getStartButton();
       BargeHeightSupplier = operatorControllerXbox::getXButton;
-      goForAlgae = operatorControllerXbox::getAButton;
+      goForAlgae = ()->operatorControllerXbox.getAButton();
+      AlgaeBargeSup = operatorControllerXbox::getBButton;
 
       //operator manual controls, should not be used unless other controls not working
       ForceEjectCoral = ()-> operatorControllerXbox.getRightTriggerAxis() > 0.1;
@@ -310,7 +311,8 @@ public class RobotContainer {
       CoralIntakeHeightSupplier = ()->operatorControllerPS4.getOptionsButton();
       BargeHeightSupplier = operatorControllerPS4::getTriangleButton;
       ClimbCommandSupplier = ()->operatorControllerPS4.getSquareButton();
-      goForAlgae = operatorControllerPS4::getCircleButton;
+      goForAlgae = ()->operatorControllerPS4.getCircleButton();
+      AlgaeBargeSup = operatorControllerPS4::getCrossButton;
 
       //manual operator controls, should not be used unless other controls do not work
       ForceEjectCoral = operatorControllerPS4::getR2Button;
@@ -446,6 +448,7 @@ public class RobotContainer {
     new Trigger(BargeHeightSupplier).onTrue(new InstantCommand(()-> RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Barge));
     new Trigger(OpLeftReefLineupSup).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringLeft = true));
     new Trigger(OpRightReefLineupSup).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringLeft = false));
+    new Trigger(goForAlgae).onTrue(new InstantCommand(()->RobotState.getInstance().goForAlgae = !RobotState.getInstance().goForAlgae));
     
     if (DrivetrainExists){
     SmartDashboard.putData("drivetrain", driveTrain);
@@ -524,6 +527,7 @@ public class RobotContainer {
     if(elevatorExists && coralEndeffectorExists && distanceSensorsExist){
       new Trigger(CoralPlaceTeleSupplier).whileTrue(
           new SequentialCommandGroup(
+            new InstantCommand(()->RobotState.getInstance().reefLineupRunning = true),
             pathFindToReef,
             new PlaceCoralNoPath(
               elevator,
@@ -536,28 +540,28 @@ public class RobotContainer {
               coralEndDefector,
               ()->RobotState.getInstance().deliveringLeft,
               algaeEndDefector,
-              goForAlgae))
-
+              ()->RobotState.getInstance().goForAlgae),
+            new InstantCommand(()->RobotState.getInstance().reefLineupRunning = false))
           );
-      new Trigger(PlaceCoralNoPathSup).whileTrue(new PlaceCoralNoPath(
-        elevator,
-        ()->RobotState.getInstance().deliveringCoralHeight,
-        distanceSensors,
-        driveTrain,
-        ControllerSidewaysAxisSupplier,
-        ControllerForwardAxisSupplier,
-        ControllerZAxisSupplier,
-        coralEndDefector,
-        ()->RobotState.getInstance().deliveringLeft, 
-        algaeEndDefector,
-        goForAlgae));
-
-    } else if(DrivetrainExists) {
-      new Trigger(CoralPlaceTeleSupplier).whileTrue(new SequentialCommandGroup(
+    } else if(DrivetrainExists&&distanceSensorsExist) {
+      
+     new Trigger(CoralPlaceTeleSupplier).whileTrue(new SequentialCommandGroup(
         pathFindToReef,
         new ApproachReef(distanceSensors, driveTrain, ControllerForwardAxisSupplier, ControllerSidewaysAxisSupplier, ControllerZAxisSupplier),
         new LineUp(driveTrain, ()->RobotState.getInstance().deliveringLeft, REEF_LINEUP_SPEED)));
     }
+    new Trigger(PlaceCoralNoPathSup).whileTrue(new PlaceCoralNoPath(
+      elevator,
+      ()->RobotState.getInstance().deliveringCoralHeight,
+      distanceSensors,
+      driveTrain,
+      ControllerSidewaysAxisSupplier,
+      ControllerForwardAxisSupplier,
+      ControllerZAxisSupplier,
+      coralEndDefector,
+      ()->RobotState.getInstance().deliveringLeft, 
+      algaeEndDefector,
+      ()->RobotState.getInstance().goForAlgae));
 
     if(elevatorExists && algaeEndeffectorExists){
       new Trigger(AlgaeDepositSup).whileTrue(new DepositAlgae(algaeEndDefector,elevator, ALGAE_SHOOT_SPEED));
@@ -753,7 +757,7 @@ public class RobotContainer {
         }
   }
   public static CommandSelectorEnum selectCommand(BooleanSupplier LeftSupplier) {
-    switch(RobotState.getInstance().closestReefSide) {
+    switch(RobotState.getInstance().closestReefSide){
       case middleFar:
         if(LeftSupplier.getAsBoolean()) {
           return CommandSelectorEnum.BackCenterReefLeft;
@@ -802,6 +806,9 @@ public class RobotContainer {
   public void teleopPeriodic() {
     if(DrivetrainExists) {
       SmartDashboard.putData(driveTrain.getCurrentCommand());
+    }
+    if (elevatorExists) {
+      SmartDashboard.putData(elevator.getCurrentCommand());
     }
   }
   public void robotInit(){
