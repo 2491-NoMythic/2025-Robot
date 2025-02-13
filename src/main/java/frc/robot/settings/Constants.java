@@ -45,6 +45,7 @@ public final class Constants {
 
   }
   public static final class DriveConstants {
+    public static final double REEF_LINEUP_SPEED = 0.3;
     public static final double BUMPER_TO_SENSOR = 100; // in milliqmeters
     public static final Pose2d DRIVE_ODOMETRY_ORIGIN = new Pose2d(5.0, 5.0, new Rotation2d());
     /** The bumper-to-bumper width of the robot. */

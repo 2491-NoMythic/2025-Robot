@@ -453,10 +453,11 @@ public class RobotContainer {
     new Trigger(AutoAngleAtReefSup).whileTrue(autoAngleAtReef);
     SmartDashboard.putData(autoAngleAtReef);
     if(distanceSensorsExist) {
-    // new Trigger(SlowFrontSup).whileTrue(new SequentialCommandGroup(
-    //   approachReef,
-    //   new LineUp(driveTrain, DvLeftReefLineupSup, 0.3))
-    // );
+    //this command is for lining up to the reef without starting the whole scoring sequence
+    new Trigger(SlowFrontSup).whileTrue(new SequentialCommandGroup(
+      approachReef,
+      new LineUp(driveTrain, ()->RobotState.getInstance().deliveringLeft, REEF_LINEUP_SPEED))
+    );
     new Trigger(DvLeftReefLineupSup).or(DvRightReefLineupSup).whileTrue(new LineUp(driveTrain, DvLeftReefLineupSup, 0.8));
   }
   SmartDashboard.putData(new LineUpBarge(driveTrain, ControllerSidewaysAxisSupplier));
@@ -552,13 +553,10 @@ public class RobotContainer {
         goForAlgae));
 
     } else if(DrivetrainExists) {
-      Command approachReef2 = approachReef;
       new Trigger(CoralPlaceTeleSupplier).whileTrue(new SequentialCommandGroup(
         pathFindToReef,
-        approachReef2,
-        new LineUp(driveTrain, ()->RobotState.getInstance().deliveringLeft, 0.3)
-      ));
-      
+        new ApproachReef(distanceSensors, driveTrain, ControllerForwardAxisSupplier, ControllerSidewaysAxisSupplier, ControllerZAxisSupplier),
+        new LineUp(driveTrain, ()->RobotState.getInstance().deliveringLeft, REEF_LINEUP_SPEED)));
     }
 
     if(elevatorExists && algaeEndeffectorExists){
