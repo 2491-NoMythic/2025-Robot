@@ -37,6 +37,8 @@ public final class Constants {
     public static final int MIDDLE_RIGHT_DIST_SENSOR_ID = 3;
     public static final int FAR_RIGHT_DIST_SENSOR_ID = 4;
     public static final  int ELEVATOR_SENSOR_ID = 2491;
+    public static final  int FUNNEL_SENSOR_ID = 2491;
+    public static final  int INTAKE_SENSOR_ID = 2491;
 
     public static final double RANGE_TO_SEE_REEF_FLAT_SENSORS = 200; // in millimeters, the distance that will trigger the time of flight sensors to report that we are or aren't in front of the reef
     public static final double RANGE_TO_SEE_REEF_ANGLED_SENSORS = 210; // in millimeters, the distance that will trigger the time of flight sensors to report that we are or aren't in front of the reef
@@ -489,5 +491,33 @@ public final class Constants {
     public static final double BLUE_BARGE_SHOOT_X = 2491; //TODO: change these values
     public static final double RED_BARGE_SHOOT_X = 2491; //TODO: change these values
    }
+public final class LightConstants{
+  public static final int LEFT_ELEVATOR_LIGHTS_ALGAE_START = 2491;
+  public static final int LEFT_ELEVATOR_LIGHTS_ALGAE_END = 2491;
+  public static final int LEFT_ELEVATOR_LIGHTS_1_START = 2491;
+  public static final int LEFT_ELEVATOR_LIGHTS_1_END = 2491;
+  public static final int LEFT_ELEVATOR_LIGHTS_2_END = 2491;
+  public static final int LEFT_ELEVATOR_LIGHTS_3_END = 2491;
+  public static final int LEFT_ELEVATOR_LIGHTS_4_END = 2491;
+  public static final int LEFT_ELEVATOR_LIGHTS_5_END = 2491;
+
+
+  public static final int RIGHT_ELEVATOR_LIGHTS_ALGAE_START = 2491;
+  public static final int RIGHT_ELEVATOR_LIGHTS_ALGAE_END = 2491;
+  public static final int RIGHT_ELEVATOR_LIGHTS_1_START = 2491;
+  public static final int RIGHT_ELEVATOR_LIGHTS_1_END = 2491;
+  public static final int RIGHT_ELEVATOR_LIGHTS_2_END = 2491;
+  public static final int RIGHT_ELEVATOR_LIGHTS_3_END = 2491;
+  public static final int RIGHT_ELEVATOR_LIGHTS_4_END = 2491;
+  public static final int RIGHT_ELEVATOR_LIGHTS_5_END = 2491;
+
+
+  public static final int FUNNEL_LIGHTS_START = 2491;
+  public static final int FUNNEL_LIGHTS_END = 2491;
+
+  public static final int DRIVETRAIN_LIGHTS_START = 2491;
+  public static final int DRIVETRAIN_LIGHTS_END = 2491;
 }
+
+  }
 

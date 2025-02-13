@@ -24,6 +24,9 @@ public class RobotState {
   public ReefSideEnum closestReefSide;
   public boolean deliveringLeft;
   public boolean goForAlgae;
+  public boolean reefLineupRunning;
+  public boolean bargeLineUp;
+  public boolean inIntakeZone;
   public boolean elevatorIsHigh;
   public boolean coralLineupRunning;
   public boolean coralAligned;
@@ -33,6 +36,7 @@ public class RobotState {
     coralLineupRunning = false;
     deliveringLeft = true;
     deliveringCoralHeight = ElevatorEnums.Reef1;
+    reefLineupRunning = false;
   }
 
   public static RobotState getInstance() {
