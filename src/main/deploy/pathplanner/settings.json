@@ -3,7 +3,7 @@
   "robotLength": 0.871,
   "holonomicMode": true,
   "pathFolders": [
-    "New Folder",
+    "InitialPaths",
     "ReefSideLineup"
   ],
   "autoFolders": [
