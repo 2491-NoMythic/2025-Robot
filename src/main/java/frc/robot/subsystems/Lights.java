@@ -60,9 +60,29 @@ public class Lights extends SubsystemBase {
   //TODO: adjust start/end values
   public void setSystemLights(LightsEnums lightEnums, int R, int G, int B){
     switch(lightEnums){
-      case ElevatorLeft1: setLights(LightConstants.LEFT_ELEVATOR_LIGHTS_START, LightConstants.LEFT_ELEVATOR_LIGHTS_END, R, G, B);
+      case ElevatorLeftAlgaeIndicator: setLights(LightConstants.LEFT_ELEVATOR_LIGHTS_ALGAE_START, LightConstants.LEFT_ELEVATOR_LIGHTS_ALGAE_END, R, G, B);
+      break;      
+      case ElevatorLeft1: setLights(LightConstants.LEFT_ELEVATOR_LIGHTS_1_START, LightConstants.LEFT_ELEVATOR_LIGHTS_1_END, R, G, B);
       break;
-      case ElevatorRight1: setLights(LightConstants.RIGHT_ELEVATOR_LIGHTS_START, LightConstants.RIGHT_ELEVATOR_LIGHTS_END, R, G, B);
+      case ElevatorLeft2: setLights(LightConstants.LEFT_ELEVATOR_LIGHTS_1_END+1, LightConstants.LEFT_ELEVATOR_LIGHTS_2_END, R, G, B);
+      break;
+      case ElevatorLeft3: setLights(LightConstants.LEFT_ELEVATOR_LIGHTS_2_END+1, LightConstants.LEFT_ELEVATOR_LIGHTS_3_END, R, G, B);
+      break;
+      case ElevatorLeft4: setLights(LightConstants.LEFT_ELEVATOR_LIGHTS_3_END+1, LightConstants.LEFT_ELEVATOR_LIGHTS_4_END, R, G, B);
+      break;
+      case ElevatorLeft5: setLights(LightConstants.LEFT_ELEVATOR_LIGHTS_4_END+1, LightConstants.LEFT_ELEVATOR_LIGHTS_5_END, R, G, B);
+      break;
+      case ElevatorRightAlgaeIndicator: setLights(LightConstants.RIGHT_ELEVATOR_LIGHTS_ALGAE_START, LightConstants.RIGHT_ELEVATOR_LIGHTS_ALGAE_END, R, G, B);
+      break;      
+      case ElevatorRight1: setLights(LightConstants.RIGHT_ELEVATOR_LIGHTS_1_START, LightConstants.RIGHT_ELEVATOR_LIGHTS_1_END, R, G, B);
+      break;
+      case ElevatorRight2: setLights(LightConstants.RIGHT_ELEVATOR_LIGHTS_1_END+1, LightConstants.RIGHT_ELEVATOR_LIGHTS_2_END, R, G, B);
+      break;
+      case ElevatorRight3: setLights(LightConstants.RIGHT_ELEVATOR_LIGHTS_2_END+1, LightConstants.RIGHT_ELEVATOR_LIGHTS_3_END, R, G, B);
+      break;
+      case ElevatorRight4: setLights(LightConstants.RIGHT_ELEVATOR_LIGHTS_3_END+1, LightConstants.RIGHT_ELEVATOR_LIGHTS_4_END, R, G, B);
+      break;
+      case ElevatorRight5: setLights(LightConstants.RIGHT_ELEVATOR_LIGHTS_4_END+1, LightConstants.RIGHT_ELEVATOR_LIGHTS_5_END, R, G, B);
       break;
       case Funnel: setLights(LightConstants.FUNNEL_LIGHTS_START, LightConstants.FUNNEL_LIGHTS_END, R, G, B);
       break;

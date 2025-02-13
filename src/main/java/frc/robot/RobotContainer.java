@@ -287,7 +287,7 @@ public class RobotContainer {
       ReefHeight4Supplier = ()->operatorControllerXbox.getPOV() == 270;
       CoralIntakeHeightSupplier = ()->operatorControllerXbox.getStartButton();
       BargeHeightSupplier = operatorControllerXbox::getXButton;
-      goForAlgae = ()->RobotState.getInstance().goForAlgae;
+      goForAlgae = ()->operatorControllerXbox.getAButton();
       AlgaeBargeSup = operatorControllerXbox::getBButton;
 
 
@@ -309,7 +309,7 @@ public class RobotContainer {
       CoralIntakeHeightSupplier = ()->operatorControllerPS4.getOptionsButton();
       BargeHeightSupplier = operatorControllerPS4::getTriangleButton;
       ClimbCommandSupplier = ()->operatorControllerPS4.getSquareButton();
-      goForAlgae = ()->RobotState.getInstance().goForAlgae;
+      goForAlgae = ()->operatorControllerPS4.getCircleButton();
       AlgaeBargeSup = operatorControllerPS4::getCrossButton;
 
       //manual operator controls, should not be used unless other controls do not work
@@ -533,7 +533,7 @@ public class RobotContainer {
               coralEndDefector,
               ()->RobotState.getInstance().deliveringLeft,
               algaeEndDefector,
-              goForAlgae),
+              ()->RobotState.getInstance().goForAlgae),
             new InstantCommand(()->RobotState.getInstance().reefLineupRunning = false))
           );
     } else if(DrivetrainExists) {
@@ -550,7 +550,7 @@ public class RobotContainer {
       coralEndDefector,
       ()->RobotState.getInstance().deliveringLeft, 
       algaeEndDefector,
-      goForAlgae));
+      ()->RobotState.getInstance().goForAlgae));
 
     if(elevatorExists && algaeEndeffectorExists){
       new Trigger(AlgaeDepositSup).whileTrue(new DepositAlgae(algaeEndDefector,elevator, ALGAE_SHOOT_SPEED));

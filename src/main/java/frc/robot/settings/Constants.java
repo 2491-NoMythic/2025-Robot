@@ -492,37 +492,31 @@ public final class Constants {
     public static final double RED_BARGE_SHOOT_X = 2491; //TODO: change these values
    }
 public final class LightConstants{
-  public static final int LEFT_ELEVATOR_LIGHTS_START = 2491;
-  public static final int LEFT_ELEVATOR_LIGHTS_END = 2491;
-  public static final int RIGHT_ELEVATOR_LIGHTS_START = 2491;
-  public static final int RIGHT_ELEVATOR_LIGHTS_END = 2491;
+  public static final int LEFT_ELEVATOR_LIGHTS_ALGAE_START = 2491;
+  public static final int LEFT_ELEVATOR_LIGHTS_ALGAE_END = 2491;
+  public static final int LEFT_ELEVATOR_LIGHTS_1_START = 2491;
+  public static final int LEFT_ELEVATOR_LIGHTS_1_END = 2491;
+  public static final int LEFT_ELEVATOR_LIGHTS_2_END = 2491;
+  public static final int LEFT_ELEVATOR_LIGHTS_3_END = 2491;
+  public static final int LEFT_ELEVATOR_LIGHTS_4_END = 2491;
+  public static final int LEFT_ELEVATOR_LIGHTS_5_END = 2491;
+
+
+  public static final int RIGHT_ELEVATOR_LIGHTS_ALGAE_START = 2491;
+  public static final int RIGHT_ELEVATOR_LIGHTS_ALGAE_END = 2491;
+  public static final int RIGHT_ELEVATOR_LIGHTS_1_START = 2491;
+  public static final int RIGHT_ELEVATOR_LIGHTS_1_END = 2491;
+  public static final int RIGHT_ELEVATOR_LIGHTS_2_END = 2491;
+  public static final int RIGHT_ELEVATOR_LIGHTS_3_END = 2491;
+  public static final int RIGHT_ELEVATOR_LIGHTS_4_END = 2491;
+  public static final int RIGHT_ELEVATOR_LIGHTS_5_END = 2491;
+
 
   public static final int FUNNEL_LIGHTS_START = 2491;
   public static final int FUNNEL_LIGHTS_END = 2491;
 
   public static final int DRIVETRAIN_LIGHTS_START = 2491;
   public static final int DRIVETRAIN_LIGHTS_END = 2491;
-
-
-  public static final int HEIGHT4_START = 2491;
-  public static final int HEIGHT4_END = 2491;
-
-  public static final int HEIGHT3_START = 2491;
-  public static final int HEIGHT3_END = 2491;
-
-  public static final int HEIGHT2_START = 2491;
-  public static final int HEIGHT2_END = 2491;
-
-  public static final int HEIGHT1_START = 2491;
-  public static final int HEIGHT1_END = 2491;
-
-
-  public static final int ELEVATOR_L_TOP_START = 2491;
-  public static final int ELEVATOR_L_TOP_END = 2491;
-
-  public static final int ELEVATOR_R_TOP_START = 2491;
-  public static final int ELEVATOR_R_TOP_END = 2491;
-
 }
 
   }
