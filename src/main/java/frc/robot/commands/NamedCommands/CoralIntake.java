@@ -20,7 +20,6 @@ public class CoralIntake extends Command {
   ElevatorSubsystem elevatorSubsystem;
   FunnelIntake funnelIntake;  
   CoralEndeffectorSubsystem coralIntake;
-  Timer y;
   
   public CoralIntake(ElevatorSubsystem elevatorSubsystem, FunnelIntake funnelIntake, CoralEndeffectorSubsystem coralIntake) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -34,7 +33,6 @@ public class CoralIntake extends Command {
   @Override
   public void initialize() {
     elevatorSubsystem.setElevatorPosition(HUMAN_PLAYER_STATION_MILLIMETERS);
-    y.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -49,13 +47,11 @@ public class CoralIntake extends Command {
   public void end(boolean interrupted) {
     funnelIntake.stopFunnel();
     coralIntake.stopCoralEndEffector();
-    y.stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    y.reset();
     return RobotState.getInstance().isCoralSeen();
   }
 }

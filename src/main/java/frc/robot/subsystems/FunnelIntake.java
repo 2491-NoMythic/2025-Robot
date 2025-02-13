@@ -35,11 +35,11 @@ public class FunnelIntake extends SubsystemBase {
   MotorLogger slantMotorLogger;
   MotorLogger straightMotorLogger;
   SparkAnalogSensor funnelIntakeSensor;
-  Timer y;
+  Timer timer;
 
   
   public FunnelIntake() {
-    y = new Timer();
+    timer = new Timer();
     funnelSlantMotor = new SparkMax(FUNNEL_SLANT_MOTOR_ID, MotorType.kBrushless);
     slantMotorConfig = new SparkMaxConfig();
     slantMotorConfig.apply(new ClosedLoopConfig().pidf(
@@ -91,15 +91,15 @@ public class FunnelIntake extends SubsystemBase {
     System.out.println("run");
   }
    public void runFunnelSine( ){
-    y.start();
-    funnelSlantMotor.getClosedLoopController().setReference(Math.abs(Math.sin(y.get())*(2.0/3) * FUNNEL_INTAKE_SPEED), ControlType.kVelocity);
-    funnelStraightMotor.getClosedLoopController().setReference(Math.abs(Math.sin(y.get()) * FUNNEL_INTAKE_SPEED), ControlType.kVelocity);
+    timer.start();
+    funnelStraightMotor.getClosedLoopController().setReference(Math.abs(Math.sin(timer.get()) * FUNNEL_INTAKE_SPEED) + 1600.0, ControlType.kVelocity); 
+    funnelSlantMotor.getClosedLoopController().setReference(Math.abs(Math.sin(timer.get() + 0.5)*(1.3/3) * FUNNEL_INTAKE_SPEED) + 1600.0, ControlType.kVelocity); 
    }
   public void stopFunnel() {
     funnelSlantMotor.set(0);
     funnelStraightMotor.set(0);
-    y.stop();                                                                                                                                            
-    y.reset();
+    timer.stop();                                                                                                                                            
+    timer.reset();
   }
 
 }

@@ -467,7 +467,7 @@ public final class Constants {
     public static final double FUNNEL_ROTATOR_KFF = 2491;
     public static final int FUNNEL_ROTATOR_SUPPLY_CURRENT_LIMIT = 2491;
     public static final double FUNNEL_ROTATOR_GEAR_RATIO = 2491;
-    public static final double FUNNEL_INTAKE_SPEED = 1600;
+    public static final double FUNNEL_INTAKE_SPEED = 1500; //2500
   }
 
   public final class AutoAlignToReefConstants {
