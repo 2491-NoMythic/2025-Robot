@@ -49,6 +49,7 @@ import frc.robot.commands.Drive;
 import frc.robot.commands.IndicatorLights;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.LineUp;
+import frc.robot.commands.LineUpBarge;
 import frc.robot.commands.LineupCoralInEndEffector;
 import frc.robot.commands.LineupCoralInFunnel;
 import frc.robot.commands.MoveMeters;
@@ -239,6 +240,7 @@ public class RobotContainer {
       SlowFrontSup = ()-> driverControllerXbox.getLeftTriggerAxis() > 0.1;
       AlgaeDriveSup = ()-> driverControllerXbox.getLeftY();
       CoralPlaceTeleSupplier = ()-> driverControllerXbox.getPOV() == 0;
+      AlgaeBargeSup = driverControllerXbox::getAButton;
 
       //Manual driver controls
       AlgaeDepositSup = driverControllerXbox::getBButton;
@@ -266,6 +268,7 @@ public class RobotContainer {
       SlowFrontSup = ()->driverControllerPS4.getL2Axis()>-0.5;
       AlgaeDriveSup = ()-> driverControllerPS4.getLeftY();
       CoralPlaceTeleSupplier = ()-> driverControllerPS4.getPOV() == 0;
+      AlgaeBargeSup = driverControllerPS4::getCircleButton;
 
       //manual driver controls
       AlgaeDepositSup = driverControllerPS4::getCircleButton;
@@ -287,8 +290,7 @@ public class RobotContainer {
       ReefHeight4Supplier = ()->operatorControllerXbox.getPOV() == 270;
       CoralIntakeHeightSupplier = ()->operatorControllerXbox.getStartButton();
       BargeHeightSupplier = operatorControllerXbox::getXButton;
-      AlgaeBargeSup = operatorControllerXbox::getBButton;
-
+      goForAlgae = operatorControllerXbox::getAButton;
 
       //operator manual controls, should not be used unless other controls not working
       ForceEjectCoral = ()-> operatorControllerXbox.getRightTriggerAxis() > 0.1;
@@ -309,7 +311,6 @@ public class RobotContainer {
       BargeHeightSupplier = operatorControllerPS4::getTriangleButton;
       ClimbCommandSupplier = ()->operatorControllerPS4.getSquareButton();
       goForAlgae = operatorControllerPS4::getCircleButton;
-      AlgaeBargeSup = operatorControllerPS4::getCrossButton;
 
       //manual operator controls, should not be used unless other controls do not work
       ForceEjectCoral = operatorControllerPS4::getR2Button;
@@ -452,9 +453,13 @@ public class RobotContainer {
     new Trigger(AutoAngleAtReefSup).whileTrue(autoAngleAtReef);
     SmartDashboard.putData(autoAngleAtReef);
     if(distanceSensorsExist) {
-    new Trigger(SlowFrontSup).whileTrue(approachReef);
+    // new Trigger(SlowFrontSup).whileTrue(new SequentialCommandGroup(
+    //   approachReef,
+    //   new LineUp(driveTrain, DvLeftReefLineupSup, 0.3))
+    // );
     new Trigger(DvLeftReefLineupSup).or(DvRightReefLineupSup).whileTrue(new LineUp(driveTrain, DvLeftReefLineupSup, 0.8));
-    }
+  }
+  SmartDashboard.putData(new LineUpBarge(driveTrain, ControllerSidewaysAxisSupplier));
     InstantCommand setOffsets = new InstantCommand(driveTrain::setEncoderOffsets) {
       public boolean runsWhenDisabled() {
         return true;
@@ -547,7 +552,12 @@ public class RobotContainer {
         goForAlgae));
 
     } else if(DrivetrainExists) {
-      new Trigger(CoralPlaceTeleSupplier).whileTrue(pathFindToReef);
+      Command approachReef2 = approachReef;
+      new Trigger(CoralPlaceTeleSupplier).whileTrue(new SequentialCommandGroup(
+        pathFindToReef,
+        approachReef2,
+        new LineUp(driveTrain, ()->RobotState.getInstance().deliveringLeft, 0.3)
+      ));
       
     }
 

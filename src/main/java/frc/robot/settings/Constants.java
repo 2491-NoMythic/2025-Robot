@@ -61,7 +61,7 @@ public final class Constants {
     public static final double DRIVETRAIN_WHEELBASE_METERS = 0.63;
 
     /** The diameter of the module's wheel in meters. */
-    public static final double DRIVETRAIN_WHEEL_DIAMETER = 0.097; // 0.098;
+    public static final double DRIVETRAIN_WHEEL_DIAMETER = 0.1016; // 0.098;
 
     /**
      * The overall drive reduction of the module. Multiplying motor rotations by this value should
@@ -197,12 +197,12 @@ public final class Constants {
 
     // Auto PID loops
     // twin pid controllers that control the x and y robot movements.
-    public static final double k_XY_P = 5; // *2.5;
-    public static final double k_XY_I = 0.0;
+    public static final double k_XY_P = 7; // *2.5;
+    public static final double k_XY_I = 0.25;
     public static final double k_XY_D = 0.0;
 
-    public static final double k_THETA_P = 8;
-    public static final double k_THETA_I = 0.0;
+    public static final double k_THETA_P = 4;
+    public static final double k_THETA_I = 5.0;
     public static final double k_THETA_D = 0.0;
     public static final double k_THETA_TOLORANCE_DEGREES = 2.0;
     public static final double k_THETA_TOLORANCE_DEG_PER_SEC = 10;
@@ -486,8 +486,8 @@ public final class Constants {
     public static final int REEF_ANGLE_1 = 60;
     public static final int REEF_ANGLE_2 = 120;
     public static final int REEF_ANGLE_3 = 180;
-    public static final double BLUE_BARGE_SHOOT_X = 2491; //TODO: change these values
-    public static final double RED_BARGE_SHOOT_X = 2491; //TODO: change these values
+    public static final double BLUE_BARGE_SHOOT_X = 7.5; //TODO: change these values
+    public static final double RED_BARGE_SHOOT_X = 10; //TODO: change these values
    }
 }
 

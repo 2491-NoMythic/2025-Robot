@@ -25,11 +25,11 @@ public class LineUpBarge extends Command {
   double desiredX;
   double speedX;
   double currentX;
-  DoubleSupplier controllerSupplier;
+  DoubleSupplier controllerYSupplier;
   /** Creates a new LineUpBarge. */
-  public LineUpBarge(DrivetrainSubsystem driveTrain, DoubleSupplier controllerSupplier) {
+  public LineUpBarge(DrivetrainSubsystem driveTrain, DoubleSupplier controllerYSupplier) {
     this.driveTrain = driveTrain;
-    this.controllerSupplier = controllerSupplier;
+    this.controllerYSupplier = controllerYSupplier;
     addRequirements(driveTrain);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -55,20 +55,20 @@ public class LineUpBarge extends Command {
     currentX = driveTrain.getPose().getX();
     SmartDashboard.putNumber("currentX", currentX);
     SmartDashboard.putNumber("desiredX", desiredX);
+    speedX = 4*(desiredX - currentX);
+    SmartDashboard.putNumber("BARGELINUP/calculated speed", speedX);
+    if(Math.abs(speedX)>3) {
+      if(isRed){
+        speedX = -3;
+      }
+      else{
+        speedX = 3;
+      }
+    }
     if (isRed) {
-      if (currentX < desiredX) {
-        speedX = -1;
-      } else {
-        speedX = 1;
-      }
-      driveTrain.moveTowardsRotationTarget(speedX, controllerSupplier.getAsDouble() * DriveConstants.MAX_VELOCITY_METERS_PER_SECOND * -1);
+      driveTrain.moveTowardsRotationTarget(speedX, controllerYSupplier.getAsDouble() * DriveConstants.MAX_VELOCITY_METERS_PER_SECOND * -1);
     } else {
-      if (currentX < desiredX) {
-        speedX = 1;
-      } else {
-        speedX = -1;
-      }
-      driveTrain.moveTowardsRotationTarget(speedX, controllerSupplier.getAsDouble() * DriveConstants.MAX_VELOCITY_METERS_PER_SECOND);
+      driveTrain.moveTowardsRotationTarget(speedX, controllerYSupplier.getAsDouble() * DriveConstants.MAX_VELOCITY_METERS_PER_SECOND);
     }
   }
 

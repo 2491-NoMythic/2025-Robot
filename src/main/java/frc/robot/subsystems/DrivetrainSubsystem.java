@@ -430,8 +430,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * {@link #setRotationTarget(double) setRotationTarget}
    */
   public void moveTowardsRotationTarget(double vx, double vy) {
-    drive(new ChassisSpeeds(vx, vy, rotationSpeedController.calculate(getPose().getRotation().getDegrees()
-    )));
+    drive(ChassisSpeeds.fromFieldRelativeSpeeds(new ChassisSpeeds(vx, vy, rotationSpeedController.calculate(getPose().getRotation().getDegrees())), getGyroscopeRotation()));
   }
   public boolean isAtRotationTarget() {
     return rotationSpeedController.atSetpoint();

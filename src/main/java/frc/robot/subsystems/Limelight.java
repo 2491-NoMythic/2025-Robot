@@ -254,10 +254,11 @@ public class Limelight {
     // numTagsContributer is better when smaller, and is based off of how many april tags the
     // Limelight identifies
     double numTagsContributer;
-    if (limelight.getLLTagCount(limelightName) <= 0) {
+    double tagCount = limelight.getLLTagCount(limelightName);
+    if (tagCount <= 0) {
       numTagsContributer = 0;
     } else {
-      numTagsContributer = 1 / limelight.getLLTagCount(limelightName);
+      numTagsContributer = 1 / tagCount;
     }
     // tx and ty contributers are based off where on the limelights screen the april tag is. Closer
     // to the center means the contributer will bea smaller number, which is better.
