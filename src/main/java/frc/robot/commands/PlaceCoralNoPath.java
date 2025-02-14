@@ -16,6 +16,7 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import java.util.function.Supplier;
 
 import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.ALGAE_INTAKE_SPEED;
+import static frc.robot.settings.Constants.DriveConstants.REEF_LINEUP_SPEED;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
@@ -40,7 +41,7 @@ public class PlaceCoralNoPath extends SequentialCommandGroup{
     {
         addCommands(
             new ApproachReef(distanceSensors, drivetrain, xSupplier, ySupplier, rSupplier),//approaches reef while raising elevator
-            new LineUp(drivetrain, leftPlace, 0.3),//align with reef
+            new LineUp(drivetrain, leftPlace, REEF_LINEUP_SPEED),//align with reef
             new ParallelRaceGroup(
                 //elevator command will stop this so modify it
                 new AlgaeIntakeCommand(algaeEndeffectorSubsystem, () -> goForAlgea.getAsBoolean() ? ALGAE_INTAKE_SPEED : 0),

@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import java.io.File;
+import java.util.prefs.Preferences;
+
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -36,7 +38,7 @@ public class Robot extends LoggedRobot {
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our
     // autonomous chooser on the dashboard.
-
+    edu.wpi.first.wpilibj.Preferences.setBoolean("FunnelIntake", true);
     Logger.recordMetadata("ProjectName", "MyProject"); // Set a metadata value
     
     if (isReal()) {

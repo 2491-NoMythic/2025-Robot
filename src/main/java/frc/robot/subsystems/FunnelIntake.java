@@ -20,9 +20,11 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import static frc.robot.settings.Constants.FunnelConstants.*;
 
 import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.helpers.MotorLogger;
+import frc.robot.settings.Constants;
 
 public class FunnelIntake extends SubsystemBase {
   /** Creates a new Funnelintake. */
@@ -33,9 +35,11 @@ public class FunnelIntake extends SubsystemBase {
   MotorLogger slantMotorLogger;
   MotorLogger straightMotorLogger;
   SparkAnalogSensor funnelIntakeSensor;
+  Timer timer;
 
   
   public FunnelIntake() {
+    timer = new Timer();
     funnelSlantMotor = new SparkMax(FUNNEL_SLANT_MOTOR_ID, MotorType.kBrushless);
     slantMotorConfig = new SparkMaxConfig();
     slantMotorConfig.apply(new ClosedLoopConfig().pidf(
@@ -81,14 +85,21 @@ public class FunnelIntake extends SubsystemBase {
     logMotors();
     }
   }
-  public void runFunnel(double speed){
-    funnelSlantMotor.getClosedLoopController().setReference(speed*(2.0/3), ControlType.kVelocity);
-    funnelStraightMotor.getClosedLoopController().setReference(speed, ControlType.kVelocity);
+  public void runFunnel(double RPM){
+    funnelSlantMotor.getClosedLoopController().setReference(RPM*(2.0/3), ControlType.kVelocity);
+    funnelStraightMotor.getClosedLoopController().setReference(RPM, ControlType.kVelocity);
+    System.out.println("run");
   }
-
+   public void runFunnelSine( ){
+    timer.start();
+    funnelStraightMotor.getClosedLoopController().setReference(Math.abs(Math.sin(timer.get()) * FUNNEL_INTAKE_SPEED) + 1600.0, ControlType.kVelocity); 
+    funnelSlantMotor.getClosedLoopController().setReference(Math.abs(Math.sin(timer.get() + 0.5)*(1.3/3) * FUNNEL_INTAKE_SPEED) + 1600.0, ControlType.kVelocity); 
+   }
   public void stopFunnel() {
     funnelSlantMotor.set(0);
     funnelStraightMotor.set(0);
+    timer.stop();                                                                                                                                            
+    timer.reset();
   }
 
 }
