@@ -58,13 +58,11 @@ public class LineUpBarge extends Command {
     SmartDashboard.putNumber("desiredX", desiredX);
     speedX = 4*(desiredX - currentX);
     SmartDashboard.putNumber("BARGELINUP/calculated speed", speedX);
-    if(Math.abs(speedX)>3) {
-      if(isRed){
-        speedX = -3;
-      }
-      else{
-        speedX = 3;
-      }
+    if(speedX>3) {
+      speedX = 3;
+    }
+    if(speedX<-3) {
+      speedX = -3;
     }
     if (isRed) {
       driveTrain.moveTowardsRotationTarget(speedX, controllerYSupplier.getAsDouble() * DriveConstants.MAX_VELOCITY_METERS_PER_SECOND * -1);
