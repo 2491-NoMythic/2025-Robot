@@ -9,19 +9,19 @@
       "prevControl": null,
       "nextControl": {
         "x": 5.9502947891274856,
-        "y": 1.8063886446702404
+        "y": 1.8063886446702402
       },
       "isLocked": false,
       "linkedName": "processorStart"
     },
     {
       "anchor": {
-        "x": 4.916694078947368,
-        "y": 2.880016447368421
+        "x": 5.005,
+        "y": 2.931
       },
       "prevControl": {
-        "x": 5.181075018906642,
-        "y": 2.6185305035763773
+        "x": 5.269380939959274,
+        "y": 2.6695140562079565
       },
       "nextControl": null,
       "isLocked": false,
