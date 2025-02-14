@@ -12,11 +12,13 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.settings.ElevatorEnums;
 import frc.robot.settings.LightsEnums;
-import frc.robot.settings.Constants.LightConstants;
+import frc.robot.settings.Constants.LightConstants; 
+import com.ctre.phoenix.led.CANdle;
 
 public class Lights extends SubsystemBase {
   /** Creates a new SubsystemLights. */
   private AddressableLED lights;
+  CANdle candle;
 
   private AddressableLEDBuffer LEDBuffer;
   private Timer timer;
@@ -31,6 +33,7 @@ public class Lights extends SubsystemBase {
     LEDBuffer = new AddressableLEDBuffer(60);
     lights.setLength(60);
     timer = new Timer();
+    candle = new CANdle(LightConstants.CANDLE_ID);
   }
 
   public void dataSetter() {
@@ -47,6 +50,9 @@ public class Lights extends SubsystemBase {
     LEDBuffer.setRGB(index, R, G, B);
   }
 
+  public void setCandleLights(int R, int G, int B, int start, int end){
+    candle.setLEDs(R, G, B, 0, start, end-start);
+  }
   public void setLights(int start, int end, int R, int G, int B) {
     for (int i = start; i < end; i++) {
       setOneLightRGB(i, R, G, B);
