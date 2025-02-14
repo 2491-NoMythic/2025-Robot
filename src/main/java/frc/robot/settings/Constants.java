@@ -37,6 +37,8 @@ public final class Constants {
     public static final int MIDDLE_RIGHT_DIST_SENSOR_ID = 3;
     public static final int FAR_RIGHT_DIST_SENSOR_ID = 4;
     public static final  int ELEVATOR_SENSOR_ID = 2491;
+    public static final  int FUNNEL_SENSOR_ID = 2491;
+    public static final  int INTAKE_SENSOR_ID = 2491;
 
     public static final double RANGE_TO_SEE_REEF_FLAT_SENSORS = 200; // in millimeters, the distance that will trigger the time of flight sensors to report that we are or aren't in front of the reef
     public static final double RANGE_TO_SEE_REEF_ANGLED_SENSORS = 210; // in millimeters, the distance that will trigger the time of flight sensors to report that we are or aren't in front of the reef
@@ -391,6 +393,8 @@ public final class Constants {
     public static final double CORAL_ENDEFFECTOR_KFF = 0;
     
     public static final double CORAL_ENDEFFECTOR_SPEED = 0.5;
+      /** this is the speed that the EndEffector motors should run at when they should be slow enough to stop the coral where it is the moment the sensor is triggered */
+      public static final double CORAL_ENDEFFECTOR_ADJUSTING_INTAKE_SPEED = 150;
   }
 
   public final class AlgaeEndeffectorConstants{
@@ -467,7 +471,9 @@ public final class Constants {
     public static final double FUNNEL_ROTATOR_KFF = 2491;
     public static final int FUNNEL_ROTATOR_SUPPLY_CURRENT_LIMIT = 2491;
     public static final double FUNNEL_ROTATOR_GEAR_RATIO = 2491;
-    public static final double FUNNEL_INTAKE_SPEED = 1500; //2500
+    public static final double FUNNEL_INTAKE_SPEED = 1500;
+    /** this is the speed that the funnel motors should run at when they should be slow enough to stop the coral where it is the moent the sensor is triggered */
+    public static final double FUNNEL_ADJUSTING_INTAKE_SPEED = 150;
   }
 
   public final class AutoAlignToReefConstants {
@@ -485,5 +491,33 @@ public final class Constants {
     public static final double BLUE_BARGE_SHOOT_X = 2491; //TODO: change these values
     public static final double RED_BARGE_SHOOT_X = 2491; //TODO: change these values
    }
+public final class LightConstants{
+  public static final int LEFT_ELEVATOR_LIGHTS_ALGAE_START = 2491;
+  public static final int LEFT_ELEVATOR_LIGHTS_ALGAE_END = 2491;
+  public static final int LEFT_ELEVATOR_LIGHTS_1_START = 2491;
+  public static final int LEFT_ELEVATOR_LIGHTS_1_END = 2491;
+  public static final int LEFT_ELEVATOR_LIGHTS_2_END = 2491;
+  public static final int LEFT_ELEVATOR_LIGHTS_3_END = 2491;
+  public static final int LEFT_ELEVATOR_LIGHTS_4_END = 2491;
+  public static final int LEFT_ELEVATOR_LIGHTS_5_END = 2491;
+
+
+  public static final int RIGHT_ELEVATOR_LIGHTS_ALGAE_START = 2491;
+  public static final int RIGHT_ELEVATOR_LIGHTS_ALGAE_END = 2491;
+  public static final int RIGHT_ELEVATOR_LIGHTS_1_START = 2491;
+  public static final int RIGHT_ELEVATOR_LIGHTS_1_END = 2491;
+  public static final int RIGHT_ELEVATOR_LIGHTS_2_END = 2491;
+  public static final int RIGHT_ELEVATOR_LIGHTS_3_END = 2491;
+  public static final int RIGHT_ELEVATOR_LIGHTS_4_END = 2491;
+  public static final int RIGHT_ELEVATOR_LIGHTS_5_END = 2491;
+
+
+  public static final int FUNNEL_LIGHTS_START = 2491;
+  public static final int FUNNEL_LIGHTS_END = 2491;
+
+  public static final int DRIVETRAIN_LIGHTS_START = 2491;
+  public static final int DRIVETRAIN_LIGHTS_END = 2491;
 }
+
+  }
 
