@@ -548,7 +548,8 @@ public class RobotContainer {
      new Trigger(CoralPlaceTeleSupplier).whileTrue(new SequentialCommandGroup(
         pathFindToReef,
         new ApproachReef(distanceSensors, driveTrain, ControllerForwardAxisSupplier, ControllerSidewaysAxisSupplier, ControllerZAxisSupplier),
-        new LineUp(driveTrain, ()->RobotState.getInstance().deliveringLeft, REEF_LINEUP_SPEED)));
+        new LineUp(driveTrain, ()->RobotState.getInstance().deliveringLeft, REEF_LINEUP_SPEED)))
+          .onTrue(new InstantCommand(()->RobotState.getInstance().reefLineupRunning = true)).onFalse(new InstantCommand(()->RobotState.getInstance().reefLineupRunning = false));
     }
     new Trigger(PlaceCoralNoPathSup).whileTrue(new PlaceCoralNoPath(
       elevator,
