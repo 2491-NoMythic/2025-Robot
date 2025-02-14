@@ -402,7 +402,7 @@ public final class Constants {
     public static final int ALGAE_ENDEFFECTOR_MOTOR_1_ID = 40;
     public static final int ALGAE_ENDEFFECTOR_MOTOR_2_ID = 41;
     
-    public static final double ALGAE_ENDEFFECTOR_CURRENT_LIMIT = 25;
+    public static final int ALGAE_ENDEFFECTOR_CURRENT_LIMIT = 25;
     public static final double ALGAE_INTAKE_SPEED = 1;
     public static final double ALGAE_SHOOT_SPEED = -1;
     public static final double ALGAE_ENDEFFECTOR_KP_1 = 0.0003;
