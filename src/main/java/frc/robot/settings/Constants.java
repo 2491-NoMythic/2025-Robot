@@ -397,7 +397,7 @@ public final class Constants {
     public static final int ALGAE_ENDEFFECTOR_MOTOR_1_ID = 40;
     public static final int ALGAE_ENDEFFECTOR_MOTOR_2_ID = 41;
     
-    public static final int ALGAE_ENDEFFECTOR_CURRENT_LIMIT = 25;
+    public static final double ALGAE_ENDEFFECTOR_CURRENT_LIMIT = 25;
     public static final double ALGAE_INTAKE_SPEED = 1;
     public static final double ALGAE_SHOOT_SPEED = -1;
     public static final double ALGAE_ENDEFFECTOR_KP_1 = 0.0003;
@@ -467,6 +467,7 @@ public final class Constants {
     public static final int FUNNEL_ROTATOR_SUPPLY_CURRENT_LIMIT = 2491;
     public static final double FUNNEL_ROTATOR_GEAR_RATIO = 2491;
     public static final double FUNNEL_INTAKE_SPEED = 1600;
+    public static final double FUNNEL_ROTATOR_DOWEN_POSITION = 2491;
   }
 
   public final class AutoAlignToReefConstants {

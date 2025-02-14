@@ -9,6 +9,7 @@ import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.ALGAE_SHOOT
 import static frc.robot.settings.Constants.CoralEndeffectorConstants.CORAL_ENDEFFECTOR_SPEED;
 import static frc.robot.settings.Constants.DriveConstants.*;
 import static frc.robot.settings.Constants.FunnelConstants.FUNNEL_INTAKE_SPEED;
+import static frc.robot.settings.Constants.FunnelConstants.FUNNEL_ROTATOR_DOWEN_POSITION;
 import static frc.robot.settings.Constants.PS4Driver.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -169,7 +170,7 @@ public class RobotContainer {
   BooleanSupplier PlaceCoralNoPathSup;
   BooleanSupplier goForAlgae;
   BooleanSupplier CoralIntakeSup;
-  BooleanSupplier FunnelRotatorCommand;
+  BooleanSupplier funnelRotatorSupplier;
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
@@ -245,7 +246,7 @@ public class RobotContainer {
       AlgaeShooterSup = ()-> driverControllerXbox.getPOV() == 180;
       PlaceCoralNoPathSup = driverControllerXbox::getYButton;
       CoralIntakeSup = driverControllerXbox::getXButton;
-      FunnelRotatorCommand = driverControllerXbox::getRightStickButton;
+      funnelRotatorSupplier = driverControllerXbox::getRightStickButton;
       
 
     } else if (DCTEnum == ControllerEnums.PS4Controller) {
@@ -274,7 +275,7 @@ public class RobotContainer {
       AlgaeIntakeSup = driverControllerPS4::getCrossButton;
       AlgaeShooterSup =  ()-> driverControllerPS4.getPOV() == 180;
       CoralIntakeSup = driverControllerPS4::getSquareButton;
-      FunnelRotatorCommand = driverControllerPS4::getShareButton;
+      funnelRotatorSupplier = driverControllerPS4::getShareButton;
     } 
     if (OCTEnum == ControllerEnums.XboxController) {
       operatorControllerXbox = new XboxController(OPERATOR_CONTROLLER_ID);
@@ -544,6 +545,9 @@ public class RobotContainer {
       if(funnelIntakeExists){
         new Trigger(ManualCoralIntake).onTrue(new InstantCommand(() -> funnelIntake.runFunnel(FUNNEL_INTAKE_SPEED)))
             .onFalse(new InstantCommand(() -> funnelIntake.stopFunnel()));
+      }
+      if (funnelRotatorExists) {
+        new Trigger(funnelRotatorSupplier).whileTrue(new FunnelRotatorCommand(funnelRotator, FUNNEL_ROTATOR_DOWEN_POSITION));
       }
   }
 
