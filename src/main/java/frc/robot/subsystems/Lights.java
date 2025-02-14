@@ -50,7 +50,7 @@ public class Lights extends SubsystemBase {
     LEDBuffer.setRGB(index, R, G, B);
   }
 
-  public void setCandleLights(int R, int G, int B, int start, int end){
+  public void setCandleLights(int start, int end, int R, int G, int B){
     candle.setLEDs(R, G, B, 0, start, end-start);
   }
   public void setLights(int start, int end, int R, int G, int B) {
