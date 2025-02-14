@@ -82,6 +82,6 @@ public class LineUpBarge extends Command {
   @Override
   public boolean isFinished() {
    return driveTrain.isAtRotationTarget()
-    && (Math.abs(currentX - desiredX) < 0.2);
+    && (Math.abs(currentX - desiredX) < 0.05);
   }
 }
