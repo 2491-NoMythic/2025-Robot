@@ -9,6 +9,7 @@ import static frc.robot.settings.Constants.ElevatorConstants.HUMAN_PLAYER_STATIO
 import static frc.robot.settings.Constants.FunnelConstants.FUNNEL_INTAKE_SPEED;
 
 import frc.robot.subsystems.RobotState;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.subsystems.CoralEndeffectorSubsystem;
@@ -40,7 +41,7 @@ public class CoralIntake extends Command {
   @Override
   public void execute() {
     coralIntake.runCoralEndEffector(CORAL_ENDEFFECTOR_SPEED);
-    funnelIntake.runFunnel(FUNNEL_INTAKE_SPEED);
+    funnelIntake.runFunnelSine();
   }
 
   // Called once the command ends or is interrupted.

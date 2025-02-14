@@ -189,7 +189,7 @@ public class RobotContainer {
     Preferences.initBoolean("Elevator", false);
     Preferences.initBoolean("CoralEndDefector", false);
     Preferences.initBoolean("AlgaeEndDefector", false);
-    Preferences.initBoolean("FunnelIntake", false);
+    Preferences.initBoolean("FunnelIntake", true);
     Preferences.initBoolean("FunnelRotator", false);
     Preferences.initBoolean("Climber", false);
     Preferences.initBoolean("DrivetrainExists", false);
@@ -577,13 +577,23 @@ public class RobotContainer {
       new Trigger(ForceEjectCoral).whileTrue(new EjectCoral(coralEndDefector));
     }
 
-    if(algaeEndeffectorExists) {
+    if(algaeEndeffectorExists && DrivetrainExists) {
         new Trigger(AlgaeBargeSup)
             .whileTrue(new ShootInBarge(driveTrain, elevator, algaeEndDefector, () -> driverControllerPS4.getLeftY()));
       }
-      if(funnelIntakeExists){
-        new Trigger(ManualCoralIntake).onTrue(new InstantCommand(() -> funnelIntake.runFunnel(FUNNEL_INTAKE_SPEED)))
-            .onFalse(new InstantCommand(() -> funnelIntake.stopFunnel()));
+      if (funnelIntakeExists) {
+        new Trigger(ManualCoralIntake).whileTrue(new Command() {
+          @Override
+          public void execute() {
+            // TODO Auto-generated method stub
+            funnelIntake.runFunnelSine();
+          }
+          @Override
+          public void end(boolean interrupted) {
+              // TODO Auto-generated method stub
+            funnelIntake.stopFunnel();
+          }
+        });
       }
   }
 
