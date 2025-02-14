@@ -49,6 +49,7 @@ import frc.robot.commands.Drive;
 import frc.robot.commands.IndicatorLights;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.LineUp;
+import frc.robot.commands.LineUpBarge;
 import frc.robot.commands.LineupCoralInEndEffector;
 import frc.robot.commands.LineupCoralInFunnel;
 import frc.robot.commands.MoveMeters;
@@ -239,6 +240,7 @@ public class RobotContainer {
       SlowFrontSup = ()-> driverControllerXbox.getLeftTriggerAxis() > 0.1;
       AlgaeDriveSup = ()-> driverControllerXbox.getLeftY();
       CoralPlaceTeleSupplier = ()-> driverControllerXbox.getPOV() == 0;
+      AlgaeBargeSup = driverControllerXbox::getAButton;
 
       //Manual driver controls
       AlgaeDepositSup = driverControllerXbox::getBButton;
@@ -266,6 +268,7 @@ public class RobotContainer {
       SlowFrontSup = ()->driverControllerPS4.getL2Axis()>-0.5;
       AlgaeDriveSup = ()-> driverControllerPS4.getLeftY();
       CoralPlaceTeleSupplier = ()-> driverControllerPS4.getPOV() == 0;
+      AlgaeBargeSup = driverControllerPS4::getCircleButton;
 
       //manual driver controls
       AlgaeDepositSup = driverControllerPS4::getCircleButton;
@@ -289,7 +292,6 @@ public class RobotContainer {
       BargeHeightSupplier = operatorControllerXbox::getXButton;
       goForAlgae = ()->operatorControllerXbox.getAButton();
       AlgaeBargeSup = operatorControllerXbox::getBButton;
-
 
       //operator manual controls, should not be used unless other controls not working
       ForceEjectCoral = ()-> operatorControllerXbox.getRightTriggerAxis() > 0.1;
@@ -454,9 +456,14 @@ public class RobotContainer {
     new Trigger(AutoAngleAtReefSup).whileTrue(autoAngleAtReef);
     SmartDashboard.putData(autoAngleAtReef);
     if(distanceSensorsExist) {
-    new Trigger(SlowFrontSup).whileTrue(approachReef);
+    //this command is for lining up to the reef without starting the whole scoring sequence
+    new Trigger(SlowFrontSup).whileTrue(new SequentialCommandGroup(
+      approachReef,
+      new LineUp(driveTrain, ()->RobotState.getInstance().deliveringLeft, REEF_LINEUP_SPEED))
+    );
     new Trigger(DvLeftReefLineupSup).or(DvRightReefLineupSup).whileTrue(new LineUp(driveTrain, DvLeftReefLineupSup, 0.8));
-    }
+  }
+  SmartDashboard.putData(new LineUpBarge(driveTrain, ControllerSidewaysAxisSupplier));
     InstantCommand setOffsets = new InstantCommand(driveTrain::setEncoderOffsets) {
       public boolean runsWhenDisabled() {
         return true;
@@ -536,8 +543,13 @@ public class RobotContainer {
               ()->RobotState.getInstance().goForAlgae),
             new InstantCommand(()->RobotState.getInstance().reefLineupRunning = false))
           );
-    } else if(DrivetrainExists) {
-      new Trigger(CoralPlaceTeleSupplier).whileTrue(pathFindToReef).onTrue(new InstantCommand(()->RobotState.getInstance().reefLineupRunning = true)).onFalse(new InstantCommand(()->RobotState.getInstance().reefLineupRunning = false));
+    } else if(DrivetrainExists&&distanceSensorsExist) {
+      
+     new Trigger(CoralPlaceTeleSupplier).whileTrue(new SequentialCommandGroup(
+        pathFindToReef,
+        new ApproachReef(distanceSensors, driveTrain, ControllerForwardAxisSupplier, ControllerSidewaysAxisSupplier, ControllerZAxisSupplier),
+        new LineUp(driveTrain, ()->RobotState.getInstance().deliveringLeft, REEF_LINEUP_SPEED)))
+          .onTrue(new InstantCommand(()->RobotState.getInstance().reefLineupRunning = true)).onFalse(new InstantCommand(()->RobotState.getInstance().reefLineupRunning = false));
     }
     new Trigger(PlaceCoralNoPathSup).whileTrue(new PlaceCoralNoPath(
       elevator,
