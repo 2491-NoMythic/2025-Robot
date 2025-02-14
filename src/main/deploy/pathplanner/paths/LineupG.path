@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.588405850016554,
-        "y": 3.8070408852015736
+        "x": 5.92403671680421,
+        "y": 3.8390115489922105
       },
       "isLocked": false,
-      "linkedName": "ReefG"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.8,
-        "y": 3.8273648648648644
+        "x": 5.694,
+        "y": 3.827
       },
       "prevControl": {
-        "x": 5.550389149447417,
-        "y": 3.8413084399593695
+        "x": 6.041621413788405,
+        "y": 3.832837805733669
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "ReefG"
     }
   ],
   "rotationTargets": [],

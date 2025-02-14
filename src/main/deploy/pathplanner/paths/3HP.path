@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.814036885245901,
-        "y": 5.757223360655737
+        "x": 6.385916095890411,
+        "y": 5.910723458904109
       },
       "isLocked": false,
       "linkedName": "2G"
@@ -20,8 +20,8 @@
         "y": 7.3985
       },
       "prevControl": {
-        "x": 4.33155737704918,
-        "y": 7.722168032786887
+        "x": 4.207191780821918,
+        "y": 6.692059075342465
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,7 +45,7 @@
     "rotation": -54.0
   },
   "reversed": false,
-  "folder": "New Folder",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": -178.85423716182487
