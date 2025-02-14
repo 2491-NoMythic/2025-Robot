@@ -1,0 +1,19 @@
+{
+    "name": "2025",
+    "rotations": [
+        {"axis": "z", "degrees":90}
+
+    ],
+    "position": [0, 0, 0],
+    "cameras": [ ],
+    "components": [
+        {
+            "zeroedRotations": [],
+            "zeroedPosition": [
+
+                0,0,0
+            ]
+
+        }
+    ] 
+  }
