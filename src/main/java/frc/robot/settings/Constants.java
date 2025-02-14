@@ -407,18 +407,27 @@ public final class Constants {
     public static final double ALGAE_SHOOT_SPEED = -1;
     public static final double ALGAE_ENDEFFECTOR_KP_1 = 0.0003;
     public static final double ALGAE_ENDEFFECTOR_KI_1 = 0;
+    public static final double ALGAE_ENDEFFECTOR_KI_1_PRACTICE = 2491;
+    public static final double ALGAE_ENDEFFECTOR_KP_1_PRACTICE = 2491;
     //2 volts ~= 1760 rpm
     //4 volts ~= 3670 rpm
     //1 volt ~= 815 rpm
     public static final double ALGAE_ENDEFFECTOR_KP_2 = 0.0002;
+    public static final double ALGAE_ENDEFFECTOR_KP_2_PRACTICE = 0.0002491;
     public static final double ALGAE_ENDEFFECTOR_KI_2 = 0;
+    public static final double ALGAE_ENDEFFECTOR_KI_2_PRACTICE = 2491;
     public static final double ALGAE_ENDEFFECTOR_KD_2 = 0;
+    public static final double ALGAE_ENDEFFECTOR_KD_2_PRACTICE = 2491;
     public static final double ALGAE_ENDEFFECTOR_KFF_2 = 0.000091;
+    public static final double ALGAE_ENDEFFECTOR_KFF_2_PRACTICE = 0.00002491;
     //2 volts ~= 1822 rpm
     //4 volts ~= 3750 rpm
     //1 volt ~= 870 rpm
     public static final double ALGAE_ENDEFFECTOR_KD_1 = 0;
     public static final double ALGAE_ENDEFFECTOR_KFF_1 = 0.000095;
+    public static final double ALGAE_ENDEFFECTOR_KFF_1_PRACTICE = 0.00002491;
+    public static final double ALGAE_ENDEFFECTOR_KD_1_PRACTICE = 0.00002491;
+
   }
   
   public final class ElevatorConstants{
