@@ -438,7 +438,6 @@ public final class Constants {
 
   public final class ClimberConstants{
     public static final int CLIMBER_MOTOR_1_ID = 2491;
-    public static final int CLIMBER_SERVO_ID = 2491;
 
     public static final TalonFXConfiguration ClimberMotorConfig = new TalonFXConfiguration()
     .withSlot0(new Slot0Configs()
@@ -472,6 +471,7 @@ public final class Constants {
     public static final double FUNNEL_ROTATOR_KFF = 2491;
     public static final int FUNNEL_ROTATOR_SUPPLY_CURRENT_LIMIT = 2491;
     public static final double FUNNEL_ROTATOR_GEAR_RATIO = 2491;
+    public static final double FUNNEL_ROTATOR_DOWEN_POSITION = 2491;
     public static final double FUNNEL_INTAKE_SPEED = 1500;
     /** this is the speed that the funnel motors should run at when they should be slow enough to stop the coral where it is the moent the sensor is triggered */
     public static final double FUNNEL_ADJUSTING_INTAKE_SPEED = 150;

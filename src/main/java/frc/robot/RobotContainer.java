@@ -10,6 +10,7 @@ import static frc.robot.settings.Constants.CoralEndeffectorConstants.CORAL_ENDEF
 import static frc.robot.settings.Constants.DriveConstants.*;
 import static frc.robot.settings.Constants.ElevatorConstants.HUMAN_PLAYER_STATION_MILLIMETERS;
 import static frc.robot.settings.Constants.FunnelConstants.FUNNEL_INTAKE_SPEED;
+import static frc.robot.settings.Constants.FunnelConstants.FUNNEL_ROTATOR_DOWEN_POSITION;
 import static frc.robot.settings.Constants.PS4Driver.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -48,6 +49,7 @@ import frc.robot.commands.AlgaeIntakeCommand;
 import frc.robot.commands.Drive;
 import frc.robot.commands.IndicatorLights;
 import frc.robot.commands.ElevatorCommand;
+import frc.robot.commands.FunnelRotatorCommand;
 import frc.robot.commands.LineUp;
 import frc.robot.commands.LineUpBarge;
 import frc.robot.commands.LineupCoralInEndEffector;
@@ -173,6 +175,7 @@ public class RobotContainer {
   BooleanSupplier PlaceCoralNoPathSup;
   BooleanSupplier goForAlgae;
   BooleanSupplier CoralIntakeSup;
+  BooleanSupplier funnelRotatorSupplier;
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
@@ -249,6 +252,8 @@ public class RobotContainer {
       AlgaeShooterSup = ()-> driverControllerXbox.getPOV() == 180;
       PlaceCoralNoPathSup = driverControllerXbox::getYButton;
       CoralIntakeSup = driverControllerXbox::getXButton;
+      funnelRotatorSupplier = driverControllerXbox::getRightStickButton;
+      
 
     } else if (DCTEnum == ControllerEnums.PS4Controller) {
 
@@ -277,6 +282,7 @@ public class RobotContainer {
       AlgaeIntakeSup = driverControllerPS4::getCrossButton;
       AlgaeShooterSup =  ()-> driverControllerPS4.getPOV() == 180;
       CoralIntakeSup = driverControllerPS4::getSquareButton;
+      funnelRotatorSupplier = driverControllerPS4::getShareButton;
     } 
     if (OCTEnum == ControllerEnums.XboxController) {
       operatorControllerXbox = new XboxController(OPERATOR_CONTROLLER_ID);
@@ -594,6 +600,9 @@ public class RobotContainer {
             funnelIntake.stopFunnel();
           }
         });
+      }
+      if (funnelRotatorExists) {
+        new Trigger(funnelRotatorSupplier).whileTrue(new FunnelRotatorCommand(funnelRotator, FUNNEL_ROTATOR_DOWEN_POSITION));
       }
   }
 
