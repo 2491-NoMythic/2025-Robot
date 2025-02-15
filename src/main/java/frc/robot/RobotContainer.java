@@ -10,7 +10,7 @@ import static frc.robot.settings.Constants.CoralEndeffectorConstants.CORAL_ENDEF
 import static frc.robot.settings.Constants.DriveConstants.*;
 import static frc.robot.settings.Constants.ElevatorConstants.HUMAN_PLAYER_STATION_MILLIMETERS;
 import static frc.robot.settings.Constants.FunnelConstants.FUNNEL_INTAKE_SPEED;
-import static frc.robot.settings.Constants.FunnelConstants.FUNNEL_ROTATOR_DOWEN_POSITION;
+import static frc.robot.settings.Constants.FunnelConstants.FUNNEL_ROTATOR_DOWN_POSITION;
 import static frc.robot.settings.Constants.PS4Driver.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -160,8 +160,9 @@ public class RobotContainer {
   BooleanSupplier ReefHeight4Supplier;
   BooleanSupplier CoralPlaceTeleSupplier;
   BooleanSupplier BargeHeightSupplier;
-  BooleanSupplier CoralIntakeHeightSupplier;
+  BooleanSupplier ProcessorHeightSupplier;
   BooleanSupplier ClimbCommandSupplier;
+  BooleanSupplier ClimbModeAuthorizer;
   DoubleSupplier ControllerForwardAxisSupplier;
   DoubleSupplier ControllerSidewaysAxisSupplier;
   DoubleSupplier ControllerZAxisSupplier;
@@ -291,12 +292,12 @@ public class RobotContainer {
       ReefHeight3Supplier = ()->operatorControllerXbox.getPOV() == 180;
       ReefHeight4Supplier = ()->operatorControllerXbox.getPOV() == 270;
       goForAlgae = ()->operatorControllerXbox.getAButton();
-      CoralIntakeHeightSupplier = operatorControllerXbox::getBButton;
+      ProcessorHeightSupplier = operatorControllerXbox::getBButton;
 
       //operator manual controls, should not be used unless other controls not working
       ForceEjectCoral = ()-> operatorControllerXbox.getRightTriggerAxis() > 0.1;
       ClimbCommandSupplier = ()->operatorControllerXbox.getXButton();
-      
+      ClimbModeAuthorizer = operatorControllerXbox::getRightStickButton;
     } else if (OCTEnum == ControllerEnums.PS4Controller){
       //Controller IDs
       operatorControllerPS4 = new PS4Controller(OPERATOR_CONTROLLER_ID);
@@ -307,7 +308,7 @@ public class RobotContainer {
       ReefHeight2Supplier = ()->operatorControllerPS4.getPOV() == 90;
       ReefHeight3Supplier = ()->operatorControllerPS4.getPOV() == 180;
       ReefHeight4Supplier = ()->operatorControllerPS4.getPOV() == 270;
-      CoralIntakeHeightSupplier = ()->operatorControllerPS4.getOptionsButton();
+      ProcessorHeightSupplier = ()->operatorControllerPS4.getOptionsButton();
       BargeHeightSupplier = operatorControllerPS4::getTriangleButton;
       goForAlgae = ()->operatorControllerPS4.getCircleButton();
       AlgaeBargeSup = operatorControllerPS4::getCrossButton;
@@ -316,23 +317,27 @@ public class RobotContainer {
       ClimbCommandSupplier = ()->operatorControllerPS4.getSquareButton();
       ForceEjectCoral = operatorControllerPS4::getR2Button;
       ForceElevator = operatorControllerPS4::getL2Button;
+      ClimbModeAuthorizer = operatorControllerPS4::getR3Button;
     } else if (OCTEnum == ControllerEnums.ButtonBoard){
       buttonBoard = new ButtonBoard(OPERATOR_CONTROLLER_ID);
 
       //automatic operator controls
       OpLeftReefLineupSup = buttonBoard::getLeftReefLineupButton;
       OpRightReefLineupSup = buttonBoard::getRightReefLineupButton;
+      goForAlgae = buttonBoard::getGoForAlgaeButton;
+
       ReefHeight2Supplier = buttonBoard::getReefHeight1Button;
       ReefHeight1Supplier = buttonBoard::getReefHeight2Button;
       ReefHeight3Supplier = buttonBoard::getReefHeight3Button;
       ReefHeight4Supplier = buttonBoard::getReefHeight4Button;
-      CoralIntakeHeightSupplier = buttonBoard::getCoralIntakeHeightButton;
+
+      ProcessorHeightSupplier = buttonBoard::getProcessorHeightButton;
       BargeHeightSupplier = buttonBoard::getBargeHeightButton;
-      goForAlgae = buttonBoard::getGoForAlgaeButton;
+      ForceEjectCoral = buttonBoard::getForceEjectCoralButton;
 
       //manual operator controls, press in case of emergancy
       ClimbCommandSupplier = buttonBoard::getclimbCommandButton;
-      ForceEjectCoral = buttonBoard::getForceEjectCoralButton;
+      ClimbModeAuthorizer = buttonBoard::getClimbModeAuthorizer;
     }
 
     if (LimelightExists) {limelightInit();}
@@ -460,7 +465,6 @@ public class RobotContainer {
     new Trigger(ReefHeight2Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef2));
     new Trigger(ReefHeight3Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef3));
     new Trigger(ReefHeight4Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef4));
-    new Trigger(CoralIntakeHeightSupplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.HumanPlayer));
     new Trigger(BargeHeightSupplier).onTrue(new InstantCommand(()-> RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Barge));
     new Trigger(OpLeftReefLineupSup).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringLeft = true));
     new Trigger(OpRightReefLineupSup).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringLeft = false));
@@ -502,7 +506,6 @@ public class RobotContainer {
     new Trigger(ReefHeight2Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef2));
     new Trigger(ReefHeight3Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef3));
     new Trigger(ReefHeight4Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef4));
-    new Trigger(CoralIntakeHeightSupplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.HumanPlayer));
     new Trigger(goForAlgae).onTrue(new InstantCommand(()->RobotState.getInstance().goForAlgae = !RobotState.getInstance().goForAlgae));
 
     if (algaeEndeffectorExists) {
@@ -612,7 +615,7 @@ public class RobotContainer {
         });
       }
       if (funnelRotatorExists) {
-        new Trigger(funnelRotatorSupplier).whileTrue(new FunnelRotatorCommand(funnelRotator, FUNNEL_ROTATOR_DOWEN_POSITION));
+        new Trigger(funnelRotatorSupplier).and(ClimbModeAuthorizer).whileTrue(new FunnelRotatorCommand(funnelRotator, FUNNEL_ROTATOR_DOWN_POSITION));
       }
   }
 
