@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -180,6 +181,7 @@ public class RobotContainer {
   BooleanSupplier CoralIntakeSup;
   BooleanSupplier funnelRotatorSupplier;
   BooleanSupplier climberResetSupplier;
+  BooleanSupplier inEndgameSupplier;
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
@@ -357,12 +359,12 @@ public class RobotContainer {
     if (climberExists) {climberInst();}
     if (elevatorExists) {elevatorInst();}
     if (funnelIntakeExists) {funnelIntakeInst();}
-    if (funnelRotatorExists) {funnelRotatorInst();}
+    if (funnelRotatorExists) {funnelRotatorInst();
+                              inEndgameSupplier = ()->endgameTimer();}
     
     configureBindings(); // Configure the trigger bindings
     autoInit();
   }
-
   private void driveTrainInst() {
     driveTrain = new DrivetrainSubsystem();
 
@@ -619,7 +621,8 @@ public class RobotContainer {
         });
       }
       if (funnelRotatorExists) {
-        new Trigger(funnelRotatorSupplier).and(ClimbModeAuthorizer).whileTrue(new FunnelRotatorCommand(funnelRotator, FUNNEL_ROTATOR_DOWN_POSITION));
+          new Trigger(funnelRotatorSupplier).and(ClimbModeAuthorizer).whileTrue(new FunnelRotatorCommand(funnelRotator, FUNNEL_ROTATOR_DOWN_POSITION));
+          new Trigger(funnelRotatorSupplier).and(inEndgameSupplier).whileTrue(new FunnelRotatorCommand(funnelRotator, FUNNEL_ROTATOR_DOWN_POSITION));
       }
   }
 
@@ -836,7 +839,13 @@ public class RobotContainer {
     } 
 
 }
-
+  public boolean endgameTimer(){
+    if (Timer.getMatchTime()<30){
+      return true;
+    } else {
+      return false;
+    }
+  }
   public void teleopInit() {
   }
 
@@ -847,6 +856,7 @@ public class RobotContainer {
     if (elevatorExists) {
       SmartDashboard.putData(elevator.getCurrentCommand());
     }
+    
   }
   public void robotInit(){
     if (elevatorExists){
