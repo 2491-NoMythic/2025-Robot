@@ -126,6 +126,7 @@ public class RobotContainer {
   private XboxController operatorControllerXbox;
   private PS4Controller driverControllerPS4;
   private PS4Controller operatorControllerPS4;
+  private ButtonBoard buttonBoard;
   private Limelight limelight;
   private SendableChooser<Command> autoChooser;
   private PowerDistribution PDP;
@@ -316,13 +317,31 @@ public class RobotContainer {
       ReefHeight4Supplier = ()->operatorControllerPS4.getPOV() == 270;
       CoralIntakeHeightSupplier = ()->operatorControllerPS4.getOptionsButton();
       BargeHeightSupplier = operatorControllerPS4::getTriangleButton;
-      ClimbCommandSupplier = ()->operatorControllerPS4.getSquareButton();
       goForAlgae = ()->operatorControllerPS4.getCircleButton();
       AlgaeBargeSup = operatorControllerPS4::getCrossButton;
 
       //manual operator controls, should not be used unless other controls do not work
+      ClimbCommandSupplier = ()->operatorControllerPS4.getSquareButton();
       ForceEjectCoral = operatorControllerPS4::getR2Button;
       ForceElevator = operatorControllerPS4::getL2Button;
+    } else if (OCTEnum == ControllerEnums.ButtonBoard){
+      buttonBoard = new ButtonBoard(OPERATOR_CONTROLLER_ID);
+
+      //automatic operator controls
+      OpLeftReefLineupSup = buttonBoard::getLeftReefLineupButton;
+      OpRightReefLineupSup = buttonBoard::getRightReefLineupButton;
+      ReefHeight2Supplier = buttonBoard::getReefHeight1Button;
+      ReefHeight1Supplier = buttonBoard::getReefHeight2Button;
+      ReefHeight3Supplier = buttonBoard::getReefHeight3Button;
+      ReefHeight4Supplier = buttonBoard::getReefHeight4Button;
+      CoralIntakeHeightSupplier = buttonBoard::getCoralIntakeHeightButton;
+      BargeHeightSupplier = buttonBoard::getBargeHeightButton;
+      goForAlgae = buttonBoard::getGoForAlgaeButton;
+
+      //manual operator controls, press in case of emergancy
+      ClimbCommandSupplier = buttonBoard::getclimbCommandButton;
+      ForceEjectCoral = buttonBoard::getForceEjectCoralButton;
+      ForceElevator = buttonBoard::getForceElevatorButton;
     }
 
     if (LimelightExists) {limelightInit();}
