@@ -118,7 +118,7 @@ public class RobotContainer {
   private boolean LimelightExists;
   private boolean SensorsExist;
   private boolean useMotorLogger;
-  private boolean usingCompBot;
+  public boolean usingCompBot;
 
   private DrivetrainSubsystem driveTrain;
   private Drive defaultDriveCommand;
