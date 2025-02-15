@@ -49,22 +49,22 @@ public class AlgaeEndeffectorSubsystem extends SubsystemBase {
         ALGAE_ENDEFFECTOR_KI_1,
         ALGAE_ENDEFFECTOR_KD_1,
         ALGAE_ENDEFFECTOR_KFF_1));
-        algaeConfig2.apply(new ClosedLoopConfig().pidf(
-          ALGAE_ENDEFFECTOR_KP_2,
-          ALGAE_ENDEFFECTOR_KI_2,
-          ALGAE_ENDEFFECTOR_KD_2,
-          ALGAE_ENDEFFECTOR_KFF_2));}
+      algaeConfig2.apply(new ClosedLoopConfig().pidf(
+        ALGAE_ENDEFFECTOR_KP_2,
+        ALGAE_ENDEFFECTOR_KI_2,
+        ALGAE_ENDEFFECTOR_KD_2,
+        ALGAE_ENDEFFECTOR_KFF_2));}
     else{
       algaeConfig1.apply(new ClosedLoopConfig().pidf(
         ALGAE_ENDEFFECTOR_KP_1_PRACTICE,
         ALGAE_ENDEFFECTOR_KI_1_PRACTICE,
         ALGAE_ENDEFFECTOR_KD_1_PRACTICE,
         ALGAE_ENDEFFECTOR_KFF_1_PRACTICE));
-        algaeConfig2.apply(new ClosedLoopConfig().pidf(
-          ALGAE_ENDEFFECTOR_KP_2_PRACTICE,
-          ALGAE_ENDEFFECTOR_KI_2_PRACTICE,
-          ALGAE_ENDEFFECTOR_KD_2_PRACTICE,
-          ALGAE_ENDEFFECTOR_KFF_2_PRACTICE));}
+      algaeConfig2.apply(new ClosedLoopConfig().pidf(
+        ALGAE_ENDEFFECTOR_KP_2_PRACTICE,
+        ALGAE_ENDEFFECTOR_KI_2_PRACTICE,
+        ALGAE_ENDEFFECTOR_KD_2_PRACTICE,          
+        ALGAE_ENDEFFECTOR_KFF_2_PRACTICE));}
 
     algaeConfig1.idleMode(IdleMode.kCoast);
     algaeConfig1.smartCurrentLimit(ALGAE_ENDEFFECTOR_CURRENT_LIMIT, ALGAE_ENDEFFECTOR_CURRENT_LIMIT, 1000);

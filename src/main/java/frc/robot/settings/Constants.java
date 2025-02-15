@@ -457,7 +457,16 @@ public final class Constants {
   public final class ClimberConstants{
     public static final int CLIMBER_MOTOR_1_ID = 2491;
 
-    public static final TalonFXConfiguration ClimberMotorConfig = new TalonFXConfiguration()
+    public static final TalonFXConfiguration ClimberMotorConfigComp = new TalonFXConfiguration()
+    .withSlot0(new Slot0Configs()
+      .withKP(1)
+      .withKI(0)
+      .withKD(0)
+      .withKV(0))
+    .withCurrentLimits(new CurrentLimitsConfigs()
+      .withSupplyCurrentLimit(100)
+      .withSupplyCurrentLimitEnable(true));
+    public static final TalonFXConfiguration ClimberMotorConfigPrac = new TalonFXConfiguration()
     .withSlot0(new Slot0Configs()
       .withKP(1)
       .withKI(0)
