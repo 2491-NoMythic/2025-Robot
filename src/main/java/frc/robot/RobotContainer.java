@@ -238,18 +238,13 @@ public class RobotContainer {
       ZeroGyroSup = driverControllerXbox::getStartButton;
 
       //Automatic controls
-      AutoAngleAtReefSup = ()->driverControllerXbox.getRightTriggerAxis()>0.1;
+      AutoAngleAtReefSup = driverControllerXbox::getAButton;
       DvLeftReefLineupSup = driverControllerXbox::getLeftBumperButton;
       DvRightReefLineupSup =  driverControllerXbox::getRightBumperButton;
-      SlowFrontSup = ()-> driverControllerXbox.getLeftTriggerAxis() > 0.1;
-      AlgaeDriveSup = ()-> driverControllerXbox.getLeftY();
-      CoralPlaceTeleSupplier = ()-> driverControllerXbox.getPOV() == 0;
-      AlgaeBargeSup = driverControllerXbox::getAButton;
+      CoralPlaceTeleSupplier = ()-> driverControllerXbox.getRightTriggerAxis() > 0.1;
 
       //Manual driver controls
       AlgaeDepositSup = driverControllerXbox::getBButton;
-      AlgaeIntakeSup = driverControllerXbox::getAButton;
-      ManualCoralIntake = ()->driverControllerXbox.getPOV() == 90;
       AlgaeShooterSup = ()-> driverControllerXbox.getPOV() == 180;
       PlaceCoralNoPathSup = driverControllerXbox::getYButton;
       CoralIntakeSup = driverControllerXbox::getXButton;
@@ -296,10 +291,11 @@ public class RobotContainer {
       ReefHeight3Supplier = ()->operatorControllerXbox.getPOV() == 180;
       ReefHeight4Supplier = ()->operatorControllerXbox.getPOV() == 270;
       goForAlgae = ()->operatorControllerXbox.getAButton();
+      CoralIntakeHeightSupplier = operatorControllerXbox::getBButton;
 
       //operator manual controls, should not be used unless other controls not working
       ForceEjectCoral = ()-> operatorControllerXbox.getRightTriggerAxis() > 0.1;
-      ClimbCommandSupplier = ()->operatorControllerXbox.getYButton();
+      ClimbCommandSupplier = ()->operatorControllerXbox.getXButton();
       
     } else if (OCTEnum == ControllerEnums.PS4Controller){
       //Controller IDs
@@ -337,7 +333,6 @@ public class RobotContainer {
       //manual operator controls, press in case of emergancy
       ClimbCommandSupplier = buttonBoard::getclimbCommandButton;
       ForceEjectCoral = buttonBoard::getForceEjectCoralButton;
-      ForceElevator = buttonBoard::getForceElevatorButton;
     }
 
     if (LimelightExists) {limelightInit();}
