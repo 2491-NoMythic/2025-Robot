@@ -37,6 +37,8 @@ public final class Constants {
     public static final int MIDDLE_RIGHT_DIST_SENSOR_ID = 3;
     public static final int FAR_RIGHT_DIST_SENSOR_ID = 4;
     public static final  int ELEVATOR_SENSOR_ID = 2491;
+    public static final  int FUNNEL_SENSOR_ID = 2491;
+    public static final  int INTAKE_SENSOR_ID = 2491;
 
     public static final double RANGE_TO_SEE_REEF_FLAT_SENSORS = 200; // in millimeters, the distance that will trigger the time of flight sensors to report that we are or aren't in front of the reef
     public static final double RANGE_TO_SEE_REEF_ANGLED_SENSORS = 210; // in millimeters, the distance that will trigger the time of flight sensors to report that we are or aren't in front of the reef
@@ -45,6 +47,7 @@ public final class Constants {
 
   }
   public static final class DriveConstants {
+    public static final double REEF_LINEUP_SPEED = 0.3;
     public static final double BUMPER_TO_SENSOR = 100; // in milliqmeters
     public static final Pose2d DRIVE_ODOMETRY_ORIGIN = new Pose2d(5.0, 5.0, new Rotation2d());
     /** The bumper-to-bumper width of the robot. */
@@ -61,7 +64,7 @@ public final class Constants {
     public static final double DRIVETRAIN_WHEELBASE_METERS = 0.63;
 
     /** The diameter of the module's wheel in meters. */
-    public static final double DRIVETRAIN_WHEEL_DIAMETER = 0.097; // 0.098;
+    public static final double DRIVETRAIN_WHEEL_DIAMETER = 0.1016; // 0.098;
 
     /**
      * The overall drive reduction of the module. Multiplying motor rotations by this value should
@@ -197,12 +200,12 @@ public final class Constants {
 
     // Auto PID loops
     // twin pid controllers that control the x and y robot movements.
-    public static final double k_XY_P = 5; // *2.5;
-    public static final double k_XY_I = 0.0;
+    public static final double k_XY_P = 7; // *2.5;
+    public static final double k_XY_I = 0.25;
     public static final double k_XY_D = 0.0;
 
-    public static final double k_THETA_P = 8;
-    public static final double k_THETA_I = 0.0;
+    public static final double k_THETA_P = 4;
+    public static final double k_THETA_I = 5.0;
     public static final double k_THETA_D = 0.0;
     public static final double k_THETA_TOLORANCE_DEGREES = 2.0;
     public static final double k_THETA_TOLORANCE_DEG_PER_SEC = 10;
@@ -391,6 +394,8 @@ public final class Constants {
     public static final double CORAL_ENDEFFECTOR_KFF = 0;
     
     public static final double CORAL_ENDEFFECTOR_SPEED = 0.5;
+      /** this is the speed that the EndEffector motors should run at when they should be slow enough to stop the coral where it is the moment the sensor is triggered */
+      public static final double CORAL_ENDEFFECTOR_ADJUSTING_INTAKE_SPEED = 150;
   }
 
   public final class AlgaeEndeffectorConstants{
@@ -433,7 +438,6 @@ public final class Constants {
 
   public final class ClimberConstants{
     public static final int CLIMBER_MOTOR_1_ID = 2491;
-    public static final int CLIMBER_SERVO_ID = 2491;
 
     public static final TalonFXConfiguration ClimberMotorConfig = new TalonFXConfiguration()
     .withSlot0(new Slot0Configs()
@@ -447,19 +451,19 @@ public final class Constants {
   }
 
   public final class FunnelConstants{
-    public static final int FUNNEL_INTAKE_MOTOR_1_ID = 2491;
-    public static final int FUNNEL_INTAKE_MOTOR_2_ID = 2491;
+    public static final int FUNNEL_SLANT_MOTOR_ID = 21;
+    public static final int FUNNEL_STRAIGHT_MOTOR_ID = 22;
     public static final int FUNNEL_ROTATOR_MOTOR_ID = 2491;
 
-    public static final double FUNNEL_INTAKE_1_KP = 2491;
-    public static final double FUNNEL_INTAKE_1_KI = 2491;
-    public static final double FUNNEL_INTAKE_1_KD = 2491;
-    public static final double FUNNEL_INTAKE_1_KFF = 2491;
+    public static final double FUNNEL_SLANT_MOTOR_KP = 0.000031;
+    public static final double FUNNEL_SLANT_MOTOR_KI = 0;
+    public static final double FUNNEL_SLANT_MOTOR_KD = 0;
+    public static final double FUNNEL_SLANT_MOTOR_KFF = 0.0001315;
 
-    public static final double FUNNEL_INTAKE_2_KP = 2491;
-    public static final double FUNNEL_INTAKE_2_KI = 2491;
-    public static final double FUNNEL_INTAKE_2_KD = 2491;
-    public static final double FUNNEL_INTAKE_2_KFF = 2491;
+    public static final double FUNNEL_STRAIGHT_MOTOR_KP = 0.0001;
+    public static final double FUNNEL_STRAIGHT_MOTOR_KI = 0;
+    public static final double FUNNEL_STRAIGHT_MOTOR_KD = 0;
+    public static final double FUNNEL_STRAIGHT_MOTOR_KFF = 0.000116;
 
     public static final double FUNNEL_ROTATOR_KP = 2491;
     public static final double FUNNEL_ROTATOR_KI = 2491;
@@ -467,6 +471,10 @@ public final class Constants {
     public static final double FUNNEL_ROTATOR_KFF = 2491;
     public static final int FUNNEL_ROTATOR_SUPPLY_CURRENT_LIMIT = 2491;
     public static final double FUNNEL_ROTATOR_GEAR_RATIO = 2491;
+    public static final double FUNNEL_ROTATOR_DOWEN_POSITION = 2491;
+    public static final double FUNNEL_INTAKE_SPEED = 1500;
+    /** this is the speed that the funnel motors should run at when they should be slow enough to stop the coral where it is the moent the sensor is triggered */
+    public static final double FUNNEL_ADJUSTING_INTAKE_SPEED = 150;
   }
 
   public final class AutoAlignToReefConstants {
@@ -481,8 +489,36 @@ public final class Constants {
     public static final int REEF_ANGLE_1 = 60;
     public static final int REEF_ANGLE_2 = 120;
     public static final int REEF_ANGLE_3 = 180;
-    public static final double BLUE_BARGE_SHOOT_X = 2491; //TODO: change these values
-    public static final double RED_BARGE_SHOOT_X = 2491; //TODO: change these values
+    public static final double BLUE_BARGE_SHOOT_X = 7.5; //TODO: change these values
+    public static final double RED_BARGE_SHOOT_X = 10; //TODO: change these values
    }
+public final class LightConstants{
+  public static final int LEFT_ELEVATOR_LIGHTS_ALGAE_START = 2491;
+  public static final int LEFT_ELEVATOR_LIGHTS_ALGAE_END = 2491;
+  public static final int LEFT_ELEVATOR_LIGHTS_1_START = 2491;
+  public static final int LEFT_ELEVATOR_LIGHTS_1_END = 2491;
+  public static final int LEFT_ELEVATOR_LIGHTS_2_END = 2491;
+  public static final int LEFT_ELEVATOR_LIGHTS_3_END = 2491;
+  public static final int LEFT_ELEVATOR_LIGHTS_4_END = 2491;
+  public static final int LEFT_ELEVATOR_LIGHTS_5_END = 2491;
+
+
+  public static final int RIGHT_ELEVATOR_LIGHTS_ALGAE_START = 2491;
+  public static final int RIGHT_ELEVATOR_LIGHTS_ALGAE_END = 2491;
+  public static final int RIGHT_ELEVATOR_LIGHTS_1_START = 2491;
+  public static final int RIGHT_ELEVATOR_LIGHTS_1_END = 2491;
+  public static final int RIGHT_ELEVATOR_LIGHTS_2_END = 2491;
+  public static final int RIGHT_ELEVATOR_LIGHTS_3_END = 2491;
+  public static final int RIGHT_ELEVATOR_LIGHTS_4_END = 2491;
+  public static final int RIGHT_ELEVATOR_LIGHTS_5_END = 2491;
+
+
+  public static final int FUNNEL_LIGHTS_START = 2491;
+  public static final int FUNNEL_LIGHTS_END = 2491;
+
+  public static final int DRIVETRAIN_LIGHTS_START = 2491;
+  public static final int DRIVETRAIN_LIGHTS_END = 2491;
 }
+
+  }
 

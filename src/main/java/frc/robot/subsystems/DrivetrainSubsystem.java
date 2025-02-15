@@ -58,6 +58,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
+import frc.robot.Robot;
 import frc.robot.LimelightHelpers.PoseEstimate;
 import frc.robot.helpers.MotorLogger;
 import frc.robot.helpers.MythicalMath;
@@ -325,7 +326,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
             + (-pigeon.getPitch().getValueAsDouble()/10);
       }
     }
-    
+      if (Preferences.getBoolean ("Safe Elevator Driving",false && RobotState.getInstance().elevatorIsHigh)){
+       chassisSpeeds.vxMetersPerSecond = chassisSpeeds.vxMetersPerSecond / 2; 
+       chassisSpeeds.vyMetersPerSecond = chassisSpeeds.vyMetersPerSecond / 2; 
+      }
     SwerveModuleState[] desiredStates =
         kinematics.toSwerveModuleStates(ChassisSpeeds.discretize(chassisSpeeds, 0.02));
     double maxSpeed = Collections.max(Arrays.asList(desiredStates)).speedMetersPerSecond;
@@ -397,12 +401,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
       }
       if (!doRejectUpdate) {
         odometer.addVisionMeasurement(estimate.pose, estimate.timestampSeconds);
+        RobotState.getInstance().LimelightsUpdated = true;
+      } else {
+        RobotState.getInstance().LimelightsUpdated = false;
       }
-      RobotState.getInstance().LimelightsUpdated = true;
-    } else {
-      RobotState.getInstance().LimelightsUpdated = false;
-    }
   }
+}
   /**
    * Set the odometry using the current apriltag estimate, disregarding the pose trustworthyness.
    *
@@ -427,8 +431,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * {@link #setRotationTarget(double) setRotationTarget}
    */
   public void moveTowardsRotationTarget(double vx, double vy) {
-    drive(new ChassisSpeeds(vx, vy, rotationSpeedController.calculate(getPose().getRotation().getDegrees()
-    )));
+    drive(ChassisSpeeds.fromFieldRelativeSpeeds(new ChassisSpeeds(vx, vy, rotationSpeedController.calculate(getPose().getRotation().getDegrees())), getGyroscopeRotation()));
   }
   public boolean isAtRotationTarget() {
     return rotationSpeedController.atSetpoint();

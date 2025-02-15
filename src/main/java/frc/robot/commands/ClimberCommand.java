@@ -24,7 +24,6 @@ public class ClimberCommand extends Command {
   @Override
   public void execute() {
     climber.setKrakenPose(100);
-    climber.setServo(100);
   }
 
   // Called once the command ends or is interrupted.

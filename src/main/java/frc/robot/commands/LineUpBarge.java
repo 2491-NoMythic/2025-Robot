@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.settings.Constants.DriveConstants;
 import frc.robot.settings.Constants.FieldConstants;
-
+import frc.robot.subsystems.RobotState;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class LineUpBarge extends Command {
   boolean isRed;
@@ -25,11 +25,11 @@ public class LineUpBarge extends Command {
   double desiredX;
   double speedX;
   double currentX;
-  DoubleSupplier controllerSupplier;
+  DoubleSupplier controllerYSupplier;
   /** Creates a new LineUpBarge. */
-  public LineUpBarge(DrivetrainSubsystem driveTrain, DoubleSupplier controllerSupplier) {
+  public LineUpBarge(DrivetrainSubsystem driveTrain, DoubleSupplier controllerYSupplier) {
     this.driveTrain = driveTrain;
-    this.controllerSupplier = controllerSupplier;
+    this.controllerYSupplier = controllerYSupplier;
     addRequirements(driveTrain);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -37,6 +37,7 @@ public class LineUpBarge extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    RobotState.getInstance().bargeLineUp = true;
     Optional<Alliance> alliance = DriverStation.getAlliance();
     isRed = alliance.isPresent() && alliance.get() == Alliance.Red;
     if(isRed){
@@ -55,20 +56,18 @@ public class LineUpBarge extends Command {
     currentX = driveTrain.getPose().getX();
     SmartDashboard.putNumber("currentX", currentX);
     SmartDashboard.putNumber("desiredX", desiredX);
+    speedX = 4*(desiredX - currentX);
+    SmartDashboard.putNumber("BARGELINUP/calculated speed", speedX);
+    if(speedX>3) {
+      speedX = 3;
+    }
+    if(speedX<-3) {
+      speedX = -3;
+    }
     if (isRed) {
-      if (currentX < desiredX) {
-        speedX = -1;
-      } else {
-        speedX = 1;
-      }
-      driveTrain.moveTowardsRotationTarget(speedX, controllerSupplier.getAsDouble() * DriveConstants.MAX_VELOCITY_METERS_PER_SECOND * -1);
+      driveTrain.moveTowardsRotationTarget(speedX, controllerYSupplier.getAsDouble() * DriveConstants.MAX_VELOCITY_METERS_PER_SECOND * -1);
     } else {
-      if (currentX < desiredX) {
-        speedX = 1;
-      } else {
-        speedX = -1;
-      }
-      driveTrain.moveTowardsRotationTarget(speedX, controllerSupplier.getAsDouble() * DriveConstants.MAX_VELOCITY_METERS_PER_SECOND);
+      driveTrain.moveTowardsRotationTarget(speedX, controllerYSupplier.getAsDouble() * DriveConstants.MAX_VELOCITY_METERS_PER_SECOND);
     }
   }
 
@@ -76,12 +75,13 @@ public class LineUpBarge extends Command {
   @Override
   public void end(boolean interrupted) {
     driveTrain.stop();
+    RobotState.getInstance().bargeLineUp = false;
   }
   
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
    return driveTrain.isAtRotationTarget()
-    && (Math.abs(currentX - desiredX) < 0.2);
+    && (Math.abs(currentX - desiredX) < 0.05);
   }
 }
