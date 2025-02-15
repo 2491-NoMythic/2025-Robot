@@ -118,7 +118,6 @@ public class RobotContainer {
   private boolean LimelightExists;
   private boolean SensorsExist;
   private boolean useMotorLogger;
-  public boolean usingCompBot;
 
   private DrivetrainSubsystem driveTrain;
   private Drive defaultDriveCommand;
@@ -203,7 +202,6 @@ public class RobotContainer {
     Preferences.initBoolean("Motor Logging", true);
     Preferences.initBoolean("Safe Elevator Driving", true);
 
-    usingCompBot = Preferences.getBoolean("CompBot", true);
     driverControllerTypeString = Preferences.getString("Driver Controller Type", "XboxController");
     operatorControllerTypeString = Preferences.getString("Operator Controller Type", "ButtonBoard");
     DCTEnum = ControllerEnums.valueOf(driverControllerTypeString);

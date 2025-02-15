@@ -32,13 +32,6 @@ public class CoralEndeffectorSubsystem extends SubsystemBase {
   public CoralEndeffectorSubsystem() {
     coralEndeffectorMotor = new SparkMax(CORAL_ENDEFFECTOR_MOTOR, MotorType.kBrushless);
     coralConfig = new SparkMaxConfig();
-    coralConfig.idleMode(IdleMode.kCoast);
-    coralConfig.smartCurrentLimit(25, 40, 1000);
-    coralEndeffectorMotor.configure(coralConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
-    coralEndeffSensor = coralEndeffectorMotor.getAnalog();
-    motorLogger = new MotorLogger("/coralEndEffector/motor");
-
     if(Preferences.getBoolean("CompBot", true)){
       coralConfig.apply(new ClosedLoopConfig().pidf(
         CORAL_ENDEFFECTOR_KP,
@@ -53,6 +46,14 @@ public class CoralEndeffectorSubsystem extends SubsystemBase {
         CORAL_ENDEFFECTOR_KD_PRACTICE,
         CORAL_ENDEFFECTOR_KFF_PRACTICE));    
     }
+    coralConfig.idleMode(IdleMode.kCoast);
+    coralConfig.smartCurrentLimit(25, 40, 1000);
+    coralEndeffectorMotor.configure(coralConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+    coralEndeffSensor = coralEndeffectorMotor.getAnalog();
+    motorLogger = new MotorLogger("/coralEndEffector/motor");
+
+  
   }
   /**
    * a method to set the speeds of both motors on the end effector. speeds are percentage of full power, from -1 to 1.
