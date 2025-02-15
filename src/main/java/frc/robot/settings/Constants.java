@@ -492,10 +492,10 @@ public final class Constants {
     public static final double RED_BARGE_SHOOT_X = 2491; //TODO: change these values
    }
 public final class LightConstants{
-  public static final int CANDLE_ID = 2491;
+  public static final int CANDLE_ID = 0;
 
-  public static final int LEFT_ELEVATOR_LIGHTS_ALGAE_START = 2491;
-  public static final int LEFT_ELEVATOR_LIGHTS_ALGAE_END = 2491;
+  public static final int LEFT_ELEVATOR_LIGHTS_ALGAE_START = 10;
+  public static final int LEFT_ELEVATOR_LIGHTS_ALGAE_END = 15;
   public static final int LEFT_ELEVATOR_LIGHTS_1_START = 2491;
   public static final int LEFT_ELEVATOR_LIGHTS_1_END = 2491;
   public static final int LEFT_ELEVATOR_LIGHTS_2_END = 2491;
@@ -504,8 +504,8 @@ public final class LightConstants{
   public static final int LEFT_ELEVATOR_LIGHTS_5_END = 2491;
 
 
-  public static final int RIGHT_ELEVATOR_LIGHTS_ALGAE_START = 2491;
-  public static final int RIGHT_ELEVATOR_LIGHTS_ALGAE_END = 2491;
+  public static final int RIGHT_ELEVATOR_LIGHTS_ALGAE_START = 20;
+  public static final int RIGHT_ELEVATOR_LIGHTS_ALGAE_END = 30;
   public static final int RIGHT_ELEVATOR_LIGHTS_1_START = 2491;
   public static final int RIGHT_ELEVATOR_LIGHTS_1_END = 2491;
   public static final int RIGHT_ELEVATOR_LIGHTS_2_END = 2491;
