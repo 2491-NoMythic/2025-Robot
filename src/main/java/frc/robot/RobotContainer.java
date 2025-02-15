@@ -567,18 +567,22 @@ public class RobotContainer {
         new LineUp(driveTrain, ()->RobotState.getInstance().deliveringLeft, REEF_LINEUP_SPEED)))
           .onTrue(new InstantCommand(()->RobotState.getInstance().reefLineupRunning = true)).onFalse(new InstantCommand(()->RobotState.getInstance().reefLineupRunning = false));
     }
-    new Trigger(PlaceCoralNoPathSup).whileTrue(new PlaceCoralNoPath(
-      elevator,
-      ()->RobotState.getInstance().deliveringCoralHeight,
-      distanceSensors,
-      driveTrain,
-      ControllerSidewaysAxisSupplier,
-      ControllerForwardAxisSupplier,
-      ControllerZAxisSupplier,
-      coralEndDefector,
-      ()->RobotState.getInstance().deliveringLeft, 
-      algaeEndDefector,
-      ()->RobotState.getInstance().goForAlgae));
+    new Trigger(PlaceCoralNoPathSup).whileTrue( new SequentialCommandGroup(
+      new InstantCommand(()->RobotState.getInstance().reefLineupRunning = true),
+      new PlaceCoralNoPath(
+        elevator,
+        ()->RobotState.getInstance().deliveringCoralHeight,
+        distanceSensors,
+        driveTrain,
+        ControllerSidewaysAxisSupplier,
+        ControllerForwardAxisSupplier,
+        ControllerZAxisSupplier,
+        coralEndDefector,
+        ()->RobotState.getInstance().deliveringLeft, 
+        algaeEndDefector,
+        ()->RobotState.getInstance().goForAlgae),
+        new InstantCommand(()->RobotState.getInstance().reefLineupRunning = false))
+        );
 
     if(elevatorExists && algaeEndeffectorExists){
       new Trigger(AlgaeDepositSup).whileTrue(new DepositAlgae(algaeEndDefector,elevator, ALGAE_SHOOT_SPEED));
