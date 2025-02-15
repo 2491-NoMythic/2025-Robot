@@ -35,11 +35,11 @@ public class FunnelRotator extends SubsystemBase {
     rotatorMotor = new SparkMax (FUNNEL_ROTATOR_MOTOR_ID, MotorType.kBrushless);
     rotatorMotorConfig = new SparkMaxConfig();
     if(Preferences.getBoolean("CompBot", true)){
-    rotatorMotorConfig.apply(new ClosedLoopConfig().pidf(
-      FUNNEL_ROTATOR_KP,
-      FUNNEL_ROTATOR_KI,
-      FUNNEL_ROTATOR_KD,
-      FUNNEL_ROTATOR_KFF));
+      rotatorMotorConfig.apply(new ClosedLoopConfig().pidf(
+        FUNNEL_ROTATOR_KP,
+        FUNNEL_ROTATOR_KI,
+        FUNNEL_ROTATOR_KD,
+        FUNNEL_ROTATOR_KFF));
     }
     else{
       rotatorMotorConfig.apply(new ClosedLoopConfig().pidf(

@@ -50,11 +50,11 @@ public class FunnelIntake extends SubsystemBase {
         FUNNEL_SLANT_MOTOR_KI,
         FUNNEL_SLANT_MOTOR_KD,
         FUNNEL_SLANT_MOTOR_KFF));
-        straightMotorConfig.apply(new ClosedLoopConfig().pidf(
-          FUNNEL_STRAIGHT_MOTOR_KP,
-          FUNNEL_STRAIGHT_MOTOR_KI,
-          FUNNEL_STRAIGHT_MOTOR_KD,
-          FUNNEL_STRAIGHT_MOTOR_KFF));
+       straightMotorConfig.apply(new ClosedLoopConfig().pidf(
+         FUNNEL_STRAIGHT_MOTOR_KP,
+         FUNNEL_STRAIGHT_MOTOR_KI,
+         FUNNEL_STRAIGHT_MOTOR_KD,
+         FUNNEL_STRAIGHT_MOTOR_KFF));
       }
       else{
         slantMotorConfig.apply(new ClosedLoopConfig().pidf(
@@ -62,11 +62,11 @@ public class FunnelIntake extends SubsystemBase {
           FUNNEL_SLANT_MOTOR_KI_PRACTICE,
           FUNNEL_SLANT_MOTOR_KD_PRACTICE,
           FUNNEL_SLANT_MOTOR_KFF_PRACTICE));
-          straightMotorConfig.apply(new ClosedLoopConfig().pidf(
-            FUNNEL_STRAIGHT_MOTOR_KP_PRACTICE,
-            FUNNEL_STRAIGHT_MOTOR_KI_PRACTICE,
-            FUNNEL_STRAIGHT_MOTOR_KD_PRACTICE,
-            FUNNEL_STRAIGHT_MOTOR_KFF_PRACTICE));
+        straightMotorConfig.apply(new ClosedLoopConfig().pidf(
+          FUNNEL_STRAIGHT_MOTOR_KP_PRACTICE,
+          FUNNEL_STRAIGHT_MOTOR_KI_PRACTICE,
+          FUNNEL_STRAIGHT_MOTOR_KD_PRACTICE,
+          FUNNEL_STRAIGHT_MOTOR_KFF_PRACTICE));
       }
     slantMotorConfig.idleMode(IdleMode.kCoast);
     slantMotorConfig.inverted(true);
