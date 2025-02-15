@@ -20,7 +20,8 @@ public class ButtonBoard extends GenericHID implements Sendable{
         rightReefLineupButton(9),
         goForAlgaeButton(10),
         climbCommandButton(11),
-        climbModeAuthorizer(12);
+        climbModeAuthorizer(12),
+        climberResetButton(13);
 
         public final int value;
         
@@ -67,6 +68,9 @@ public class ButtonBoard extends GenericHID implements Sendable{
     public boolean getClimbModeAuthorizer() {
         return getRawButton(Button.climbModeAuthorizer.value);
     }
+    public boolean getClimberResetButton(){
+        return getRawButton(Button.climberResetButton.value);
+    }
     public void initSendable(SendableBuilder builder){
         builder.setSmartDashboardType("HID");
         builder.addBooleanProperty("Reef Height 1 Button", this::getReefHeight1Button, null);
@@ -81,6 +85,6 @@ public class ButtonBoard extends GenericHID implements Sendable{
         builder.addBooleanProperty("Go For Algae Button", this::getGoForAlgaeButton, null);
         builder.addBooleanProperty("Climb Command Button", this::getclimbCommandButton, null);
         builder.addBooleanProperty("Climb Mode Authorizer", this::getClimbModeAuthorizer, null);
-
+        builder.addBooleanProperty("Climber Reset Button", this::getClimberResetButton, null);
     }
 }

@@ -57,6 +57,7 @@ import frc.robot.commands.LineupCoralInFunnel;
 import frc.robot.commands.MoveMeters;
 import frc.robot.commands.PassCoralToEndEffector;
 import frc.robot.commands.PlaceCoralNoPath;
+import frc.robot.commands.ResetClimber;
 import frc.robot.commands.ShootInBarge;
 import frc.robot.commands.WaitCommand;
 import frc.robot.subsystems.DistanceSensors;
@@ -178,6 +179,7 @@ public class RobotContainer {
   BooleanSupplier goForAlgae;
   BooleanSupplier CoralIntakeSup;
   BooleanSupplier funnelRotatorSupplier;
+  BooleanSupplier climberResetSupplier;
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
@@ -298,6 +300,7 @@ public class RobotContainer {
       ForceEjectCoral = ()-> operatorControllerXbox.getRightTriggerAxis() > 0.1;
       ClimbCommandSupplier = ()->operatorControllerXbox.getXButton();
       ClimbModeAuthorizer = operatorControllerXbox::getRightStickButton;
+      climberResetSupplier = operatorControllerXbox::getLeftStickButton;
     } else if (OCTEnum == ControllerEnums.PS4Controller){
       //Controller IDs
       operatorControllerPS4 = new PS4Controller(OPERATOR_CONTROLLER_ID);
@@ -318,10 +321,10 @@ public class RobotContainer {
       ForceEjectCoral = operatorControllerPS4::getR2Button;
       ForceElevator = operatorControllerPS4::getL2Button;
       ClimbModeAuthorizer = operatorControllerPS4::getR3Button;
+      climberResetSupplier = operatorControllerPS4::getL3Button;
     } else if (OCTEnum == ControllerEnums.ButtonBoard){
       buttonBoard = new ButtonBoard(OPERATOR_CONTROLLER_ID);
-
-      //automatic operator controls
+      //These are not sorted based on manual or automatic, but rather location on the physical board. 
       OpLeftReefLineupSup = buttonBoard::getLeftReefLineupButton;
       OpRightReefLineupSup = buttonBoard::getRightReefLineupButton;
       goForAlgae = buttonBoard::getGoForAlgaeButton;
@@ -335,9 +338,9 @@ public class RobotContainer {
       BargeHeightSupplier = buttonBoard::getBargeHeightButton;
       ForceEjectCoral = buttonBoard::getForceEjectCoralButton;
 
-      //manual operator controls, press in case of emergancy
       ClimbCommandSupplier = buttonBoard::getclimbCommandButton;
       ClimbModeAuthorizer = buttonBoard::getClimbModeAuthorizer;
+      climberResetSupplier = buttonBoard::getClimberResetButton;
     }
 
     if (LimelightExists) {limelightInit();}
@@ -514,6 +517,7 @@ public class RobotContainer {
     }
     if (climberExists){
       new Trigger(ClimbCommandSupplier).whileTrue(new ClimberCommand(climber));
+      new Trigger(climberResetSupplier).whileTrue(new ResetClimber(climber));
     }
     if (funnelIntakeExists&&elevatorExists&&coralEndeffectorExists) {
       //if the coral is triggering the funnel, but hasn't been aligned, and there elevator isn't in place, lineup the coral in the funnel
