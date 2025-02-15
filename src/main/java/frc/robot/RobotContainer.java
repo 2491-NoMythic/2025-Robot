@@ -41,6 +41,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AutoAngleAtReef;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.DepositAlgae;
+import frc.robot.settings.Constants.LightConstants;
 import frc.robot.settings.Constants.Vision;
 import frc.robot.settings.ControllerEnums;
 import frc.robot.commands.AlgaeEndeffectorCommand;
@@ -67,6 +68,7 @@ import frc.robot.commands.autos.PlaceCoralNoOdometry;
 import frc.robot.settings.SensorNameEnums;
 import frc.robot.settings.CommandSelectorEnum;
 import frc.robot.settings.ElevatorEnums;
+import frc.robot.settings.LightsEnums;
 import frc.robot.settings.ReefSideEnum;
 import frc.robot.subsystems.AlgaeEndeffectorSubsystem;
 import frc.robot.subsystems.CoralEndeffectorSubsystem;
@@ -464,7 +466,7 @@ public class RobotContainer {
     new Trigger(BargeHeightSupplier).onTrue(new InstantCommand(()-> RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Barge));
     new Trigger(OpLeftReefLineupSup).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringLeft = true));
     new Trigger(OpRightReefLineupSup).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringLeft = false));
-    new Trigger(goForAlgae).onTrue(new InstantCommand(()->RobotState.getInstance().goForAlgae = !RobotState.getInstance().goForAlgae));
+    new Trigger(goForAlgae).onTrue(new InstantCommand(()->RobotState.getInstance().goForAlgae = !RobotState.getInstance().goForAlgae));    SmartDashboard.putData("toggle algae pickup", new InstantCommand(()->RobotState.getInstance().goForAlgae = !RobotState.getInstance().goForAlgae));
     
     if (DrivetrainExists){
     SmartDashboard.putData("drivetrain", driveTrain);
@@ -567,18 +569,21 @@ public class RobotContainer {
         new LineUp(driveTrain, ()->RobotState.getInstance().deliveringLeft, REEF_LINEUP_SPEED)))
           .onTrue(new InstantCommand(()->RobotState.getInstance().reefLineupRunning = true)).onFalse(new InstantCommand(()->RobotState.getInstance().reefLineupRunning = false));
     }
+
+    if (DrivetrainExists) {
     new Trigger(PlaceCoralNoPathSup).whileTrue(new PlaceCoralNoPath(
       elevator,
-      ()->RobotState.getInstance().deliveringCoralHeight,
+          () -> RobotState.getInstance().deliveringCoralHeight,
       distanceSensors,
       driveTrain,
       ControllerSidewaysAxisSupplier,
       ControllerForwardAxisSupplier,
       ControllerZAxisSupplier,
       coralEndDefector,
-      ()->RobotState.getInstance().deliveringLeft, 
+          () -> RobotState.getInstance().deliveringLeft,
       algaeEndDefector,
-      ()->RobotState.getInstance().goForAlgae));
+          () -> RobotState.getInstance().goForAlgae));
+    }
 
     if(elevatorExists && algaeEndeffectorExists){
       new Trigger(AlgaeDepositSup).whileTrue(new DepositAlgae(algaeEndDefector,elevator, ALGAE_SHOOT_SPEED));
