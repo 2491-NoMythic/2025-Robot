@@ -213,6 +213,7 @@ public final class Constants {
     public static final double AUTO_AIM_ROBOT_kP = 0.125;
     public static final double AUTO_AIM_ROBOT_kI = 0.00;
     public static final double AUTO_AIM_ROBOT_kD = 0.00;
+
     public static final double ROBOT_ANGLE_TOLERANCE = 0.5;
 
     public static final PathConstraints DEFAULT_PATH_CONSTRAINTS =
@@ -234,6 +235,7 @@ public final class Constants {
       driveMotorConfig.Slot0.kD = DriveConstants.k_DRIVE_D * 12;
       driveMotorConfig.Slot0.kS = DriveConstants.k_DRIVE_FF_S;
       driveMotorConfig.Slot0.kV = DriveConstants.k_DRIVE_FF_V;
+      //TODO: ADD DUPLICATE CONSTANTS
       driveMotorConfig.Voltage.PeakForwardVoltage = 12;
       driveMotorConfig.Voltage.PeakReverseVoltage = -12;
       driveMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
@@ -392,6 +394,11 @@ public final class Constants {
     public static final double CORAL_ENDEFFECTOR_KI = 0;
     public static final double CORAL_ENDEFFECTOR_KD = 0;
     public static final double CORAL_ENDEFFECTOR_KFF = 0;
+
+    public static final double CORAL_ENDEFFECTOR_KP_PRACTICE = 2491;
+    public static final double CORAL_ENDEFFECTOR_KI_PRACTICE = 2491;
+    public static final double CORAL_ENDEFFECTOR_KD_PRACTICE = 2491;
+    public static final double CORAL_ENDEFFECTOR_KFF_PRACTICE = 2491;
     
     public static final double CORAL_ENDEFFECTOR_SPEED = 0.5;
       /** this is the speed that the EndEffector motors should run at when they should be slow enough to stop the coral where it is the moment the sensor is triggered */
@@ -405,8 +412,19 @@ public final class Constants {
     public static final int ALGAE_ENDEFFECTOR_CURRENT_LIMIT = 25;
     public static final double ALGAE_INTAKE_SPEED = 1;
     public static final double ALGAE_SHOOT_SPEED = -1;
+
+    //2 volts ~= 1822 rpm
+    //4 volts ~= 3750 rpm
+    //1 volt ~= 870 rpm
     public static final double ALGAE_ENDEFFECTOR_KP_1 = 0.0003;
     public static final double ALGAE_ENDEFFECTOR_KI_1 = 0;
+    public static final double ALGAE_ENDEFFECTOR_KD_1 = 0;
+    public static final double ALGAE_ENDEFFECTOR_KFF_1 = 0.000095;
+
+    public static final double ALGAE_ENDEFFECTOR_KI_1_PRACTICE = 2491;
+    public static final double ALGAE_ENDEFFECTOR_KP_1_PRACTICE = 2491;
+    public static final double ALGAE_ENDEFFECTOR_KFF_1_PRACTICE = 2491;
+    public static final double ALGAE_ENDEFFECTOR_KD_1_PRACTICE = 2491;
     //2 volts ~= 1760 rpm
     //4 volts ~= 3670 rpm
     //1 volt ~= 815 rpm
@@ -414,11 +432,11 @@ public final class Constants {
     public static final double ALGAE_ENDEFFECTOR_KI_2 = 0;
     public static final double ALGAE_ENDEFFECTOR_KD_2 = 0;
     public static final double ALGAE_ENDEFFECTOR_KFF_2 = 0.000091;
-    //2 volts ~= 1822 rpm
-    //4 volts ~= 3750 rpm
-    //1 volt ~= 870 rpm
-    public static final double ALGAE_ENDEFFECTOR_KD_1 = 0;
-    public static final double ALGAE_ENDEFFECTOR_KFF_1 = 0.000095;
+
+    public static final double ALGAE_ENDEFFECTOR_KP_2_PRACTICE = 2491;
+    public static final double ALGAE_ENDEFFECTOR_KI_2_PRACTICE = 2491;
+    public static final double ALGAE_ENDEFFECTOR_KD_2_PRACTICE = 2491;
+    public static final double ALGAE_ENDEFFECTOR_KFF_2_PRACTICE = 2491;
   }
   
   public final class ElevatorConstants{
@@ -439,7 +457,16 @@ public final class Constants {
   public final class ClimberConstants{
     public static final int CLIMBER_MOTOR_1_ID = 2491;
 
-    public static final TalonFXConfiguration ClimberMotorConfig = new TalonFXConfiguration()
+    public static final TalonFXConfiguration ClimberMotorConfigComp = new TalonFXConfiguration()
+    .withSlot0(new Slot0Configs()
+      .withKP(1)
+      .withKI(0)
+      .withKD(0)
+      .withKV(0))
+    .withCurrentLimits(new CurrentLimitsConfigs()
+      .withSupplyCurrentLimit(100)
+      .withSupplyCurrentLimitEnable(true));
+    public static final TalonFXConfiguration ClimberMotorConfigPrac = new TalonFXConfiguration()
     .withSlot0(new Slot0Configs()
       .withKP(1)
       .withKI(0)
@@ -459,16 +486,32 @@ public final class Constants {
     public static final double FUNNEL_SLANT_MOTOR_KI = 0;
     public static final double FUNNEL_SLANT_MOTOR_KD = 0;
     public static final double FUNNEL_SLANT_MOTOR_KFF = 0.0001315;
+    
+    public static final double FUNNEL_SLANT_MOTOR_KP_PRACTICE = 2491;
+    public static final double FUNNEL_SLANT_MOTOR_KI_PRACTICE = 2491;
+    public static final double FUNNEL_SLANT_MOTOR_KD_PRACTICE = 2491;
+    public static final double FUNNEL_SLANT_MOTOR_KFF_PRACTICE = 2491;
 
     public static final double FUNNEL_STRAIGHT_MOTOR_KP = 0.0001;
     public static final double FUNNEL_STRAIGHT_MOTOR_KI = 0;
     public static final double FUNNEL_STRAIGHT_MOTOR_KD = 0;
     public static final double FUNNEL_STRAIGHT_MOTOR_KFF = 0.000116;
 
+    public static final double FUNNEL_STRAIGHT_MOTOR_KP_PRACTICE = 2491;
+    public static final double FUNNEL_STRAIGHT_MOTOR_KI_PRACTICE = 2491;
+    public static final double FUNNEL_STRAIGHT_MOTOR_KD_PRACTICE = 2491;
+    public static final double FUNNEL_STRAIGHT_MOTOR_KFF_PRACTICE = 2491;
+
     public static final double FUNNEL_ROTATOR_KP = 2491;
     public static final double FUNNEL_ROTATOR_KI = 2491;
     public static final double FUNNEL_ROTATOR_KD = 2491;
     public static final double FUNNEL_ROTATOR_KFF = 2491;
+
+    public static final double FUNNEL_ROTATOR_KP_PRACTICE = 2491;
+    public static final double FUNNEL_ROTATOR_KI_PRACTICE = 2491;
+    public static final double FUNNEL_ROTATOR_KD_PRACTICE = 2491;
+    public static final double FUNNEL_ROTATOR_KFF_PRACTICE = 2491;
+
     public static final int FUNNEL_ROTATOR_SUPPLY_CURRENT_LIMIT = 2491;
     public static final double FUNNEL_ROTATOR_GEAR_RATIO = 2491;
     public static final double FUNNEL_ROTATOR_DOWEN_POSITION = 2491;

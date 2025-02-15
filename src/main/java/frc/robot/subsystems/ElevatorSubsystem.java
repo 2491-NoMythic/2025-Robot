@@ -50,10 +50,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     } else {
       eleMotorConfig = new TalonFXConfiguration()
       .withSlot0(new Slot0Configs()
-        .withKP(1)
-        .withKS(0)
-        .withKA(0)
-        .withKV(0))
+        .withKP(2491)
+        .withKS(2491)
+        .withKA(2491)
+        .withKV(2491))
       .withCurrentLimits(new CurrentLimitsConfigs()
         .withSupplyCurrentLimit(100)
         .withSupplyCurrentLimitEnable(true));

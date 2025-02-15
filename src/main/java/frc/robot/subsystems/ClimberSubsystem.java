@@ -23,7 +23,11 @@ public class ClimberSubsystem extends SubsystemBase {
   /** Creates a new CimberSubsystem. */
   public ClimberSubsystem() {
     climberMotor1 = new TalonFX(CLIMBER_MOTOR_1_ID);
-    climberMotor1.getConfigurator().apply(ClimberMotorConfig);
+    if(Preferences.getBoolean("CompBot", true)) {
+      climberMotor1.getConfigurator().apply(ClimberMotorConfigComp);
+    } else {
+      climberMotor1.getConfigurator().apply(ClimberMotorConfigPrac);
+    }
 //TODO spend some time figuring out how to use the absolute encoder with the motor.
     FeedbackConfigs krakenSensorConfigs = new FeedbackConfigs()
       .withFeedbackRemoteSensorID(2491)

@@ -42,24 +42,36 @@ public class FunnelIntake extends SubsystemBase {
     timer = new Timer();
     funnelSlantMotor = new SparkMax(FUNNEL_SLANT_MOTOR_ID, MotorType.kBrushless);
     slantMotorConfig = new SparkMaxConfig();
-    slantMotorConfig.apply(new ClosedLoopConfig().pidf(
-      FUNNEL_SLANT_MOTOR_KP,
-      FUNNEL_SLANT_MOTOR_KI,
-      FUNNEL_SLANT_MOTOR_KD,
-      FUNNEL_SLANT_MOTOR_KFF));
-
+    funnelStraightMotor = new SparkMax(FUNNEL_STRAIGHT_MOTOR_ID,MotorType.kBrushless);
+    straightMotorConfig = new SparkMaxConfig();
+    if(Preferences.getBoolean("CompBot", true)){
+      slantMotorConfig.apply(new ClosedLoopConfig().pidf(
+        FUNNEL_SLANT_MOTOR_KP,
+        FUNNEL_SLANT_MOTOR_KI,
+        FUNNEL_SLANT_MOTOR_KD,
+        FUNNEL_SLANT_MOTOR_KFF));
+       straightMotorConfig.apply(new ClosedLoopConfig().pidf(
+         FUNNEL_STRAIGHT_MOTOR_KP,
+         FUNNEL_STRAIGHT_MOTOR_KI,
+         FUNNEL_STRAIGHT_MOTOR_KD,
+         FUNNEL_STRAIGHT_MOTOR_KFF));
+      }
+      else{
+        slantMotorConfig.apply(new ClosedLoopConfig().pidf(
+          FUNNEL_SLANT_MOTOR_KP_PRACTICE,
+          FUNNEL_SLANT_MOTOR_KI_PRACTICE,
+          FUNNEL_SLANT_MOTOR_KD_PRACTICE,
+          FUNNEL_SLANT_MOTOR_KFF_PRACTICE));
+        straightMotorConfig.apply(new ClosedLoopConfig().pidf(
+          FUNNEL_STRAIGHT_MOTOR_KP_PRACTICE,
+          FUNNEL_STRAIGHT_MOTOR_KI_PRACTICE,
+          FUNNEL_STRAIGHT_MOTOR_KD_PRACTICE,
+          FUNNEL_STRAIGHT_MOTOR_KFF_PRACTICE));
+      }
     slantMotorConfig.idleMode(IdleMode.kCoast);
     slantMotorConfig.inverted(true);
     slantMotorConfig.smartCurrentLimit(25, 25, 1000);
     funnelSlantMotor.configure(slantMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
-    funnelStraightMotor = new SparkMax(FUNNEL_STRAIGHT_MOTOR_ID,MotorType.kBrushless);
-    straightMotorConfig = new SparkMaxConfig();
-    straightMotorConfig.apply(new ClosedLoopConfig().pidf(
-      FUNNEL_STRAIGHT_MOTOR_KP,
-      FUNNEL_STRAIGHT_MOTOR_KI,
-      FUNNEL_STRAIGHT_MOTOR_KD,
-      FUNNEL_STRAIGHT_MOTOR_KFF));
 
     straightMotorConfig.idleMode(IdleMode.kCoast);
     straightMotorConfig.inverted(false);
@@ -70,8 +82,8 @@ public class FunnelIntake extends SubsystemBase {
     straightMotorLogger = new MotorLogger("/funnelIntake/straightMotor");
     
     funnelIntakeSensor = funnelSlantMotor.getAnalog();
-
   }
+
   private void logMotors(){
     slantMotorLogger.log(funnelSlantMotor);
     straightMotorLogger.log(funnelStraightMotor);
