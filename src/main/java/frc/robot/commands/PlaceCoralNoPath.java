@@ -50,7 +50,7 @@ public class PlaceCoralNoPath extends SequentialCommandGroup{
                         new ElevatorCommand(elevator, elevatorPose),//raises elevator to position)
                         new WaitUntil(()->elevator.isElevatorAtPose()))),
                     new DeliverCoral(coralEndeffector),//drops coral
-                    new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.Bottom), elevator) //sets elevator back to the bottom position
+                    new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer), elevator) //sets elevator back to the bottom position
                 )
 
         );

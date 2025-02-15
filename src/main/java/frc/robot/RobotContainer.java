@@ -569,20 +569,23 @@ public class RobotContainer {
         new LineUp(driveTrain, ()->RobotState.getInstance().deliveringLeft, REEF_LINEUP_SPEED)))
           .onTrue(new InstantCommand(()->RobotState.getInstance().reefLineupRunning = true)).onFalse(new InstantCommand(()->RobotState.getInstance().reefLineupRunning = false));
     }
-
-    if (DrivetrainExists) {
-    new Trigger(PlaceCoralNoPathSup).whileTrue(new PlaceCoralNoPath(
-      elevator,
-          () -> RobotState.getInstance().deliveringCoralHeight,
-      distanceSensors,
-      driveTrain,
-      ControllerSidewaysAxisSupplier,
-      ControllerForwardAxisSupplier,
-      ControllerZAxisSupplier,
-      coralEndDefector,
-          () -> RobotState.getInstance().deliveringLeft,
-      algaeEndDefector,
-          () -> RobotState.getInstance().goForAlgae));
+    if(DrivetrainExists) {
+      new Trigger(PlaceCoralNoPathSup).whileTrue( new SequentialCommandGroup(
+        new InstantCommand(()->RobotState.getInstance().reefLineupRunning = true),
+        new PlaceCoralNoPath(
+          elevator,
+          ()->RobotState.getInstance().deliveringCoralHeight,
+          distanceSensors,
+          driveTrain,
+          ControllerSidewaysAxisSupplier,
+          ControllerForwardAxisSupplier,
+          ControllerZAxisSupplier,
+          coralEndDefector,
+          ()->RobotState.getInstance().deliveringLeft, 
+          algaeEndDefector,
+          ()->RobotState.getInstance().goForAlgae),
+          new InstantCommand(()->RobotState.getInstance().reefLineupRunning = false))
+          );
     }
 
     if(elevatorExists && algaeEndeffectorExists){
@@ -591,7 +594,7 @@ public class RobotContainer {
     }
 
     if(elevatorExists){
-      new Trigger(ForceElevator).onTrue(new InstantCommand(()-> elevator.setElevatorPosition(RobotState.getInstance().deliveringCoralHeight)));
+      new Trigger(ForceElevator).onTrue(new InstantCommand(()-> elevator.setElevatorPosition(RobotState.getInstance().deliveringCoralHeight))).onFalse(new InstantCommand(()-> elevator.setElevatorPosition(ElevatorEnums.HumanPlayer)));
     }
 
     if(coralEndeffectorExists){

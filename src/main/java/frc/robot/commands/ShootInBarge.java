@@ -31,8 +31,11 @@ public class ShootInBarge extends SequentialCommandGroup {
     this.controllerSupplier = controllerSupplier;
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new LineUpBarge(drivetrainSubsystem, controllerSupplier),
-       new ElevatorCommand(elevatorSubsystem, () -> ElevatorEnums.Barge),
-       (new AlgaeIntakeCommand(algaeSubsystem, ()->-1)));
+    addCommands(
+      new LineUpBarge(drivetrainSubsystem, controllerSupplier),
+      new ElevatorCommand(elevatorSubsystem, () -> ElevatorEnums.Barge),
+      new AlgaeIntakeCommand(algaeSubsystem, ()->-1),
+      new InstantCommand(()->elevatorSubsystem.setElevatorPosition(ElevatorEnums.HumanPlayer), elevatorSubsystem));
+
   }
 }
