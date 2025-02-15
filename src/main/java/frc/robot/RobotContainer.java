@@ -586,7 +586,7 @@ public class RobotContainer {
     }
 
     if(elevatorExists){
-      new Trigger(ForceElevator).onTrue(new InstantCommand(()-> elevator.setElevatorPosition(RobotState.getInstance().deliveringCoralHeight)));
+      new Trigger(ForceElevator).onTrue(new InstantCommand(()-> elevator.setElevatorPosition(RobotState.getInstance().deliveringCoralHeight))).onFalse(new InstantCommand(()-> elevator.setElevatorPosition(ElevatorEnums.HumanPlayer)));
     }
 
     if(coralEndeffectorExists){
