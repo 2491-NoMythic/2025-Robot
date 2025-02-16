@@ -373,7 +373,6 @@ public class RobotContainer {
     configureBindings(); // Configure the trigger bindings
     autoInit();
   }
-
   private void driveTrainInst() {
     driveTrain = new DrivetrainSubsystem();
 
