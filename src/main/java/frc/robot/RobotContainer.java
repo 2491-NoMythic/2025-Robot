@@ -345,12 +345,13 @@ public class RobotContainer {
       ReefHeight4Supplier = buttonBoard::getReefHeight4Button;
 
       ProcessorHeightSupplier = buttonBoard::getProcessorHeightButton;
+      ForceElevator = ()->false;
+      BargeHeightSupplier = ()->false;
+      ForceEjectCoral = buttonBoard::getForceEjectCoralButton;
+
       ClimbModeAuthorizer = buttonBoard::getClimbModeAuthorizer;
       climberResetSupplier = buttonBoard::getClimberResetButton;
       ClimbCommandSupplier = buttonBoard::getclimbCommandButton;
-      ForceElevator = ()->false;
-      BargeHeightSupplier = ()->false;
-      ForceEjectCoral = ()->false;
     }
     if (LimelightExists) {limelightInit();}
     if (distanceSensorsExist) {sensorInit();}   
