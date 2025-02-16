@@ -25,13 +25,13 @@ public class ClimberCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    climber.setKrakenPose(position);
+    climber.setClimberAngle(position);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    climber.setKrakenPose(climber.getClimberPose());
+    climber.setClimberAngle(climber.getClimberAngle());
   }
 
   // Returns true when the command should end.

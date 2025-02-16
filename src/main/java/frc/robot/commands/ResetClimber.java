@@ -23,7 +23,7 @@ public class ResetClimber extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    climber.setKrakenPose(0);
+    climber.setClimberAngle(0);
   }
 
   // Called once the command ends or is interrupted.

@@ -45,10 +45,10 @@ public class ClimberSubsystem extends SubsystemBase {
     motorLogger1 = new MotorLogger("/climber/motor1");
   }
 
-  public double getClimberPose() {
+  public double getClimberAngle() {
     return climberAngleSensor.getAbsolutePosition().getValueAsDouble();
   }
-  public void setKrakenPose(double angle) {
+  public void setClimberAngle(double angle) {
     climberMotor1.setControl(new PositionVoltage(angle));
   }
   public void stopClimber(){
