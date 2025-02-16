@@ -7,6 +7,8 @@ package frc.robot.commands;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.settings.ElevatorEnums;
 import frc.robot.subsystems.AlgaeEndeffectorSubsystem;
@@ -33,8 +35,11 @@ public class ShootInBarge extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new LineUpBarge(drivetrainSubsystem, controllerSupplier),
-      new ElevatorCommand(elevatorSubsystem, () -> ElevatorEnums.Barge),
-      new AlgaeIntakeCommand(algaeSubsystem, ()->-1),
+      new InstantCommand(()->elevatorSubsystem.setElevatorPosition(ElevatorEnums.Barge), elevatorSubsystem),
+      new WaitUntil(()->elevatorSubsystem.isElevatorAtPose()),
+      new ParallelRaceGroup(
+        new AlgaeIntakeCommand(algaeSubsystem, ()->-1),
+        new WaitCommand(()->1.0)),
       new InstantCommand(()->elevatorSubsystem.setElevatorPosition(ElevatorEnums.HumanPlayer), elevatorSubsystem));
 
   }

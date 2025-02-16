@@ -18,7 +18,6 @@ public class AlgaeIntakeCommand extends Command {
   AlgaeEndeffectorSubsystem algaeEndeffector;
   DoubleSupplier shootSpeed;
   boolean algaeDetected;
-  boolean goForAlgae;
   /** Creates a new AlgaeIntakeCommand. */
   public AlgaeIntakeCommand(AlgaeEndeffectorSubsystem algaeEndeffector, DoubleSupplier shootSpeed) {
     this.algaeEndeffector = algaeEndeffector;
@@ -40,16 +39,10 @@ public class AlgaeIntakeCommand extends Command {
     // This command is meant to be used with a parallel race group. 
     // if we returned true from isFinished we would cancel the rest of the commands.
     // so instead handle finishing internally.
-    if (RobotState.getInstance().hasAlgae) {
-      algaeDetected = true;
-    }
-    if (algaeDetected) {
+
+    if (RobotState.getInstance().hasAlgae && shootSpeed.getAsDouble() >= 0) {
       algaeEndeffector.stopAlgaeEndDefector();
-    }
-    if (goForAlgae = false) {
-      algaeEndeffector.stopAlgaeEndDefector();
-    }
-    else {
+    } else {
       algaeEndeffector.runAlgaeEndDefector(shootSpeed.getAsDouble());
     }
   }
