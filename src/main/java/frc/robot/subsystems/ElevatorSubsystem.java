@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
@@ -36,7 +37,7 @@ public class ElevatorSubsystem extends SubsystemBase {
       eleMotorConfig = new TalonFXConfiguration()
       .withSlot0(new Slot0Configs()
         .withKP(1)
-        .withKS(0)
+        .withKG(0)
         .withKA(0)
         .withKV(0))
       .withCurrentLimits(new CurrentLimitsConfigs()
@@ -50,18 +51,14 @@ public class ElevatorSubsystem extends SubsystemBase {
     } else {
       eleMotorConfig = new TalonFXConfiguration()
       .withSlot0(new Slot0Configs()
-        .withKP(2491)
-        .withKS(2491)
-        .withKA(2491)
-        .withKV(2491))
+        .withKP(0)
+        .withKG(0)
+        .withKA(0)
+        .withKV(0))
       .withCurrentLimits(new CurrentLimitsConfigs()
         .withSupplyCurrentLimit(100)
         .withSupplyCurrentLimitEnable(true));
-      //We are not yet sure on whether or not we are using MotionMagic.
-        //.withMotionMagic(new MotionMagicConfigs()
-        //.withMotionMagicAcceleration(2491)
-        //.withMotionMagicCruiseVelocity(2491)
-        //.withMotionMagicJerk(2491));
+      //We are not yet sure on whether or not we are using MotionMagic.;
     }
     elevatorMotor1.getConfigurator().apply(eleMotorConfig);
     elevatorMotor2.getConfigurator().apply(eleMotorConfig);
@@ -86,22 +83,22 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
   }
   /**
-   * Creates a zero from input
+   * tells the elevator motor what rotations it will have to reach for the elevator to be touching the ground (this will never happen, just theoritically)
    * @param theDistance the distance that the distance sensor at the bottom of the elevator reads
    */
   public void setZero(double theDistance){//Replace with sensor return
-    double rof0 = theDistance * ELEVATOR_MILLIMETERS_TO_ROTATIONS;
-    zeroPoint = elevatorMotor1.getPosition().getValueAsDouble() - rof0;    
+    double rof0 = (theDistance+ELEVATOR_SENSOR_MILLIMETERS_OFF_GROUND) * ELEVATOR_MILLIMETERS_TO_ROTATIONS;
+    zeroPoint = elevatorMotor1.getPosition().getValueAsDouble() - rof0;   
     }
   /**
-   * Sets the elevator to a position relative to the 0 set by createZero. 
+   * Makes the elevator move to a position relative to the ground. It does this by changing the setpoint for the motor's onboard PID controller
    * @param height double that controls how many millimeters from the distance sensor
    */
   public void setElevatorPosition(double height){
     double position = height * ELEVATOR_MILLIMETERS_TO_ROTATIONS;
     double uPos = position + zeroPoint;
-    PositionVoltage voltReq = new PositionVoltage(0);
-    elevatorMotor1.setControl(voltReq.withPosition(uPos));
+    PositionVoltage voltReq = new PositionVoltage(uPos);
+    elevatorMotor1.setControl(voltReq);
   }
   public void setElevatorPosition(ElevatorEnums height){
     switch(height){
