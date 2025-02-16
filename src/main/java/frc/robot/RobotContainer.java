@@ -6,6 +6,8 @@ package frc.robot;
 
 import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.ALGAE_INTAKE_SPEED;
 import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.ALGAE_SHOOT_SPEED;
+import static frc.robot.settings.Constants.ClimberConstants.CLIMBER_CLIMBED_ANGLE;
+import static frc.robot.settings.Constants.ClimberConstants.CLIMBER_NOT_CLIMBED_ANGLE;
 import static frc.robot.settings.Constants.CoralEndeffectorConstants.CORAL_ENDEFFECTOR_SPEED;
 import static frc.robot.settings.Constants.DriveConstants.*;
 import static frc.robot.settings.Constants.ElevatorConstants.HUMAN_PLAYER_STATION_MILLIMETERS;
@@ -163,7 +165,8 @@ public class RobotContainer {
   BooleanSupplier CoralPlaceTeleSupplier;
   BooleanSupplier BargeHeightSupplier;
   BooleanSupplier CoralIntakeHeightSupplier;
-  BooleanSupplier ClimbCommandSupplier;
+  BooleanSupplier ClimbUpCommandSupplier;
+  BooleanSupplier ClimbDownCommandSupplier;
   DoubleSupplier ControllerForwardAxisSupplier;
   DoubleSupplier ControllerSidewaysAxisSupplier;
   DoubleSupplier ControllerZAxisSupplier;
@@ -297,7 +300,8 @@ public class RobotContainer {
 
       //operator manual controls, should not be used unless other controls not working
       ForceEjectCoral = ()-> operatorControllerXbox.getRightTriggerAxis() > 0.1;
-      ClimbCommandSupplier = ()->operatorControllerXbox.getXButton();
+      ClimbUpCommandSupplier = ()->operatorControllerXbox.getXButton();
+      ClimbDownCommandSupplier = ()->operatorControllerXbox.getYButton();
       
     } else if (OCTEnum == ControllerEnums.PS4Controller){
       //Controller IDs
@@ -315,7 +319,8 @@ public class RobotContainer {
       AlgaeBargeSup = operatorControllerPS4::getCrossButton;
 
       //manual operator controls, should not be used unless other controls do not work
-      ClimbCommandSupplier = ()->operatorControllerPS4.getSquareButton();
+      ClimbUpCommandSupplier = ()->operatorControllerPS4.getSquareButton();
+      ClimbDownCommandSupplier = ()->operatorControllerPS4.getTriangleButton();
       ForceEjectCoral = operatorControllerPS4::getR2Button;
       ForceElevator = operatorControllerPS4::getL2Button;
     } else if (OCTEnum == ControllerEnums.ButtonBoard){
@@ -333,7 +338,8 @@ public class RobotContainer {
       goForAlgae = buttonBoard::getGoForAlgaeButton;
 
       //manual operator controls, press in case of emergancy
-      ClimbCommandSupplier = buttonBoard::getclimbCommandButton;
+      ClimbUpCommandSupplier = buttonBoard::getclimbCommandButton;
+      ClimbDownCommandSupplier = buttonBoard::getclimbCommandButton;
       ForceEjectCoral = buttonBoard::getForceEjectCoralButton;
     }
 
@@ -512,7 +518,8 @@ public class RobotContainer {
       new Trigger(AlgaeShooterSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector, ()->ALGAE_SHOOT_SPEED));
     }
     if (climberExists){
-      new Trigger(ClimbCommandSupplier).whileTrue(new ClimberCommand(climber));
+      new Trigger(ClimbUpCommandSupplier).whileTrue(new ClimberCommand(climber, CLIMBER_CLIMBED_ANGLE));
+      new Trigger(ClimbDownCommandSupplier).whileTrue(new ClimberCommand(climber, CLIMBER_NOT_CLIMBED_ANGLE));
     }
     if (funnelIntakeExists&&elevatorExists&&coralEndeffectorExists) {
       //if the coral is triggering the funnel, but hasn't been aligned, and there elevator isn't in place, lineup the coral in the funnel

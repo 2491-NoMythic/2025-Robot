@@ -6,6 +6,7 @@ package frc.robot.settings;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -451,11 +452,19 @@ public final class Constants {
     public static final double REEF_LEVEL_4_MILLIMETERS = 2491;
     public static final double BARGE_SHOOT_MILLIMETERS = 2491;
     public static final double ELEVATOR_MILLIMETERS_TO_ROTATIONS = 2491;
-    public static final double ELEVATOR_THRESHOLD = 2491;
+    public static final double ELEVATOR_SENSOR_MILLIMETERS_OFF_GROUND = 2491;
+    public static final double ELEVATOR_THRESHOLD = 5;
   }
 
   public final class ClimberConstants{
-    public static final int CLIMBER_MOTOR_1_ID = 2491;
+    public static final int CLIMBER_MOTOR_ID = 2491;
+    public static final int CLIMBER_CANCODER_ID = 2491;
+
+    public static final double COMP_ENCODER_OFFSET = 0;
+    public static final double PRAC_ENCODER_OFFSET = 0;
+
+    public static final double CLIMBER_CLIMBED_ANGLE = 0;
+    public static final double CLIMBER_NOT_CLIMBED_ANGLE = 90;
 
     public static final TalonFXConfiguration ClimberMotorConfigComp = new TalonFXConfiguration()
     .withSlot0(new Slot0Configs()
@@ -474,7 +483,10 @@ public final class Constants {
       .withKV(0))
     .withCurrentLimits(new CurrentLimitsConfigs()
       .withSupplyCurrentLimit(100)
-      .withSupplyCurrentLimitEnable(true));
+      .withSupplyCurrentLimitEnable(true))
+    .withFeedback(new FeedbackConfigs()
+      .withFeedbackRemoteSensorID(CLIMBER_CANCODER_ID)
+      .withFeedbackSensorSource(FeedbackSensorSourceValue.RemoteCANcoder));
   }
 
   public final class FunnelConstants{
