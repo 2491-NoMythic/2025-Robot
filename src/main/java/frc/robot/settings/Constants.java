@@ -575,6 +575,11 @@ public final class LightConstants{
 
   public static final int DRIVETRAIN_LIGHTS_START = 2491;
   public static final int DRIVETRAIN_LIGHTS_END = 2491;
+
+  public static final int TOTAL_LIGHTS_RIO_STRIP_START = 0;
+  public static final int TOTAL_LIGHTS_RIO_STRIP_END = 2491;
+  public static final int TOTAL_LIGHTS_CANDLE_STRIP_START = 0;
+  public static final int TOTAL_LIGHTS_CANDLE_STRIP_END = 2491;
 }
 
   }
