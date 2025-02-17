@@ -7,7 +7,6 @@ package frc.robot.settings;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
-import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -471,7 +470,7 @@ public final class Constants {
       .withKP(1)
       .withKI(0)
       .withKD(0)
-      .withKV(0))
+      .withKS(0))
     .withCurrentLimits(new CurrentLimitsConfigs()
       .withSupplyCurrentLimit(100)
       .withSupplyCurrentLimitEnable(true));
@@ -480,7 +479,7 @@ public final class Constants {
       .withKP(1)
       .withKI(0)
       .withKD(0)
-      .withKV(0))
+      .withKS(0))
     .withCurrentLimits(new CurrentLimitsConfigs()
       .withSupplyCurrentLimit(100)
       .withSupplyCurrentLimitEnable(true))
@@ -524,9 +523,6 @@ public final class Constants {
     public static final double FUNNEL_ROTATOR_KD_PRACTICE = 2491;
     public static final double FUNNEL_ROTATOR_KFF_PRACTICE = 2491;
 
-    public static final int FUNNEL_ROTATOR_SUPPLY_CURRENT_LIMIT = 2491;
-    public static final double FUNNEL_ROTATOR_GEAR_RATIO = 2491;
-    public static final double FUNNEL_ROTATOR_DOWN_POSITION = 2491;
     public static final double FUNNEL_INTAKE_SPEED = 1500;
     /** this is the speed that the funnel motors should run at when they should be slow enough to stop the coral where it is the moent the sensor is triggered */
     public static final double FUNNEL_ADJUSTING_INTAKE_SPEED = 150;

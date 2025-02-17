@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.helpers.MotorLogger;
 
 import com.revrobotics.spark.SparkBase;
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkMax;
@@ -63,6 +64,13 @@ public class FunnelRotator extends SubsystemBase {
   }
   private void logMotors(){
     motorLogger.log(rotatorMotor);
+  }
+  /**
+   * sets the position of the funnel rotator motor in rotations, relative to it's current position 
+   * @param position the number of rotations to move
+   */
+  public void setFunnelPosition(double position) {
+    rotatorMotor.getClosedLoopController().setReference(rotatorMotor.getEncoder().getPosition() + position, ControlType.kPosition);
   }
   @Override
   public void periodic() {

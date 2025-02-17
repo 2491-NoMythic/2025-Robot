@@ -10,12 +10,14 @@ import frc.robot.subsystems.FunnelRotator;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class FunnelRotatorCommand extends Command {
   FunnelRotator rotator;
-  double position;
-  /** Creates a new FunnelRotatorCommand. */
-  public FunnelRotatorCommand(FunnelRotator rotator, double position) {
+  /**
+   * creates a command that will drop the funnel back out of the way so that the cage can make it to the climber
+   * @param rotator the funnel rotator subsystem
+   * @param position
+   */
+  public FunnelRotatorCommand(FunnelRotator rotator) {
     this.rotator = rotator;
     addRequirements(rotator);
-    this.position = position;
 
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -27,7 +29,7 @@ public class FunnelRotatorCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    rotator.setFunnelRotator(position);
+    rotator.setFunnelPosition(10);
   }
 
   // Called once the command ends or is interrupted.
