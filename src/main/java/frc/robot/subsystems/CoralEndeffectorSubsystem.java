@@ -66,6 +66,11 @@ public class CoralEndeffectorSubsystem extends SubsystemBase {
   public void stopCoralEndEffector(){
     coralEndeffectorMotor.set(0);
   }
+
+  /**
+   * runs the CoralEndEffector at a specific RPM
+   * @param RPM the set RPM
+   */
   public void runCoralEndEffector(double RPM) {
     coralEndeffectorMotor.getClosedLoopController().setReference(RPM, ControlType.kVelocity);
   }

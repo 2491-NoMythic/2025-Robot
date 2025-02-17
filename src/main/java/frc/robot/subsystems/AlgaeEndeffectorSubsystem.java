@@ -43,6 +43,7 @@ public class AlgaeEndeffectorSubsystem extends SubsystemBase {
     algaeConfig1 = new SparkMaxConfig();
     algaeConfig2 = new SparkMaxConfig();
 
+    //applying PID settings based on if we are using the CompBot or the PracticeBot
     if(Preferences.getBoolean("CompBot", true)) {
       algaeConfig1.apply(new ClosedLoopConfig().pidf(
         ALGAE_ENDEFFECTOR_KP_1,
@@ -78,7 +79,10 @@ public class AlgaeEndeffectorSubsystem extends SubsystemBase {
     powerSpike = false;
 
   }
-
+  /**
+   * Runs the AlgaeEndEffector at a speed from -1 to 1
+   * @param speed 
+   */
   public void runAlgaeEndDefector(double speed){
     algaeEndeffectorMotor1.set(speed);
   }
@@ -90,6 +94,9 @@ public class AlgaeEndeffectorSubsystem extends SubsystemBase {
   public SparkMax getMotor(){
     return algaeEndeffectorMotor1;
   }
+  /**
+   * Updates hasAlgae to true or false based on if algaeEndeffectorMotor1 has a high output current for a period of time
+   */
   public void powerCheck(){
 
     SmartDashboard.putNumber("AlgaeMotorCurrent",algaeEndeffectorMotor1.getOutputCurrent());

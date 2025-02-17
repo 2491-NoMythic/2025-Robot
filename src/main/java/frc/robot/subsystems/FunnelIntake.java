@@ -44,6 +44,8 @@ public class FunnelIntake extends SubsystemBase {
     slantMotorConfig = new SparkMaxConfig();
     funnelStraightMotor = new SparkMax(FUNNEL_STRAIGHT_MOTOR_ID,MotorType.kBrushless);
     straightMotorConfig = new SparkMaxConfig();
+
+    //applying PID settings based on if we are using the CompBot or the PracticeBot
     if(Preferences.getBoolean("CompBot", true)){
       slantMotorConfig.apply(new ClosedLoopConfig().pidf(
         FUNNEL_SLANT_MOTOR_KP,
@@ -97,11 +99,18 @@ public class FunnelIntake extends SubsystemBase {
     logMotors();
     }
   }
+  /**
+   * Runs the different FunnelIntake motors at proportinal speeds, with funnelSlantMotor running at 2/3 of speed of funnelStraightMotor
+   * @param RPM the rpm setpoint for the wheels the motors control
+   */
   public void runFunnel(double RPM){
     funnelSlantMotor.getClosedLoopController().setReference(RPM*(2.0/3), ControlType.kVelocity);
     funnelStraightMotor.getClosedLoopController().setReference(RPM, ControlType.kVelocity);
     System.out.println("run");
   }
+  /**
+   * Runs the FunnelIntake at a speed that changes over time, based off a sine wave
+   */
    public void runFunnelSine( ){
     timer.start();
     funnelStraightMotor.getClosedLoopController().setReference(Math.abs(Math.sin(timer.get()) * FUNNEL_INTAKE_SPEED) + 1600.0, ControlType.kVelocity); 
