@@ -444,7 +444,7 @@ public final class Constants {
     public static final int ELEVATOR_MOTOR_1_ID = 13;
     public static final int ELEVATOR_MOTOR_2_ID = 14;
     public static final double HUMAN_PLAYER_STATION_MILLIMETERS = 2491;
-    public static final double BOTTOM_MILLIMETERS = 2491;
+    public static final double HEIGHT_AT_LIMIT_SWITCH = 2491;
     public static final double PROCESSOR_HEIGHT_MILLIMETERS = 2491;
     public static final double REEF_LEVEL_1_MILLIMETERS = 2491;
     public static final double REEF_LEVEL_2_MILLIMETERS = 2491;
@@ -454,6 +454,10 @@ public final class Constants {
     public static final double ELEVATOR_MILLIMETERS_TO_ROTATIONS = 2491;
     public static final double ELEVATOR_SENSOR_MILLIMETERS_OFF_GROUND = 2491;
     public static final double ELEVATOR_THRESHOLD = 5;
+
+    public static final double MOTION_MAGIC_ELEVATOR_VELOCITY = 0;
+    public static final double MOTION_MAGIC_ELEVATOR_ACCLERATION = 0;
+    public static final double MOTION_MAGIC_ELEVATOR_JERK = 0;
   }
 
   public final class ClimberConstants{
@@ -473,7 +477,7 @@ public final class Constants {
       .withKD(0)
       .withKV(0))
     .withCurrentLimits(new CurrentLimitsConfigs()
-      .withSupplyCurrentLimit(100)
+      .withSupplyCurrentLimit(30)
       .withSupplyCurrentLimitEnable(true));
     public static final TalonFXConfiguration ClimberMotorConfigPrac = new TalonFXConfiguration()
     .withSlot0(new Slot0Configs()
@@ -482,7 +486,7 @@ public final class Constants {
       .withKD(0)
       .withKV(0))
     .withCurrentLimits(new CurrentLimitsConfigs()
-      .withSupplyCurrentLimit(100)
+      .withSupplyCurrentLimit(30)
       .withSupplyCurrentLimitEnable(true))
     .withFeedback(new FeedbackConfigs()
       .withFeedbackRemoteSensorID(CLIMBER_CANCODER_ID)
