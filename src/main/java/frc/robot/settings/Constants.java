@@ -440,8 +440,8 @@ public final class Constants {
   }
   
   public final class ElevatorConstants{
-    public static final int ELEVATOR_MOTOR_1_ID = 13;
-    public static final int ELEVATOR_MOTOR_2_ID = 14;
+    public static final int ELEVATOR_MOTOR_1_ID = 9;
+    public static final int ELEVATOR_MOTOR_2_ID = 10;
     public static final double HUMAN_PLAYER_STATION_MILLIMETERS = 2491;
     public static final double HEIGHT_AT_LIMIT_SWITCH = 2491;
     public static final double PROCESSOR_HEIGHT_MILLIMETERS = 2491;
