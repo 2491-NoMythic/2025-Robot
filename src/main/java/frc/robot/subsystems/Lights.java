@@ -69,6 +69,11 @@ public class Lights extends SubsystemBase {
     }
   }
 
+  public void setAllLights(int R, int G, int B) {
+    setLights(LightConstants.TOTAL_LIGHTS_RIO_STRIP_START, LightConstants.TOTAL_LIGHTS_RIO_STRIP_END, R, G, B);
+    setCandleLights(LightConstants.TOTAL_LIGHTS_CANDLE_STRIP_START, LightConstants.TOTAL_LIGHTS_CANDLE_STRIP_END, R, G, B);
+  }
+
   /** turns the lights off */
   public void lightsOut() {
     setLights(0, LEDBuffer.getLength(), 0, 0, 0);

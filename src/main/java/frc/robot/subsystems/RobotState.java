@@ -17,6 +17,7 @@ public class RobotState {
   public boolean middleRightSensorTriggered;
   public boolean farRightSensorTriggered;
   public boolean hasAlgae;
+  public boolean climbed;
   public ElevatorEnums deliveringCoralHeight;
   public ReefOffsetEnums reefOffset;
   public boolean funnelSensorTrig;

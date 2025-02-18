@@ -67,5 +67,8 @@ public class ClimberSubsystem extends SubsystemBase {
     if(Preferences.getBoolean("Motor Logging", false)){
       logMotors();
     }
+    if(Math.abs(climberAngleSensor.getAbsolutePosition().getValueAsDouble() - CLIMBER_CLIMBED_ANGLE) < 2) {
+      RobotState.getInstance().climbed = true;
+    }
   }
 }

@@ -56,6 +56,7 @@ import frc.robot.commands.AlgaeIntakeCommand;
 import frc.robot.commands.Drive;
 import frc.robot.commands.IndicatorLights;
 import frc.robot.commands.ElevatorCommand;
+import frc.robot.commands.FunClimbedLights;
 import frc.robot.commands.FunnelRotatorCommand;
 import frc.robot.commands.LineUp;
 import frc.robot.commands.LineUpBarge;
@@ -609,7 +610,10 @@ public class RobotContainer {
 
     if(elevatorExists && algaeEndeffectorExists){
       new Trigger(AlgaeDepositSup).whileTrue(new DepositAlgae(algaeEndDefector,elevator, ALGAE_SHOOT_SPEED));
+    }
 
+    if(lightsExist) {
+      new Trigger(()->RobotState.getInstance().climbed).whileTrue(new FunClimbedLights(lights));
     }
 
     if(elevatorExists){
