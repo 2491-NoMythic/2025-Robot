@@ -231,11 +231,11 @@ public class DistanceSensors  extends SubsystemBase{
     RobotState.getInstance().middleRightSensorTriggered =
       middleRight.getRange()<RANGE_TO_SEE_REEF_FLAT_SENSORS
       && middleRight.getRange()>0
-      && loopsFRValid>loopsNeededForValid;
+      && loopsMRValid>loopsNeededForValid;
     RobotState.getInstance().farRightSensorTriggered =
       farRight.getRange()<RANGE_TO_SEE_REEF_FLAT_SENSORS
       && farRight.getRange()>0
-      && loopsMRValid>loopsNeededForValid;
+      && loopsFRValid>loopsNeededForValid;
     RobotState.getInstance().reefOffset = calcOffset(
       RobotState.getInstance().farLeftSensorTriggered, 
       RobotState.getInstance().middleLeftSensorTriggered,

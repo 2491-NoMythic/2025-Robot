@@ -38,7 +38,6 @@ public class Robot extends LoggedRobot {
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our
     // autonomous chooser on the dashboard.
-    edu.wpi.first.wpilibj.Preferences.setBoolean("FunnelIntake", true);
     Logger.recordMetadata("ProjectName", "MyProject"); // Set a metadata value
     
     if (isReal()) {

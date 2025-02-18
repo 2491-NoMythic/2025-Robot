@@ -553,32 +553,34 @@ public final class Constants {
    }
 public final class LightConstants{
   public static final int CANDLE_ID = 0;
+  private static final int REEF_LEVEL_INDICATORS_LENGTH = 7;
+  private static final int DELIVERY_SIDE_INDICATORS_LENGTH = 4;
 
-  public static final int LEFT_ELEVATOR_LIGHTS_ALGAE_START = 10;
+  public static final int LEFT_ELEVATOR_LIGHTS_ALGAE_START = 0;
   public static final int LEFT_ELEVATOR_LIGHTS_ALGAE_END = 15;
-  public static final int LEFT_ELEVATOR_LIGHTS_1_START = 2491;
-  public static final int LEFT_ELEVATOR_LIGHTS_1_END = 2491;
-  public static final int LEFT_ELEVATOR_LIGHTS_2_END = 2491;
-  public static final int LEFT_ELEVATOR_LIGHTS_3_END = 2491;
-  public static final int LEFT_ELEVATOR_LIGHTS_4_END = 2491;
-  public static final int LEFT_ELEVATOR_LIGHTS_5_END = 2491;
+  public static final int LEFT_ELEVATOR_LIGHTS_1_START = LEFT_ELEVATOR_LIGHTS_ALGAE_END + 1;
+  public static final int LEFT_ELEVATOR_LIGHTS_1_END = LEFT_ELEVATOR_LIGHTS_1_START + REEF_LEVEL_INDICATORS_LENGTH;
+  public static final int LEFT_ELEVATOR_LIGHTS_2_END = LEFT_ELEVATOR_LIGHTS_1_END + REEF_LEVEL_INDICATORS_LENGTH;
+  public static final int LEFT_ELEVATOR_LIGHTS_3_END = LEFT_ELEVATOR_LIGHTS_2_END + REEF_LEVEL_INDICATORS_LENGTH;
+  public static final int LEFT_ELEVATOR_LIGHTS_4_END = LEFT_ELEVATOR_LIGHTS_3_END + REEF_LEVEL_INDICATORS_LENGTH;
+  public static final int LEFT_ELEVATOR_LIGHTS_5_END = LEFT_ELEVATOR_LIGHTS_4_END + DELIVERY_SIDE_INDICATORS_LENGTH;
+
+  public static final int DRIVETRAIN_LIGHTS_START = LEFT_ELEVATOR_LIGHTS_5_END + 1;
+  public static final int DRIVETRAIN_LIGHTS_END = 2491;
+
+  public static final int RIGHT_ELEVATOR_LIGHTS_5_START = DRIVETRAIN_LIGHTS_END + 1;
+  public static final int RIGHT_ELEVATOR_LIGHTS_5_END = RIGHT_ELEVATOR_LIGHTS_5_START + DELIVERY_SIDE_INDICATORS_LENGTH;
+  public static final int RIGHT_ELEVATOR_LIGHTS_4_END = RIGHT_ELEVATOR_LIGHTS_5_END + REEF_LEVEL_INDICATORS_LENGTH;
+  public static final int RIGHT_ELEVATOR_LIGHTS_3_END = RIGHT_ELEVATOR_LIGHTS_4_END + REEF_LEVEL_INDICATORS_LENGTH;
+  public static final int RIGHT_ELEVATOR_LIGHTS_2_END = RIGHT_ELEVATOR_LIGHTS_3_END + REEF_LEVEL_INDICATORS_LENGTH;
+  public static final int RIGHT_ELEVATOR_LIGHTS_1_END = RIGHT_ELEVATOR_LIGHTS_2_END + REEF_LEVEL_INDICATORS_LENGTH;
+  public static final int RIGHT_ELEVATOR_LIGHTS_ALGAE_START = RIGHT_ELEVATOR_LIGHTS_1_END + REEF_LEVEL_INDICATORS_LENGTH;
+  public static final int RIGHT_ELEVATOR_LIGHTS_ALGAE_END = RIGHT_ELEVATOR_LIGHTS_ALGAE_START + 16;
 
 
-  public static final int RIGHT_ELEVATOR_LIGHTS_ALGAE_START = 20;
-  public static final int RIGHT_ELEVATOR_LIGHTS_ALGAE_END = 30;
-  public static final int RIGHT_ELEVATOR_LIGHTS_1_START = 2491;
-  public static final int RIGHT_ELEVATOR_LIGHTS_1_END = 2491;
-  public static final int RIGHT_ELEVATOR_LIGHTS_2_END = 2491;
-  public static final int RIGHT_ELEVATOR_LIGHTS_3_END = 2491;
-  public static final int RIGHT_ELEVATOR_LIGHTS_4_END = 2491;
-  public static final int RIGHT_ELEVATOR_LIGHTS_5_END = 2491;
-
-
-  public static final int FUNNEL_LIGHTS_START = 2491;
+  public static final int FUNNEL_LIGHTS_START = 0;
   public static final int FUNNEL_LIGHTS_END = 2491;
 
-  public static final int DRIVETRAIN_LIGHTS_START = 2491;
-  public static final int DRIVETRAIN_LIGHTS_END = 2491;
 }
 
   }
