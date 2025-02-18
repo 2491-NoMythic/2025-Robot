@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.HardwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -14,6 +15,11 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.ForwardLimitSourceValue;
+import com.ctre.phoenix6.signals.ForwardLimitTypeValue;
+import com.ctre.phoenix6.signals.ForwardLimitValue;
+import com.ctre.phoenix6.signals.ReverseLimitTypeValue;
+import com.revrobotics.spark.config.LimitSwitchConfig;
+import com.revrobotics.spark.config.LimitSwitchConfig.Type;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.helpers.MotorLogger;
@@ -22,6 +28,7 @@ import frc.robot.subsystems.RobotState;
 
 import static frc.robot.settings.Constants.ElevatorConstants.*;
 import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ElevatorSubsystem extends SubsystemBase {
   private TalonFX elevatorMotor1;
@@ -42,7 +49,15 @@ public class ElevatorSubsystem extends SubsystemBase {
       .withMotionMagic(new MotionMagicConfigs()
         .withMotionMagicAcceleration(MOTION_MAGIC_ELEVATOR_ACCLERATION)
         .withMotionMagicCruiseVelocity(MOTION_MAGIC_ELEVATOR_VELOCITY)
-        .withMotionMagicJerk(MOTION_MAGIC_ELEVATOR_JERK));
+        .withMotionMagicJerk(MOTION_MAGIC_ELEVATOR_JERK))
+      .withHardwareLimitSwitch(new HardwareLimitSwitchConfigs()
+        .withReverseLimitAutosetPositionEnable(true)
+        .withReverseLimitAutosetPositionValue(HEIGHT_AT_LIMIT_SWITCH*ELEVATOR_MILLIMETERS_TO_ROTATIONS)
+        .withReverseLimitEnable(true)
+        .withReverseLimitType(ReverseLimitTypeValue.NormallyClosed)
+        .withForwardLimitAutosetPositionEnable(false)
+        .withForwardLimitEnable(true)
+        .withForwardLimitType(ForwardLimitTypeValue.NormallyClosed));
     if (Preferences.getBoolean("CompBot", true)){  
       eleMotorConfig.Slot0 = new Slot0Configs()
         .withKP(0)
@@ -50,12 +65,11 @@ public class ElevatorSubsystem extends SubsystemBase {
         .withKA(0)
         .withKV(0);
     } else {
-      eleMotorConfig = new TalonFXConfiguration()
-      .withSlot0(new Slot0Configs()
+      eleMotorConfig.Slot0 = new Slot0Configs()
         .withKP(0)
         .withKG(0)
         .withKA(0)
-        .withKV(0));
+        .withKV(0);
     }
     elevatorMotor1.getConfigurator().apply(eleMotorConfig);
     elevatorMotor2.setControl(new Follower(ELEVATOR_MOTOR_1_ID, false));
@@ -74,10 +88,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     if(Preferences.getBoolean("Motor Logging", false)){
     logMotors();
     }
-    if(elevatorMotor1.getForwardLimit().getValueAsDouble() > 0.1){
-      setZero(HEIGHT_AT_LIMIT_SWITCH);
-      RobotState.getInstance().elevatorZeroSet = true;
-    }
+    SmartDashboard.putBoolean("ELEVATOR/limit switch value", elevatorMotor1.getForwardLimit().getValue() == ForwardLimitValue.Open);
   }
   /**
    * tells the elevator motor what rotations it will have to reach for the elevator to be touching the ground (this will never happen, just theoritically) <p>
@@ -147,12 +158,13 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
   }
   /**
-   * calculate the target rotations for the motor based on a desired height off the ground
+   * calculate the target rotations for the motor based on a desired height off the ground. If the input height is lower than the height of the limit switch, 
+   * the output will be the height of the limit switch
    * @param desiredHeight height off the ground, in millimeters
    * @return the taret position for the motor, in rotations
    */
   private double calculateRotations(double desiredHeight) {
-    return (desiredHeight*ELEVATOR_MILLIMETERS_TO_ROTATIONS) + zeroPoint;
+    return (Math.max(desiredHeight, HEIGHT_AT_LIMIT_SWITCH)*ELEVATOR_MILLIMETERS_TO_ROTATIONS) + zeroPoint;
   }
   /**
    * asks if the error on the closed loop is less than our ELEVATOR_THRESHOLD constant

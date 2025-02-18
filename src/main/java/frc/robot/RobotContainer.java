@@ -589,7 +589,7 @@ public class RobotContainer {
         new LineUp(driveTrain, ()->RobotState.getInstance().deliveringLeft, REEF_LINEUP_SPEED)))
           .onTrue(new InstantCommand(()->RobotState.getInstance().reefLineupRunning = true)).onFalse(new InstantCommand(()->RobotState.getInstance().reefLineupRunning = false));
     }
-    if(DrivetrainExists) {
+    if(DrivetrainExists&&coralEndeffectorExists&&algaeEndeffectorExists&&elevatorExists) {
       new Trigger(PlaceCoralNoPathSup).whileTrue( new SequentialCommandGroup(
         new InstantCommand(()->RobotState.getInstance().reefLineupRunning = true),
         new PlaceCoralNoPath(
