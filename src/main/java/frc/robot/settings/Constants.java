@@ -406,8 +406,8 @@ public final class Constants {
   }
 
   public final class AlgaeEndeffectorConstants{
-    public static final int ALGAE_ENDEFFECTOR_MOTOR_1_ID = 40;
-    public static final int ALGAE_ENDEFFECTOR_MOTOR_2_ID = 41;
+    public static final int ALGAE_ENDEFFECTOR_MOTOR_1_ID = 23;
+    public static final int ALGAE_ENDEFFECTOR_MOTOR_2_ID = 26;
     
     public static final int ALGAE_ENDEFFECTOR_CURRENT_LIMIT = 25;
     public static final double ALGAE_INTAKE_SPEED = 1;
@@ -495,7 +495,7 @@ public final class Constants {
   public final class FunnelConstants{
     public static final int FUNNEL_SLANT_MOTOR_ID = 21;
     public static final int FUNNEL_STRAIGHT_MOTOR_ID = 22;
-    public static final int FUNNEL_ROTATOR_MOTOR_ID = 2491;
+    public static final int FUNNEL_ROTATOR_MOTOR_ID = 25;
 
     public static final double FUNNEL_SLANT_MOTOR_KP = 0.000031;
     public static final double FUNNEL_SLANT_MOTOR_KI = 0;
