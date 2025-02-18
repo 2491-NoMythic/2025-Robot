@@ -12,7 +12,6 @@ import static frc.robot.settings.Constants.CoralEndeffectorConstants.CORAL_ENDEF
 import static frc.robot.settings.Constants.DriveConstants.*;
 import static frc.robot.settings.Constants.ElevatorConstants.HUMAN_PLAYER_STATION_MILLIMETERS;
 import static frc.robot.settings.Constants.FunnelConstants.FUNNEL_INTAKE_SPEED;
-import static frc.robot.settings.Constants.FunnelConstants.FUNNEL_ROTATOR_DOWN_POSITION;
 import static frc.robot.settings.Constants.PS4Driver.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -635,8 +634,8 @@ public class RobotContainer {
         });
       }
       if (funnelRotatorExists) {
-          new Trigger(funnelRotatorSupplier).and(ClimbModeAuthorizer).whileTrue(new FunnelRotatorCommand(funnelRotator, FUNNEL_ROTATOR_DOWN_POSITION));
-          new Trigger(funnelRotatorSupplier).and(inEndgameSupplier).whileTrue(new FunnelRotatorCommand(funnelRotator, FUNNEL_ROTATOR_DOWN_POSITION));
+          new Trigger(funnelRotatorSupplier).and(ClimbModeAuthorizer).whileTrue(new FunnelRotatorCommand(funnelRotator));
+          new Trigger(funnelRotatorSupplier).and(inEndgameSupplier).whileTrue(new FunnelRotatorCommand(funnelRotator));
       }
   }
 
