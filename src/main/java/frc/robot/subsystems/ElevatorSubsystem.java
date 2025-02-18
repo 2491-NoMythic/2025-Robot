@@ -8,7 +8,9 @@ import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.DynamicMotionMagicVoltage;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.ForwardLimitSourceValue;
@@ -33,36 +35,30 @@ public class ElevatorSubsystem extends SubsystemBase {
   public ElevatorSubsystem() {
     elevatorMotor1 = new TalonFX(ELEVATOR_MOTOR_1_ID);
     elevatorMotor2 = new TalonFX(ELEVATOR_MOTOR_2_ID);
+    eleMotorConfig = new TalonFXConfiguration()
+      .withCurrentLimits(new CurrentLimitsConfigs()
+        .withSupplyCurrentLimit(30)
+        .withSupplyCurrentLimitEnable(true))
+      .withMotionMagic(new MotionMagicConfigs()
+        .withMotionMagicAcceleration(MOTION_MAGIC_ELEVATOR_ACCLERATION)
+        .withMotionMagicCruiseVelocity(MOTION_MAGIC_ELEVATOR_VELOCITY)
+        .withMotionMagicJerk(MOTION_MAGIC_ELEVATOR_JERK));
     if (Preferences.getBoolean("CompBot", true)){  
-      eleMotorConfig = new TalonFXConfiguration()
-      .withSlot0(new Slot0Configs()
-        .withKP(1)
+      eleMotorConfig.Slot0 = new Slot0Configs()
+        .withKP(0)
         .withKG(0)
         .withKA(0)
-        .withKV(0))
-      .withCurrentLimits(new CurrentLimitsConfigs()
-        .withSupplyCurrentLimit(100)
-        .withSupplyCurrentLimitEnable(true));
-      //We are not yet sure on whether or not we are using MotionMagic.
-        //.withMotionMagic(new MotionMagicConfigs()
-        //.withMotionMagicAcceleration(2491)
-        //.withMotionMagicCruiseVelocity(2491)
-        //.withMotionMagicJerk(2491));
+        .withKV(0);
     } else {
       eleMotorConfig = new TalonFXConfiguration()
       .withSlot0(new Slot0Configs()
         .withKP(0)
         .withKG(0)
         .withKA(0)
-        .withKV(0))
-      .withCurrentLimits(new CurrentLimitsConfigs()
-        .withSupplyCurrentLimit(100)
-        .withSupplyCurrentLimitEnable(true));
-      //We are not yet sure on whether or not we are using MotionMagic.;
+        .withKV(0));
     }
     elevatorMotor1.getConfigurator().apply(eleMotorConfig);
-    elevatorMotor2.getConfigurator().apply(eleMotorConfig);
-    elevatorMotor2.setControl(new Follower(ELEVATOR_MOTOR_1_ID, true));
+    elevatorMotor2.setControl(new Follower(ELEVATOR_MOTOR_1_ID, false));
 
     motorLogger1 = new MotorLogger("/elevator/motor1");
     motorLogger2 = new MotorLogger("/elevator/motor2");
@@ -79,30 +75,36 @@ public class ElevatorSubsystem extends SubsystemBase {
     logMotors();
     }
     if(elevatorMotor1.getForwardLimit().getValueAsDouble() > 0.1){
-      setZero(BOTTOM_MILLIMETERS);
+      setZero(HEIGHT_AT_LIMIT_SWITCH);
+      RobotState.getInstance().elevatorZeroSet = true;
     }
   }
   /**
-   * tells the elevator motor what rotations it will have to reach for the elevator to be touching the ground (this will never happen, just theoritically)
-   * @param theDistance the distance that the distance sensor at the bottom of the elevator reads
+   * tells the elevator motor what rotations it will have to reach for the elevator to be touching the ground (this will never happen, just theoritically) <p>
+   * this is necessary so that the elevator has a reference point to calculate the position of any height off the ground. Run this before ever setting the elevator to a position
+   * @param theDistance the distance that the elevator is from the ground, in millimeters
    */
-  public void setZero(double theDistance){//Replace with sensor return
-    double rof0 = (theDistance+ELEVATOR_SENSOR_MILLIMETERS_OFF_GROUND) * ELEVATOR_MILLIMETERS_TO_ROTATIONS;
-    zeroPoint = elevatorMotor1.getPosition().getValueAsDouble() - rof0;   
+  public void setZero(double theDistance){
+    double rotationsFromGround = theDistance * ELEVATOR_MILLIMETERS_TO_ROTATIONS;
+    zeroPoint = elevatorMotor1.getPosition().getValueAsDouble() - rotationsFromGround;   
     }
   /**
    * Makes the elevator move to a position relative to the ground. It does this by changing the setpoint for the motor's onboard PID controller
-   * @param height double that controls how many millimeters from the distance sensor
+   * @param height the desired height, in millimeters off the ground
    */
   public void setElevatorPosition(double height){
-    double position = height * ELEVATOR_MILLIMETERS_TO_ROTATIONS;
-    double uPos = position + zeroPoint;
-    PositionVoltage voltReq = new PositionVoltage(uPos);
-    elevatorMotor1.setControl(voltReq);
+    double targetRotations = calculateRotations(height);
+    MotionMagicVoltage request = new MotionMagicVoltage(targetRotations);
+    elevatorMotor1.setControl(request);
+  }
+  public void setElevatorPositionDynamicConfigs(double height, double acceleration, double velocity, double jerk) {
+    double targetRotations = calculateRotations(height);
+    DynamicMotionMagicVoltage request = new DynamicMotionMagicVoltage(targetRotations, velocity, acceleration, jerk);
+    elevatorMotor1.setControl(request);
   }
   /**
-   * takes a desired height and moves the elevator to that position
-   * @param height the desired height
+   * sets the height of the elvator using constants associated with different values of ElevatorEnums
+   * @param height
    */
   public void setElevatorPosition(ElevatorEnums height){
     switch(height){
@@ -134,7 +136,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         }
         break;
       case Bottom:
-        setElevatorPosition(BOTTOM_MILLIMETERS);
+        setElevatorPosition(HEIGHT_AT_LIMIT_SWITCH);
         break;
       case AlgaeInProcessor:
         setElevatorPosition(PROCESSOR_HEIGHT_MILLIMETERS);
@@ -145,16 +147,32 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
   }
   /**
-   * @return true when the elevator is within the deadband of its desired height
+   * calculate the target rotations for the motor based on a desired height off the ground
+   * @param desiredHeight height off the ground, in millimeters
+   * @return the taret position for the motor, in rotations
+   */
+  private double calculateRotations(double desiredHeight) {
+    return (desiredHeight*ELEVATOR_MILLIMETERS_TO_ROTATIONS) + zeroPoint;
+  }
+  /**
+   * asks if the error on the closed loop is less than our ELEVATOR_THRESHOLD constant
+   * @return true if closed loop error is less than our threshold, false otherwise
    */
   public boolean isElevatorAtPose() {
     return elevatorMotor1.getClosedLoopError().getValueAsDouble() < ELEVATOR_THRESHOLD;
   }
+  /**
+   * the current reference for the onboard ClosedLoopController
+   * @return the reference, in rotations
+   */
   public double getPIDTarget() {
     return elevatorMotor1.getClosedLoopReference().getValueAsDouble();
   }
+  /**
+   * stops the elevator by setting it's target to wherever it is right now
+   */
   public void stopElevator(){
-    elevatorMotor1.set(0);
+    elevatorMotor1.setControl(new PositionVoltage(elevatorMotor1.getPosition().getValueAsDouble()));
   }
 
 }

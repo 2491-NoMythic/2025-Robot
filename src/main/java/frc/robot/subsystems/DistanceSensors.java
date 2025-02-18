@@ -19,7 +19,6 @@ public class DistanceSensors  extends SubsystemBase{
   private TimeOfFlight middleLeft;
   private TimeOfFlight middleRight;
   private TimeOfFlight farRight;
-  private TimeOfFlight elevatorSensor;
 
   private int loopsFLValid;
   private int loopsMLValid;
@@ -38,7 +37,6 @@ public class DistanceSensors  extends SubsystemBase{
   public DistanceSensors(){
     loopsSensed = 0;
     //TODO these must be configured from the roborio
-    elevatorSensor = new TimeOfFlight(ELEVATOR_SENSOR_ID);
     farLeft = new TimeOfFlight(FAR_LEFT_DIST_SENSOR_ID);
     middleLeft = new TimeOfFlight(MIDDLE_LEFT_DIST_SENSOR_ID);
     middleRight = new TimeOfFlight(MIDDLE_RIGHT_DIST_SENSOR_ID);
@@ -62,8 +60,6 @@ public class DistanceSensors  extends SubsystemBase{
  */
   public double getDistance(SensorNameEnums sensorName) {
     switch (sensorName) {
-      case Elevator:
-        return elevatorSensor.getRange();
       case FarLeft:
         return farLeft.getRange();
       case MiddleLeft:
@@ -214,7 +210,6 @@ public class DistanceSensors  extends SubsystemBase{
 
   private void updateRobotState() {
   //post ranges for each sensor to SmartDashboard
-    SmartDashboard.putNumber("SENSOR/RANGE/elevator", elevatorSensor.getRange());
     SmartDashboard.putNumber("SENSOR/RANGE/far left", farLeft.getRange());
     SmartDashboard.putNumber("SENSOR/RANGE/middle left", middleLeft.getRange());
     SmartDashboard.putNumber("SENSOR/RANGE/middle right", middleRight.getRange());

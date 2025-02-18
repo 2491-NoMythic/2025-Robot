@@ -10,7 +10,11 @@ import static frc.robot.settings.Constants.ClimberConstants.CLIMBER_CLIMBED_ANGL
 import static frc.robot.settings.Constants.ClimberConstants.CLIMBER_NOT_CLIMBED_ANGLE;
 import static frc.robot.settings.Constants.CoralEndeffectorConstants.CORAL_ENDEFFECTOR_SPEED;
 import static frc.robot.settings.Constants.DriveConstants.*;
+import static frc.robot.settings.Constants.ElevatorConstants.HEIGHT_AT_LIMIT_SWITCH;
 import static frc.robot.settings.Constants.ElevatorConstants.HUMAN_PLAYER_STATION_MILLIMETERS;
+import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_ACCLERATION;
+import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_JERK;
+import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_VELOCITY;
 import static frc.robot.settings.Constants.FunnelConstants.FUNNEL_INTAKE_SPEED;
 import static frc.robot.settings.Constants.PS4Driver.*;
 
@@ -63,6 +67,7 @@ import frc.robot.commands.PlaceCoralNoPath;
 import frc.robot.commands.ResetClimber;
 import frc.robot.commands.ShootInBarge;
 import frc.robot.commands.WaitCommand;
+import frc.robot.commands.WaitUntil;
 import frc.robot.subsystems.DistanceSensors;
 import frc.robot.commands.NamedCommands.CoralIntake;
 import frc.robot.commands.NamedCommands.DeliverCoral;
@@ -678,8 +683,16 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
+  //if the elevator exists, return a zeroElevator command, then the auto. (if the elevator is set up right, the zeroElevator command will be instant)
+    if(elevatorExists) {
+      return new SequentialCommandGroup(
+        new SequentialCommandGroup(
+          new InstantCommand(()->elevator.setElevatorPositionDynamicConfigs(HEIGHT_AT_LIMIT_SWITCH-10, MOTION_MAGIC_ELEVATOR_ACCLERATION/5, MOTION_MAGIC_ELEVATOR_VELOCITY/5, MOTION_MAGIC_ELEVATOR_JERK/5), elevator),
+          new WaitUntil(()->RobotState.getInstance().elevatorZeroSet)),
+        autoChooser.getSelected());
+    } else {
     return autoChooser.getSelected();
+    }
   }
 
   public void autonomousInit() {
@@ -872,9 +885,6 @@ public class RobotContainer {
     
   }
   public void robotInit(){
-    if (elevatorExists){
-      elevator.setZero(distanceSensors.getDistance(SensorNameEnums.Elevator));
-    }
   }
   public void robotPeriodic() {
     currentAlliance = DriverStation.getAlliance().get();
