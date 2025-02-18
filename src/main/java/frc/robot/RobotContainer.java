@@ -688,7 +688,7 @@ public class RobotContainer {
     if(elevatorExists) {
       return new SequentialCommandGroup(
         new SequentialCommandGroup(
-          new InstantCommand(()->elevator.setElevatorPositionDynamicConfigs(HEIGHT_AT_LIMIT_SWITCH-1, MOTION_MAGIC_ELEVATOR_ACCLERATION/5, MOTION_MAGIC_ELEVATOR_VELOCITY/5, MOTION_MAGIC_ELEVATOR_JERK/5), elevator),
+          new InstantCommand(()->elevator.setElevatorPositionDynamicConfigs(HEIGHT_AT_LIMIT_SWITCH-10, MOTION_MAGIC_ELEVATOR_ACCLERATION/5, MOTION_MAGIC_ELEVATOR_VELOCITY/5, MOTION_MAGIC_ELEVATOR_JERK/5), elevator),
           new WaitUntil(()->RobotState.getInstance().elevatorZeroSet)),
         autoChooser.getSelected());
     } else {
