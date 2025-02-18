@@ -9,9 +9,11 @@ import frc.robot.subsystems.ClimberSubsystem;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ClimberCommand extends Command {
  ClimberSubsystem climber;
+ double position;
   /** Creates a new ClimberCommand. */
-  public ClimberCommand(ClimberSubsystem climber) {
+  public ClimberCommand(ClimberSubsystem climber, double position) {
     this.climber = climber;
+    this.position = position;
     addRequirements(climber);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -23,13 +25,13 @@ public class ClimberCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    climber.setKrakenPose(100);
+    climber.setClimberAngle(position);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    climber.stopClimber();
+    climber.setClimberAngle(climber.getClimberAngle());
   }
 
   // Returns true when the command should end.

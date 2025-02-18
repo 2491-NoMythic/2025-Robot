@@ -6,6 +6,7 @@ package frc.robot.settings;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -451,11 +452,19 @@ public final class Constants {
     public static final double REEF_LEVEL_4_MILLIMETERS = 2491;
     public static final double BARGE_SHOOT_MILLIMETERS = 2491;
     public static final double ELEVATOR_MILLIMETERS_TO_ROTATIONS = 2491;
-    public static final double ELEVATOR_THRESHOLD = 2491;
+    public static final double ELEVATOR_SENSOR_MILLIMETERS_OFF_GROUND = 2491;
+    public static final double ELEVATOR_THRESHOLD = 5;
   }
 
   public final class ClimberConstants{
-    public static final int CLIMBER_MOTOR_1_ID = 2491;
+    public static final int CLIMBER_MOTOR_ID = 2491;
+    public static final int CLIMBER_CANCODER_ID = 2491;
+
+    public static final double COMP_ENCODER_OFFSET = 0;
+    public static final double PRAC_ENCODER_OFFSET = 0;
+
+    public static final double CLIMBER_CLIMBED_ANGLE = 0;
+    public static final double CLIMBER_NOT_CLIMBED_ANGLE = 90;
 
     public static final TalonFXConfiguration ClimberMotorConfigComp = new TalonFXConfiguration()
     .withSlot0(new Slot0Configs()
@@ -474,7 +483,10 @@ public final class Constants {
       .withKV(0))
     .withCurrentLimits(new CurrentLimitsConfigs()
       .withSupplyCurrentLimit(100)
-      .withSupplyCurrentLimitEnable(true));
+      .withSupplyCurrentLimitEnable(true))
+    .withFeedback(new FeedbackConfigs()
+      .withFeedbackRemoteSensorID(CLIMBER_CANCODER_ID)
+      .withFeedbackSensorSource(FeedbackSensorSourceValue.RemoteCANcoder));
   }
 
   public final class FunnelConstants{
@@ -537,32 +549,34 @@ public final class Constants {
    }
 public final class LightConstants{
   public static final int CANDLE_ID = 0;
+  private static final int REEF_LEVEL_INDICATORS_LENGTH = 7;
+  private static final int DELIVERY_SIDE_INDICATORS_LENGTH = 4;
 
-  public static final int LEFT_ELEVATOR_LIGHTS_ALGAE_START = 10;
+  public static final int LEFT_ELEVATOR_LIGHTS_ALGAE_START = 0;
   public static final int LEFT_ELEVATOR_LIGHTS_ALGAE_END = 15;
-  public static final int LEFT_ELEVATOR_LIGHTS_1_START = 2491;
-  public static final int LEFT_ELEVATOR_LIGHTS_1_END = 2491;
-  public static final int LEFT_ELEVATOR_LIGHTS_2_END = 2491;
-  public static final int LEFT_ELEVATOR_LIGHTS_3_END = 2491;
-  public static final int LEFT_ELEVATOR_LIGHTS_4_END = 2491;
-  public static final int LEFT_ELEVATOR_LIGHTS_5_END = 2491;
+  public static final int LEFT_ELEVATOR_LIGHTS_1_START = LEFT_ELEVATOR_LIGHTS_ALGAE_END + 1;
+  public static final int LEFT_ELEVATOR_LIGHTS_1_END = LEFT_ELEVATOR_LIGHTS_1_START + REEF_LEVEL_INDICATORS_LENGTH;
+  public static final int LEFT_ELEVATOR_LIGHTS_2_END = LEFT_ELEVATOR_LIGHTS_1_END + REEF_LEVEL_INDICATORS_LENGTH;
+  public static final int LEFT_ELEVATOR_LIGHTS_3_END = LEFT_ELEVATOR_LIGHTS_2_END + REEF_LEVEL_INDICATORS_LENGTH;
+  public static final int LEFT_ELEVATOR_LIGHTS_4_END = LEFT_ELEVATOR_LIGHTS_3_END + REEF_LEVEL_INDICATORS_LENGTH;
+  public static final int LEFT_ELEVATOR_LIGHTS_5_END = LEFT_ELEVATOR_LIGHTS_4_END + DELIVERY_SIDE_INDICATORS_LENGTH;
+
+  public static final int DRIVETRAIN_LIGHTS_START = LEFT_ELEVATOR_LIGHTS_5_END + 1;
+  public static final int DRIVETRAIN_LIGHTS_END = 2491;
+
+  public static final int RIGHT_ELEVATOR_LIGHTS_5_START = DRIVETRAIN_LIGHTS_END + 1;
+  public static final int RIGHT_ELEVATOR_LIGHTS_5_END = RIGHT_ELEVATOR_LIGHTS_5_START + DELIVERY_SIDE_INDICATORS_LENGTH;
+  public static final int RIGHT_ELEVATOR_LIGHTS_4_END = RIGHT_ELEVATOR_LIGHTS_5_END + REEF_LEVEL_INDICATORS_LENGTH;
+  public static final int RIGHT_ELEVATOR_LIGHTS_3_END = RIGHT_ELEVATOR_LIGHTS_4_END + REEF_LEVEL_INDICATORS_LENGTH;
+  public static final int RIGHT_ELEVATOR_LIGHTS_2_END = RIGHT_ELEVATOR_LIGHTS_3_END + REEF_LEVEL_INDICATORS_LENGTH;
+  public static final int RIGHT_ELEVATOR_LIGHTS_1_END = RIGHT_ELEVATOR_LIGHTS_2_END + REEF_LEVEL_INDICATORS_LENGTH;
+  public static final int RIGHT_ELEVATOR_LIGHTS_ALGAE_START = RIGHT_ELEVATOR_LIGHTS_1_END + REEF_LEVEL_INDICATORS_LENGTH;
+  public static final int RIGHT_ELEVATOR_LIGHTS_ALGAE_END = RIGHT_ELEVATOR_LIGHTS_ALGAE_START + 16;
 
 
-  public static final int RIGHT_ELEVATOR_LIGHTS_ALGAE_START = 20;
-  public static final int RIGHT_ELEVATOR_LIGHTS_ALGAE_END = 30;
-  public static final int RIGHT_ELEVATOR_LIGHTS_1_START = 2491;
-  public static final int RIGHT_ELEVATOR_LIGHTS_1_END = 2491;
-  public static final int RIGHT_ELEVATOR_LIGHTS_2_END = 2491;
-  public static final int RIGHT_ELEVATOR_LIGHTS_3_END = 2491;
-  public static final int RIGHT_ELEVATOR_LIGHTS_4_END = 2491;
-  public static final int RIGHT_ELEVATOR_LIGHTS_5_END = 2491;
-
-
-  public static final int FUNNEL_LIGHTS_START = 2491;
+  public static final int FUNNEL_LIGHTS_START = 0;
   public static final int FUNNEL_LIGHTS_END = 2491;
 
-  public static final int DRIVETRAIN_LIGHTS_START = 2491;
-  public static final int DRIVETRAIN_LIGHTS_END = 2491;
 }
 
   }

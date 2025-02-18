@@ -4,10 +4,13 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -20,24 +23,36 @@ import static frc.robot.settings.Constants.ClimberConstants.*;
 public class ClimberSubsystem extends SubsystemBase {
   TalonFX climberMotor1;
   MotorLogger motorLogger1;
+  CANcoder climberAngleSensor;
   /** Creates a new CimberSubsystem. */
   public ClimberSubsystem() {
-    climberMotor1 = new TalonFX(CLIMBER_MOTOR_1_ID);
+    climberMotor1 = new TalonFX(CLIMBER_MOTOR_ID);
+    climberAngleSensor = new CANcoder(CLIMBER_CANCODER_ID);
+    //TODO spend some time figuring out how to use the absolute encoder with the motor.
+    
+    CANcoderConfiguration encoderConfig = new CANcoderConfiguration();
+    encoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
+    //configures sensor and motor based on whether we are on the practice bot or competition bot
     if(Preferences.getBoolean("CompBot", true)) {
       climberMotor1.getConfigurator().apply(ClimberMotorConfigComp);
+      encoderConfig.MagnetSensor.MagnetOffset = COMP_ENCODER_OFFSET;
     } else {
       climberMotor1.getConfigurator().apply(ClimberMotorConfigPrac);
+      encoderConfig.MagnetSensor.MagnetOffset = PRAC_ENCODER_OFFSET;
     }
-//TODO spend some time figuring out how to use the absolute encoder with the motor.
-    FeedbackConfigs krakenSensorConfigs = new FeedbackConfigs()
-      .withFeedbackRemoteSensorID(2491)
-      .withFeedbackSensorSource(FeedbackSensorSourceValue.RemoteCANcoder)
-      .withFeedbackRotorOffset(2491);
-    climberMotor1.getConfigurator().apply(krakenSensorConfigs);
+    climberAngleSensor.getConfigurator().apply(encoderConfig);
 
     motorLogger1 = new MotorLogger("/climber/motor1");
   }
-  public void setKrakenPose(double angle) {
+
+  public double getClimberAngle() {
+    return climberAngleSensor.getAbsolutePosition().getValueAsDouble();
+  }
+  /**
+   * takes a desired angle and moves climberMotor1 to it
+   * @param angle the desired angle
+   */
+  public void setClimberAngle(double angle) {
     climberMotor1.setControl(new PositionVoltage(angle));
   }
   public void stopClimber(){
