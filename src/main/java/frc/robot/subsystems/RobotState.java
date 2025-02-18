@@ -43,7 +43,9 @@ public class RobotState {
     }
     return instance;
   }
-
+  /**
+   * @return true when the coralEndEffector or funnelIntake detects a coral
+   */
   public boolean isCoralSeen() {
     return funnelSensorTrig||coralEndeffSensorTrig||coralLineupRunning;
   }

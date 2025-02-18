@@ -100,6 +100,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     PositionVoltage voltReq = new PositionVoltage(uPos);
     elevatorMotor1.setControl(voltReq);
   }
+  /**
+   * takes a desired height and moves the elevator to that position
+   * @param height the desired height
+   */
   public void setElevatorPosition(ElevatorEnums height){
     switch(height){
       case Reef1:
@@ -140,6 +144,9 @@ public class ElevatorSubsystem extends SubsystemBase {
         break;
     }
   }
+  /**
+   * @return true when the elevator is within the deadband of its desired height
+   */
   public boolean isElevatorAtPose() {
     return elevatorMotor1.getClosedLoopError().getValueAsDouble() < ELEVATOR_THRESHOLD;
   }

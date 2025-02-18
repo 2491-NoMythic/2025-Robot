@@ -178,7 +178,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
 	public Rotation2d getGyroscopeRotation() {
 		return pigeon.getRotation2d();
 	}
-
+  /**
+   * returns the pitch of the pigeon as a double
+   * @return the pitch, returned as a double
+   */
   public double getPigeonPitch(){
     double pitch = pigeon.getPitch().getValueAsDouble();
     return pitch;

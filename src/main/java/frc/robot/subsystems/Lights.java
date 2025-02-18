@@ -80,7 +80,13 @@ public class Lights extends SubsystemBase {
     candle.setLEDs(0, 0, 0);
   }
 
-  // TODO: adjust start/end values
+  /**
+   * sets a specific section of lights to a certain color. The sections to choose from are the ones in the LightsEnum. The sections lenghts are defined in Constnats
+   * @param lightEnums the enum for the section of lights to set
+   * @param R the Red value (0-255)
+   * @param G the Green value (0-255)
+   * @param B the Blue value (0-255)
+   */
   public void setSystemLights(LightsEnums lightEnums, int R, int G, int B) {
     switch (lightEnums) {
       case ElevatorLeftAlgaeIndicator:
@@ -88,44 +94,44 @@ public class Lights extends SubsystemBase {
             R, G, B);
         break;
       case ElevatorLeft1:
-        setLights(LightConstants.LEFT_ELEVATOR_LIGHTS_1_START, LightConstants.LEFT_ELEVATOR_LIGHTS_1_END, R, G, B);
+        setCandleLights(LightConstants.LEFT_ELEVATOR_LIGHTS_1_START, LightConstants.LEFT_ELEVATOR_LIGHTS_1_END, R, G, B);
         break;
       case ElevatorLeft2:
-        setLights(LightConstants.LEFT_ELEVATOR_LIGHTS_1_END + 1, LightConstants.LEFT_ELEVATOR_LIGHTS_2_END, R, G, B);
+        setCandleLights(LightConstants.LEFT_ELEVATOR_LIGHTS_1_END + 1, LightConstants.LEFT_ELEVATOR_LIGHTS_2_END, R, G, B);
         break;
       case ElevatorLeft3:
-        setLights(LightConstants.LEFT_ELEVATOR_LIGHTS_2_END + 1, LightConstants.LEFT_ELEVATOR_LIGHTS_3_END, R, G, B);
+        setCandleLights(LightConstants.LEFT_ELEVATOR_LIGHTS_2_END + 1, LightConstants.LEFT_ELEVATOR_LIGHTS_3_END, R, G, B);
         break;
       case ElevatorLeft4:
-        setLights(LightConstants.LEFT_ELEVATOR_LIGHTS_3_END + 1, LightConstants.LEFT_ELEVATOR_LIGHTS_4_END, R, G, B);
+        setCandleLights(LightConstants.LEFT_ELEVATOR_LIGHTS_3_END + 1, LightConstants.LEFT_ELEVATOR_LIGHTS_4_END, R, G, B);
         break;
       case ElevatorLeft5:
-        setLights(LightConstants.LEFT_ELEVATOR_LIGHTS_4_END + 1, LightConstants.LEFT_ELEVATOR_LIGHTS_5_END, R, G, B);
+        setCandleLights(LightConstants.LEFT_ELEVATOR_LIGHTS_4_END + 1, LightConstants.LEFT_ELEVATOR_LIGHTS_5_END, R, G, B);
         break;
       case ElevatorRightAlgaeIndicator:
         setCandleLights(LightConstants.RIGHT_ELEVATOR_LIGHTS_ALGAE_START,
             LightConstants.RIGHT_ELEVATOR_LIGHTS_ALGAE_END, R, G, B);
         break;
       case ElevatorRight1:
-        setLights(LightConstants.RIGHT_ELEVATOR_LIGHTS_1_START, LightConstants.RIGHT_ELEVATOR_LIGHTS_1_END, R, G, B);
+        setCandleLights(LightConstants.RIGHT_ELEVATOR_LIGHTS_2_END + 1, LightConstants.RIGHT_ELEVATOR_LIGHTS_1_END, R, G, B);
         break;
       case ElevatorRight2:
-        setLights(LightConstants.RIGHT_ELEVATOR_LIGHTS_1_END + 1, LightConstants.RIGHT_ELEVATOR_LIGHTS_2_END, R, G, B);
+        setCandleLights(LightConstants.RIGHT_ELEVATOR_LIGHTS_3_END + 1, LightConstants.RIGHT_ELEVATOR_LIGHTS_2_END, R, G, B);
         break;
       case ElevatorRight3:
-        setLights(LightConstants.RIGHT_ELEVATOR_LIGHTS_2_END + 1, LightConstants.RIGHT_ELEVATOR_LIGHTS_3_END, R, G, B);
+        setCandleLights(LightConstants.RIGHT_ELEVATOR_LIGHTS_4_END + 1, LightConstants.RIGHT_ELEVATOR_LIGHTS_3_END, R, G, B);
         break;
       case ElevatorRight4:
-        setLights(LightConstants.RIGHT_ELEVATOR_LIGHTS_3_END + 1, LightConstants.RIGHT_ELEVATOR_LIGHTS_4_END, R, G, B);
+        setCandleLights(LightConstants.RIGHT_ELEVATOR_LIGHTS_5_END + 1, LightConstants.RIGHT_ELEVATOR_LIGHTS_4_END, R, G, B);
         break;
       case ElevatorRight5:
-        setLights(LightConstants.RIGHT_ELEVATOR_LIGHTS_4_END + 1, LightConstants.RIGHT_ELEVATOR_LIGHTS_5_END, R, G, B);
+        setCandleLights(LightConstants.RIGHT_ELEVATOR_LIGHTS_5_START, LightConstants.RIGHT_ELEVATOR_LIGHTS_5_END, R, G, B);
         break;
       case Funnel:
         setLights(LightConstants.FUNNEL_LIGHTS_START, LightConstants.FUNNEL_LIGHTS_END, R, G, B);
         break;
       case Drivetrain:
-        setLights(LightConstants.DRIVETRAIN_LIGHTS_START, LightConstants.DRIVETRAIN_LIGHTS_END, R, G, B);
+        setCandleLights(LightConstants.DRIVETRAIN_LIGHTS_START, LightConstants.DRIVETRAIN_LIGHTS_END, R, G, B);
         break;
     }
   }

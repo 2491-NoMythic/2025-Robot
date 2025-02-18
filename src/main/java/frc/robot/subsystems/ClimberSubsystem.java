@@ -48,6 +48,10 @@ public class ClimberSubsystem extends SubsystemBase {
   public double getClimberAngle() {
     return climberAngleSensor.getAbsolutePosition().getValueAsDouble();
   }
+  /**
+   * takes a desired angle and moves climberMotor1 to it
+   * @param angle the desired angle
+   */
   public void setClimberAngle(double angle) {
     climberMotor1.setControl(new PositionVoltage(angle));
   }
