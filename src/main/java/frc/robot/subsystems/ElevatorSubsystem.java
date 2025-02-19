@@ -5,8 +5,10 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.HardwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DynamicMotionMagicVoltage;
@@ -17,15 +19,18 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.ForwardLimitSourceValue;
 import com.ctre.phoenix6.signals.ForwardLimitTypeValue;
 import com.ctre.phoenix6.signals.ForwardLimitValue;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.ReverseLimitTypeValue;
 import com.revrobotics.spark.config.LimitSwitchConfig;
 import com.revrobotics.spark.config.LimitSwitchConfig.Type;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.helpers.MotorLogger;
 import frc.robot.settings.ElevatorEnums;
 import frc.robot.subsystems.RobotState;
 
+import static frc.robot.settings.Constants.DriveConstants.CANIVORE_DRIVETRAIN;
 import static frc.robot.settings.Constants.ElevatorConstants.*;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -40,9 +45,13 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   /** Creates a new ElevatorSubsystem. */
   public ElevatorSubsystem() {
-    elevatorMotor1 = new TalonFX(ELEVATOR_MOTOR_1_ID);
-    elevatorMotor2 = new TalonFX(ELEVATOR_MOTOR_2_ID);
+    elevatorMotor1 = new TalonFX(ELEVATOR_MOTOR_1_ID, CANIVORE_DRIVETRAIN);
+    elevatorMotor2 = new TalonFX(ELEVATOR_MOTOR_2_ID, CANIVORE_DRIVETRAIN);
     eleMotorConfig = new TalonFXConfiguration()
+      .withMotorOutput(new MotorOutputConfigs()
+        .withInverted(InvertedValue.Clockwise_Positive))
+      .withFeedback(new FeedbackConfigs()
+        .withSensorToMechanismRatio(0.08910703))
       .withCurrentLimits(new CurrentLimitsConfigs()
         .withSupplyCurrentLimit(30)
         .withSupplyCurrentLimitEnable(true))
@@ -52,7 +61,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         .withMotionMagicJerk(MOTION_MAGIC_ELEVATOR_JERK))
       .withHardwareLimitSwitch(new HardwareLimitSwitchConfigs()
         .withReverseLimitAutosetPositionEnable(true)
-        .withReverseLimitAutosetPositionValue(HEIGHT_AT_LIMIT_SWITCH*ELEVATOR_MILLIMETERS_TO_ROTATIONS)
+        .withReverseLimitAutosetPositionValue(HEIGHT_AT_LIMIT_SWITCH)
         .withReverseLimitEnable(true)
         .withReverseLimitType(ReverseLimitTypeValue.NormallyClosed)
         .withForwardLimitAutosetPositionEnable(false)
@@ -63,13 +72,15 @@ public class ElevatorSubsystem extends SubsystemBase {
         .withKP(0)
         .withKG(0)
         .withKA(0)
-        .withKV(0);
+        .withKV(0)
+        .withKS(0);
     } else {
       eleMotorConfig.Slot0 = new Slot0Configs()
         .withKP(0)
-        .withKG(0)
-        .withKA(0)
-        .withKV(0);
+        .withKG(0.1015625)
+        .withKA(0.00040067)
+        .withKV(0.02168)
+        .withKS(1.8818359375);
     }
     elevatorMotor1.getConfigurator().apply(eleMotorConfig);
     elevatorMotor2.setControl(new Follower(ELEVATOR_MOTOR_1_ID, false));
@@ -87,6 +98,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     if(Preferences.getBoolean("Motor Logging", false)){
     logMotors();
+    }
+    if(elevatorMotor1.getForwardLimit().getValue() == ForwardLimitValue.Open) {
+      RobotState.getInstance().elevatorZeroSet = true;
     }
     SmartDashboard.putBoolean("ELEVATOR/limit switch value", elevatorMotor1.getForwardLimit().getValue() == ForwardLimitValue.Open);
   }

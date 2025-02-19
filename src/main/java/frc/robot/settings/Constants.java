@@ -443,7 +443,7 @@ public final class Constants {
     public static final int ELEVATOR_MOTOR_1_ID = 9;
     public static final int ELEVATOR_MOTOR_2_ID = 10;
     public static final double HUMAN_PLAYER_STATION_MILLIMETERS = 2491;
-    public static final double HEIGHT_AT_LIMIT_SWITCH = 2491;
+    public static final double HEIGHT_AT_LIMIT_SWITCH = 20;
     public static final double PROCESSOR_HEIGHT_MILLIMETERS = 2491;
     public static final double REEF_LEVEL_1_MILLIMETERS = 2491;
     public static final double REEF_LEVEL_2_MILLIMETERS = 2491;
@@ -454,8 +454,8 @@ public final class Constants {
     public static final double ELEVATOR_SENSOR_MILLIMETERS_OFF_GROUND = 2491;
     public static final double ELEVATOR_THRESHOLD = 5;
 
-    public static final double MOTION_MAGIC_ELEVATOR_VELOCITY = 0;
-    public static final double MOTION_MAGIC_ELEVATOR_ACCLERATION = 0;
+    public static final double MOTION_MAGIC_ELEVATOR_VELOCITY = 600;
+    public static final double MOTION_MAGIC_ELEVATOR_ACCLERATION = 2400;
     public static final double MOTION_MAGIC_ELEVATOR_JERK = 0;
   }
 
