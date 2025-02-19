@@ -76,11 +76,11 @@ public class ElevatorSubsystem extends SubsystemBase {
         .withKS(0);
     } else {
       eleMotorConfig.Slot0 = new Slot0Configs()
-        .withKP(0)
-        .withKG(0.1015625)
+        .withKP(0.4)
+        .withKG(0.57)
         .withKA(0.00040067)
         .withKV(0.02168)
-        .withKS(1.8818359375);
+        .withKS(1.17);
     }
     elevatorMotor1.getConfigurator().apply(eleMotorConfig);
     elevatorMotor2.setControl(new Follower(ELEVATOR_MOTOR_1_ID, false));
