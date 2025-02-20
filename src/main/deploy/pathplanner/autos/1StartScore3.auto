@@ -29,9 +29,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "CoralIntake"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "LineUpCoralInEndeffector"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "CoralIntake"
+                }
+              }
+            ]
           }
         },
         {
@@ -59,9 +72,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "CoralIntake"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "LineUpCoralInEndeffector"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "CoralIntake"
+                }
+              }
+            ]
           }
         },
         {
