@@ -17,6 +17,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.helpers.MotorLogger;
 
@@ -47,6 +48,7 @@ public class CoralEndeffectorSubsystem extends SubsystemBase {
         CORAL_ENDEFFECTOR_KFF_PRACTICE));    
     }
     coralConfig.idleMode(IdleMode.kCoast);
+    coralConfig.inverted(true);
     coralConfig.smartCurrentLimit(25, 40, 1000);
     coralEndeffectorMotor.configure(coralConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
@@ -80,7 +82,7 @@ public class CoralEndeffectorSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    RobotState.getInstance().coralEndeffSensorTrig = coralEndeffSensor.getVoltage()>2;
+    RobotState.getInstance().coralEndeffSensorTrig = coralEndeffSensor.getVoltage() < 2;
     if(Preferences.getBoolean("Motor Logging", false)){
     logMotors();
     }

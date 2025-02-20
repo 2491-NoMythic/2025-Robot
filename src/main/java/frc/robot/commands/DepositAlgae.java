@@ -4,7 +4,7 @@
 
 package frc.robot.commands;
 
-import static frc.robot.settings.Constants.ElevatorConstants.PROCESSOR_HEIGHT_MILLIMETERS;
+import static frc.robot.settings.Constants.ElevatorConstants.PROCESSOR_HEIGHT_CENTIMETERS;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.settings.ElevatorEnums;
@@ -39,7 +39,7 @@ public class DepositAlgae extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    elevator.setElevatorPosition(PROCESSOR_HEIGHT_MILLIMETERS);
+    elevator.setElevatorPosition(PROCESSOR_HEIGHT_CENTIMETERS);
     if(elevator.isElevatorAtPose()){
       algaeEndeffector.runAlgaeEndDefector(shootSpeed);
   }

@@ -5,11 +5,12 @@
 package frc.robot.commands.NamedCommands;
 
 import static frc.robot.settings.Constants.CoralEndeffectorConstants.CORAL_ENDEFFECTOR_SPEED;
-import static frc.robot.settings.Constants.ElevatorConstants.HUMAN_PLAYER_STATION_MILLIMETERS;
+import static frc.robot.settings.Constants.ElevatorConstants.HUMAN_PLAYER_STATION_CENTIMETERS;
 import static frc.robot.settings.Constants.FunnelConstants.FUNNEL_INTAKE_SPEED;
 
 import frc.robot.subsystems.RobotState;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.subsystems.CoralEndeffectorSubsystem;
@@ -34,7 +35,7 @@ public class CoralIntake extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    elevatorSubsystem.setElevatorPosition(HUMAN_PLAYER_STATION_MILLIMETERS);
+    elevatorSubsystem.setElevatorPosition(HUMAN_PLAYER_STATION_CENTIMETERS);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -54,6 +55,6 @@ public class CoralIntake extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return RobotState.getInstance().isCoralSeen();
+    return false;//RobotState.getInstance().isCoralSeen();
   }
 }

@@ -22,9 +22,9 @@ public class LineupCoralInEndEffector extends SequentialCommandGroup {
     final double adjustingSpeed = CoralEndeffectorConstants.CORAL_ENDEFFECTOR_ADJUSTING_INTAKE_SPEED;
     addCommands(
       new InstantCommand(()->RobotState.getInstance().coralLineupRunning = true),
-      new InstantCommand(()->EndEffector.runCoralEndEffector(-adjustingSpeed), EndEffector),
-      new WaitUntil(()->!RobotState.getInstance().coralEndeffSensorTrig),
       new InstantCommand(()->EndEffector.runCoralEndEffector(adjustingSpeed), EndEffector),
+      new WaitUntil(()->!RobotState.getInstance().coralEndeffSensorTrig),
+      new InstantCommand(()->EndEffector.runCoralEndEffector(-adjustingSpeed), EndEffector),
       new WaitUntil(()->RobotState.getInstance().coralEndeffSensorTrig),
       new InstantCommand(()->EndEffector.stopCoralEndEffector(), EndEffector),
       new InstantCommand(()->RobotState.getInstance().coralAligned = true),
