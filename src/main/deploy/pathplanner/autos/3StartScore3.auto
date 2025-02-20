@@ -29,6 +29,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "CoralIntake"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -39,18 +45,12 @@
                 }
               },
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "CoralIntake"
+                  "pathName": "HPToD"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "HPToD"
           }
         },
         {
@@ -72,6 +72,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "CoralIntake"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -82,18 +88,12 @@
                 }
               },
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "CoralIntake"
+                  "pathName": "HPToC"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "HPToC"
           }
         },
         {
