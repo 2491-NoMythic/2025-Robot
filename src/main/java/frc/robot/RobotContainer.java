@@ -627,6 +627,8 @@ public class RobotContainer {
 
     if(elevatorExists){
       new Trigger(ForceElevator).onTrue(new InstantCommand(()-> elevator.setElevatorPosition(RobotState.getInstance().deliveringCoralHeight), elevator)).onFalse(new InstantCommand(()-> elevator.setElevatorPosition(ElevatorEnums.HumanPlayer), elevator));
+      new Trigger(ForceElevatorUp).whileTrue(new InstantCommand(()-> elevator.setVoltage(3), elevator)).onFalse(new InstantCommand(()-> elevator.setVoltage(0), elevator));
+      new Trigger(ForceElevatorDown).whileTrue(new InstantCommand(()-> elevator.setVoltage(-1.2), elevator)).onFalse(new InstantCommand(()-> elevator.setVoltage(0), elevator));
     }
 
     if(coralEndeffectorExists){
