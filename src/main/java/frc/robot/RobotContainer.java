@@ -185,6 +185,8 @@ public class RobotContainer {
   BooleanSupplier OpRightReefLineupSup;
   BooleanSupplier ForceEjectCoral;
   BooleanSupplier ForceElevator;
+  BooleanSupplier ForceElevatorUp;
+  BooleanSupplier ForceElevatorDown;
   BooleanSupplier ManualCoralIntake;
   BooleanSupplier PlaceCoralNoPathSup;
   BooleanSupplier goForAlgae;
@@ -315,6 +317,8 @@ public class RobotContainer {
       //operator manual controls, should not be used unless other controls not working
       ForceEjectCoral = ()-> operatorControllerXbox.getRightTriggerAxis() > 0.1;
       ForceElevator = ()->false;
+      ForceElevatorUp = ()->operatorControllerXbox.getLeftTriggerAxis() > -0.5;
+      ForceElevatorDown = ()->operatorControllerXbox.getLeftTriggerAxis() > 0.5;
       ClimbCommandSupplier = ()->operatorControllerXbox.getXButton();
       ClimbModeAuthorizer = operatorControllerXbox::getRightStickButton;
       climberResetSupplier = operatorControllerXbox::getLeftStickButton;
@@ -334,7 +338,9 @@ public class RobotContainer {
 
       //manual operator controls, should not be used unless other controls do not work
       ForceEjectCoral = operatorControllerPS4::getR2Button;
-      ForceElevator = operatorControllerPS4::getL2Button;
+      ForceElevator = ()->operatorControllerPS4.getL2Button();
+      ForceElevatorUp = ()->operatorControllerPS4.getRawAxis(1) < -0.5;
+      ForceElevatorDown = ()->operatorControllerPS4.getRawAxis(1) > 0.5;
       ClimbCommandSupplier = operatorControllerPS4::getSquareButton;
       ClimbModeAuthorizer = operatorControllerPS4::getR3Button;
       climberResetSupplier = operatorControllerPS4::getL3Button;
@@ -352,6 +358,8 @@ public class RobotContainer {
 
       ProcessorHeightSupplier = buttonBoard::getProcessorHeightButton;
       ForceElevator = ()->false;
+      ForceElevatorUp = ()->false;
+      ForceElevatorDown = ()->false;
       BargeHeightSupplier = ()->false;
       ForceEjectCoral = buttonBoard::getForceEjectCoralButton;
 
