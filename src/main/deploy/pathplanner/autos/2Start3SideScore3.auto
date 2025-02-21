@@ -35,9 +35,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "HPToD"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "LineUpCoralInEndeffector"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "HPToD"
+                }
+              }
+            ]
           }
         },
         {
@@ -65,9 +78,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "HPToC"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "LineUpCoralInEndeffector"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "HPToC"
+                }
+              }
+            ]
           }
         },
         {
