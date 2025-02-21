@@ -624,7 +624,7 @@ public class RobotContainer {
       new Trigger(ForceEjectCoral).whileTrue(new EjectCoral(coralEndDefector));
     }
 
-    if(algaeEndeffectorExists && DrivetrainExists) {
+    if(algaeEndeffectorExists && DrivetrainExists && elevatorExists) {
         new Trigger(AlgaeBargeSup)
             .whileTrue(new ShootInBarge(driveTrain, elevator, algaeEndDefector, () -> driverControllerPS4.getLeftY()));
       }
@@ -691,7 +691,7 @@ public class RobotContainer {
     if(elevatorExists) {
       return new SequentialCommandGroup(
         new SequentialCommandGroup(
-          new InstantCommand(()->elevator.setElevatorPositionDynamicConfigs(HEIGHT_AT_LIMIT_SWITCH-10, MOTION_MAGIC_ELEVATOR_ACCLERATION/5, MOTION_MAGIC_ELEVATOR_VELOCITY/5, MOTION_MAGIC_ELEVATOR_JERK/5), elevator),
+          new InstantCommand(()->elevator.setVoltage(-1.5), elevator),
           new WaitUntil(()->RobotState.getInstance().elevatorZeroSet)),
         autoChooser.getSelected());
     } else {

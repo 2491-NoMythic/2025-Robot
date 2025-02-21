@@ -14,6 +14,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DynamicMotionMagicVoltage;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.ForwardLimitTypeValue;
 import com.ctre.phoenix6.signals.ForwardLimitValue;
@@ -108,7 +109,15 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void setZero(double theDistance){
     double rotationsFromGround = theDistance;
     zeroPoint = elevatorMotor1.getPosition().getValueAsDouble() - rotationsFromGround;   
-    }
+  }
+  /**
+   * sets the voltage of the elevator motor. It takes about 2 volts to move the elevator slowly up, and higher than 4 is dangerously fast
+   * it takes about 1 volt to move the elevator slowly down, and lower than -2 is dangerously fast
+   * @param voltage
+   */
+  public void setVoltage(double voltage) {
+    elevatorMotor1.setControl(new VoltageOut(voltage));
+  }
   /**
    * Makes the elevator move to a position relative to the ground. It does this by changing the setpoint for the motor's onboard PID controller
    * @param height the desired height, in centimeters off the ground
