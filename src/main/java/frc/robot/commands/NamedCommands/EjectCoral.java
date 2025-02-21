@@ -34,7 +34,7 @@ public class EjectCoral extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    coralIntake.runCoralEndEffector(-CORAL_ENDEFFECTOR_SPEED);
+    coralIntake.runCoralEndEffector(CORAL_ENDEFFECTOR_SPEED);
   }
 
   // Called once the command ends or is interrupted.

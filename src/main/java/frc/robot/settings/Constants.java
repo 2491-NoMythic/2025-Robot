@@ -398,11 +398,11 @@ public final class Constants {
     public static final double CORAL_ENDEFFECTOR_KP_PRACTICE = 0.00005;
     public static final double CORAL_ENDEFFECTOR_KI_PRACTICE = 0;
     public static final double CORAL_ENDEFFECTOR_KD_PRACTICE = 0;
-    public static final double CORAL_ENDEFFECTOR_KFF_PRACTICE = 0.000106;
+    public static final double CORAL_ENDEFFECTOR_KFF_PRACTICE = 0.000108;
     
-    public static final double CORAL_ENDEFFECTOR_SPEED = 2000;
+    public static final double CORAL_ENDEFFECTOR_SPEED = 1900;
       /** this is the speed that the EndEffector motors should run at when they should be slow enough to stop the coral where it is the moment the sensor is triggered */
-      public static final double CORAL_ENDEFFECTOR_ADJUSTING_INTAKE_SPEED = 700;
+      public static final double CORAL_ENDEFFECTOR_ADJUSTING_INTAKE_SPEED = 1000;
   }
 
   public final class AlgaeEndeffectorConstants{
@@ -442,14 +442,14 @@ public final class Constants {
   public final class ElevatorConstants{
     public static final int ELEVATOR_MOTOR_1_ID = 9;
     public static final int ELEVATOR_MOTOR_2_ID = 10;
-    public static final double HUMAN_PLAYER_STATION_CENTIMETERS = 31.5;
+    public static final double HUMAN_PLAYER_STATION_CENTIMETERS = 28.3;//31.5;
     public static final double HEIGHT_AT_LIMIT_SWITCH = 20;
     public static final double PROCESSOR_HEIGHT_CENTIMETERS = 23;
-    public static final double REEF_LEVEL_1_CENTIMETERS = 60;
-    public static final double REEF_LEVEL_2_CENTIMETERS = 80;
-    public static final double REEF_LEVEL_3_CENTIMETERS = 100;
-    public static final double REEF_LEVEL_4_CENTIMETERS = 120;
-    public static final double BARGE_SHOOT_CENTIMETERS = 170;
+    public static final double REEF_LEVEL_1_CENTIMETERS = 80;
+    public static final double REEF_LEVEL_2_CENTIMETERS = 92.5;
+    public static final double REEF_LEVEL_3_CENTIMETERS = 130.2;
+    public static final double REEF_LEVEL_4_CENTIMETERS = 198.2;
+    public static final double BARGE_SHOOT_CENTIMETERS = 180;
     public static final double ELEVATOR_THRESHOLD = 5;
 
     public static final double MOTION_MAGIC_ELEVATOR_VELOCITY = 600;
@@ -527,7 +527,7 @@ public final class Constants {
 
     public static final double FUNNEL_INTAKE_SPEED = 1500;
     /** this is the speed that the funnel motors should run at when they should be slow enough to stop the coral where it is the moent the sensor is triggered */
-    public static final double FUNNEL_ADJUSTING_INTAKE_SPEED = 150;
+    public static final double FUNNEL_ADJUSTING_INTAKE_SPEED = 600;
   }
 
   public final class AutoAlignToReefConstants {

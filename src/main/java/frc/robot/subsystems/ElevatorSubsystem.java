@@ -193,6 +193,13 @@ public class ElevatorSubsystem extends SubsystemBase {
     return elevatorMotor1.getClosedLoopError().getValueAsDouble() < ELEVATOR_THRESHOLD;
   }
   /**
+   * asks if the error on the closed loop is less than our ELEVATOR_THRESHOLD constant
+   * @return true if closed loop error is less than our threshold, false otherwise
+   */
+  public boolean isElevatorAtIntakeHeight() {
+    return isElevatorAtPose() && Math.abs(getPIDTarget()-HUMAN_PLAYER_STATION_CENTIMETERS) < 4;
+  }
+  /**
    * the current reference for the onboard ClosedLoopController
    * @return the reference, in rotations
    */

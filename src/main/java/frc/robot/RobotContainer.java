@@ -65,6 +65,7 @@ import frc.robot.commands.LineupCoralInEndEffector;
 import frc.robot.commands.LineupCoralInFunnel;
 import frc.robot.commands.MoveMeters;
 import frc.robot.commands.PassCoralToEndEffector;
+import frc.robot.commands.PassCoralToEndEffectorSequential;
 import frc.robot.commands.PlaceCoralNoPath;
 import frc.robot.commands.ResetClimber;
 import frc.robot.commands.ShootInBarge;
@@ -289,7 +290,7 @@ public class RobotContainer {
       DvRightReefLineupSup = driverControllerPS4::getR1Button;
       SlowFrontSup = ()->driverControllerPS4.getL2Axis()>-0.5;
       CoralPlaceTeleSupplier = ()-> driverControllerPS4.getPOV() == 0;
-      AlgaeBargeSup = driverControllerPS4::getSquareButton;
+      AlgaeBargeSup = ()->false;//driverControllerPS4::getSquareButton;
 
       //manual driver controls
       AlgaeDepositSup = driverControllerPS4::getCircleButton;
@@ -548,12 +549,13 @@ public class RobotContainer {
       new Trigger(()->
         !RobotState.getInstance().coralAligned &&
         RobotState.getInstance().funnelSensorTrig &&
-        !(elevator.isElevatorAtPose() && elevator.getPIDTarget() == HUMAN_PLAYER_STATION_CENTIMETERS) &&
+        !elevator.isElevatorAtIntakeHeight() &&
         !RobotState.getInstance().coralLineupRunning)
           .onTrue(new LineupCoralInFunnel(funnelIntake));
       //if the coral hasn't been aligned, but has traveled all the way through to the coralEndEffector, lineup the coral in the endeffector
       new Trigger(()->
       !RobotState.getInstance().coralAligned &&
+      !RobotState.getInstance().funnelSensorTrig &&
       RobotState.getInstance().coralEndeffSensorTrig &&
       !RobotState.getInstance().coralLineupRunning)
         .onTrue(new LineupCoralInEndEffector(coralEndDefector));
@@ -561,9 +563,9 @@ public class RobotContainer {
       new Trigger(()->
         RobotState.getInstance().funnelSensorTrig &&
         elevator.isElevatorAtPose() &&
-        elevator.getPIDTarget() == HUMAN_PLAYER_STATION_CENTIMETERS &&
+        elevator.isElevatorAtIntakeHeight() &&
         !RobotState.getInstance().coralLineupRunning)
-          .onTrue(new PassCoralToEndEffector(coralEndDefector, funnelIntake));
+          .onTrue(new PassCoralToEndEffectorSequential(coralEndDefector, funnelIntake));
       //if no coral alignment code is running, and no coral is detected by sensors, assume that the coral is out of our robot, and set coralAligned to false
       new Trigger(()->
         !RobotState.getInstance().coralLineupRunning &&
@@ -627,7 +629,7 @@ public class RobotContainer {
 
     if(elevatorExists){
       new Trigger(ForceElevator).onTrue(new InstantCommand(()-> elevator.setElevatorPosition(RobotState.getInstance().deliveringCoralHeight), elevator)).onFalse(new InstantCommand(()-> elevator.setElevatorPosition(ElevatorEnums.HumanPlayer), elevator));
-      new Trigger(ForceElevatorUp).whileTrue(new InstantCommand(()-> elevator.setVoltage(3), elevator)).onFalse(new InstantCommand(()-> elevator.setVoltage(0), elevator));
+      new Trigger(ForceElevatorUp).whileTrue(new InstantCommand(()-> elevator.setVoltage(5), elevator)).onFalse(new InstantCommand(()-> elevator.setVoltage(0), elevator));
       new Trigger(ForceElevatorDown).whileTrue(new InstantCommand(()-> elevator.setVoltage(-1.2), elevator)).onFalse(new InstantCommand(()-> elevator.setVoltage(0), elevator));
     }
 
@@ -914,6 +916,10 @@ public class RobotContainer {
   public void robotInit(){
   }
   public void robotPeriodic() {
+    if(elevatorExists) {
+      SmartDashboard.putBoolean("TESTING/elevator lined up", elevator.isElevatorAtIntakeHeight());
+      SmartDashboard.putBoolean("TESTING/coralLineupRunnning", RobotState.getInstance().coralLineupRunning);
+    }
     SmartDashboard.putString("TESTING/delivery height", RobotState.getInstance().deliveringCoralHeight.toString());
     SmartDashboard.putBoolean("TESTING/isCoralSeen", RobotState.getInstance().isCoralSeen());
     SmartDashboard.putBoolean("TESTING/coralsensortrig", RobotState.getInstance().coralEndeffSensorTrig);
