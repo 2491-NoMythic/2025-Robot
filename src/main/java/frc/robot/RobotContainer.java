@@ -805,18 +805,18 @@ public class RobotContainer {
     try {
       pathFindToReef = new SelectCommand<>(
         Map.ofEntries(
-          Map.entry(CommandSelectorEnum.FrontCenterReefLeft, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupA"), DEFAULT_PATH_CONSTRAINTS)),
-          Map.entry(CommandSelectorEnum.FrontCenterReefRight, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupB"), DEFAULT_PATH_CONSTRAINTS)),
-          Map.entry(CommandSelectorEnum.FrontRightReefLeft, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupC"), DEFAULT_PATH_CONSTRAINTS)),
-          Map.entry(CommandSelectorEnum.FrontRightReefRight, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupD"), DEFAULT_PATH_CONSTRAINTS)),
-          Map.entry(CommandSelectorEnum.BackRightReefLeft, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupE"), DEFAULT_PATH_CONSTRAINTS)),
-          Map.entry(CommandSelectorEnum.BackRightReefRight, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupF"), DEFAULT_PATH_CONSTRAINTS)),
-          Map.entry(CommandSelectorEnum.BackCenterReefLeft, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupG"), DEFAULT_PATH_CONSTRAINTS)),
-          Map.entry(CommandSelectorEnum.BackCenterReefRight, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupH"), DEFAULT_PATH_CONSTRAINTS)),
-          Map.entry(CommandSelectorEnum.BackLeftReefLeft, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupI"), DEFAULT_PATH_CONSTRAINTS)),
-          Map.entry(CommandSelectorEnum.BackLeftReefRight, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupJ"), DEFAULT_PATH_CONSTRAINTS)),
-          Map.entry(CommandSelectorEnum.FrontLeftReefLeft, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupK"), DEFAULT_PATH_CONSTRAINTS)),
-          Map.entry(CommandSelectorEnum.FrontLeftReefRight, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupL"), DEFAULT_PATH_CONSTRAINTS)),
+          Map.entry(CommandSelectorEnum.ReefPoleA, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupA"), DEFAULT_PATH_CONSTRAINTS)),
+          Map.entry(CommandSelectorEnum.ReefPoleB, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupB"), DEFAULT_PATH_CONSTRAINTS)),
+          Map.entry(CommandSelectorEnum.ReefPoleC, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupC"), DEFAULT_PATH_CONSTRAINTS)),
+          Map.entry(CommandSelectorEnum.ReefPoleD, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupD"), DEFAULT_PATH_CONSTRAINTS)),
+          Map.entry(CommandSelectorEnum.ReefPoleE, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupE"), DEFAULT_PATH_CONSTRAINTS)),
+          Map.entry(CommandSelectorEnum.ReefPoleF, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupF"), DEFAULT_PATH_CONSTRAINTS)),
+          Map.entry(CommandSelectorEnum.ReefPoleG, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupG"), DEFAULT_PATH_CONSTRAINTS)),
+          Map.entry(CommandSelectorEnum.ReefPoleH, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupH"), DEFAULT_PATH_CONSTRAINTS)),
+          Map.entry(CommandSelectorEnum.ReefPoleI, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupI"), DEFAULT_PATH_CONSTRAINTS)),
+          Map.entry(CommandSelectorEnum.ReefPoleJ, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupJ"), DEFAULT_PATH_CONSTRAINTS)),
+          Map.entry(CommandSelectorEnum.ReefPoleK, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupK"), DEFAULT_PATH_CONSTRAINTS)),
+          Map.entry(CommandSelectorEnum.ReefPoleL, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupL"), DEFAULT_PATH_CONSTRAINTS)),
           Map.entry(CommandSelectorEnum.NoClosestSide, new InstantCommand(()->System.out.println("No Closest Reef Side")))
           ), 
           ()->selectCommand(()->RobotState.getInstance().deliveringLeft));
@@ -830,39 +830,39 @@ public class RobotContainer {
     switch(RobotState.getInstance().closestReefSide){
       case middleFar:
         if(LeftSupplier.getAsBoolean()) {
-          return CommandSelectorEnum.BackCenterReefLeft;
+          return CommandSelectorEnum.ReefPoleG;
         } else {
-          return CommandSelectorEnum.BackCenterReefRight;
+          return CommandSelectorEnum.ReefPoleH;
         }
       case processorFar:
         if(LeftSupplier.getAsBoolean()) {
-          return CommandSelectorEnum.BackRightReefLeft;
+          return CommandSelectorEnum.ReefPoleE;
         } else {
-          return CommandSelectorEnum.BackRightReefRight;
+          return CommandSelectorEnum.ReefPoleF;
         }
       case bargeFar:
         if(LeftSupplier.getAsBoolean()) {
-          return CommandSelectorEnum.BackLeftReefLeft;
+          return CommandSelectorEnum.ReefPoleI;
         } else {
-          return CommandSelectorEnum.BackLeftReefRight;
+          return CommandSelectorEnum.ReefPoleJ;
         }
       case middleClose:
         if(LeftSupplier.getAsBoolean()) {
-          return CommandSelectorEnum.FrontCenterReefLeft;
+          return CommandSelectorEnum.ReefPoleA;
         } else { 
-          return CommandSelectorEnum.FrontCenterReefRight;
+          return CommandSelectorEnum.ReefPoleB;
         }
       case processorClose:
         if(LeftSupplier.getAsBoolean()) {
-          return CommandSelectorEnum.FrontRightReefLeft;
+          return CommandSelectorEnum.ReefPoleC;
         } else { 
-          return CommandSelectorEnum.FrontRightReefRight;
+          return CommandSelectorEnum.ReefPoleD;
         }
       case bargeClose:
         if(LeftSupplier.getAsBoolean()) {
-          return CommandSelectorEnum.FrontLeftReefLeft;
+          return CommandSelectorEnum.ReefPoleK;
         } else { 
-          return CommandSelectorEnum.FrontLeftReefRight;
+          return CommandSelectorEnum.ReefPoleL;
         }
       default:
           return CommandSelectorEnum.NoClosestSide;

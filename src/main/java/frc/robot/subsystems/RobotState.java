@@ -4,7 +4,7 @@ import javax.print.attribute.standard.MediaSize.Other;
 import frc.robot.settings.ReefOffsetEnums;
 import frc.robot.settings.ReefSideEnum;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+import frc.robot.settings.CommandSelectorEnum;
 import frc.robot.settings.ElevatorEnums;
 
 public class RobotState {
@@ -32,6 +32,7 @@ public class RobotState {
   public boolean coralLineupRunning;
   public boolean coralAligned;
   public boolean elevatorZeroSet;
+  public CommandSelectorEnum selectedReefSide;//Doctor Oliver
 
   public RobotState(){
     //sets any values that aren't periodically updated by a subsystem to a value, so that they won't return null if called before they are updated

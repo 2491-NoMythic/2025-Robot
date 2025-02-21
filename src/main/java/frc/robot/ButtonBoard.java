@@ -21,8 +21,20 @@ public class ButtonBoard extends GenericHID implements Sendable{
         goForAlgaeButton(10),
         climbCommandButton(11),
         climbModeAuthorizer(12),
-        climberResetButton(13);
-
+        climberResetButton(13),
+        reefPoleAButton(14),
+        reefPoleBButton(15),
+        reefPoleCButton(16),
+        reefPoleDButton(17),
+        reefPoleEButton(18),
+        reefPoleFButton(19),
+        reefPoleGButton(20),
+        reefPoleHButton(21),
+        reefPoleIButton(22),
+        reefPoleJButton(23),
+        reefPoleKButton(24),
+        reefPoleLButton(25);
+        
         public final int value;
         
         Button(int value){
@@ -71,6 +83,42 @@ public class ButtonBoard extends GenericHID implements Sendable{
     public boolean getClimberResetButton(){
         return getRawButton(Button.climberResetButton.value);
     }
+    public boolean getReefPoleAButton(){
+        return getRawButton(Button.reefPoleAButton.value);
+    }
+    public boolean getReefPoleBButton(){
+        return getRawButton(Button.reefPoleBButton.value);
+    }
+    public boolean getReefPoleCButton(){
+        return getRawButton(Button.reefPoleCButton.value);
+    }
+    public boolean getReefPoleDButton(){
+        return getRawButton(Button.reefPoleDButton.value);
+    }
+    public boolean getReefPoleEButton(){
+        return getRawButton(Button.reefPoleEButton.value);
+    }
+    public boolean getReefPoleFButton(){
+        return getRawButton(Button.reefPoleFButton.value);
+    }
+    public boolean getReefPoleGButton(){
+        return getRawButton(Button.reefPoleGButton.value);
+    }
+    public boolean getReefPoleHButton(){
+        return getRawButton(Button.reefPoleHButton.value);
+    }
+    public boolean getReefPoleIButton(){
+        return getRawButton(Button.reefPoleIButton.value);
+    }
+    public boolean getReefPoleJButton(){
+        return getRawButton(Button.reefPoleJButton.value);
+    }
+    public boolean getReefPoleKButton(){
+        return getRawButton(Button.reefPoleKButton.value);
+    }
+    public boolean getReefPoleLButton(){
+        return getRawButton(Button.reefPoleLButton.value);
+    }
     public void initSendable(SendableBuilder builder){
         builder.setSmartDashboardType("HID");
         builder.addBooleanProperty("Reef Height 1 Button", this::getReefHeight1Button, null);
@@ -86,5 +134,17 @@ public class ButtonBoard extends GenericHID implements Sendable{
         builder.addBooleanProperty("Climb Command Button", this::getclimbCommandButton, null);
         builder.addBooleanProperty("Climb Mode Authorizer", this::getClimbModeAuthorizer, null);
         builder.addBooleanProperty("Climber Reset Button", this::getClimberResetButton, null);
+        builder.addBooleanProperty("Reef Pole A Button", this::getReefPoleAButton, null);
+        builder.addBooleanProperty("Reef Pole B Button", this::getReefPoleBButton, null);
+        builder.addBooleanProperty("Reef Pole C Button", this::getReefPoleCButton, null);
+        builder.addBooleanProperty("Reef Pole D Button", this::getReefPoleDButton, null);
+        builder.addBooleanProperty("Reef Pole E Button", this::getReefPoleEButton, null);
+        builder.addBooleanProperty("Reef Pole F Button", this::getReefPoleFButton, null);
+        builder.addBooleanProperty("Reef Pole G Button", this::getReefPoleGButton, null);
+        builder.addBooleanProperty("Reef Pole H Button", this::getReefPoleHButton, null);
+        builder.addBooleanProperty("Reef Pole I Button", this::getReefPoleIButton, null);
+        builder.addBooleanProperty("Reef Pole J Button", this::getReefPoleJButton, null);
+        builder.addBooleanProperty("Reef Pole K Button", this::getReefPoleKButton, null);
+        builder.addBooleanProperty("Reef Pole L Button", this::getReefPoleLButton, null);
     }
 }
