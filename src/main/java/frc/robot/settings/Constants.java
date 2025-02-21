@@ -452,6 +452,8 @@ public final class Constants {
     public static final double BARGE_SHOOT_CENTIMETERS = 180;
     public static final double ELEVATOR_THRESHOLD = 5;
 
+    public static final double MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY = 60;
+    public static final double MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION = 120;
     public static final double MOTION_MAGIC_ELEVATOR_VELOCITY = 600;
     public static final double MOTION_MAGIC_ELEVATOR_ACCLERATION = 2400;
     public static final double MOTION_MAGIC_ELEVATOR_JERK = 0;

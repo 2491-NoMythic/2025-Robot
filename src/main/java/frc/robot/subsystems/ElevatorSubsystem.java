@@ -160,7 +160,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         }
         break;
       case HumanPlayer:
-        setElevatorPosition(HUMAN_PLAYER_STATION_CENTIMETERS);
+        setElevatorPositionDynamicConfigs(HUMAN_PLAYER_STATION_CENTIMETERS, MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION, MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY, MOTION_MAGIC_ELEVATOR_JERK);
         if(elevatorMotor1.getClosedLoopError().getValueAsDouble() < ELEVATOR_THRESHOLD){
           RobotState.getInstance().elevatorIsHigh = false;
         }

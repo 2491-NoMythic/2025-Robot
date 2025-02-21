@@ -4,6 +4,10 @@
 
 package frc.robot.commands;
 
+import static frc.robot.settings.Constants.ElevatorConstants.HUMAN_PLAYER_STATION_CENTIMETERS;
+import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION;
+import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY;
+
 import java.util.function.Supplier;
 
 import frc.robot.subsystems.RobotState;
@@ -44,7 +48,7 @@ public class ElevatorCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    elevator.setElevatorPosition(ElevatorEnums.HumanPlayer);
+    elevator.setElevatorPositionDynamicConfigs(HUMAN_PLAYER_STATION_CENTIMETERS, MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION, MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY, 0);
   }
 
   // Returns true when the command should end.

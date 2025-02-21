@@ -4,6 +4,10 @@
 
 package frc.robot.commands;
 
+import static frc.robot.settings.Constants.ElevatorConstants.HUMAN_PLAYER_STATION_CENTIMETERS;
+import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION;
+import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY;
+
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -40,7 +44,7 @@ public class ShootInBarge extends SequentialCommandGroup {
       new ParallelRaceGroup(
         new AlgaeIntakeCommand(algaeSubsystem, ()->-1),
         new WaitCommand(()->1.0)),
-      new InstantCommand(()->elevatorSubsystem.setElevatorPosition(ElevatorEnums.HumanPlayer), elevatorSubsystem));
+      new InstantCommand(()->elevatorSubsystem.setElevatorPositionDynamicConfigs(HUMAN_PLAYER_STATION_CENTIMETERS, MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION, MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY, 0), elevatorSubsystem));
 
   }
 }

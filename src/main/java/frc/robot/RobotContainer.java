@@ -14,6 +14,8 @@ import static frc.robot.settings.Constants.ElevatorConstants.HEIGHT_AT_LIMIT_SWI
 import static frc.robot.settings.Constants.ElevatorConstants.HUMAN_PLAYER_STATION_CENTIMETERS;
 import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_ACCLERATION;
 import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_JERK;
+import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION;
+import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY;
 import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_VELOCITY;
 import static frc.robot.settings.Constants.FunnelConstants.FUNNEL_INTAKE_SPEED;
 import static frc.robot.settings.Constants.PS4Driver.*;
@@ -628,7 +630,7 @@ public class RobotContainer {
     }
 
     if(elevatorExists){
-      new Trigger(ForceElevator).onTrue(new InstantCommand(()-> elevator.setElevatorPosition(RobotState.getInstance().deliveringCoralHeight), elevator)).onFalse(new InstantCommand(()-> elevator.setElevatorPosition(ElevatorEnums.HumanPlayer), elevator));
+      new Trigger(ForceElevator).onTrue(new InstantCommand(()-> elevator.setElevatorPosition(RobotState.getInstance().deliveringCoralHeight), elevator)).onFalse(new InstantCommand(()-> elevator.setElevatorPositionDynamicConfigs(HUMAN_PLAYER_STATION_CENTIMETERS, MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION, MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY, 0), elevator));
       new Trigger(ForceElevatorUp).whileTrue(new InstantCommand(()-> elevator.setVoltage(5), elevator)).onFalse(new InstantCommand(()-> elevator.setVoltage(0), elevator));
       new Trigger(ForceElevatorDown).whileTrue(new InstantCommand(()-> elevator.setVoltage(-1.2), elevator)).onFalse(new InstantCommand(()-> elevator.setVoltage(0), elevator));
     }
@@ -784,7 +786,7 @@ public class RobotContainer {
     }
 
     if(elevatorExists) {
-      elevatorResetNamedCommand = new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer));
+      elevatorResetNamedCommand = new InstantCommand(()->elevator.setElevatorPositionDynamicConfigs(HUMAN_PLAYER_STATION_CENTIMETERS, MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION, MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY, 0));
     } else {
       elevatorResetNamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
     }
