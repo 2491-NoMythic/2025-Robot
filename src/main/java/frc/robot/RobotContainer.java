@@ -317,7 +317,7 @@ public class RobotContainer {
       //operator manual controls, should not be used unless other controls not working
       ForceEjectCoral = ()-> operatorControllerXbox.getRightTriggerAxis() > 0.1;
       ForceElevator = ()->false;
-      ForceElevatorUp = ()->operatorControllerXbox.getLeftTriggerAxis() > -0.5;
+      ForceElevatorUp = ()->operatorControllerXbox.getLeftTriggerAxis() < -0.5;
       ForceElevatorDown = ()->operatorControllerXbox.getLeftTriggerAxis() > 0.5;
       ClimbCommandSupplier = ()->operatorControllerXbox.getXButton();
       ClimbModeAuthorizer = operatorControllerXbox::getRightStickButton;
