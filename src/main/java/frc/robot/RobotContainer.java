@@ -922,10 +922,12 @@ public class RobotContainer {
       SmartDashboard.putBoolean("TESTING/elevator lined up", elevator.isElevatorAtIntakeHeight());
       SmartDashboard.putBoolean("TESTING/coralLineupRunnning", RobotState.getInstance().coralLineupRunning);
     }
+    SmartDashboard.putBoolean("TESTING/reefLineupRunning", RobotState.getInstance().reefLineupRunning);
     SmartDashboard.putString("TESTING/delivery height", RobotState.getInstance().deliveringCoralHeight.toString());
     SmartDashboard.putBoolean("TESTING/isCoralSeen", RobotState.getInstance().isCoralSeen());
     SmartDashboard.putBoolean("TESTING/coralsensortrig", RobotState.getInstance().coralEndeffSensorTrig);
     SmartDashboard.putBoolean("TESTING/intakesensortrig", RobotState.getInstance().funnelSensorTrig);
+    SmartDashboard.putBoolean("TESTING/goingForAlgae", RobotState.getInstance().goForAlgae);
 
     currentAlliance = DriverStation.getAlliance().get();
     SmartDashboard.putString(
@@ -944,5 +946,9 @@ public class RobotContainer {
   }
 
   public void disabledInit() {
+    RobotState.getInstance().coralLineupRunning = false;
+    if(coralEndeffectorExists) {
+      new InstantCommand(()->coralEndDefector.stopCoralEndEffector(), coralEndDefector);
+    }
   }
 }

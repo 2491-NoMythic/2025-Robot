@@ -39,6 +39,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   private double zeroPoint;
   MotorLogger motorLogger1;
   MotorLogger motorLogger2;
+  double elevatorTarget = 0;
 
   /** Creates a new ElevatorSubsystem. */
   public ElevatorSubsystem() {
@@ -100,6 +101,9 @@ public class ElevatorSubsystem extends SubsystemBase {
       RobotState.getInstance().elevatorZeroSet = true;
     }
     SmartDashboard.putNumber("TESTING/limit switch value", elevatorMotor1.getClosedLoopReference().getValueAsDouble());
+    SmartDashboard.putBoolean("TESTING/elevatorAtPose", isElevatorAtPose());
+    SmartDashboard.putNumber("TESTING/elevatorTarget", elevatorTarget);
+    SmartDashboard.putNumber("TESTING/elevatorClosedLoopError", Math.abs(elevatorTarget-elevatorMotor1.getPosition().getValueAsDouble()));
   }
   /**
    * tells the elevator motor what rotations it will have to reach for the elevator to be touching the ground (this will never happen, just theoritically) <p>
@@ -124,11 +128,14 @@ public class ElevatorSubsystem extends SubsystemBase {
    */
   public void setElevatorPosition(double height){
     double targetHeight = calculateRotations(height);
+    elevatorTarget = height;
     MotionMagicVoltage request = new MotionMagicVoltage(targetHeight);
+
     elevatorMotor1.setControl(request);
   }
   public void setElevatorPositionDynamicConfigs(double height, double acceleration, double velocity, double jerk) {
     double targetHeight = calculateRotations(height);
+    elevatorTarget = height;
     DynamicMotionMagicVoltage request = new DynamicMotionMagicVoltage(targetHeight, velocity, acceleration, jerk);
     elevatorMotor1.setControl(request);
   }
@@ -143,25 +150,25 @@ public class ElevatorSubsystem extends SubsystemBase {
         break;
       case Reef2:
         setElevatorPosition(REEF_LEVEL_2_CENTIMETERS);
-        if(elevatorMotor1.getClosedLoopError().getValueAsDouble() < ELEVATOR_THRESHOLD){
+        if(isElevatorAtPose()){
           RobotState.getInstance().elevatorIsHigh = true;
         }
         break;
       case Reef3:
         setElevatorPosition(REEF_LEVEL_3_CENTIMETERS);
-        if(elevatorMotor1.getClosedLoopError().getValueAsDouble() < ELEVATOR_THRESHOLD){
+        if(isElevatorAtPose()){
           RobotState.getInstance().elevatorIsHigh = true;
         }
         break;
       case Reef4:
         setElevatorPosition(REEF_LEVEL_4_CENTIMETERS);
-        if(elevatorMotor1.getClosedLoopError().getValueAsDouble() < ELEVATOR_THRESHOLD){
+        if(isElevatorAtPose()){
           RobotState.getInstance().elevatorIsHigh = true;
         }
         break;
       case HumanPlayer:
         setElevatorPositionDynamicConfigs(HUMAN_PLAYER_STATION_CENTIMETERS, MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION, MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY, MOTION_MAGIC_ELEVATOR_JERK);
-        if(elevatorMotor1.getClosedLoopError().getValueAsDouble() < ELEVATOR_THRESHOLD){
+        if(isElevatorAtPose()){
           RobotState.getInstance().elevatorIsHigh = false;
         }
         break;
@@ -190,7 +197,7 @@ public class ElevatorSubsystem extends SubsystemBase {
    * @return true if closed loop error is less than our threshold, false otherwise
    */
   public boolean isElevatorAtPose() {
-    return elevatorMotor1.getClosedLoopError().getValueAsDouble() < ELEVATOR_THRESHOLD;
+    return Math.abs(getPIDTarget()-elevatorMotor1.getPosition().getValueAsDouble()) < ELEVATOR_THRESHOLD;
   }
   /**
    * asks if the error on the closed loop is less than our ELEVATOR_THRESHOLD constant
@@ -204,7 +211,7 @@ public class ElevatorSubsystem extends SubsystemBase {
    * @return the reference, in rotations
    */
   public double getPIDTarget() {
-    return elevatorMotor1.getClosedLoopReference().getValueAsDouble();
+    return elevatorTarget;
   }
   /**
    * stops the elevator by setting it's target to wherever it is right now
