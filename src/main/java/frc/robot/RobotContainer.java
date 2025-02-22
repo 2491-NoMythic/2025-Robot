@@ -91,6 +91,7 @@ import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.RobotState;
 import java.io.IOException;
 import java.lang.ModuleLayer.Controller;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
@@ -192,6 +193,22 @@ public class RobotContainer {
   BooleanSupplier climberResetSupplier;
   BooleanSupplier inEndgameSupplier;
 
+  //For ButtonBoard
+  Boolean useClosestSide;
+  Map<CommandSelectorEnum, Command> mapOfPaths;
+  BooleanSupplier reefPoleASupplier;
+  BooleanSupplier reefPoleBSupplier;
+  BooleanSupplier reefPoleCSupplier;
+  BooleanSupplier reefPoleDSupplier;
+  BooleanSupplier reefPoleESupplier;
+  BooleanSupplier reefPoleFSupplier;
+  BooleanSupplier reefPoleGSupplier;
+  BooleanSupplier reefPoleHSupplier;
+  BooleanSupplier reefPoleISupplier;
+  BooleanSupplier reefPoleJSupplier;
+  BooleanSupplier reefPoleKSupplier;
+  BooleanSupplier reefPoleLSupplier;
+
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
   /**
@@ -232,6 +249,26 @@ public class RobotContainer {
     lightsExist = Preferences.getBoolean("Lights Exist", true);
     LimelightExists = Preferences.getBoolean("Limelight Exists", true);
     useMotorLogger = Preferences.getBoolean("Motor Logging", true);
+    try{
+       mapOfPaths = Map.ofEntries(
+            Map.entry(CommandSelectorEnum.ReefPoleA, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupA"), DEFAULT_PATH_CONSTRAINTS)),
+            Map.entry(CommandSelectorEnum.ReefPoleB, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupB"), DEFAULT_PATH_CONSTRAINTS)),
+            Map.entry(CommandSelectorEnum.ReefPoleC, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupC"), DEFAULT_PATH_CONSTRAINTS)),
+            Map.entry(CommandSelectorEnum.ReefPoleD, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupD"), DEFAULT_PATH_CONSTRAINTS)),
+            Map.entry(CommandSelectorEnum.ReefPoleE, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupE"), DEFAULT_PATH_CONSTRAINTS)),
+            Map.entry(CommandSelectorEnum.ReefPoleF, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupF"), DEFAULT_PATH_CONSTRAINTS)),
+            Map.entry(CommandSelectorEnum.ReefPoleG, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupG"), DEFAULT_PATH_CONSTRAINTS)),
+            Map.entry(CommandSelectorEnum.ReefPoleH, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupH"), DEFAULT_PATH_CONSTRAINTS)),
+            Map.entry(CommandSelectorEnum.ReefPoleI, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupI"), DEFAULT_PATH_CONSTRAINTS)),
+            Map.entry(CommandSelectorEnum.ReefPoleJ, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupJ"), DEFAULT_PATH_CONSTRAINTS)),
+            Map.entry(CommandSelectorEnum.ReefPoleK, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupK"), DEFAULT_PATH_CONSTRAINTS)),
+            Map.entry(CommandSelectorEnum.ReefPoleL, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupL"), DEFAULT_PATH_CONSTRAINTS)),
+            Map.entry(CommandSelectorEnum.NoPoleSelected, new InstantCommand(()->System.out.println("No Closest Reef Side")))
+            );
+        } catch (FileVersionException | IOException | ParseException e) {
+          e.printStackTrace();
+        }
+
 
     DataLogManager.start(); // Start logging
     DriverStation.startDataLog(DataLogManager.getLog()); // Joystick Data logging
@@ -357,7 +394,21 @@ public class RobotContainer {
       ClimbModeAuthorizer = buttonBoard::getClimbModeAuthorizer;
       climberResetSupplier = buttonBoard::getClimberResetButton;
       ClimbCommandSupplier = buttonBoard::getclimbCommandButton;
+
+      reefPoleASupplier = buttonBoard::getReefPoleAButton;
+      reefPoleBSupplier = buttonBoard::getReefPoleBButton;
+      reefPoleCSupplier = buttonBoard::getReefPoleCButton;
+      reefPoleDSupplier = buttonBoard::getReefPoleDButton;
+      reefPoleESupplier = buttonBoard::getReefPoleEButton;
+      reefPoleFSupplier = buttonBoard::getReefPoleFButton;
+      reefPoleGSupplier = buttonBoard::getReefPoleGButton;
+      reefPoleHSupplier = buttonBoard::getReefPoleHButton;
+      reefPoleISupplier = buttonBoard::getReefPoleIButton;
+      reefPoleJSupplier = buttonBoard::getReefPoleJButton;
+      reefPoleKSupplier = buttonBoard::getReefPoleKButton;
+      reefPoleLSupplier = buttonBoard::getReefPoleLButton;
     }
+    useClosestSide = true;
     if (LimelightExists) {limelightInit();}
     if (distanceSensorsExist) {sensorInit();}   
     if (DrivetrainExists) {
@@ -487,7 +538,22 @@ public class RobotContainer {
     new Trigger(OpLeftReefLineupSup).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringLeft = true));
     new Trigger(OpRightReefLineupSup).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringLeft = false));
     new Trigger(goForAlgae).onTrue(new InstantCommand(()->RobotState.getInstance().goForAlgae = !RobotState.getInstance().goForAlgae));    SmartDashboard.putData("toggle algae pickup", new InstantCommand(()->RobotState.getInstance().goForAlgae = !RobotState.getInstance().goForAlgae));
-    
+    if (OCTEnum == ControllerEnums.ButtonBoard){
+      new Trigger(OpLeftReefLineupSup).or(OpRightReefLineupSup).onTrue(new InstantCommand(()->useClosestSide = true));
+      new Trigger(reefPoleASupplier)
+              .or(reefPoleBSupplier)
+              .or(reefPoleCSupplier)
+              .or(reefPoleDSupplier)
+              .or(reefPoleESupplier)
+              .or(reefPoleFSupplier)
+              .or(reefPoleGSupplier)
+              .or(reefPoleHSupplier)
+              .or(reefPoleISupplier)
+              .or(reefPoleJSupplier)
+              .or(reefPoleKSupplier)
+              .or(reefPoleLSupplier)
+              .onTrue(new InstantCommand(()->useClosestSide = false));
+    }
     if (DrivetrainExists){
     SmartDashboard.putData("drivetrain", driveTrain);
     new Trigger(ZeroGyroSup).onTrue(new InstantCommand(driveTrain::zeroGyroscope));
@@ -802,29 +868,18 @@ public class RobotContainer {
   }
 
   private void commandSelectorInst() {
-    try {
-      pathFindToReef = new SelectCommand<>(
-        Map.ofEntries(
-          Map.entry(CommandSelectorEnum.ReefPoleA, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupA"), DEFAULT_PATH_CONSTRAINTS)),
-          Map.entry(CommandSelectorEnum.ReefPoleB, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupB"), DEFAULT_PATH_CONSTRAINTS)),
-          Map.entry(CommandSelectorEnum.ReefPoleC, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupC"), DEFAULT_PATH_CONSTRAINTS)),
-          Map.entry(CommandSelectorEnum.ReefPoleD, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupD"), DEFAULT_PATH_CONSTRAINTS)),
-          Map.entry(CommandSelectorEnum.ReefPoleE, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupE"), DEFAULT_PATH_CONSTRAINTS)),
-          Map.entry(CommandSelectorEnum.ReefPoleF, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupF"), DEFAULT_PATH_CONSTRAINTS)),
-          Map.entry(CommandSelectorEnum.ReefPoleG, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupG"), DEFAULT_PATH_CONSTRAINTS)),
-          Map.entry(CommandSelectorEnum.ReefPoleH, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupH"), DEFAULT_PATH_CONSTRAINTS)),
-          Map.entry(CommandSelectorEnum.ReefPoleI, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupI"), DEFAULT_PATH_CONSTRAINTS)),
-          Map.entry(CommandSelectorEnum.ReefPoleJ, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupJ"), DEFAULT_PATH_CONSTRAINTS)),
-          Map.entry(CommandSelectorEnum.ReefPoleK, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupK"), DEFAULT_PATH_CONSTRAINTS)),
-          Map.entry(CommandSelectorEnum.ReefPoleL, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupL"), DEFAULT_PATH_CONSTRAINTS)),
-          Map.entry(CommandSelectorEnum.NoClosestSide, new InstantCommand(()->System.out.println("No Closest Reef Side")))
-          ), 
-          ()->selectCommand(()->RobotState.getInstance().deliveringLeft));
-        } catch (FileVersionException | IOException | ParseException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-          pathFindToReef = new InstantCommand(()->System.out.println("Error thrown while creating path!!"));
-        }
+    if (useClosestSide == true) {
+    pathFindToReef = new SelectCommand<>(
+      mapOfPaths, 
+        ()->selectCommand(()->RobotState.getInstance().deliveringLeft));
+    } else {
+      if (OCTEnum == ControllerEnums.ButtonBoard){
+        pathFindToReef = new SelectCommand<>(mapOfPaths, ()->bbSelectCommand());
+      } else {
+        pathFindToReef = new InstantCommand(()->System.out.println("Error thrown while creating path!!"));
+      }
+      //pathFindToReef = new supper button board thing
+    }
   }
   public static CommandSelectorEnum selectCommand(BooleanSupplier LeftSupplier) {
     switch(RobotState.getInstance().closestReefSide){
@@ -865,10 +920,40 @@ public class RobotContainer {
           return CommandSelectorEnum.ReefPoleL;
         }
       default:
-          return CommandSelectorEnum.NoClosestSide;
+          return CommandSelectorEnum.NoPoleSelected;
     } 
-
-}
+  }
+  public CommandSelectorEnum bbSelectCommand(){
+    if (reefPoleASupplier.getAsBoolean()){
+      RobotState.getInstance().selectedReefSide = CommandSelectorEnum.ReefPoleA;
+    } else if (reefPoleBSupplier.getAsBoolean()){
+      RobotState.getInstance().selectedReefSide = CommandSelectorEnum.ReefPoleB;
+    } else if (reefPoleCSupplier.getAsBoolean()){
+      RobotState.getInstance().selectedReefSide = CommandSelectorEnum.ReefPoleC;
+    } else if (reefPoleDSupplier.getAsBoolean()){
+      RobotState.getInstance().selectedReefSide = CommandSelectorEnum.ReefPoleD;
+    } else if (reefPoleESupplier.getAsBoolean()){
+      RobotState.getInstance().selectedReefSide = CommandSelectorEnum.ReefPoleE;
+    } else if (reefPoleFSupplier.getAsBoolean()){
+      RobotState.getInstance().selectedReefSide = CommandSelectorEnum.ReefPoleF;
+    } else if (reefPoleGSupplier.getAsBoolean()){
+      RobotState.getInstance().selectedReefSide = CommandSelectorEnum.ReefPoleG;
+    } else if (reefPoleHSupplier.getAsBoolean()){
+      RobotState.getInstance().selectedReefSide = CommandSelectorEnum.ReefPoleH;
+    } else if (reefPoleISupplier.getAsBoolean()){
+      RobotState.getInstance().selectedReefSide = CommandSelectorEnum.ReefPoleI;
+    } else if (reefPoleJSupplier.getAsBoolean()){
+      RobotState.getInstance().selectedReefSide = CommandSelectorEnum.ReefPoleJ;
+    } else if (reefPoleKSupplier.getAsBoolean()){
+      RobotState.getInstance().selectedReefSide = CommandSelectorEnum.ReefPoleK;
+    } else if (reefPoleLSupplier.getAsBoolean()){
+      RobotState.getInstance().selectedReefSide = CommandSelectorEnum.ReefPoleL;
+    } else {
+      RobotState.getInstance().selectedReefSide = CommandSelectorEnum.NoPoleSelected;
+    }
+    
+    return RobotState.getInstance().selectedReefSide;
+  }
   public boolean endgameTimer(){
     if (Timer.getMatchTime()<30){
       return true;

@@ -6,17 +6,17 @@ package frc.robot.settings;
 
 /** Add your docs here. */
 public enum CommandSelectorEnum {
+    ReefPoleA,
+    ReefPoleB,
+    ReefPoleC,
+    ReefPoleD,
     ReefPoleE,
     ReefPoleF,
     ReefPoleG,
     ReefPoleH,
     ReefPoleI,
     ReefPoleJ,
-    ReefPoleA,
-    ReefPoleB,
-    ReefPoleC,
-    ReefPoleD,
     ReefPoleK,
     ReefPoleL,
-    NoClosestSide
+    NoPoleSelected
 }
