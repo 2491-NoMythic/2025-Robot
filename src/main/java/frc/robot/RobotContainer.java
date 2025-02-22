@@ -893,6 +893,7 @@ public class RobotContainer {
   public void robotInit(){
     }
   public void robotPeriodic() {
+    updateSmartDashboard();
     currentAlliance = DriverStation.getAlliance().get();
     SmartDashboard.putString(
         "AlliancePeriodic",
@@ -903,7 +904,17 @@ public class RobotContainer {
       SmartDashboard.putBoolean("LIMELIGHT/isConnectedB", Limelight.getInstance().isConnected(Vision.APRILTAG_LIMELIGHTB_NAME));
       SmartDashboard.putBoolean("LIMELIGHT/isConnectedC", Limelight.getInstance().isConnected(Vision.APRILTAG_LIMELIGHTC_NAME));
     }
+  }
+
+  private void updateSmartDashboard() {
     SmartDashboard.putBoolean("REEFLINEUP/deliveringLeft", RobotState.getInstance().deliveringLeft);
+    SmartDashboard.putString("REEFLINEUP/deliveringHeight", RobotState.getInstance().deliveringCoralHeight.toString());
+    SmartDashboard.putString("REEFLINEUP/closestReefSide", RobotState.getInstance().closestReefSide.toString());
+    SmartDashboard.putBoolean("REEFLINEUP/coralEndEfSensorTrig", RobotState.getInstance().coralEndeffSensorTrig);
+    SmartDashboard.putBoolean("REEFLINEUP/funnelSensorTrig", RobotState.getInstance().funnelSensorTrig);
+    SmartDashboard.putBoolean("REEFLINEUP/isCoralSeen", RobotState.getInstance().isCoralSeen());
+    SmartDashboard.putBoolean("REEFLINEUP/reefLineupRunning", RobotState.getInstance().reefLineupRunning);
+
   }
 
   public void disabledPeriodic() {
