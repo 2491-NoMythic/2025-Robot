@@ -225,7 +225,7 @@ public class DistanceSensors  extends SubsystemBase{
       && farLeft.getRange()>0 //the sensor does not read (which it sometimes reads when there is nothing within it's sensing range)
       && loopsFLValid>loopsNeededForValid; //the sensor has given a consistent, smoothly changing reading for at least x loops of the code, meaning it isn't just blinking static
     RobotState.getInstance().middleLeftSensorTriggered = 
-      middleLeft.getRange()<RANGE_TO_SEE_REEF_FLAT_SENSORS
+      middleLeft.getRange()<RANGE_TO_SEE_REEF_ANGLED_AND_SPACED_SENSORS
       && middleLeft.getRange()>0
       && loopsMLValid>loopsNeededForValid;
     RobotState.getInstance().middleRightSensorTriggered =

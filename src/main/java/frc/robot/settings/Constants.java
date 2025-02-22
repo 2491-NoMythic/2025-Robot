@@ -32,10 +32,10 @@ public final class Constants {
   private Constants() {}
 
   public static final class SensorConstants {
-    public static final int FAR_LEFT_DIST_SENSOR_ID = 1;
-    public static final int MIDDLE_LEFT_DIST_SENSOR_ID = 2;
+    public static final int FAR_LEFT_DIST_SENSOR_ID = 2;
+    public static final int MIDDLE_LEFT_DIST_SENSOR_ID = 4;
     public static final int MIDDLE_RIGHT_DIST_SENSOR_ID = 3;
-    public static final int FAR_RIGHT_DIST_SENSOR_ID = 4;
+    public static final int FAR_RIGHT_DIST_SENSOR_ID = 1;
     public static final  int ELEVATOR_SENSOR_ID = 2491;
     public static final  int FUNNEL_SENSOR_ID = 2491;
     public static final  int INTAKE_SENSOR_ID = 2491;
