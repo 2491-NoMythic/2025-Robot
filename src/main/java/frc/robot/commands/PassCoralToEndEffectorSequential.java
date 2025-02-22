@@ -25,22 +25,21 @@ public class PassCoralToEndEffectorSequential extends SequentialCommandGroup {
       final double endEffectorAdjustingSpeed = CoralEndeffectorConstants.CORAL_ENDEFFECTOR_ADJUSTING_INTAKE_SPEED;
       final double funelAdjustingSpeed = CoralEndeffectorConstants.CORAL_ENDEFFECTOR_ADJUSTING_INTAKE_SPEED;
     addCommands(
-      new ParallelRaceGroup(
-        new WaitCommand(()->5),
         new SequentialCommandGroup(
           new InstantCommand(()->RobotState.getInstance().coralLineupRunning = true),
           new InstantCommand(()->coralEndEffector.runCoralEndEffector(CORAL_ENDEFFECTOR_SPEED), coralEndEffector),
           new InstantCommand(()->funnelIntake.runFunnel(funelAdjustingSpeed), funnelIntake),
           new InstantCommand(()->System.out.println("reached checkpoint 1")),
-          new WaitCommand(()->0.3),
-          new WaitUntil(()->!RobotState.getInstance().coralEndeffSensorTrig&&!RobotState.getInstance().funnelSensorTrig),
+          // new WaitCommand(()->0.3),
+          new WaitUntil(()->!(RobotState.getInstance().coralEndeffSensorTrig||RobotState.getInstance().funnelSensorTrig)),
           new InstantCommand(()->coralEndEffector.runCoralEndEffector(-endEffectorAdjustingSpeed), coralEndEffector),
           new InstantCommand(()->funnelIntake.stopFunnel(), funnelIntake),
-          new WaitUntil(()->RobotState.getInstance().coralEndeffSensorTrig),
+          new ParallelRaceGroup(
+            new WaitCommand(()->2),
+            new WaitUntil(()->RobotState.getInstance().coralEndeffSensorTrig)),
           new InstantCommand(()->coralEndEffector.stopCoralEndEffector(), coralEndEffector),
           new InstantCommand(()->RobotState.getInstance().coralAligned = true),
           new InstantCommand(()->RobotState.getInstance().coralLineupRunning = false)
-        )
       )
     );
   }

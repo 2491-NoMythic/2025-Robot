@@ -57,7 +57,7 @@ public class PlaceCoralNoPath extends SequentialCommandGroup{
                         new WaitCommand(()->0.75)))
             ),
             new InstantCommand(()->System.out.println("reeflineupended!!")), //sets elevator back to the bottom position
-            new MoveMeters(drivetrain, -0.5, -2, 0, 0),
+            new MoveMeters(drivetrain, -0.5, -0.8, 0, 0),
             new InstantCommand(()->elevator.setElevatorPositionDynamicConfigs(HUMAN_PLAYER_STATION_CENTIMETERS, MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION, MOTION_MAGIC_ELEVATOR_VELOCITY, 0), elevator) //sets elevator back to the bottom position
         );
 

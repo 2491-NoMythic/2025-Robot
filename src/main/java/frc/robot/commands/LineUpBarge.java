@@ -29,7 +29,7 @@ public class LineUpBarge extends Command {
   /** Creates a new LineUpBarge. */
   public LineUpBarge(DrivetrainSubsystem driveTrain, DoubleSupplier controllerYSupplier) {
     this.driveTrain = driveTrain;
-    this.controllerYSupplier = controllerYSupplier;
+    this.controllerYSupplier = ()->0;
     addRequirements(driveTrain);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -56,6 +56,7 @@ public class LineUpBarge extends Command {
     currentX = driveTrain.getPose().getX();
     SmartDashboard.putNumber("currentX", currentX);
     SmartDashboard.putNumber("desiredX", desiredX);
+    SmartDashboard.putNumber("BARGELINUP/difference", Math.abs(currentX-desiredX));
     speedX = 4*(desiredX - currentX);
     SmartDashboard.putNumber("BARGELINUP/calculated speed", speedX);
     if(speedX>3) {
@@ -65,9 +66,9 @@ public class LineUpBarge extends Command {
       speedX = -3;
     }
     if (isRed) {
-      driveTrain.moveTowardsRotationTarget(speedX, controllerYSupplier.getAsDouble() * DriveConstants.MAX_VELOCITY_METERS_PER_SECOND * -1);
+      driveTrain.moveTowardsRotationTarget(speedX, 0);
     } else {
-      driveTrain.moveTowardsRotationTarget(speedX, controllerYSupplier.getAsDouble() * DriveConstants.MAX_VELOCITY_METERS_PER_SECOND);
+      driveTrain.moveTowardsRotationTarget(speedX, 0);
     }
   }
 
