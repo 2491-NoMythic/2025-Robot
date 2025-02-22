@@ -102,6 +102,6 @@ public class ApproachReef extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return pidController.atSetpoint();
+    return true;
   }
 }
