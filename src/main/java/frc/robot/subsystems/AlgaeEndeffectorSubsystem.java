@@ -87,12 +87,10 @@ public class AlgaeEndeffectorSubsystem extends SubsystemBase {
    */
   public void runAlgaeEndDefector(double speed){
     algaeEndeffectorMotor1.set(speed);
-    algaeEndeffectorMotor2.set(speed);
   }
 
   public void stopAlgaeEndDefector(){
     algaeEndeffectorMotor1.set(0);
-    algaeEndeffectorMotor2.set(0);
   }
 
   public SparkMax getMotor(){
