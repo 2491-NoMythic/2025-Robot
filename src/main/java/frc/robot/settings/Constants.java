@@ -32,10 +32,10 @@ public final class Constants {
   private Constants() {}
 
   public static final class SensorConstants {
-    public static final int FAR_LEFT_DIST_SENSOR_ID = 1;
-    public static final int MIDDLE_LEFT_DIST_SENSOR_ID = 2;
+    public static final int FAR_LEFT_DIST_SENSOR_ID = 2;
+    public static final int MIDDLE_LEFT_DIST_SENSOR_ID = 4;
     public static final int MIDDLE_RIGHT_DIST_SENSOR_ID = 3;
-    public static final int FAR_RIGHT_DIST_SENSOR_ID = 4;
+    public static final int FAR_RIGHT_DIST_SENSOR_ID = 1;
     public static final  int ELEVATOR_SENSOR_ID = 2491;
     public static final  int FUNNEL_SENSOR_ID = 2491;
     public static final  int INTAKE_SENSOR_ID = 2491;
@@ -201,7 +201,7 @@ public final class Constants {
     // Auto PID loops
     // twin pid controllers that control the x and y robot movements.
     public static final double k_XY_P = 7; // *2.5;
-    public static final double k_XY_I = 0.25;
+    public static final double k_XY_I = 0.3;
     public static final double k_XY_D = 0.0;
 
     public static final double k_THETA_P = 4;
@@ -390,24 +390,24 @@ public final class Constants {
   public final class CoralEndeffectorConstants{
     public static final int CORAL_ENDEFFECTOR_MOTOR = 20;
 
-    public static final double CORAL_ENDEFFECTOR_KP = 0.001;
+    public static final double CORAL_ENDEFFECTOR_KP = 0.00005;
     public static final double CORAL_ENDEFFECTOR_KI = 0;
     public static final double CORAL_ENDEFFECTOR_KD = 0;
-    public static final double CORAL_ENDEFFECTOR_KFF = 0;
+    public static final double CORAL_ENDEFFECTOR_KFF = 0.000106;
 
-    public static final double CORAL_ENDEFFECTOR_KP_PRACTICE = 2491;
-    public static final double CORAL_ENDEFFECTOR_KI_PRACTICE = 2491;
-    public static final double CORAL_ENDEFFECTOR_KD_PRACTICE = 2491;
-    public static final double CORAL_ENDEFFECTOR_KFF_PRACTICE = 2491;
+    public static final double CORAL_ENDEFFECTOR_KP_PRACTICE = 0.00005;
+    public static final double CORAL_ENDEFFECTOR_KI_PRACTICE = 0;
+    public static final double CORAL_ENDEFFECTOR_KD_PRACTICE = 0;
+    public static final double CORAL_ENDEFFECTOR_KFF_PRACTICE = 0.000108;
     
-    public static final double CORAL_ENDEFFECTOR_SPEED = 0.5;
+    public static final double CORAL_ENDEFFECTOR_SPEED = 1900;
       /** this is the speed that the EndEffector motors should run at when they should be slow enough to stop the coral where it is the moment the sensor is triggered */
-      public static final double CORAL_ENDEFFECTOR_ADJUSTING_INTAKE_SPEED = 150;
+      public static final double CORAL_ENDEFFECTOR_ADJUSTING_INTAKE_SPEED = 1000;
   }
 
   public final class AlgaeEndeffectorConstants{
-    public static final int ALGAE_ENDEFFECTOR_MOTOR_1_ID = 40;
-    public static final int ALGAE_ENDEFFECTOR_MOTOR_2_ID = 41;
+    public static final int ALGAE_ENDEFFECTOR_MOTOR_1_ID = 23;
+    public static final int ALGAE_ENDEFFECTOR_MOTOR_2_ID = 25;
     
     public static final int ALGAE_ENDEFFECTOR_CURRENT_LIMIT = 25;
     public static final double ALGAE_INTAKE_SPEED = 1;
@@ -440,22 +440,22 @@ public final class Constants {
   }
   
   public final class ElevatorConstants{
-    public static final int ELEVATOR_MOTOR_1_ID = 13;
-    public static final int ELEVATOR_MOTOR_2_ID = 14;
-    public static final double HUMAN_PLAYER_STATION_MILLIMETERS = 2491;
-    public static final double HEIGHT_AT_LIMIT_SWITCH = 2491;
-    public static final double PROCESSOR_HEIGHT_MILLIMETERS = 2491;
-    public static final double REEF_LEVEL_1_MILLIMETERS = 2491;
-    public static final double REEF_LEVEL_2_MILLIMETERS = 2491;
-    public static final double REEF_LEVEL_3_MILLIMETERS = 2491;
-    public static final double REEF_LEVEL_4_MILLIMETERS = 2491;
-    public static final double BARGE_SHOOT_MILLIMETERS = 2491;
-    public static final double ELEVATOR_MILLIMETERS_TO_ROTATIONS = 2491;
-    public static final double ELEVATOR_SENSOR_MILLIMETERS_OFF_GROUND = 2491;
+    public static final int ELEVATOR_MOTOR_1_ID = 9;
+    public static final int ELEVATOR_MOTOR_2_ID = 10;
+    public static final double HUMAN_PLAYER_STATION_CENTIMETERS = 28.3;//31.5;
+    public static final double HEIGHT_AT_LIMIT_SWITCH = 20;
+    public static final double PROCESSOR_HEIGHT_CENTIMETERS = 19;
+    public static final double REEF_LEVEL_1_CENTIMETERS = 80;
+    public static final double REEF_LEVEL_2_CENTIMETERS = 92.5;
+    public static final double REEF_LEVEL_3_CENTIMETERS = 130.2;
+    public static final double REEF_LEVEL_4_CENTIMETERS = 198.2;
+    public static final double BARGE_SHOOT_CENTIMETERS = 198;
     public static final double ELEVATOR_THRESHOLD = 5;
 
-    public static final double MOTION_MAGIC_ELEVATOR_VELOCITY = 0;
-    public static final double MOTION_MAGIC_ELEVATOR_ACCLERATION = 0;
+    public static final double MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY = 60;
+    public static final double MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION = 120;
+    public static final double MOTION_MAGIC_ELEVATOR_VELOCITY = 600;
+    public static final double MOTION_MAGIC_ELEVATOR_ACCLERATION = 2400;
     public static final double MOTION_MAGIC_ELEVATOR_JERK = 0;
   }
 
@@ -495,27 +495,27 @@ public final class Constants {
   public final class FunnelConstants{
     public static final int FUNNEL_SLANT_MOTOR_ID = 21;
     public static final int FUNNEL_STRAIGHT_MOTOR_ID = 22;
-    public static final int FUNNEL_ROTATOR_MOTOR_ID = 2491;
+    public static final int FUNNEL_ROTATOR_MOTOR_ID = 24;
 
     public static final double FUNNEL_SLANT_MOTOR_KP = 0.000031;
     public static final double FUNNEL_SLANT_MOTOR_KI = 0;
     public static final double FUNNEL_SLANT_MOTOR_KD = 0;
     public static final double FUNNEL_SLANT_MOTOR_KFF = 0.0001315;
     
-    public static final double FUNNEL_SLANT_MOTOR_KP_PRACTICE = 2491;
-    public static final double FUNNEL_SLANT_MOTOR_KI_PRACTICE = 2491;
-    public static final double FUNNEL_SLANT_MOTOR_KD_PRACTICE = 2491;
-    public static final double FUNNEL_SLANT_MOTOR_KFF_PRACTICE = 2491;
+    public static final double FUNNEL_SLANT_MOTOR_KP_PRACTICE = 0.000031;
+    public static final double FUNNEL_SLANT_MOTOR_KI_PRACTICE = 0;
+    public static final double FUNNEL_SLANT_MOTOR_KD_PRACTICE = 0;
+    public static final double FUNNEL_SLANT_MOTOR_KFF_PRACTICE = 0.0001315;
 
     public static final double FUNNEL_STRAIGHT_MOTOR_KP = 0.0001;
     public static final double FUNNEL_STRAIGHT_MOTOR_KI = 0;
     public static final double FUNNEL_STRAIGHT_MOTOR_KD = 0;
     public static final double FUNNEL_STRAIGHT_MOTOR_KFF = 0.000116;
 
-    public static final double FUNNEL_STRAIGHT_MOTOR_KP_PRACTICE = 2491;
-    public static final double FUNNEL_STRAIGHT_MOTOR_KI_PRACTICE = 2491;
-    public static final double FUNNEL_STRAIGHT_MOTOR_KD_PRACTICE = 2491;
-    public static final double FUNNEL_STRAIGHT_MOTOR_KFF_PRACTICE = 2491;
+    public static final double FUNNEL_STRAIGHT_MOTOR_KP_PRACTICE = 0.0001;
+    public static final double FUNNEL_STRAIGHT_MOTOR_KI_PRACTICE = 0;
+    public static final double FUNNEL_STRAIGHT_MOTOR_KD_PRACTICE = 0;
+    public static final double FUNNEL_STRAIGHT_MOTOR_KFF_PRACTICE = 0.000116;
 
     public static final double FUNNEL_ROTATOR_KP = 2491;
     public static final double FUNNEL_ROTATOR_KI = 2491;
@@ -529,7 +529,7 @@ public final class Constants {
 
     public static final double FUNNEL_INTAKE_SPEED = 1500;
     /** this is the speed that the funnel motors should run at when they should be slow enough to stop the coral where it is the moent the sensor is triggered */
-    public static final double FUNNEL_ADJUSTING_INTAKE_SPEED = 150;
+    public static final double FUNNEL_ADJUSTING_INTAKE_SPEED = 600;
   }
 
   public final class AutoAlignToReefConstants {
@@ -544,8 +544,8 @@ public final class Constants {
     public static final int REEF_ANGLE_1 = 60;
     public static final int REEF_ANGLE_2 = 120;
     public static final int REEF_ANGLE_3 = 180;
-    public static final double BLUE_BARGE_SHOOT_X = 7.5; //TODO: change these values
-    public static final double RED_BARGE_SHOOT_X = 10; //TODO: change these values
+    public static final double BLUE_BARGE_SHOOT_X = 7.78; //TODO: change these values
+    public static final double RED_BARGE_SHOOT_X = 9.72; //TODO: change these values
    }
 public final class LightConstants{
   public static final int CANDLE_ID = 0;

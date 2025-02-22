@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.17725,
-        "y": 5.14625
+        "x": 4.841,
+        "y": 5.197
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.467272727272728,
-        "y": 5.585553977272727
+        "x": 4.131022727272728,
+        "y": 5.636303977272727
       },
       "isLocked": false,
-      "linkedName": "ReefTopRight"
+      "linkedName": "ReefJ"
     },
     {
       "anchor": {

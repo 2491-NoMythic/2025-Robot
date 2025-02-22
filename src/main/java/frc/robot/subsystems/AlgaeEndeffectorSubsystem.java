@@ -68,10 +68,12 @@ public class AlgaeEndeffectorSubsystem extends SubsystemBase {
         ALGAE_ENDEFFECTOR_KFF_2_PRACTICE));}
 
     algaeConfig1.idleMode(IdleMode.kCoast);
+    algaeConfig1.inverted(true);
     algaeConfig1.smartCurrentLimit(ALGAE_ENDEFFECTOR_CURRENT_LIMIT, ALGAE_ENDEFFECTOR_CURRENT_LIMIT, 1000);
     algaeEndeffectorMotor1.configure(algaeConfig1, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-   
+    
     algaeConfig2.idleMode(IdleMode.kCoast);
+    algaeConfig1.inverted(true);
     algaeConfig2.smartCurrentLimit(ALGAE_ENDEFFECTOR_CURRENT_LIMIT, ALGAE_ENDEFFECTOR_CURRENT_LIMIT, 1000);
     algaeConfig2.follow(algaeEndeffectorMotor1);
     algaeEndeffectorMotor2.configure(algaeConfig2, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);

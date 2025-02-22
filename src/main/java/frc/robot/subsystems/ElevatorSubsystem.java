@@ -5,23 +5,32 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.FeedbackConfigs;
+import com.ctre.phoenix6.configs.HardwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DynamicMotionMagicVoltage;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
-import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.ForwardLimitSourceValue;
+import com.ctre.phoenix6.signals.ForwardLimitTypeValue;
+import com.ctre.phoenix6.signals.ForwardLimitValue;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.ReverseLimitTypeValue;
+import com.ctre.phoenix6.signals.ReverseLimitValue;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.helpers.MotorLogger;
 import frc.robot.settings.ElevatorEnums;
 import frc.robot.subsystems.RobotState;
 
+import static frc.robot.settings.Constants.DriveConstants.CANIVORE_DRIVETRAIN;
 import static frc.robot.settings.Constants.ElevatorConstants.*;
 import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ElevatorSubsystem extends SubsystemBase {
   private TalonFX elevatorMotor1;
@@ -30,32 +39,46 @@ public class ElevatorSubsystem extends SubsystemBase {
   private double zeroPoint;
   MotorLogger motorLogger1;
   MotorLogger motorLogger2;
+  double elevatorTarget = 0;
 
   /** Creates a new ElevatorSubsystem. */
   public ElevatorSubsystem() {
-    elevatorMotor1 = new TalonFX(ELEVATOR_MOTOR_1_ID);
-    elevatorMotor2 = new TalonFX(ELEVATOR_MOTOR_2_ID);
+    elevatorMotor1 = new TalonFX(ELEVATOR_MOTOR_1_ID, CANIVORE_DRIVETRAIN);
+    elevatorMotor2 = new TalonFX(ELEVATOR_MOTOR_2_ID, CANIVORE_DRIVETRAIN);
     eleMotorConfig = new TalonFXConfiguration()
+      .withMotorOutput(new MotorOutputConfigs()
+        .withInverted(InvertedValue.Clockwise_Positive))
+      .withFeedback(new FeedbackConfigs()
+        .withSensorToMechanismRatio(0.08910703))
       .withCurrentLimits(new CurrentLimitsConfigs()
         .withSupplyCurrentLimit(30)
         .withSupplyCurrentLimitEnable(true))
       .withMotionMagic(new MotionMagicConfigs()
         .withMotionMagicAcceleration(MOTION_MAGIC_ELEVATOR_ACCLERATION)
         .withMotionMagicCruiseVelocity(MOTION_MAGIC_ELEVATOR_VELOCITY)
-        .withMotionMagicJerk(MOTION_MAGIC_ELEVATOR_JERK));
+        .withMotionMagicJerk(MOTION_MAGIC_ELEVATOR_JERK))
+      .withHardwareLimitSwitch(new HardwareLimitSwitchConfigs()
+        .withReverseLimitAutosetPositionEnable(true)
+        .withReverseLimitAutosetPositionValue(HEIGHT_AT_LIMIT_SWITCH)
+        .withReverseLimitEnable(true)
+        .withReverseLimitType(ReverseLimitTypeValue.NormallyClosed)
+        .withForwardLimitAutosetPositionEnable(false)
+        .withForwardLimitEnable(true)
+        .withForwardLimitType(ForwardLimitTypeValue.NormallyClosed));
     if (Preferences.getBoolean("CompBot", true)){  
       eleMotorConfig.Slot0 = new Slot0Configs()
         .withKP(0)
         .withKG(0)
         .withKA(0)
-        .withKV(0);
+        .withKV(0)
+        .withKS(0);
     } else {
-      eleMotorConfig = new TalonFXConfiguration()
-      .withSlot0(new Slot0Configs()
-        .withKP(0)
-        .withKG(0)
-        .withKA(0)
-        .withKV(0));
+      eleMotorConfig.Slot0 = new Slot0Configs()
+        .withKP(0.4)
+        .withKG(0.57)
+        .withKA(0.00040067)
+        .withKV(0.02168)
+        .withKS(1.17);
     }
     elevatorMotor1.getConfigurator().apply(eleMotorConfig);
     elevatorMotor2.setControl(new Follower(ELEVATOR_MOTOR_1_ID, false));
@@ -74,32 +97,46 @@ public class ElevatorSubsystem extends SubsystemBase {
     if(Preferences.getBoolean("Motor Logging", false)){
     logMotors();
     }
-    if(elevatorMotor1.getForwardLimit().getValueAsDouble() > 0.1){
-      setZero(HEIGHT_AT_LIMIT_SWITCH);
+    if(elevatorMotor1.getReverseLimit().getValue() == ReverseLimitValue.Open) {
       RobotState.getInstance().elevatorZeroSet = true;
     }
+    SmartDashboard.putNumber("TESTING/limit switch value", elevatorMotor1.getClosedLoopReference().getValueAsDouble());
+    SmartDashboard.putBoolean("TESTING/elevatorAtPose", isElevatorAtPose());
+    SmartDashboard.putNumber("TESTING/elevatorTarget", elevatorTarget);
+    SmartDashboard.putNumber("TESTING/elevatorClosedLoopError", Math.abs(elevatorTarget-elevatorMotor1.getPosition().getValueAsDouble()));
   }
   /**
    * tells the elevator motor what rotations it will have to reach for the elevator to be touching the ground (this will never happen, just theoritically) <p>
    * this is necessary so that the elevator has a reference point to calculate the position of any height off the ground. Run this before ever setting the elevator to a position
-   * @param theDistance the distance that the elevator is from the ground, in millimeters
+   * @param theDistance the distance that the elevator is from the ground, in centimeters
    */
   public void setZero(double theDistance){
-    double rotationsFromGround = theDistance * ELEVATOR_MILLIMETERS_TO_ROTATIONS;
+    double rotationsFromGround = theDistance;
     zeroPoint = elevatorMotor1.getPosition().getValueAsDouble() - rotationsFromGround;   
-    }
+  }
+  /**
+   * sets the voltage of the elevator motor. It takes about 2 volts to move the elevator slowly up, and higher than 4 is dangerously fast
+   * it takes about 1 volt to move the elevator slowly down, and lower than -2 is dangerously fast
+   * @param voltage
+   */
+  public void setVoltage(double voltage) {
+    elevatorMotor1.setControl(new VoltageOut(voltage));
+  }
   /**
    * Makes the elevator move to a position relative to the ground. It does this by changing the setpoint for the motor's onboard PID controller
-   * @param height the desired height, in millimeters off the ground
+   * @param height the desired height, in centimeters off the ground
    */
   public void setElevatorPosition(double height){
-    double targetRotations = calculateRotations(height);
-    MotionMagicVoltage request = new MotionMagicVoltage(targetRotations);
+    double targetHeight = calculateRotations(height);
+    elevatorTarget = height;
+    MotionMagicVoltage request = new MotionMagicVoltage(targetHeight);
+
     elevatorMotor1.setControl(request);
   }
   public void setElevatorPositionDynamicConfigs(double height, double acceleration, double velocity, double jerk) {
-    double targetRotations = calculateRotations(height);
-    DynamicMotionMagicVoltage request = new DynamicMotionMagicVoltage(targetRotations, velocity, acceleration, jerk);
+    double targetHeight = calculateRotations(height);
+    elevatorTarget = height;
+    DynamicMotionMagicVoltage request = new DynamicMotionMagicVoltage(targetHeight, velocity, acceleration, jerk);
     elevatorMotor1.setControl(request);
   }
   /**
@@ -109,29 +146,29 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void setElevatorPosition(ElevatorEnums height){
     switch(height){
       case Reef1:
-        setElevatorPosition(REEF_LEVEL_1_MILLIMETERS);
+        setElevatorPosition(REEF_LEVEL_1_CENTIMETERS);
         break;
       case Reef2:
-        setElevatorPosition(REEF_LEVEL_2_MILLIMETERS);
-        if(elevatorMotor1.getClosedLoopError().getValueAsDouble() < ELEVATOR_THRESHOLD){
+        setElevatorPosition(REEF_LEVEL_2_CENTIMETERS);
+        if(isElevatorAtPose()){
           RobotState.getInstance().elevatorIsHigh = true;
         }
         break;
       case Reef3:
-        setElevatorPosition(REEF_LEVEL_3_MILLIMETERS);
-        if(elevatorMotor1.getClosedLoopError().getValueAsDouble() < ELEVATOR_THRESHOLD){
+        setElevatorPosition(REEF_LEVEL_3_CENTIMETERS);
+        if(isElevatorAtPose()){
           RobotState.getInstance().elevatorIsHigh = true;
         }
         break;
       case Reef4:
-        setElevatorPosition(REEF_LEVEL_4_MILLIMETERS);
-        if(elevatorMotor1.getClosedLoopError().getValueAsDouble() < ELEVATOR_THRESHOLD){
+        setElevatorPosition(REEF_LEVEL_4_CENTIMETERS);
+        if(isElevatorAtPose()){
           RobotState.getInstance().elevatorIsHigh = true;
         }
         break;
       case HumanPlayer:
-        setElevatorPosition(HUMAN_PLAYER_STATION_MILLIMETERS);
-        if(elevatorMotor1.getClosedLoopError().getValueAsDouble() < ELEVATOR_THRESHOLD){
+        setElevatorPositionDynamicConfigs(HUMAN_PLAYER_STATION_CENTIMETERS, MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION, MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY, MOTION_MAGIC_ELEVATOR_JERK);
+        if(isElevatorAtPose()){
           RobotState.getInstance().elevatorIsHigh = false;
         }
         break;
@@ -139,40 +176,48 @@ public class ElevatorSubsystem extends SubsystemBase {
         setElevatorPosition(HEIGHT_AT_LIMIT_SWITCH);
         break;
       case AlgaeInProcessor:
-        setElevatorPosition(PROCESSOR_HEIGHT_MILLIMETERS);
+        setElevatorPosition(PROCESSOR_HEIGHT_CENTIMETERS);
         break;
       case Barge:
-        setElevatorPosition(BARGE_SHOOT_MILLIMETERS);
+        setElevatorPosition(BARGE_SHOOT_CENTIMETERS);
         break;
     }
   }
   /**
-   * calculate the target rotations for the motor based on a desired height off the ground
+   * calculate the target rotations for the motor based on a desired height off the ground. If the input height is lower than the height of the limit switch, 
+   * the output will be the height of the limit switch
    * @param desiredHeight height off the ground, in millimeters
    * @return the taret position for the motor, in rotations
    */
   private double calculateRotations(double desiredHeight) {
-    return (desiredHeight*ELEVATOR_MILLIMETERS_TO_ROTATIONS) + zeroPoint;
+    return (Math.max(desiredHeight, HEIGHT_AT_LIMIT_SWITCH));
   }
   /**
    * asks if the error on the closed loop is less than our ELEVATOR_THRESHOLD constant
    * @return true if closed loop error is less than our threshold, false otherwise
    */
   public boolean isElevatorAtPose() {
-    return elevatorMotor1.getClosedLoopError().getValueAsDouble() < ELEVATOR_THRESHOLD;
+    return Math.abs(getPIDTarget()-elevatorMotor1.getPosition().getValueAsDouble()) < ELEVATOR_THRESHOLD;
+  }
+  /**
+   * asks if the error on the closed loop is less than our ELEVATOR_THRESHOLD constant
+   * @return true if closed loop error is less than our threshold, false otherwise
+   */
+  public boolean isElevatorAtIntakeHeight() {
+    return isElevatorAtPose() && Math.abs(getPIDTarget()-HUMAN_PLAYER_STATION_CENTIMETERS) < 4;
   }
   /**
    * the current reference for the onboard ClosedLoopController
    * @return the reference, in rotations
    */
   public double getPIDTarget() {
-    return elevatorMotor1.getClosedLoopReference().getValueAsDouble();
+    return elevatorTarget;
   }
   /**
    * stops the elevator by setting it's target to wherever it is right now
    */
   public void stopElevator(){
-    elevatorMotor1.setControl(new PositionVoltage(elevatorMotor1.getPosition().getValueAsDouble()));
+    elevatorMotor1.setControl(new MotionMagicVoltage(elevatorMotor1.getPosition().getValueAsDouble()));
   }
 
 }

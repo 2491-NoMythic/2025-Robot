@@ -4,7 +4,10 @@
 
 package frc.robot.commands;
 
-import static frc.robot.settings.Constants.ElevatorConstants.PROCESSOR_HEIGHT_MILLIMETERS;
+import static frc.robot.settings.Constants.ElevatorConstants.HUMAN_PLAYER_STATION_CENTIMETERS;
+import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION;
+import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY;
+import static frc.robot.settings.Constants.ElevatorConstants.PROCESSOR_HEIGHT_CENTIMETERS;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.settings.ElevatorEnums;
@@ -33,13 +36,13 @@ public class DepositAlgae extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
+    elevator.setElevatorPositionDynamicConfigs(PROCESSOR_HEIGHT_CENTIMETERS, MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION, MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY, 0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    elevator.setElevatorPosition(PROCESSOR_HEIGHT_MILLIMETERS);
+    elevator.setVoltage(-1.2);
     if(elevator.isElevatorAtPose()){
       algaeEndeffector.runAlgaeEndDefector(shootSpeed);
   }
@@ -49,7 +52,7 @@ public class DepositAlgae extends Command {
   @Override
   public void end(boolean interrupted) {
     algaeEndeffector.stopAlgaeEndDefector();
-    elevator.setElevatorPosition(ElevatorEnums.HumanPlayer);
+    elevator.setElevatorPositionDynamicConfigs(HUMAN_PLAYER_STATION_CENTIMETERS, MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION, MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY, 0);
   }
 
   // Returns true when the command should end.

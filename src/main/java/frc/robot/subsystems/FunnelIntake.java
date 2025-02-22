@@ -22,6 +22,7 @@ import static frc.robot.settings.Constants.FunnelConstants.*;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.helpers.MotorLogger;
 import frc.robot.settings.Constants;
@@ -83,7 +84,7 @@ public class FunnelIntake extends SubsystemBase {
     slantMotorLogger = new MotorLogger("/funnelIntake/slantMotor");
     straightMotorLogger = new MotorLogger("/funnelIntake/straightMotor");
     
-    funnelIntakeSensor = funnelSlantMotor.getAnalog();
+    funnelIntakeSensor = funnelStraightMotor.getAnalog();
   }
 
   private void logMotors(){
@@ -94,7 +95,7 @@ public class FunnelIntake extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    RobotState.getInstance().funnelSensorTrig = funnelIntakeSensor.getVoltage()>2;
+    RobotState.getInstance().funnelSensorTrig = funnelIntakeSensor.getVoltage() < 2;
     if(Preferences.getBoolean("Motor Logging", false)){
     logMotors();
     }
