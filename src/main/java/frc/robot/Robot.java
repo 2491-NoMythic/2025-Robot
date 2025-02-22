@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.net.WebServer;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -39,6 +41,7 @@ public class Robot extends LoggedRobot {
     // and put our
     // autonomous chooser on the dashboard.
     Logger.recordMetadata("ProjectName", "MyProject"); // Set a metadata value
+    WebServer.start(5800, Filesystem.getDeployDirectory().getPath());
     
     if (isReal()) {
       // the following indented code is from ChatGPT, and checks if a USB stick is pluged in. If it

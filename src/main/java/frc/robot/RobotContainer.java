@@ -30,9 +30,11 @@ import com.playingwithfusion.TimeOfFlight;
 import com.playingwithfusion.jni.TimeOfFlightJNI;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.net.WebServer;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.Preferences;
@@ -916,17 +918,9 @@ public class RobotContainer {
     
   }
   public void robotInit(){
-  }
-  public void robotPeriodic() {
-    if(elevatorExists) {
-      SmartDashboard.putBoolean("TESTING/elevator lined up", elevator.isElevatorAtIntakeHeight());
-      SmartDashboard.putBoolean("TESTING/coralLineupRunnning", RobotState.getInstance().coralLineupRunning);
     }
-    SmartDashboard.putString("TESTING/delivery height", RobotState.getInstance().deliveringCoralHeight.toString());
-    SmartDashboard.putBoolean("TESTING/isCoralSeen", RobotState.getInstance().isCoralSeen());
-    SmartDashboard.putBoolean("TESTING/coralsensortrig", RobotState.getInstance().coralEndeffSensorTrig);
-    SmartDashboard.putBoolean("TESTING/intakesensortrig", RobotState.getInstance().funnelSensorTrig);
-
+  public void robotPeriodic() {
+    updateSmartDashboard();
     currentAlliance = DriverStation.getAlliance().get();
     SmartDashboard.putString(
         "AlliancePeriodic",
@@ -937,7 +931,21 @@ public class RobotContainer {
       SmartDashboard.putBoolean("LIMELIGHT/isConnectedB", Limelight.getInstance().isConnected(Vision.APRILTAG_LIMELIGHTB_NAME));
       SmartDashboard.putBoolean("LIMELIGHT/isConnectedC", Limelight.getInstance().isConnected(Vision.APRILTAG_LIMELIGHTC_NAME));
     }
+  }
+
+  private void updateSmartDashboard() {
+    if(elevatorExists) {
+      SmartDashboard.putBoolean("TESTING/elevator lined up", elevator.isElevatorAtIntakeHeight());
+      SmartDashboard.putBoolean("TESTING/coralLineupRunnning", RobotState.getInstance().coralLineupRunning);
+    }
     SmartDashboard.putBoolean("REEFLINEUP/deliveringLeft", RobotState.getInstance().deliveringLeft);
+    SmartDashboard.putString("REEFLINEUP/deliveringHeight", RobotState.getInstance().deliveringCoralHeight.toString());
+    SmartDashboard.putString("REEFLINEUP/closestReefSide", RobotState.getInstance().closestReefSide.toString());
+    SmartDashboard.putBoolean("TESTING/coralEndEfSensorTrig", RobotState.getInstance().coralEndeffSensorTrig);
+    SmartDashboard.putBoolean("TESTING/funnelSensorTrig", RobotState.getInstance().funnelSensorTrig);
+    SmartDashboard.putBoolean("TESTING/isCoralSeen", RobotState.getInstance().isCoralSeen());
+    SmartDashboard.putBoolean("TESTING/reefLineupRunning", RobotState.getInstance().reefLineupRunning);
+
   }
 
   public void disabledPeriodic() {
