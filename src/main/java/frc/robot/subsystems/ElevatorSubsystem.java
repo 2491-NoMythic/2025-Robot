@@ -76,7 +76,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         .withKD(0.02)
         .withKG(1.06)
         .withKA(0.001)
-        .withKV(0.0325)
+        .withKV(0.0325)//0.026 is the right value for comp bot, of 2-23 12:57 pm
         .withKS(0.5616);
       eleMotorConfig.HardwareLimitSwitch.ReverseLimitAutosetPositionValue = COMP_HEIGHT_AT_LIMIT_SWITCH;
     } else {

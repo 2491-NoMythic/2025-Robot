@@ -318,7 +318,7 @@ public class RobotContainer {
 
       //operator manual controls, should not be used unless other controls not working
       ForceEjectCoral = ()-> operatorControllerXbox.getRightTriggerAxis() > 0.1;
-      ForceElevator = ()->false;
+      ForceElevator = ()->operatorControllerXbox.getLeftTriggerAxis() > 0.1;
       ForceElevatorUp = ()->operatorControllerXbox.getLeftY() < -0.5;
       ForceElevatorDown = ()->operatorControllerXbox.getLeftY() > 0.5;
       ClimbCommandSupplier = ()->operatorControllerXbox.getXButton();
@@ -562,7 +562,7 @@ public class RobotContainer {
       //   .onTrue(new PassCoralToEndEffectorSequential(coralEndDefector, funnelIntake));
       //if the coral is in the funnel, and the elevator is in place, pass the coral to the endeffector
       new Trigger(()->
-        RobotState.getInstance().funnelSensorTrig &&
+        RobotState.getInstance().coralEndeffSensorTrig &&
         elevator.isElevatorAtPose() &&
         elevator.isElevatorAtIntakeHeight() &&
         !RobotState.getInstance().coralLineupRunning &&
@@ -917,6 +917,9 @@ public class RobotContainer {
     
   }
   public void robotInit(){
+    if(lightsExist) {
+      lights.setAllLights(0, 0, 0);
+    }
   }
   public void robotPeriodic() {
     if(elevatorExists) {
@@ -944,8 +947,11 @@ public class RobotContainer {
   }
 
   public void disabledPeriodic() {
+    if(lightsExist) {
+      lights.setCandleLights(LightConstants.TOTAL_LIGHTS_CANDLE_STRIP_START, LightConstants.DRIVETRAIN_LIGHTS_END, 100, 50, 100);
+    }
   }
-
+  
   public void disabledInit() {
     RobotState.getInstance().coralLineupRunning = false;
     if(coralEndeffectorExists) {

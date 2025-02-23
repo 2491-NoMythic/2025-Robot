@@ -15,8 +15,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.settings.ElevatorEnums;
 import frc.robot.settings.LightsEnums;
 import frc.robot.settings.Constants.LightConstants;
+
+import static frc.robot.settings.Constants.DriveConstants.CANIVORE_DRIVETRAIN;
+
 import com.ctre.phoenix.led.CANdle;
 import com.ctre.phoenix.led.CANdleConfiguration;
+import com.ctre.phoenix.led.CANdle.LEDStripType;
 
 public class Lights extends SubsystemBase {
   /** Creates a new SubsystemLights. */
@@ -37,10 +41,11 @@ public class Lights extends SubsystemBase {
     LEDBuffer = new AddressableLEDBuffer(60);
     lights.setLength(60);
     timer = new Timer();
-    candle = new CANdle(LightConstants.CANDLE_ID);
+    candle = new CANdle(LightConstants.CANDLE_ID, CANIVORE_DRIVETRAIN);
     CANdleConfig = new CANdleConfiguration();
     CANdleConfig.v5Enabled = true;
     CANdleConfig.brightnessScalar = 1;
+    CANdleConfig.stripType = LEDStripType.GRB;
     candle.configAllSettings(CANdleConfig);
   }
 
@@ -97,16 +102,16 @@ public class Lights extends SubsystemBase {
         setCandleLights(LightConstants.LEFT_ELEVATOR_LIGHTS_1_START, LightConstants.LEFT_ELEVATOR_LIGHTS_1_END, R, G, B);
         break;
       case ElevatorLeft2:
-        setCandleLights(LightConstants.LEFT_ELEVATOR_LIGHTS_1_END + 1, LightConstants.LEFT_ELEVATOR_LIGHTS_2_END, R, G, B);
+        setCandleLights(LightConstants.LEFT_ELEVATOR_LIGHTS_1_END, LightConstants.LEFT_ELEVATOR_LIGHTS_2_END, R, G, B);
         break;
       case ElevatorLeft3:
-        setCandleLights(LightConstants.LEFT_ELEVATOR_LIGHTS_2_END + 1, LightConstants.LEFT_ELEVATOR_LIGHTS_3_END, R, G, B);
+        setCandleLights(LightConstants.LEFT_ELEVATOR_LIGHTS_2_END, LightConstants.LEFT_ELEVATOR_LIGHTS_3_END, R, G, B);
         break;
       case ElevatorLeft4:
-        setCandleLights(LightConstants.LEFT_ELEVATOR_LIGHTS_3_END + 1, LightConstants.LEFT_ELEVATOR_LIGHTS_4_END, R, G, B);
+        setCandleLights(LightConstants.LEFT_ELEVATOR_LIGHTS_3_END, LightConstants.LEFT_ELEVATOR_LIGHTS_4_END, R, G, B);
         break;
       case ElevatorLeft5:
-        setCandleLights(LightConstants.LEFT_ELEVATOR_LIGHTS_4_END + 1, LightConstants.LEFT_ELEVATOR_LIGHTS_5_END, R, G, B);
+        setCandleLights(LightConstants.LEFT_ELEVATOR_LIGHTS_4_END, LightConstants.LEFT_ELEVATOR_LIGHTS_5_END, R, G, B);
         break;
       case ElevatorRightAlgaeIndicator:
         setCandleLights(LightConstants.RIGHT_ELEVATOR_LIGHTS_ALGAE_START,

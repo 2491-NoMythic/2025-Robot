@@ -12,6 +12,7 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.hardware.core.CoreTalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import com.ctre.phoenix6.signals.ForwardLimitTypeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
 
@@ -30,8 +31,8 @@ public class ClimberSubsystem extends SubsystemBase {
   CANcoder climberAngleSensor;
   /** Creates a new CimberSubsystem. */
   public ClimberSubsystem() {
-    climberMotor1 = new TalonFX(CLIMBER_MOTOR_ID);
-    climberAngleSensor = new CANcoder(CLIMBER_CANCODER_ID);
+    climberMotor1 = new TalonFX(CLIMBER_MOTOR_ID, CANIVORE_DRIVETRAIN);
+    climberAngleSensor = new CANcoder(CLIMBER_CANCODER_ID, CANIVORE_DRIVETRAIN);
     //TODO spend some time figuring out how to use the absolute encoder with the motor.
     
     CANcoderConfiguration encoderConfig = new CANcoderConfiguration();
@@ -44,10 +45,16 @@ public class ClimberSubsystem extends SubsystemBase {
       climberMotor1.getConfigurator().apply(ClimberMotorConfigPrac);
       encoderConfig.MagnetSensor.MagnetOffset = PRAC_ENCODER_OFFSET;
     }
+    encoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1;
     climberAngleSensor.getConfigurator().apply(encoderConfig);
     if(Preferences.getBoolean("Elevator", false)) {
       climberMotor1.getConfigurator().apply(new HardwareLimitSwitchConfigs()
-        .withForwardLimitRemoteTalonFX(new TalonFX(ELEVATOR_MOTOR_2_ID, CANIVORE_DRIVETRAIN)));
+        .withForwardLimitRemoteTalonFX(new TalonFX(ELEVATOR_MOTOR_2_ID, CANIVORE_DRIVETRAIN))
+        .withForwardLimitEnable(true)
+        .withForwardLimitAutosetPositionEnable(false)
+        .withForwardLimitType(ForwardLimitTypeValue.NormallyClosed)
+        .withReverseLimitEnable(false)
+        .withReverseLimitAutosetPositionEnable(false));
     }
 
     motorLogger1 = new MotorLogger("/climber/motor1");
