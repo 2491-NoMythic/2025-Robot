@@ -41,7 +41,7 @@ public class AlgaeIntakeCommand extends Command {
     // so instead handle finishing internally.
 
     if (RobotState.getInstance().hasAlgae && shootSpeed.getAsDouble() >= 0) {
-      algaeEndeffector.stopAlgaeEndDefector();
+      algaeEndeffector.stopAlgaeEndDefectorHard();
     } else {
       algaeEndeffector.runAlgaeEndDefector(shootSpeed.getAsDouble());
     }
@@ -50,10 +50,12 @@ public class AlgaeIntakeCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    algaeEndeffector.stopAlgaeEndDefector();
-
+    if(shootSpeed.getAsDouble() >= 0) {
+      algaeEndeffector.stopAlgaeEndDefectorHard();
+    } else {
+      algaeEndeffector.stopAlgaeEndDefectorCoast();
+    }
   }
-
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {

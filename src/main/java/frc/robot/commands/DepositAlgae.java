@@ -42,7 +42,6 @@ public class DepositAlgae extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    elevator.setVoltage(-1.2);
     if(elevator.isElevatorAtPose()){
       algaeEndeffector.runAlgaeEndDefector(shootSpeed);
   }
@@ -51,7 +50,7 @@ public class DepositAlgae extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    algaeEndeffector.stopAlgaeEndDefector();
+    algaeEndeffector.stopAlgaeEndDefectorCoast();
     elevator.setElevatorPositionDynamicConfigs(HUMAN_PLAYER_STATION_CENTIMETERS, MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION, MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY, 0);
   }
 
