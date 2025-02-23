@@ -6,9 +6,11 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
+import com.ctre.phoenix6.configs.HardwareLimitSwitchConfigs;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.hardware.core.CoreTalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
@@ -19,6 +21,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.helpers.MotorLogger;
 
 import static frc.robot.settings.Constants.ClimberConstants.*;
+import static frc.robot.settings.Constants.DriveConstants.CANIVORE_DRIVETRAIN;
+import static frc.robot.settings.Constants.ElevatorConstants.ELEVATOR_MOTOR_2_ID;
 
 public class ClimberSubsystem extends SubsystemBase {
   TalonFX climberMotor1;
@@ -41,6 +45,10 @@ public class ClimberSubsystem extends SubsystemBase {
       encoderConfig.MagnetSensor.MagnetOffset = PRAC_ENCODER_OFFSET;
     }
     climberAngleSensor.getConfigurator().apply(encoderConfig);
+    if(Preferences.getBoolean("Elevator", false)) {
+      climberMotor1.getConfigurator().apply(new HardwareLimitSwitchConfigs()
+        .withForwardLimitRemoteTalonFX(new TalonFX(ELEVATOR_MOTOR_2_ID, CANIVORE_DRIVETRAIN)));
+    }
 
     motorLogger1 = new MotorLogger("/climber/motor1");
   }

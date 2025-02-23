@@ -11,6 +11,7 @@ import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.VoltageConfigs;
 import com.ctre.phoenix6.controls.DynamicMotionMagicVoltage;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
@@ -51,15 +52,19 @@ public class ElevatorSubsystem extends SubsystemBase {
       .withFeedback(new FeedbackConfigs()
         .withSensorToMechanismRatio(0.08910703))
       .withCurrentLimits(new CurrentLimitsConfigs()
-        .withSupplyCurrentLimit(30)
+        .withSupplyCurrentLimit(70)
+        .withSupplyCurrentLowerLimit(40)
+        .withSupplyCurrentLowerTime(1)
         .withSupplyCurrentLimitEnable(true))
+      .withVoltage(new VoltageConfigs()
+        .withPeakForwardVoltage(7)
+        .withPeakReverseVoltage(-7))
       .withMotionMagic(new MotionMagicConfigs()
         .withMotionMagicAcceleration(MOTION_MAGIC_ELEVATOR_ACCLERATION)
         .withMotionMagicCruiseVelocity(MOTION_MAGIC_ELEVATOR_VELOCITY)
         .withMotionMagicJerk(MOTION_MAGIC_ELEVATOR_JERK))
       .withHardwareLimitSwitch(new HardwareLimitSwitchConfigs()
         .withReverseLimitAutosetPositionEnable(true)
-        .withReverseLimitAutosetPositionValue(HEIGHT_AT_LIMIT_SWITCH)
         .withReverseLimitEnable(true)
         .withReverseLimitType(ReverseLimitTypeValue.NormallyClosed)
         .withForwardLimitAutosetPositionEnable(false)
@@ -67,11 +72,13 @@ public class ElevatorSubsystem extends SubsystemBase {
         .withForwardLimitType(ForwardLimitTypeValue.NormallyClosed));
     if (Preferences.getBoolean("CompBot", true)){  
       eleMotorConfig.Slot0 = new Slot0Configs()
-        .withKP(0)
-        .withKG(0)
-        .withKA(0)
-        .withKV(0)
-        .withKS(0);
+        .withKP(0.5)
+        .withKD(0.02)
+        .withKG(1.06)
+        .withKA(0.001)
+        .withKV(0.0325)
+        .withKS(0.5616);
+      eleMotorConfig.HardwareLimitSwitch.ReverseLimitAutosetPositionValue = COMP_HEIGHT_AT_LIMIT_SWITCH;
     } else {
       eleMotorConfig.Slot0 = new Slot0Configs()
         .withKP(0.4)
@@ -79,9 +86,14 @@ public class ElevatorSubsystem extends SubsystemBase {
         .withKA(0.00040067)
         .withKV(0.02168)
         .withKS(1.17);
+      eleMotorConfig.HardwareLimitSwitch.ReverseLimitAutosetPositionValue = PRAC_HEIGHT_AT_LIMIT_SWITCH;
     }
     elevatorMotor1.getConfigurator().apply(eleMotorConfig);
     elevatorMotor2.setControl(new Follower(ELEVATOR_MOTOR_1_ID, false));
+    elevatorMotor2.getConfigurator().apply(new TalonFXConfiguration()
+      .withHardwareLimitSwitch(new HardwareLimitSwitchConfigs()
+        .withForwardLimitEnable(false)
+        .withReverseLimitEnable(false)));
 
     motorLogger1 = new MotorLogger("/elevator/motor1");
     motorLogger2 = new MotorLogger("/elevator/motor2");
@@ -173,7 +185,11 @@ public class ElevatorSubsystem extends SubsystemBase {
         }
         break;
       case Bottom:
-        setElevatorPosition(HEIGHT_AT_LIMIT_SWITCH);
+      if(Preferences.getBoolean("CompBot", true)) {
+        setElevatorPosition(COMP_HEIGHT_AT_LIMIT_SWITCH);
+      } else {
+        setElevatorPosition(PRAC_HEIGHT_AT_LIMIT_SWITCH);
+      }
         break;
       case AlgaeInProcessor:
         setElevatorPosition(PROCESSOR_HEIGHT_CENTIMETERS);
@@ -190,7 +206,11 @@ public class ElevatorSubsystem extends SubsystemBase {
    * @return the taret position for the motor, in rotations
    */
   private double calculateRotations(double desiredHeight) {
-    return (Math.max(desiredHeight, HEIGHT_AT_LIMIT_SWITCH));
+    if(Preferences.getBoolean("CompBot", true)) {
+      return (Math.max(desiredHeight, COMP_HEIGHT_AT_LIMIT_SWITCH));
+    } else {
+      return (Math.max(desiredHeight, PRAC_HEIGHT_AT_LIMIT_SWITCH));
+    }
   }
   /**
    * asks if the error on the closed loop is less than our ELEVATOR_THRESHOLD constant

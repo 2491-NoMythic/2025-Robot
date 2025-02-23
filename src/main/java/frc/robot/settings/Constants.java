@@ -438,12 +438,32 @@ public final class Constants {
     public static final double ALGAE_ENDEFFECTOR_KD_2_PRACTICE = 2491;
     public static final double ALGAE_ENDEFFECTOR_KFF_2_PRACTICE = 2491;
   }
+
+  public final class PreferencesConstants{
+    // public static final String COMP_BOT = "Lights Exist";
+    // public static final String ELEVATOR = "CompBot";
+    // public static final String CORAL_END_EFFECTOR = "Use Limelight";
+    // public static final String ALGAE_END_EFFECTOR = "Driver Controller Type";
+    // public static final String FUNNEL_ROTATOR = "Operator Controller Type";
+    // public static final String FUNNEL_INTAKE = "Elevator";
+    // public static final String DISTANCE_SENSORS = "CoralEndDefector";
+    // public static final String LIGHTS = "AlgaeEndDefector";
+    // public static final String LIMELIGHTS = "FunnelIntake";
+    // public static final String MOTOR_LOGGING = "FunnelRotator";
+    // public static final String SAFE_ELEVATOR_DRIVING = "AntiTipActive";
+    // public static final String ANTITIP_ACTIVE = "LimelightExists";
+    // public static final String CLIMBER = ;
+    // public static final String DRIVER_CONTROLLER_TYPE = ;
+    // public static final String OPERATOR_CONTROLLER_TYPE = ;
+    // public static final String OPERATOR_CONTROLLER_TYPE = ;
+  }
   
   public final class ElevatorConstants{
     public static final int ELEVATOR_MOTOR_1_ID = 9;
     public static final int ELEVATOR_MOTOR_2_ID = 10;
     public static final double HUMAN_PLAYER_STATION_CENTIMETERS = 28.3;//31.5;
-    public static final double HEIGHT_AT_LIMIT_SWITCH = 20;
+    public static final double PRAC_HEIGHT_AT_LIMIT_SWITCH = 20;
+    public static final double COMP_HEIGHT_AT_LIMIT_SWITCH = 16.6116;
     public static final double PROCESSOR_HEIGHT_CENTIMETERS = 19;
     public static final double REEF_LEVEL_1_CENTIMETERS = 80;
     public static final double REEF_LEVEL_2_CENTIMETERS = 92.5;
@@ -454,14 +474,14 @@ public final class Constants {
 
     public static final double MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY = 60;
     public static final double MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION = 120;
-    public static final double MOTION_MAGIC_ELEVATOR_VELOCITY = 600;
-    public static final double MOTION_MAGIC_ELEVATOR_ACCLERATION = 2400;
+    public static final double MOTION_MAGIC_ELEVATOR_VELOCITY = 400;
+    public static final double MOTION_MAGIC_ELEVATOR_ACCLERATION = 1600;
     public static final double MOTION_MAGIC_ELEVATOR_JERK = 0;
   }
 
   public final class ClimberConstants{
-    public static final int CLIMBER_MOTOR_ID = 2491;
-    public static final int CLIMBER_CANCODER_ID = 2491;
+    public static final int CLIMBER_MOTOR_ID = 11;
+    public static final int CLIMBER_CANCODER_ID = 5;
 
     public static final double COMP_ENCODER_OFFSET = 0;
     public static final double PRAC_ENCODER_OFFSET = 0;
@@ -562,7 +582,7 @@ public final class LightConstants{
   public static final int LEFT_ELEVATOR_LIGHTS_5_END = LEFT_ELEVATOR_LIGHTS_4_END + DELIVERY_SIDE_INDICATORS_LENGTH;
 
   public static final int DRIVETRAIN_LIGHTS_START = LEFT_ELEVATOR_LIGHTS_5_END + 1;
-  public static final int DRIVETRAIN_LIGHTS_END = 2491;
+  public static final int DRIVETRAIN_LIGHTS_END = 72;
 
   public static final int RIGHT_ELEVATOR_LIGHTS_5_START = DRIVETRAIN_LIGHTS_END + 1;
   public static final int RIGHT_ELEVATOR_LIGHTS_5_END = RIGHT_ELEVATOR_LIGHTS_5_START + DELIVERY_SIDE_INDICATORS_LENGTH;
@@ -570,15 +590,15 @@ public final class LightConstants{
   public static final int RIGHT_ELEVATOR_LIGHTS_3_END = RIGHT_ELEVATOR_LIGHTS_4_END + REEF_LEVEL_INDICATORS_LENGTH;
   public static final int RIGHT_ELEVATOR_LIGHTS_2_END = RIGHT_ELEVATOR_LIGHTS_3_END + REEF_LEVEL_INDICATORS_LENGTH;
   public static final int RIGHT_ELEVATOR_LIGHTS_1_END = RIGHT_ELEVATOR_LIGHTS_2_END + REEF_LEVEL_INDICATORS_LENGTH;
-  public static final int RIGHT_ELEVATOR_LIGHTS_ALGAE_START = RIGHT_ELEVATOR_LIGHTS_1_END + REEF_LEVEL_INDICATORS_LENGTH;
-  public static final int RIGHT_ELEVATOR_LIGHTS_ALGAE_END = RIGHT_ELEVATOR_LIGHTS_ALGAE_START + 16;
+  public static final int RIGHT_ELEVATOR_LIGHTS_ALGAE_START = RIGHT_ELEVATOR_LIGHTS_1_END + 1;
+  public static final int RIGHT_ELEVATOR_LIGHTS_ALGAE_END = RIGHT_ELEVATOR_LIGHTS_ALGAE_START + 15;
 
 
   public static final int FUNNEL_LIGHTS_START = 0;
   public static final int FUNNEL_LIGHTS_END = 2491;
 
   public static final int TOTAL_LIGHTS_RIO_STRIP_START = 0;
-  public static final int TOTAL_LIGHTS_RIO_STRIP_END = 2491;
+  public static final int TOTAL_LIGHTS_RIO_STRIP_END = RIGHT_ELEVATOR_LIGHTS_ALGAE_END;
   public static final int TOTAL_LIGHTS_CANDLE_STRIP_START = 0;
   public static final int TOTAL_LIGHTS_CANDLE_STRIP_END = 2491;
 }
