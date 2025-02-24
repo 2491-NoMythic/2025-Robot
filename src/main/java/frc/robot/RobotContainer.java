@@ -542,8 +542,8 @@ public class RobotContainer {
       new Trigger(AlgaeShooterSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector, ()->ALGAE_SHOOT_SPEED));
     }
     if (climberExists){
-      new Trigger(ClimbCommandSupplier).whileTrue(new ClimberCommand(climber, CLIMBER_CLIMBED_ANGLE));
-      new Trigger(climberResetSupplier).whileTrue(new ClimberCommand(climber, CLIMBER_NOT_CLIMBED_ANGLE));
+      new Trigger(ClimbCommandSupplier).whileTrue(new ClimberCommand(climber));
+      new Trigger(climberResetSupplier).whileTrue(new InstantCommand(()->climber.setClimberPower(-0.15)));
     }
     if (funnelIntakeExists&&elevatorExists&&coralEndeffectorExists) {
       // // if the coral is triggering the funnel, but hasn't been aligned, and there elevator isn't in place, lineup the coral in the funnel

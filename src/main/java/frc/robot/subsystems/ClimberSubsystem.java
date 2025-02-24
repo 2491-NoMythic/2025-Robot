@@ -8,6 +8,7 @@ import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.HardwareLimitSwitchConfigs;
 import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.controls.TorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.hardware.core.CoreTalonFX;
@@ -73,8 +74,14 @@ public class ClimberSubsystem extends SubsystemBase {
   public void stopClimber(){
     climberMotor1.set(0);
   }
+  public void setClimberPower(double power) {
+    climberMotor1.set(power);
+  }
   private void logMotors(){
     motorLogger1.log(climberMotor1);
+  }
+  public void setMotorTorqueFOC(double current) {
+    climberMotor1.setControl(new TorqueCurrentFOC(current));
   }
   @Override
   public void periodic() {
