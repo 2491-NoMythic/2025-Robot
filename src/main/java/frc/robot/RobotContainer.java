@@ -544,7 +544,7 @@ public class RobotContainer {
     }
     if (climberExists){
       new Trigger(ClimbCommandSupplier).whileTrue(new ClimberCommand(climber));
-      new Trigger(climberResetSupplier).whileTrue(new InstantCommand(()->climber.setClimberPower(-0.15)));
+      new Trigger(climberResetSupplier).onTrue(new InstantCommand(()->climber.setClimberPower(-0.15), climber)).onFalse(new InstantCommand(()->climber.stopClimber(), climber));
     }
     if (funnelIntakeExists&&elevatorExists&&coralEndeffectorExists) {
       // // if the coral is triggering the funnel, but hasn't been aligned, and there elevator isn't in place, lineup the coral in the funnel
@@ -660,8 +660,8 @@ public class RobotContainer {
         });
       }
       if (funnelRotatorExists) {
-          new Trigger(funnelRotatorSupplier).and(ClimbModeAuthorizer).whileTrue(new FunnelRotatorCommand(funnelRotator));
-          new Trigger(funnelRotatorSupplier).and(inEndgameSupplier).whileTrue(new FunnelRotatorCommand(funnelRotator));
+          new Trigger(()->funnelRotatorSupplier.getAsBoolean() && ClimbModeAuthorizer.getAsBoolean()).whileTrue(new FunnelRotatorCommand(funnelRotator));
+          new Trigger(()->funnelRotatorSupplier.getAsBoolean() && inEndgameSupplier.getAsBoolean()).whileTrue(new FunnelRotatorCommand(funnelRotator));
       }
   }
 
