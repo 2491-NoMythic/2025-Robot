@@ -79,8 +79,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         );
     if (Preferences.getBoolean("CompBot", true)){  
       eleMotorConfig.Slot0 = new Slot0Configs()
-        .withKP(0.16)
-        .withKD(0.)
+        .withKP(0.64)
+        .withKD(0.02)
         .withKG(0.8623)
         .withKA(0.002)
         .withKV(0.01)//0.026 is the right value for comp bot, of 2-23 12:57 pm
@@ -180,7 +180,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         }
         break;
       case Reef4:
-        setElevatorPosition(REEF_LEVEL_4_CENTIMETERS);
+        setElevatorPositionDynamicConfigs(REEF_LEVEL_4_CENTIMETERS, MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION, MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY, 0);
         if(isElevatorAtPose()){
           RobotState.getInstance().elevatorIsHigh = true;
         }

@@ -46,7 +46,7 @@ public class DistanceSensors  extends SubsystemBase{
     middleLeft.setRangingMode(RangingMode.Short, 24);
     middleRight.setRangingMode(RangingMode.Short, 24);
     farRight.setRangingMode(RangingMode.Short, 24);
-    farLeft.setRangeOfInterest(7, 10, 10, 7);
+    farLeft.setRangeOfInterest(8, 10, 10, 8);
   }
 /**
  * a method that returns the distance sensed by the given sensor, as shown below. If a sensor senses nothing within it's range, It returns 0.0 <br>

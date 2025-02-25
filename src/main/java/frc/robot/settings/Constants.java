@@ -48,8 +48,8 @@ public final class Constants {
 
   }
   public static final class DriveConstants {
-    public static final double REEF_LINEUP_SPEED = 0.3;
-    public static final double BUMPER_TO_SENSOR = 100; // in milliqmeters
+    public static final double REEF_LINEUP_SPEED = 0.6;
+    public static final double BUMPER_TO_SENSOR = 158; // in milliqmeters
     public static final Pose2d DRIVE_ODOMETRY_ORIGIN = new Pose2d(5.0, 5.0, new Rotation2d());
     /** The bumper-to-bumper width of the robot. */
     public static final double DRIVETRAIN_ROBOT_WIDTH_METERS = 0.83;
@@ -467,16 +467,16 @@ public final class Constants {
     public static final double COMP_HEIGHT_AT_LIMIT_SWITCH = 16.828;
     public static final double PROCESSOR_HEIGHT_CENTIMETERS = 19;
     public static final double REEF_LEVEL_1_CENTIMETERS = 80;
-    public static final double REEF_LEVEL_2_CENTIMETERS = 92.5;
-    public static final double REEF_LEVEL_3_CENTIMETERS = 122.8;
-    public static final double REEF_LEVEL_4_CENTIMETERS = 182;
+    public static final double REEF_LEVEL_2_CENTIMETERS = 81.23;
+    public static final double REEF_LEVEL_3_CENTIMETERS = 122.6;
+    public static final double REEF_LEVEL_4_CENTIMETERS = 187;
     public static final double BARGE_SHOOT_CENTIMETERS = 198;
-    public static final double ELEVATOR_THRESHOLD = 5;
+    public static final double ELEVATOR_THRESHOLD = 2;
 
-    public static final double MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY = 60;
-    public static final double MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION = 120;
-    public static final double MOTION_MAGIC_ELEVATOR_VELOCITY = 400;
-    public static final double MOTION_MAGIC_ELEVATOR_ACCLERATION = 1600;
+    public static final double MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY = 320;
+    public static final double MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION = 400;
+    public static final double MOTION_MAGIC_ELEVATOR_VELOCITY = 320;
+    public static final double MOTION_MAGIC_ELEVATOR_ACCLERATION = 640;
     public static final double MOTION_MAGIC_ELEVATOR_JERK = 0;
   }
 
