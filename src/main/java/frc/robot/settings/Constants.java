@@ -464,7 +464,7 @@ public final class Constants {
     public static final int ELEVATOR_MOTOR_2_ID = 10;
     public static final double HUMAN_PLAYER_STATION_CENTIMETERS = 19.2;//31.5;
     public static final double PRAC_HEIGHT_AT_LIMIT_SWITCH = 20;
-    public static final double COMP_HEIGHT_AT_LIMIT_SWITCH = 18.415;
+    public static final double COMP_HEIGHT_AT_LIMIT_SWITCH = 16.828;
     public static final double PROCESSOR_HEIGHT_CENTIMETERS = 19;
     public static final double REEF_LEVEL_1_CENTIMETERS = 80;
     public static final double REEF_LEVEL_2_CENTIMETERS = 92.5;

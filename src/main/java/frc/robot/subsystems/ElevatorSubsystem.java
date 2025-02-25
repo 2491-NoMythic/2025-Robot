@@ -10,6 +10,7 @@ import com.ctre.phoenix6.configs.HardwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.VoltageConfigs;
 import com.ctre.phoenix6.controls.DynamicMotionMagicVoltage;
@@ -69,15 +70,21 @@ public class ElevatorSubsystem extends SubsystemBase {
         .withReverseLimitType(ReverseLimitTypeValue.NormallyClosed)
         .withForwardLimitAutosetPositionEnable(false)
         .withForwardLimitEnable(true)
-        .withForwardLimitType(ForwardLimitTypeValue.NormallyClosed));
+        .withForwardLimitType(ForwardLimitTypeValue.NormallyClosed))
+      .withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()
+        .withForwardSoftLimitEnable(true)
+        .withForwardSoftLimitThreshold(198.39)
+        .withReverseSoftLimitEnable(true)
+        .withReverseSoftLimitThreshold(COMP_HEIGHT_AT_LIMIT_SWITCH+1)
+        );
     if (Preferences.getBoolean("CompBot", true)){  
       eleMotorConfig.Slot0 = new Slot0Configs()
-        .withKP(0.5)
-        .withKD(0.02)
-        .withKG(1.06)
-        .withKA(0.001)
-        .withKV(0.0325)//0.026 is the right value for comp bot, of 2-23 12:57 pm
-        .withKS(0.5616);
+        .withKP(0.16)
+        .withKD(0.)
+        .withKG(0.8623)
+        .withKA(0.002)
+        .withKV(0.01)//0.026 is the right value for comp bot, of 2-23 12:57 pm
+        .withKS(0.6);
       eleMotorConfig.HardwareLimitSwitch.ReverseLimitAutosetPositionValue = COMP_HEIGHT_AT_LIMIT_SWITCH;
     } else {
       eleMotorConfig.Slot0 = new Slot0Configs()
