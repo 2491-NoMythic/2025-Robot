@@ -99,9 +99,11 @@ public class ApproachReef extends Command {
       speeds.vxMetersPerSecond = Math.min(3, -calculatedSpeed);
     }
   //
-  if(timer.get()>0.25) {
-    if(Math.abs(distance - lastDistance) < 6.5) {
+  if(timer.get()>0.5) {
+    if(Math.abs(distance - lastDistance) < 10) {
       loopsLastDistanceGreater++;
+    } else {
+      loopsLastDistanceGreater = 0;
     }
     lastDistance = distance;
     timer.reset();
@@ -122,6 +124,6 @@ public class ApproachReef extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return pidController.atSetpoint()|loopsLastDistanceGreater>4;
+    return pidController.atSetpoint()|loopsLastDistanceGreater>3;
   }
 }
