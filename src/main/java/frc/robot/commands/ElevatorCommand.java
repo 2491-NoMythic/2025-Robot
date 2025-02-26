@@ -39,7 +39,7 @@ public class ElevatorCommand extends Command {
   public void initialize() {
     elevator.setElevatorPosition(levelSupplier.get());
   }
-
+  
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {

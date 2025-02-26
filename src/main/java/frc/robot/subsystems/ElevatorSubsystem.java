@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.HardwareLimitSwitchConfigs;
@@ -21,6 +22,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.ForwardLimitTypeValue;
 import com.ctre.phoenix6.signals.ForwardLimitValue;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.ReverseLimitTypeValue;
 import com.ctre.phoenix6.signals.ReverseLimitValue;
 
@@ -31,6 +33,9 @@ import frc.robot.subsystems.RobotState;
 
 import static frc.robot.settings.Constants.DriveConstants.CANIVORE_DRIVETRAIN;
 import static frc.robot.settings.Constants.ElevatorConstants.*;
+
+import java.lang.annotation.ElementType;
+
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -158,6 +163,13 @@ public class ElevatorSubsystem extends SubsystemBase {
     elevatorTarget = height;
     DynamicMotionMagicVoltage request = new DynamicMotionMagicVoltage(targetHeight, velocity, acceleration, jerk);
     elevatorMotor1.setControl(request);
+  }
+  public void holdElevatorPose() {
+    setVoltage(eleMotorConfig.Slot0.kG);
+  }
+  public void setNeutralMode(NeutralModeValue mode) {
+    eleMotorConfig.MotorOutput.NeutralMode = mode;
+    elevatorMotor1.getConfigurator().apply(eleMotorConfig);
   }
   /**
    * sets the height of the elvator using constants associated with different values of ElevatorEnums

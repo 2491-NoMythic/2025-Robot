@@ -19,6 +19,7 @@ import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVAT
 import static frc.robot.settings.Constants.FunnelConstants.FUNNEL_INTAKE_SPEED;
 import static frc.robot.settings.Constants.PS4Driver.*;
 
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.config.RobotConfig;
@@ -44,10 +45,12 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AutoAngleAtReef;
 import frc.robot.commands.ClimberCommand;
+import frc.robot.commands.ClimberTestCommand;
 import frc.robot.commands.DepositAlgae;
 import frc.robot.settings.Constants.LightConstants;
 import frc.robot.settings.Constants.Vision;
@@ -58,6 +61,7 @@ import frc.robot.commands.AlgaeIntakeCommand;
 import frc.robot.commands.Drive;
 import frc.robot.commands.IndicatorLights;
 import frc.robot.commands.ElevatorCommand;
+import frc.robot.commands.ElevatorTestCommand;
 import frc.robot.commands.FunClimbedLights;
 import frc.robot.commands.FunnelRotatorCommand;
 import frc.robot.commands.LineUp;
@@ -561,20 +565,19 @@ public class RobotContainer {
       // RobotState.getInstance().coralEndeffSensorTrig &&
       // !RobotState.getInstance().coralLineupRunning)
       //   .onTrue(new PassCoralToEndEffectorSequential(coralEndDefector, funnelIntake));
+      
       //if the coral is in the funnel, and the elevator is in place, pass the coral to the endeffector
       new Trigger(()->
         RobotState.getInstance().coralEndeffSensorTrig &&
-        elevator.isElevatorAtPose() &&
         elevator.isElevatorAtIntakeHeight() &&
         !RobotState.getInstance().coralLineupRunning &&
-        DriverStation.isTeleop())
+        !DriverStation.isAutonomous())
           .onTrue(new PassCoralToEndEffectorSequential(coralEndDefector, funnelIntake));
       //if no coral alignment code is running, and no coral is detected by sensors, assume that the coral is out of our robot, and set coralAligned to false
       new Trigger(()->
         !RobotState.getInstance().coralLineupRunning &&
         !RobotState.getInstance().funnelSensorTrig &&
-        !RobotState.getInstance().coralEndeffSensorTrig &&
-        DriverStation.isTeleop())
+        !RobotState.getInstance().coralEndeffSensorTrig)
           .onTrue(new InstantCommand(()->RobotState.getInstance().coralAligned = false));
     }
     if(elevatorExists && coralEndeffectorExists && distanceSensorsExist && algaeEndeffectorExists){
@@ -718,6 +721,7 @@ public class RobotContainer {
 
   public void autonomousInit() {
     SmartDashboard.putNumber("autos ran", SmartDashboard.getNumber("autos ran", 0) + 1);
+    updateBrakeModes(NeutralModeValue.Coast);
   }
 
   private double modifyAxis(double value, double deadband) {
@@ -903,8 +907,14 @@ public class RobotContainer {
     }
   }
   public void teleopInit() {
+    updateBrakeModes(NeutralModeValue.Coast);
   }
 
+  private void updateBrakeModes(NeutralModeValue mode) {
+    if(elevatorExists) {
+      elevator.setNeutralMode(mode);
+    }
+  }
   public void teleopPeriodic() {
     if(DrivetrainExists) {
       SmartDashboard.putData(driveTrain.getCurrentCommand());
@@ -915,6 +925,29 @@ public class RobotContainer {
     if(funnelIntakeExists && funnelIntake.getCurrentCommand() != null) {
       SmartDashboard.putString("TESTING/funnelintakeCommand", funnelIntake.getCurrentCommand().toString());
     }
+  }
+  public void testInit() {
+    if(DrivetrainExists) {
+      new Drive(driveTrain, ()->false, ControllerForwardAxisSupplier, ControllerSidewaysAxisSupplier, ControllerZAxisSupplier) {
+        @Override
+        public boolean isFinished() {
+          return !DriverStation.isTest();
+        }
+        @Override
+        public InterruptionBehavior getInterruptionBehavior() {
+          return InterruptionBehavior.kCancelIncoming;
+        }
+      }.schedule();
+    }
+    if(climberExists){
+      new ClimberTestCommand(climber, ClimbCommandSupplier, climberResetSupplier).schedule();
+    }
+    if(elevatorExists){
+      new ElevatorTestCommand(elevator, ForceElevatorUp, ForceElevatorDown, ForceElevator).schedule();
+    }
+  }
+
+  public void testPeriodic() {
     
   }
   public void robotInit(){
@@ -958,5 +991,6 @@ public class RobotContainer {
     if(coralEndeffectorExists) {
       new InstantCommand(()->coralEndDefector.stopCoralEndEffector(), coralEndDefector);
     }
+    updateBrakeModes(NeutralModeValue.Brake);
   }
 }

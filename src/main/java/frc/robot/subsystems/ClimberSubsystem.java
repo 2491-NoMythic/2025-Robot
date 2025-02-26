@@ -60,7 +60,10 @@ public class ClimberSubsystem extends SubsystemBase {
 
     motorLogger1 = new MotorLogger("/climber/motor1");
   }
-
+  /**
+   * Gets the absolute angle of the climber and returns it as a double. 
+   * @return climber absolute angle as double
+   */
   public double getClimberAngle() {
     return climberAngleSensor.getAbsolutePosition().getValueAsDouble();
   }

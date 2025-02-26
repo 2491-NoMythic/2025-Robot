@@ -100,7 +100,10 @@ public class AlgaeEndeffectorSubsystem extends SubsystemBase {
   public void stopAlgaeEndDefectorCoast(){
     algaeEndeffectorMotor1.setVoltage(0);
   }
-
+  /**
+   * Gets motor 1
+   * @return motor1
+   */
   public SparkMax getMotor(){
     return algaeEndeffectorMotor1;
   }
