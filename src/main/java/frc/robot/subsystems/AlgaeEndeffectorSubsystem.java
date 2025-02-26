@@ -23,61 +23,60 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class AlgaeEndeffectorSubsystem extends SubsystemBase {
-  SparkMax algaeEndeffectorMotor1;
-  SparkMax algaeEndeffectorMotor2;
-  SparkBaseConfig algaeConfig1;
-  SparkBaseConfig algaeConfig2;
+  SparkMax algaeEndeffectorMotor;
+  // SparkBaseConfig algaeConfig1;
+  SparkBaseConfig algaeConfig;
   PIDController algendController;
   MotorLogger motorLogger1;
-  MotorLogger motorLogger2;
+  // MotorLogger motorLogger2;
   int loops;
   public boolean powerSpike;
   /** Creates a new AlgaeEndDefectorSubsystem. */
   public AlgaeEndeffectorSubsystem() {
-    algaeEndeffectorMotor1 = new SparkMax(ALGAE_ENDEFFECTOR_MOTOR_1_ID, MotorType.kBrushless);
-    algaeEndeffectorMotor2 = new SparkMax(ALGAE_ENDEFFECTOR_MOTOR_2_ID, MotorType.kBrushless);
+    algaeEndeffectorMotor = new SparkMax(ALGAE_ENDEFFECTOR_MOTOR_1_ID, MotorType.kBrushless);
+    // algaeEndeffectorMotor2 = new SparkMax(ALGAE_ENDEFFECTOR_MOTOR_2_ID, MotorType.kBrushless);
 
     motorLogger1 = new MotorLogger("/algaeEndEffector/motor1");
-    motorLogger2 = new MotorLogger("/algaeEndEffector/motor2");
+    // motorLogger2 = new MotorLogger("/algaeEndEffector/motor2");
 
-    algaeConfig1 = new SparkMaxConfig();
-    algaeConfig2 = new SparkMaxConfig();
+    // algaeConfig1 = new SparkMaxConfig();
+    algaeConfig = new SparkMaxConfig();
 
     //applying PID settings based on if we are using the CompBot or the PracticeBot
     if(Preferences.getBoolean("CompBot", true)) {
-      algaeConfig1.apply(new ClosedLoopConfig().pidf(
-        ALGAE_ENDEFFECTOR_KP_1,
-        ALGAE_ENDEFFECTOR_KI_1,
-        ALGAE_ENDEFFECTOR_KD_1,
-        ALGAE_ENDEFFECTOR_KFF_1));
-      algaeConfig2.apply(new ClosedLoopConfig().pidf(
+      // algaeConfig1.apply(new ClosedLoopConfig().pidf(
+      //   ALGAE_ENDEFFECTOR_KP_1,
+      //   ALGAE_ENDEFFECTOR_KI_1,
+      //   ALGAE_ENDEFFECTOR_KD_1,
+      //   ALGAE_ENDEFFECTOR_KFF_1));
+      algaeConfig.apply(new ClosedLoopConfig().pidf(
         ALGAE_ENDEFFECTOR_KP_2,
         ALGAE_ENDEFFECTOR_KI_2,
         ALGAE_ENDEFFECTOR_KD_2,
         ALGAE_ENDEFFECTOR_KFF_2));}
     else{
-      algaeConfig1.apply(new ClosedLoopConfig().pidf(
-        ALGAE_ENDEFFECTOR_KP_1_PRACTICE,
-        ALGAE_ENDEFFECTOR_KI_1_PRACTICE,
-        ALGAE_ENDEFFECTOR_KD_1_PRACTICE,
-        ALGAE_ENDEFFECTOR_KFF_1_PRACTICE));
-      algaeConfig2.apply(new ClosedLoopConfig().pidf(
+      // algaeConfig1.apply(new ClosedLoopConfig().pidf(
+      //   ALGAE_ENDEFFECTOR_KP_1_PRACTICE,
+      //   ALGAE_ENDEFFECTOR_KI_1_PRACTICE,
+      //   ALGAE_ENDEFFECTOR_KD_1_PRACTICE,
+      //   ALGAE_ENDEFFECTOR_KFF_1_PRACTICE));
+      algaeConfig.apply(new ClosedLoopConfig().pidf(
         ALGAE_ENDEFFECTOR_KP_2_PRACTICE,
         ALGAE_ENDEFFECTOR_KI_2_PRACTICE,
         ALGAE_ENDEFFECTOR_KD_2_PRACTICE,          
         ALGAE_ENDEFFECTOR_KFF_2_PRACTICE));}
 
-    algaeConfig1.idleMode(IdleMode.kBrake);
-    algaeConfig1.inverted(true);
-    algaeConfig1.smartCurrentLimit(ALGAE_ENDEFFECTOR_CURRENT_LIMIT, ALGAE_ENDEFFECTOR_CURRENT_LIMIT, 1000);
-    algaeEndeffectorMotor1.configure(algaeConfig1, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    // algaeConfig1.idleMode(IdleMode.kBrake);
+    // algaeConfig1.inverted(true);
+    // algaeConfig1.smartCurrentLimit(ALGAE_ENDEFFECTOR_CURRENT_LIMIT, ALGAE_ENDEFFECTOR_CURRENT_LIMIT, 1000);
     
-    algaeConfig2.idleMode(IdleMode.kBrake);
-    algaeConfig1.inverted(true);
-    algaeConfig2.smartCurrentLimit(ALGAE_ENDEFFECTOR_CURRENT_LIMIT, ALGAE_ENDEFFECTOR_CURRENT_LIMIT, 1000);
-    algaeConfig2.follow(algaeEndeffectorMotor1);
-    algaeEndeffectorMotor2.configure(algaeConfig2, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    algaeConfig.idleMode(IdleMode.kBrake);
+    // algaeConfig1.inverted(true); TODO: review
+    algaeConfig.smartCurrentLimit(ALGAE_ENDEFFECTOR_CURRENT_LIMIT, ALGAE_ENDEFFECTOR_CURRENT_LIMIT, 1000);
+    // algaeConfig2.follow(algaeEndeffectorMotor1);
+    // algaeEndeffectorMotor2.configure(algaeConfig2, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     
+    algaeEndeffectorMotor.configure(algaeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     powerSpike = false;
 
   }
@@ -86,32 +85,32 @@ public class AlgaeEndeffectorSubsystem extends SubsystemBase {
    * @param speed 
    */
   public void runAlgaeEndDefector(double speed){
-    algaeEndeffectorMotor1.set(speed);
+    algaeEndeffectorMotor.set(speed);
   }
   /**
    * stops the algae end effector motor by setting speed to 0, with brake mode enabled
    */
   public void stopAlgaeEndDefectorHard(){
-    algaeEndeffectorMotor1.set(0.1);
+    algaeEndeffectorMotor.set(0.1);
   }
   /**
    * stop the algae end effector motor be setting voltage to 0, letting it coast out
    */
   public void stopAlgaeEndDefectorCoast(){
-    algaeEndeffectorMotor1.setVoltage(0);
+    algaeEndeffectorMotor.setVoltage(0);
   }
 
   public SparkMax getMotor(){
-    return algaeEndeffectorMotor1;
+    return algaeEndeffectorMotor;
   }
   /**
    * Updates hasAlgae to true or false based on if algaeEndeffectorMotor1 has a high output current for a period of time
    */
   public void powerCheck(){
 
-    SmartDashboard.putNumber("AlgaeMotorCurrent",algaeEndeffectorMotor1.getOutputCurrent());
+    SmartDashboard.putNumber("AlgaeMotorCurrent",algaeEndeffectorMotor.getOutputCurrent());
     //if we are at 80%+ percent of the current limit, assume it's becuse we have an algae
-    if(algaeEndeffectorMotor1.getOutputCurrent()>ALGAE_ENDEFFECTOR_CURRENT_LIMIT*0.95){ 
+    if(algaeEndeffectorMotor.getOutputCurrent()>ALGAE_ENDEFFECTOR_CURRENT_LIMIT*0.95){ 
       loops++;
       if(loops > 10){
         RobotState.getInstance().hasAlgae = true;
@@ -122,8 +121,8 @@ public class AlgaeEndeffectorSubsystem extends SubsystemBase {
     }
   }
   private void logMotors(){
-    motorLogger1.log(algaeEndeffectorMotor1);
-    motorLogger2.log(algaeEndeffectorMotor2);
+    motorLogger1.log(algaeEndeffectorMotor);
+    // motorLogger2.log(algaeEndeffectorMotor2);
   }
   @Override
   public void periodic() {
