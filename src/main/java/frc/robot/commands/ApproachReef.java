@@ -59,7 +59,7 @@ public class ApproachReef extends Command {
   public void initialize() {
     timer.reset();
     timer.start();
-    lastDistance = 3000;
+    lastDistance = (sensorSubsystem.distanceOfFrontDistancer == 0) ? 3000 : sensorSubsystem.distanceOfFrontDistancer;
     loopsLastDistanceGreater = 0;
     if (DriverStation.getAlliance().get() == Alliance.Red) {
       invert = -1;
