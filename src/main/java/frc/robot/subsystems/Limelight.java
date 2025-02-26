@@ -176,6 +176,9 @@ public class Limelight {
     double distance1 = MythicalMath.DistanceFromOrigin3d(limelight1x, limelight1y, limelight1z);
     return distance1;
   }
+  public boolean isPoseNotNull(String limelightName) {
+    return LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName) != null;
+  }
 
   public void updateLoggingWithPoses() {
     if(isConnected(APRILTAG_LIMELIGHTB_NAME)) {
@@ -317,11 +320,13 @@ public class Limelight {
   }
 
   private boolean isValid(String limelightName, PoseEstimate estimate) {
-    Boolean valid =
-        (estimate.pose.getX() < FIELD_CORNER.getX()
+    Boolean valid = false;
+    if(isPoseNotNull(limelightName)) {
+      valid = (estimate.pose.getX() < FIELD_CORNER.getX()
             && estimate.pose.getX() > 0.0
             && estimate.pose.getY() < FIELD_CORNER.getY()
             && estimate.pose.getY() > 0.0);
+    }
 
     if (limelightName.equalsIgnoreCase(APRILTAG_LIMELIGHTB_NAME)) {
       SmartDashboard.putBoolean("Vision/Left/valid", valid);

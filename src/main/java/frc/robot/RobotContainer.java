@@ -191,7 +191,8 @@ public class RobotContainer {
   BooleanSupplier ForceElevatorDown;
   BooleanSupplier ManualCoralIntake;
   BooleanSupplier PlaceCoralNoPathSup;
-  BooleanSupplier goForAlgae;
+  BooleanSupplier goForAlgaeTrue;
+  BooleanSupplier goForAlgaeFalse;
   BooleanSupplier CoralIntakeSup;
   BooleanSupplier funnelRotatorSupplier;
   BooleanSupplier climberResetSupplier;
@@ -268,8 +269,8 @@ public class RobotContainer {
       AlgaeDepositSup = driverControllerXbox::getBButton;
       AlgaeShooterSup = ()-> driverControllerXbox.getPOV() == 180;
       PlaceCoralNoPathSup = driverControllerXbox::getYButton;
-      CoralIntakeSup = driverControllerXbox::getXButton;
-      funnelRotatorSupplier = driverControllerXbox::getRightStickButton;
+      CoralIntakeSup = driverControllerXbox::getRightStickButton;
+      funnelRotatorSupplier = driverControllerXbox::getLeftStickButton;
       AlgaeIntakeSup = ()->driverControllerXbox.getPOV() == 270;
       ManualCoralIntake = ()->false;
       
@@ -312,9 +313,10 @@ public class RobotContainer {
       ReefHeight2Supplier = ()->operatorControllerXbox.getPOV() == 90;
       ReefHeight3Supplier = ()->operatorControllerXbox.getPOV() == 180;
       ReefHeight4Supplier = ()->operatorControllerXbox.getPOV() == 270;
-      goForAlgae = ()->operatorControllerXbox.getAButton();
-      ProcessorHeightSupplier = operatorControllerXbox::getBButton;
-      BargeHeightSupplier = ()->false;
+      goForAlgaeTrue = ()->operatorControllerXbox.getAButton();
+      goForAlgaeFalse = ()->operatorControllerXbox.getYButton();
+      ProcessorHeightSupplier = ()->false;//operatorControllerXbox::getBButton;
+      BargeHeightSupplier = operatorControllerXbox::getBButton;
 
       //operator manual controls, should not be used unless other controls not working
       ForceEjectCoral = ()-> operatorControllerXbox.getRightTriggerAxis() > 0.1;
@@ -335,7 +337,8 @@ public class RobotContainer {
       ReefHeight3Supplier = ()->operatorControllerPS4.getPOV() == 180;
       ReefHeight4Supplier = ()->operatorControllerPS4.getPOV() == 270;
       ProcessorHeightSupplier = ()->operatorControllerPS4.getOptionsButton();
-      goForAlgae = ()->operatorControllerPS4.getCircleButton();
+      goForAlgaeTrue = ()->operatorControllerPS4.getCircleButton();
+      goForAlgaeFalse = ()->operatorControllerPS4.getCrossButton();
       BargeHeightSupplier = operatorControllerPS4::getTriangleButton;
 
       //manual operator controls, should not be used unless other controls do not work
@@ -351,7 +354,7 @@ public class RobotContainer {
       //These are not sorted based on manual or automatic, but rather location on the physical board. 
       OpLeftReefLineupSup = buttonBoard::getLeftReefLineupButton;
       OpRightReefLineupSup = buttonBoard::getRightReefLineupButton;
-      goForAlgae = buttonBoard::getGoForAlgaeButton;
+      goForAlgaeTrue = buttonBoard::getGoForAlgaeButton;
 
       ReefHeight2Supplier = buttonBoard::getReefHeight1Button;
       ReefHeight1Supplier = buttonBoard::getReefHeight2Button;
@@ -497,7 +500,9 @@ public class RobotContainer {
     new Trigger(BargeHeightSupplier).onTrue(new InstantCommand(()-> RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Barge));
     new Trigger(OpLeftReefLineupSup).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringLeft = true));
     new Trigger(OpRightReefLineupSup).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringLeft = false));
-    new Trigger(goForAlgae).onTrue(new InstantCommand(()->RobotState.getInstance().goForAlgae = true));
+    new Trigger(goForAlgaeTrue).onTrue(new InstantCommand(()->RobotState.getInstance().goForAlgae = !RobotState.getInstance().goForAlgae));
+    // new Trigger(goForAlgaeTrue).onTrue(new InstantCommand(()->RobotState.getInstance().goForAlgae = true));
+    // new Trigger(goForAlgaeFalse).onTrue(new InstantCommand(()->RobotState.getInstance().goForAlgae = false));
     SmartDashboard.putData("toggle algae pickup", new InstantCommand(()->RobotState.getInstance().goForAlgae = !RobotState.getInstance().goForAlgae));
     
     if (DrivetrainExists){
@@ -531,12 +536,6 @@ public class RobotContainer {
       .onFalse(new InstantCommand(()->SmartDashboard.putBoolean("INTAKE/in intake zone", false)));
     }
     }
-    
-    new Trigger(ReefHeight1Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef1));
-    new Trigger(ReefHeight2Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef2));
-    new Trigger(ReefHeight3Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef3));
-    new Trigger(ReefHeight4Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef4));
-    new Trigger(goForAlgae).onTrue(new InstantCommand(()->RobotState.getInstance().goForAlgae = !RobotState.getInstance().goForAlgae));
 
     if (algaeEndeffectorExists) {
       new Trigger(AlgaeIntakeSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector, ()->ALGAE_INTAKE_SPEED));

@@ -203,7 +203,62 @@ public class ElevatorSubsystem extends SubsystemBase {
         setElevatorPosition(PROCESSOR_HEIGHT_CENTIMETERS);
         break;
       case Barge:
-        setElevatorPositionDynamicConfigs(BARGE_SHOOT_CENTIMETERS, MOTION_MAGIC_ELEVATOR_ACCLERATION, MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY, 0);
+        setElevatorPositionDynamicConfigs(BARGE_SHOOT_CENTIMETERS, MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION, MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY, 0);
+        break;
+    }
+  }
+  /**
+   * sets the height of the elvator using constants associated with different values of ElevatorEnums. Uses slower acceleration so that we are able to pick up aglae
+   * @param height
+   */
+
+   //default: 320 cm/s 640 cm/s/s
+
+   //works: 100 cm/s/s 200 cm/s 
+   // TODO: may need speedup
+  public void setElevatorPositionWithAlgae(ElevatorEnums height){
+    final double algaeAcceleration = 100;
+    final double algaeVelocity = 200;
+    switch(height){
+      case Reef1:
+      setElevatorPositionDynamicConfigs(REEF_LEVEL_1_CENTIMETERS, algaeAcceleration, algaeVelocity, 0);
+        break;
+      case Reef2:
+      setElevatorPositionDynamicConfigs(REEF_LEVEL_2_CENTIMETERS, algaeAcceleration, algaeVelocity, 0);
+        if(isElevatorAtPose()){
+          RobotState.getInstance().elevatorIsHigh = true;
+        }
+        break;
+      case Reef3:
+      setElevatorPositionDynamicConfigs(REEF_LEVEL_3_CENTIMETERS, algaeAcceleration, algaeVelocity, 0);
+        if(isElevatorAtPose()){
+          RobotState.getInstance().elevatorIsHigh = true;
+        }
+        break;
+      case Reef4:
+        setElevatorPositionDynamicConfigs(REEF_LEVEL_4_CENTIMETERS, algaeAcceleration, algaeVelocity, 0);
+        if(isElevatorAtPose()){
+          RobotState.getInstance().elevatorIsHigh = true;
+        }
+        break;
+      case HumanPlayer:
+        setElevatorPositionDynamicConfigs(HUMAN_PLAYER_STATION_CENTIMETERS, algaeAcceleration, algaeVelocity, 0);
+        if(isElevatorAtPose()){
+          RobotState.getInstance().elevatorIsHigh = false;
+        }
+        break;
+      case Bottom:
+      if(Preferences.getBoolean("CompBot", true)) {
+        setElevatorPosition(COMP_HEIGHT_AT_LIMIT_SWITCH);
+      } else {
+        setElevatorPosition(PRAC_HEIGHT_AT_LIMIT_SWITCH);
+      }
+        break;
+      case AlgaeInProcessor:
+        setElevatorPosition(PROCESSOR_HEIGHT_CENTIMETERS);
+        break;
+      case Barge:
+        setElevatorPositionDynamicConfigs(BARGE_SHOOT_CENTIMETERS, MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION, MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY, 0);
         break;
     }
   }
