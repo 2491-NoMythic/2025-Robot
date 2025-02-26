@@ -10,7 +10,6 @@ import static frc.robot.settings.Constants.ClimberConstants.CLIMBER_CLIMBED_ANGL
 import static frc.robot.settings.Constants.ClimberConstants.CLIMBER_NOT_CLIMBED_ANGLE;
 import static frc.robot.settings.Constants.CoralEndeffectorConstants.CORAL_ENDEFFECTOR_SPEED;
 import static frc.robot.settings.Constants.DriveConstants.*;
-import static frc.robot.settings.Constants.ElevatorConstants.HEIGHT_AT_LIMIT_SWITCH;
 import static frc.robot.settings.Constants.ElevatorConstants.HUMAN_PLAYER_STATION_CENTIMETERS;
 import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_ACCLERATION;
 import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_JERK;
@@ -319,9 +318,9 @@ public class RobotContainer {
 
       //operator manual controls, should not be used unless other controls not working
       ForceEjectCoral = ()-> operatorControllerXbox.getRightTriggerAxis() > 0.1;
-      ForceElevator = ()->false;
-      ForceElevatorUp = ()->operatorControllerXbox.getLeftY() < -0.5;
-      ForceElevatorDown = ()->operatorControllerXbox.getLeftY() > 0.5;
+      ForceElevator = ()->operatorControllerXbox.getLeftTriggerAxis() > 0.1;
+      ForceElevatorUp = ()->false;//operatorControllerXbox.getLeftY() < -0.5;
+      ForceElevatorDown = ()->false;//operatorControllerXbox.getLeftY() > 0.5;
       ClimbCommandSupplier = ()->operatorControllerXbox.getXButton();
       ClimbModeAuthorizer = operatorControllerXbox::getRightStickButton;
       climberResetSupplier = operatorControllerXbox::getLeftStickButton;
@@ -498,7 +497,8 @@ public class RobotContainer {
     new Trigger(BargeHeightSupplier).onTrue(new InstantCommand(()-> RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Barge));
     new Trigger(OpLeftReefLineupSup).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringLeft = true));
     new Trigger(OpRightReefLineupSup).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringLeft = false));
-    new Trigger(goForAlgae).onTrue(new InstantCommand(()->RobotState.getInstance().goForAlgae = !RobotState.getInstance().goForAlgae));    SmartDashboard.putData("toggle algae pickup", new InstantCommand(()->RobotState.getInstance().goForAlgae = !RobotState.getInstance().goForAlgae));
+    new Trigger(goForAlgae).onTrue(new InstantCommand(()->RobotState.getInstance().goForAlgae = true));
+    SmartDashboard.putData("toggle algae pickup", new InstantCommand(()->RobotState.getInstance().goForAlgae = !RobotState.getInstance().goForAlgae));
     
     if (DrivetrainExists){
     SmartDashboard.putData("drivetrain", driveTrain);
@@ -543,8 +543,8 @@ public class RobotContainer {
       new Trigger(AlgaeShooterSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector, ()->ALGAE_SHOOT_SPEED));
     }
     if (climberExists){
-      new Trigger(ClimbCommandSupplier).whileTrue(new ClimberCommand(climber, CLIMBER_CLIMBED_ANGLE));
-      new Trigger(climberResetSupplier).whileTrue(new ClimberCommand(climber, CLIMBER_NOT_CLIMBED_ANGLE));
+      new Trigger(ClimbCommandSupplier).whileTrue(new ClimberCommand(climber));
+      new Trigger(climberResetSupplier).onTrue(new InstantCommand(()->climber.setClimberPower(-0.15), climber)).onFalse(new InstantCommand(()->climber.stopClimber(), climber));
     }
     if (funnelIntakeExists&&elevatorExists&&coralEndeffectorExists) {
       // // if the coral is triggering the funnel, but hasn't been aligned, and there elevator isn't in place, lineup the coral in the funnel
@@ -563,7 +563,7 @@ public class RobotContainer {
       //   .onTrue(new PassCoralToEndEffectorSequential(coralEndDefector, funnelIntake));
       //if the coral is in the funnel, and the elevator is in place, pass the coral to the endeffector
       new Trigger(()->
-        RobotState.getInstance().funnelSensorTrig &&
+        RobotState.getInstance().coralEndeffSensorTrig &&
         elevator.isElevatorAtPose() &&
         elevator.isElevatorAtIntakeHeight() &&
         !RobotState.getInstance().coralLineupRunning &&
@@ -595,7 +595,7 @@ public class RobotContainer {
               algaeEndDefector,
               ()->RobotState.getInstance().goForAlgae),
             new InstantCommand(()->RobotState.getInstance().reefLineupRunning = false))
-          );
+          ).onFalse(new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer)));
     } else if(DrivetrainExists&&distanceSensorsExist) {
       
      new Trigger(CoralPlaceTeleSupplier).whileTrue(new SequentialCommandGroup(
@@ -620,7 +620,7 @@ public class RobotContainer {
           algaeEndDefector,
           ()->RobotState.getInstance().goForAlgae),
           new InstantCommand(()->RobotState.getInstance().reefLineupRunning = false))
-          );
+          ).onFalse(new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer)));
     }
 
     if(elevatorExists && algaeEndeffectorExists){
@@ -660,8 +660,8 @@ public class RobotContainer {
         });
       }
       if (funnelRotatorExists) {
-          new Trigger(funnelRotatorSupplier).and(ClimbModeAuthorizer).whileTrue(new FunnelRotatorCommand(funnelRotator));
-          new Trigger(funnelRotatorSupplier).and(inEndgameSupplier).whileTrue(new FunnelRotatorCommand(funnelRotator));
+          new Trigger(()->funnelRotatorSupplier.getAsBoolean() && ClimbModeAuthorizer.getAsBoolean()).whileTrue(new FunnelRotatorCommand(funnelRotator));
+          new Trigger(()->funnelRotatorSupplier.getAsBoolean() && inEndgameSupplier.getAsBoolean()).whileTrue(new FunnelRotatorCommand(funnelRotator));
       }
   }
 
@@ -918,6 +918,9 @@ public class RobotContainer {
     
   }
   public void robotInit(){
+    if(lightsExist) {
+      lights.setAllLights(0, 0, 0);
+    }
   }
   public void robotPeriodic() {
     if(elevatorExists) {
@@ -945,8 +948,11 @@ public class RobotContainer {
   }
 
   public void disabledPeriodic() {
+    if(lightsExist) {
+      lights.setCandleLights(LightConstants.TOTAL_LIGHTS_CANDLE_STRIP_START, LightConstants.DRIVETRAIN_LIGHTS_END, 100, 50, 100);
+    }
   }
-
+  
   public void disabledInit() {
     RobotState.getInstance().coralLineupRunning = false;
     if(coralEndeffectorExists) {

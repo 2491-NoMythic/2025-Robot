@@ -10,10 +10,10 @@ import frc.robot.subsystems.ClimberSubsystem;
 public class ClimberCommand extends Command {
  ClimberSubsystem climber;
  double position;
+ final double currentForClimbing = 200;
   /** Creates a new ClimberCommand. */
-  public ClimberCommand(ClimberSubsystem climber, double position) {
+  public ClimberCommand(ClimberSubsystem climber) {
     this.climber = climber;
-    this.position = position;
     addRequirements(climber);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -25,13 +25,13 @@ public class ClimberCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    climber.setClimberAngle(position);
+    climber.setMotorTorqueFOC(currentForClimbing);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    climber.setClimberAngle(climber.getClimberAngle());
+    climber.stopClimber();
   }
 
   // Returns true when the command should end.

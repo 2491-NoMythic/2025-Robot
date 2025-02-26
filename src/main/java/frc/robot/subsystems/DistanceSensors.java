@@ -46,7 +46,7 @@ public class DistanceSensors  extends SubsystemBase{
     middleLeft.setRangingMode(RangingMode.Short, 24);
     middleRight.setRangingMode(RangingMode.Short, 24);
     farRight.setRangingMode(RangingMode.Short, 24);
-    farLeft.setRangeOfInterest(7, 10, 10, 7);
+    farLeft.setRangeOfInterest(8, 10, 10, 8);
   }
 /**
  * a method that returns the distance sensed by the given sensor, as shown below. If a sensor senses nothing within it's range, It returns 0.0 <br>
@@ -234,7 +234,7 @@ public class DistanceSensors  extends SubsystemBase{
       && middleRight.getRange()>0
       && loopsMRValid>loopsNeededForValid;
     RobotState.getInstance().farRightSensorTriggered =
-      farRight.getRange()<RANGE_TO_SEE_REEF_ANGLED_AND_SPACED_SENSORS
+      farRight.getRange()<RANGE_TO_SEE_REEF_ANGLED_SENSORS
       && farRight.getRange()>0
       && loopsFRValid>loopsNeededForValid;
     RobotState.getInstance().reefOffset = calcOffset(

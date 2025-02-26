@@ -67,12 +67,12 @@ public class AlgaeEndeffectorSubsystem extends SubsystemBase {
         ALGAE_ENDEFFECTOR_KD_2_PRACTICE,          
         ALGAE_ENDEFFECTOR_KFF_2_PRACTICE));}
 
-    algaeConfig1.idleMode(IdleMode.kCoast);
+    algaeConfig1.idleMode(IdleMode.kBrake);
     algaeConfig1.inverted(true);
     algaeConfig1.smartCurrentLimit(ALGAE_ENDEFFECTOR_CURRENT_LIMIT, ALGAE_ENDEFFECTOR_CURRENT_LIMIT, 1000);
     algaeEndeffectorMotor1.configure(algaeConfig1, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     
-    algaeConfig2.idleMode(IdleMode.kCoast);
+    algaeConfig2.idleMode(IdleMode.kBrake);
     algaeConfig1.inverted(true);
     algaeConfig2.smartCurrentLimit(ALGAE_ENDEFFECTOR_CURRENT_LIMIT, ALGAE_ENDEFFECTOR_CURRENT_LIMIT, 1000);
     algaeConfig2.follow(algaeEndeffectorMotor1);
@@ -88,9 +88,17 @@ public class AlgaeEndeffectorSubsystem extends SubsystemBase {
   public void runAlgaeEndDefector(double speed){
     algaeEndeffectorMotor1.set(speed);
   }
-
-  public void stopAlgaeEndDefector(){
+  /**
+   * stops the algae end effector motor by setting speed to 0, with brake mode enabled
+   */
+  public void stopAlgaeEndDefectorHard(){
     algaeEndeffectorMotor1.set(0);
+  }
+  /**
+   * stop the algae end effector motor be setting voltage to 0, letting it coast out
+   */
+  public void stopAlgaeEndDefectorCoast(){
+    algaeEndeffectorMotor1.setVoltage(0);
   }
 
   public SparkMax getMotor(){

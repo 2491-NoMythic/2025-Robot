@@ -179,24 +179,30 @@ public class Limelight {
 
   public void updateLoggingWithPoses() {
     if(isConnected(APRILTAG_LIMELIGHTB_NAME)) {
-      Pose2d poseB =
-        LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(APRILTAG_LIMELIGHTB_NAME).pose;
-      fieldB.setRobotPose(poseB);
-      Logger.recordOutput("LeftPose", poseB);
+      if(LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(APRILTAG_LIMELIGHTB_NAME) != null) {
+        Pose2d poseB =
+          LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(APRILTAG_LIMELIGHTB_NAME).pose;
+        fieldB.setRobotPose(poseB);
+        Logger.recordOutput("LeftPose", poseB);
+      }
     }
 
     if(isConnected(APRILTAG_LIMELIGHTC_NAME)) {
-      Pose2d poseC =
-        LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(APRILTAG_LIMELIGHTC_NAME).pose;
-      fieldC.setRobotPose(poseC);
-      Logger.recordOutput("RightPose", poseC);
+      if(LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(APRILTAG_LIMELIGHTC_NAME) != null) {
+        Pose2d poseC =
+          LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(APRILTAG_LIMELIGHTC_NAME).pose;
+        fieldC.setRobotPose(poseC);
+        Logger.recordOutput("RightPose", poseC);
+      }
     }
     
     if(isConnected(APRILTAG_LIMELIGHTA_NAME)) {
-      Pose2d poseA =
-        LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(APRILTAG_LIMELIGHTA_NAME).pose;
-      fieldC.setRobotPose(poseA);
-      Logger.recordOutput("ExtraPose", poseA);
+      if(LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(APRILTAG_LIMELIGHTA_NAME) != null) {
+        Pose2d poseA =
+          LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(APRILTAG_LIMELIGHTA_NAME).pose;
+        fieldC.setRobotPose(poseA);
+        Logger.recordOutput("ExtraPose", poseA);
+      }
     }
 
 
