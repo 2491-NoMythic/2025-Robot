@@ -31,6 +31,8 @@ public class ApproachReef extends Command {
   DoubleSupplier rightwardsSupplier;
   DoubleSupplier rotationSupplier;
   double invert;
+  double lastDistance;
+  int loopsLastDistanceGreater;
   /** Creates a new ApproachReef. */
   public ApproachReef(
     DistanceSensors distanceSensorsSubssytem,
@@ -52,6 +54,8 @@ public class ApproachReef extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    lastDistance = 3000;
+    loopsLastDistanceGreater = 0;
     if (DriverStation.getAlliance().get() == Alliance.Red) {
       invert = -1;
     } else {
@@ -90,6 +94,10 @@ public class ApproachReef extends Command {
       speeds.vxMetersPerSecond = Math.min(3, -calculatedSpeed);
     }
   //drive using controller inputs + calculated forward speed
+  if(distance >= lastDistance) {
+    loopsLastDistanceGreater++;
+  }
+  lastDistance = distance;
     drivetrain.drive(speeds);
   }
 
@@ -97,11 +105,12 @@ public class ApproachReef extends Command {
   @Override
   public void end(boolean interrupted) {
     drivetrain.pointWheelsInward();
+    loopsLastDistanceGreater = 0;
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return pidController.atSetpoint();
+    return pidController.atSetpoint()|loopsLastDistanceGreater>50;
   }
 }

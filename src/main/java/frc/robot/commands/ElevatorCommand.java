@@ -37,7 +37,11 @@ public class ElevatorCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    elevator.setElevatorPosition(levelSupplier.get());
+    if(RobotState.getInstance().goForAlgae) {
+      elevator.setElevatorPositionWithAlgae(levelSupplier.get());
+    } else {
+      elevator.setElevatorPosition(levelSupplier.get());
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.

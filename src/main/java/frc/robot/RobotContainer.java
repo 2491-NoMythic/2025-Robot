@@ -315,8 +315,8 @@ public class RobotContainer {
       ReefHeight4Supplier = ()->operatorControllerXbox.getPOV() == 270;
       goForAlgaeTrue = ()->operatorControllerXbox.getAButton();
       goForAlgaeFalse = ()->operatorControllerXbox.getYButton();
-      ProcessorHeightSupplier = operatorControllerXbox::getBButton;
-      BargeHeightSupplier = ()->false;
+      ProcessorHeightSupplier = ()->false;//operatorControllerXbox::getBButton;
+      BargeHeightSupplier = operatorControllerXbox::getBButton;
 
       //operator manual controls, should not be used unless other controls not working
       ForceEjectCoral = ()-> operatorControllerXbox.getRightTriggerAxis() > 0.1;
