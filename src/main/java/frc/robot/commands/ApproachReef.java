@@ -10,6 +10,7 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -31,6 +32,7 @@ public class ApproachReef extends Command {
   DoubleSupplier rightwardsSupplier;
   DoubleSupplier rotationSupplier;
   double invert;
+  Timer timer;
   double lastDistance;
   int loopsLastDistanceGreater;
   /** Creates a new ApproachReef. */
@@ -46,6 +48,7 @@ public class ApproachReef extends Command {
     forwardSupplier = translationXSupplier;
     rightwardsSupplier = translationYSupplier;
     this.rotationSupplier = rotationSupplier;
+    timer = new Timer();
     addRequirements(drivetrainSubsystem);
     pidController.setIZone(300);
     pidController.setTolerance(10);
@@ -54,6 +57,8 @@ public class ApproachReef extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    timer.reset();
+    timer.start();
     lastDistance = 3000;
     loopsLastDistanceGreater = 0;
     if (DriverStation.getAlliance().get() == Alliance.Red) {
@@ -93,11 +98,15 @@ public class ApproachReef extends Command {
     if(distance<1300) {
       speeds.vxMetersPerSecond = Math.min(3, -calculatedSpeed);
     }
-  //drive using controller inputs + calculated forward speed
-  if(distance >= lastDistance) {
-    loopsLastDistanceGreater++;
+  //
+  if(timer.get()>0.25) {
+    if(Math.abs(distance - lastDistance) < 6.5) {
+      loopsLastDistanceGreater++;
+    }
+    lastDistance = distance;
+    timer.reset();
   }
-  lastDistance = distance;
+    //drive using controller inputs + calculated forward speed
     drivetrain.drive(speeds);
   }
 
@@ -106,11 +115,13 @@ public class ApproachReef extends Command {
   public void end(boolean interrupted) {
     drivetrain.pointWheelsInward();
     loopsLastDistanceGreater = 0;
+    timer.stop();
+    timer.reset();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return pidController.atSetpoint()|loopsLastDistanceGreater>50;
+    return pidController.atSetpoint()|loopsLastDistanceGreater>4;
   }
 }
