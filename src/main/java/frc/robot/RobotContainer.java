@@ -269,8 +269,8 @@ public class RobotContainer {
       AlgaeDepositSup = driverControllerXbox::getBButton;
       AlgaeShooterSup = ()-> driverControllerXbox.getPOV() == 180;
       PlaceCoralNoPathSup = driverControllerXbox::getYButton;
-      CoralIntakeSup = driverControllerXbox::getXButton;
-      funnelRotatorSupplier = driverControllerXbox::getRightStickButton;
+      CoralIntakeSup = driverControllerXbox::getRightStickButton;
+      funnelRotatorSupplier = driverControllerXbox::getLeftStickButton;
       AlgaeIntakeSup = ()->driverControllerXbox.getPOV() == 270;
       ManualCoralIntake = ()->false;
       

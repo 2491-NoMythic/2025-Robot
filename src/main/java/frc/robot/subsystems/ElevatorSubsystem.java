@@ -202,7 +202,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         setElevatorPosition(PROCESSOR_HEIGHT_CENTIMETERS);
         break;
       case Barge:
-        setElevatorPosition(BARGE_SHOOT_CENTIMETERS);
+        setElevatorPositionDynamicConfigs(BARGE_SHOOT_CENTIMETERS, MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION, MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY, 0);
         break;
     }
   }
