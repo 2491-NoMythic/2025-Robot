@@ -470,7 +470,7 @@ public final class Constants {
     public static final double REEF_LEVEL_2_CENTIMETERS = 81.23;
     public static final double REEF_LEVEL_3_CENTIMETERS = 122.6;
     public static final double REEF_LEVEL_4_CENTIMETERS = 187;
-    public static final double BARGE_SHOOT_CENTIMETERS = 198;
+    public static final double BARGE_SHOOT_CENTIMETERS = 194.5;
     public static final double ELEVATOR_THRESHOLD = 2;
 
     public static final double MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY = 320;
