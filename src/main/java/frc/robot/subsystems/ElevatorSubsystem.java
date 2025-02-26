@@ -211,6 +211,11 @@ public class ElevatorSubsystem extends SubsystemBase {
    * sets the height of the elvator using constants associated with different values of ElevatorEnums. Uses slower acceleration so that we are able to pick up aglae
    * @param height
    */
+
+   //default: 320 cm/s 640 cm/s/s
+
+   //works: 100 cm/s/s 200 cm/s 
+   // TODO: may need speedup
   public void setElevatorPositionWithAlgae(ElevatorEnums height){
     final double algaeAcceleration = 100;
     final double algaeVelocity = 200;
