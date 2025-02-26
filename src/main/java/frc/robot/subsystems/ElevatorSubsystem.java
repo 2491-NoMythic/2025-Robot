@@ -77,13 +77,14 @@ public class ElevatorSubsystem extends SubsystemBase {
         .withReverseSoftLimitEnable(true)
         .withReverseSoftLimitThreshold(COMP_HEIGHT_AT_LIMIT_SWITCH+1)
         );
-    if (Preferences.getBoolean("CompBot", true)){  
+    if (Preferences.getBoolean("CompBot", true)){
+      //good values from right before duluth: p: 0.64, d: 0.02, g: 0.8623, a: 0.002, v: 0.01, s: 0.6  
       eleMotorConfig.Slot0 = new Slot0Configs()
         .withKP(0.64)
         .withKD(0.02)
         .withKG(0.8623)
         .withKA(0.002)
-        .withKV(0.01)//0.026 is the right value for comp bot, of 2-23 12:57 pm
+        .withKV(0.01)
         .withKS(0.6);
       eleMotorConfig.HardwareLimitSwitch.ReverseLimitAutosetPositionValue = COMP_HEIGHT_AT_LIMIT_SWITCH;
     } else {
@@ -186,7 +187,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         }
         break;
       case HumanPlayer:
-        setElevatorPositionDynamicConfigs(HUMAN_PLAYER_STATION_CENTIMETERS, MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION, MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY, MOTION_MAGIC_ELEVATOR_JERK);
+        setElevatorPositionDynamicConfigs(HUMAN_PLAYER_STATION_CENTIMETERS, MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION, MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY, 0);
         if(isElevatorAtPose()){
           RobotState.getInstance().elevatorIsHigh = false;
         }
