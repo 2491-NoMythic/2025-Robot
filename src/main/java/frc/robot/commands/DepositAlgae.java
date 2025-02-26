@@ -36,8 +36,7 @@ public class DepositAlgae extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    elevator.
-    setElevatorPositionDynamicConfigs(PROCESSOR_HEIGHT_CENTIMETERS, MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION, MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY, 0);
+    elevator.setElevatorPositionDynamicConfigs(PROCESSOR_HEIGHT_CENTIMETERS, MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION, MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY, 0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
