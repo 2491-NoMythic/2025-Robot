@@ -30,6 +30,9 @@ public class ClimberSubsystem extends SubsystemBase {
   TalonFX climberMotor1;
   MotorLogger motorLogger1;
   CANcoder climberAngleSensor;
+  boolean moveWithPower;
+  double movingPower;
+  boolean overSpooled;
   /** Creates a new CimberSubsystem. */
   public ClimberSubsystem() {
     climberMotor1 = new TalonFX(CLIMBER_MOTOR_ID, CANIVORE_DRIVETRAIN);
@@ -69,18 +72,23 @@ public class ClimberSubsystem extends SubsystemBase {
    * @param angle the desired angle
    */
   public void setClimberAngle(double angle) {
+    moveWithPower = false;
     climberMotor1.setControl(new PositionVoltage(angle));
   }
   public void stopClimber(){
+    moveWithPower = false;
     climberMotor1.set(0);
   }
   public void setClimberPower(double power) {
-    climberMotor1.set(power);
+    moveWithPower = true;
+    movingPower = power;
+
   }
   private void logMotors(){
     motorLogger1.log(climberMotor1);
   }
   public void setMotorTorqueFOC(double current) {
+    moveWithPower = false;
     climberMotor1.setControl(new TorqueCurrentFOC(current));
   }
   @Override
@@ -91,6 +99,20 @@ public class ClimberSubsystem extends SubsystemBase {
     }
     if(Math.abs(climberAngleSensor.getAbsolutePosition().getValueAsDouble() - CLIMBER_CLIMBED_ANGLE) < 2) {
       RobotState.getInstance().climbed = true;
+    }
+    if(moveWithPower) {
+      if(movingPower < 0) {
+        if(climberAngleSensor.getVelocity().getValueAsDouble() > 0) {
+          overSpooled = true;
+        } 
+      } else if(movingPower > 0){
+        overSpooled = false;
+      }
+      if(overSpooled && movingPower < 0) {
+        climberMotor1.set(0);
+      } else {
+        climberMotor1.set(movingPower);
+      }
     }
   }
 }
