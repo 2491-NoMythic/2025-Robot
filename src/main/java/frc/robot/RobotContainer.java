@@ -323,7 +323,7 @@ public class RobotContainer {
       ForceElevator = ()->operatorControllerXbox.getLeftTriggerAxis() > 0.1;
       ForceElevatorUp = ()->false;//operatorControllerXbox.getLeftY() < -0.5;
       ForceElevatorDown = ()->false;//operatorControllerXbox.getLeftY() > 0.5;
-      ClimbCommandSupplier = ()->operatorControllerXbox.getXButton();
+      ClimbCommandSupplier = ()->operatorControllerXbox.getRightStickButton();
       ClimbModeAuthorizer = ()->false;//operatorControllerXbox::getRightStickButton;
       climberResetSupplier = operatorControllerXbox::getLeftStickButton;
     } else if (OCTEnum == ControllerEnums.PS4Controller){
@@ -543,7 +543,7 @@ public class RobotContainer {
     }
     if (climberExists){
       new Trigger(ClimbCommandSupplier).whileTrue(new ClimberCommand(climber));
-      new Trigger(climberResetSupplier).onTrue(new InstantCommand(()->climber.setClimberPower(-0.15), climber)).onFalse(new InstantCommand(()->climber.stopClimber(), climber));
+      new Trigger(climberResetSupplier).onTrue(new InstantCommand(()->climber.setClimberPower(-0.45), climber)).onFalse(new InstantCommand(()->climber.stopClimber(), climber));
     }
     if (funnelIntakeExists&&elevatorExists&&coralEndeffectorExists) {
       // // if the coral is triggering the funnel, but hasn't been aligned, and there elevator isn't in place, lineup the coral in the funnel
