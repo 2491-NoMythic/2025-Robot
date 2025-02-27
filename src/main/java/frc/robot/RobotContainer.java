@@ -267,7 +267,7 @@ public class RobotContainer {
       
       //Manual driver controls
       AlgaeDepositSup = driverControllerXbox::getBButton;
-      AlgaeShooterSup = ()-> driverControllerXbox.getPOV() == 180;
+      AlgaeShooterSup = ()-> driverControllerXbox.getPOV() == 180 || operatorControllerXbox.getRightStickButton();
       PlaceCoralNoPathSup = driverControllerXbox::getYButton;
       CoralIntakeSup = driverControllerXbox::getRightStickButton;
       funnelRotatorSupplier = driverControllerXbox::getLeftStickButton;
@@ -324,7 +324,7 @@ public class RobotContainer {
       ForceElevatorUp = ()->false;//operatorControllerXbox.getLeftY() < -0.5;
       ForceElevatorDown = ()->false;//operatorControllerXbox.getLeftY() > 0.5;
       ClimbCommandSupplier = ()->operatorControllerXbox.getXButton();
-      ClimbModeAuthorizer = operatorControllerXbox::getRightStickButton;
+      ClimbModeAuthorizer = ()->false;//operatorControllerXbox::getRightStickButton;
       climberResetSupplier = operatorControllerXbox::getLeftStickButton;
     } else if (OCTEnum == ControllerEnums.PS4Controller){
       //Controller IDs
@@ -659,7 +659,7 @@ public class RobotContainer {
         });
       }
       if (funnelRotatorExists) {
-          new Trigger(()->funnelRotatorSupplier.getAsBoolean() && ClimbModeAuthorizer.getAsBoolean()).whileTrue(new FunnelRotatorCommand(funnelRotator));
+          new Trigger(()->funnelRotatorSupplier.getAsBoolean()).whileTrue(new FunnelRotatorCommand(funnelRotator));
           new Trigger(()->funnelRotatorSupplier.getAsBoolean() && inEndgameSupplier.getAsBoolean()).whileTrue(new FunnelRotatorCommand(funnelRotator));
       }
   }
