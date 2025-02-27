@@ -497,13 +497,14 @@ public final class Constants {
       .withKD(0)
       .withKS(0))
     .withCurrentLimits(new CurrentLimitsConfigs()
-      .withSupplyCurrentLimit(100)
-      .withSupplyCurrentLimitEnable(true))
+      .withSupplyCurrentLimit(110)
+      .withSupplyCurrentLimitEnable(true)
+      .withStatorCurrentLimitEnable(false))
     .withFeedback(new FeedbackConfigs()
       .withFeedbackRemoteSensorID(CLIMBER_CANCODER_ID)
       .withFeedbackSensorSource(FeedbackSensorSourceValue.RemoteCANcoder))
     .withMotorOutput(new MotorOutputConfigs()
-      .withInverted(InvertedValue.Clockwise_Positive));
+      .withInverted(InvertedValue.CounterClockwise_Positive));
     public static final TalonFXConfiguration ClimberMotorConfigPrac = new TalonFXConfiguration()
     .withSlot0(new Slot0Configs()
       .withKP(1)
