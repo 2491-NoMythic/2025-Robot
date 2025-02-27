@@ -287,11 +287,11 @@ public class RobotContainer {
       ZeroGyroSup = driverControllerPS4::getPSButton;
 
       //Automatic driver controls
-      AutoAngleAtReefSup = ()->driverControllerPS4.getR2Button();
+      AutoAngleAtReefSup = ()->driverControllerPS4.getPOV() == 0;
       DvLeftReefLineupSup = driverControllerPS4::getL1Button;
       DvRightReefLineupSup = driverControllerPS4::getR1Button;
       SlowFrontSup = ()->driverControllerPS4.getL2Axis()>-0.5;
-      CoralPlaceTeleSupplier = ()-> driverControllerPS4.getPOV() == 0;
+      CoralPlaceTeleSupplier = ()-> driverControllerPS4.getR2Button();
       AlgaeBargeSup = ()->false;//driverControllerPS4::getSquareButton;
 
       //manual driver controls
