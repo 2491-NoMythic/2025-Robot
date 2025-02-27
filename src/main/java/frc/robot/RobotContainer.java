@@ -543,6 +543,7 @@ public class RobotContainer {
     }
     if (climberExists){
       new Trigger(ClimbCommandSupplier).whileTrue(new ClimberCommand(climber));
+      new Trigger(ClimbCommandSupplier).onTrue(new InstantCommand(()->elevator.setVoltage(0), elevator));
       new Trigger(climberResetSupplier).onTrue(new InstantCommand(()->climber.setClimberPower(-0.45), climber)).onFalse(new InstantCommand(()->climber.stopClimber(), climber));
     }
     if (funnelIntakeExists&&elevatorExists&&coralEndeffectorExists) {
@@ -740,9 +741,11 @@ public class RobotContainer {
     Command elevatorResetNamedCommand;
     Command lineUpCoralNamedCommand;
     if(elevatorExists&&funnelIntakeExists&&coralEndeffectorExists&&algaeEndeffectorExists) {
-      coralIntakeNamedCommand =  new ParallelRaceGroup(
-        new CoralIntake(elevator, funnelIntake, coralEndDefector),
-        new WaitUntil(()->RobotState.getInstance().isCoralSeen()));
+      coralIntakeNamedCommand =  new SequentialCommandGroup(
+        new ParallelRaceGroup(
+          new CoralIntake(elevator, funnelIntake, coralEndDefector),
+          new WaitUntil(()->RobotState.getInstance().isCoralSeen())),
+        new PassCoralToEndEffectorSequential(coralEndDefector, funnelIntake));
       deliverCoralLeft1NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef1, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true,algaeEndDefector, ()-> false);
       deliverCoralLeft2NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef2, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true,algaeEndDefector, ()-> false);
       deliverCoralLeft3NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef3, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true,algaeEndDefector, ()-> false);
@@ -784,8 +787,8 @@ public class RobotContainer {
     } else {
       elevatorResetNamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
     }
-    if(coralEndeffectorExists) {
-      lineUpCoralNamedCommand = new LineupCoralInEndEffector(coralEndDefector);
+    if(coralEndeffectorExists && funnelIntakeExists) {
+      lineUpCoralNamedCommand = new PassCoralToEndEffectorSequential(coralEndDefector, funnelIntake);
     } else {
       lineUpCoralNamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist (attempted lineUpCoralInEndeffector)"));
     }
