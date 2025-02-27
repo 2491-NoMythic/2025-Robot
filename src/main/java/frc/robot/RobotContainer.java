@@ -567,7 +567,7 @@ public class RobotContainer {
         elevator.isElevatorAtIntakeHeight() &&
         !RobotState.getInstance().coralLineupRunning &&
         DriverStation.isTeleop())
-          .onTrue(new PassCoralToEndEffectorSequential(coralEndDefector, funnelIntake));
+          .onTrue(new PassCoralToEndEffectorSequential(coralEndDefector, funnelIntake)).onFalse(new InstantCommand(()->RobotState.getInstance().coralLineupRunning = false));
       //if no coral alignment code is running, and no coral is detected by sensors, assume that the coral is out of our robot, and set coralAligned to false
       new Trigger(()->
         !RobotState.getInstance().coralLineupRunning &&
