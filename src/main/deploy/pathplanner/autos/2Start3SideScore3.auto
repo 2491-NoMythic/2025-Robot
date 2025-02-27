@@ -13,7 +13,7 @@
         {
           "type": "named",
           "data": {
-            "name": "DeliverCoralRight1"
+            "name": "DeliverCoralLeft4"
           }
         },
         {
@@ -56,7 +56,7 @@
         {
           "type": "named",
           "data": {
-            "name": "DeliverCoralLeft4"
+            "name": "DeliverCoralRight4"
           }
         },
         {
@@ -99,7 +99,7 @@
         {
           "type": "named",
           "data": {
-            "name": "DeliverCoralRight3"
+            "name": "DeliverCoralLeft4"
           }
         },
         {
