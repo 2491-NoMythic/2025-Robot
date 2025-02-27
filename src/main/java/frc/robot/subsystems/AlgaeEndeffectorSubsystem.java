@@ -33,7 +33,7 @@ public class AlgaeEndeffectorSubsystem extends SubsystemBase {
   public boolean powerSpike;
   /** Creates a new AlgaeEndDefectorSubsystem. */
   public AlgaeEndeffectorSubsystem() {
-    algaeEndeffectorMotor = new SparkMax(ALGAE_ENDEFFECTOR_MOTOR_1_ID, MotorType.kBrushless);
+    algaeEndeffectorMotor = new SparkMax(ALGAE_ENDEFFECTOR_MOTOR_2_ID, MotorType.kBrushless);
     // algaeEndeffectorMotor2 = new SparkMax(ALGAE_ENDEFFECTOR_MOTOR_2_ID, MotorType.kBrushless);
 
     motorLogger1 = new MotorLogger("/algaeEndEffector/motor1");

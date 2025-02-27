@@ -73,7 +73,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         .withForwardLimitType(ForwardLimitTypeValue.NormallyClosed))
       .withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()
         .withForwardSoftLimitEnable(true)
-        .withForwardSoftLimitThreshold(198.39)
+        .withForwardSoftLimitThreshold(196.4)
         .withReverseSoftLimitEnable(true)
         .withReverseSoftLimitThreshold(COMP_HEIGHT_AT_LIMIT_SWITCH+1)
         );

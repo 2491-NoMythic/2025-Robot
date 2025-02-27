@@ -267,11 +267,11 @@ public class RobotContainer {
       
       //Manual driver controls
       AlgaeDepositSup = driverControllerXbox::getBButton;
-      AlgaeShooterSup = ()-> driverControllerXbox.getPOV() == 180 || operatorControllerXbox.getRightStickButton();
+      AlgaeIntakeSup = ()-> driverControllerXbox.getPOV() == 180;
       PlaceCoralNoPathSup = driverControllerXbox::getYButton;
       CoralIntakeSup = driverControllerXbox::getRightStickButton;
       funnelRotatorSupplier = driverControllerXbox::getLeftStickButton;
-      AlgaeIntakeSup = ()->driverControllerXbox.getPOV() == 270;
+      AlgaeShooterSup = ()->driverControllerXbox.getPOV() == 270 || operatorControllerXbox.getXButton();
       ManualCoralIntake = ()->false;
       
 
