@@ -71,7 +71,7 @@ public class AlgaeEndeffectorSubsystem extends SubsystemBase {
     // algaeConfig1.smartCurrentLimit(ALGAE_ENDEFFECTOR_CURRENT_LIMIT, ALGAE_ENDEFFECTOR_CURRENT_LIMIT, 1000);
     
     algaeConfig.idleMode(IdleMode.kBrake);
-    // algaeConfig1.inverted(true); TODO: review
+    algaeConfig.inverted(true);
     algaeConfig.smartCurrentLimit(ALGAE_ENDEFFECTOR_CURRENT_LIMIT, ALGAE_ENDEFFECTOR_CURRENT_LIMIT, 1000);
     // algaeConfig2.follow(algaeEndeffectorMotor1);
     // algaeEndeffectorMotor2.configure(algaeConfig2, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
