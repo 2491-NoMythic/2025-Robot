@@ -940,7 +940,11 @@ public class RobotContainer {
 
   public void disabledPeriodic() {
     if(lightsExist) {
-      lights.setCandleLights(LightConstants.TOTAL_LIGHTS_CANDLE_STRIP_START, LightConstants.DRIVETRAIN_LIGHTS_END, 100, 50, 100);
+      if(!elevatorExists || elevator.limitSwitchTrig()){
+        lights.setCandleLights(LightConstants.TOTAL_LIGHTS_CANDLE_STRIP_START, LightConstants.DRIVETRAIN_LIGHTS_END, 200, 50, 200);
+      }else{
+        lights.setCandleLights(LightConstants.TOTAL_LIGHTS_CANDLE_STRIP_START, LightConstants.DRIVETRAIN_LIGHTS_END, 200, 0, 0);  
+      }
     }
   }
   
