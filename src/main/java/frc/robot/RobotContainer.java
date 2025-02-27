@@ -704,15 +704,7 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
   //if the elevator exists, return a zeroElevator command, then the auto. (if the elevator is set up right, the zeroElevator command will be instant)
-    if(elevatorExists) {
-      return new SequentialCommandGroup(
-        new SequentialCommandGroup(
-          new InstantCommand(()->elevator.setVoltage(-1.5), elevator),
-          new WaitUntil(()->RobotState.getInstance().elevatorZeroSet)),
-        autoChooser.getSelected());
-    } else {
     return autoChooser.getSelected();
-    }
   }
 
   public void autonomousInit() {
