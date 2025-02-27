@@ -39,6 +39,8 @@ public class ShootInBarge extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new LineUpBarge(drivetrainSubsystem, controllerSupplier),
+      new InstantCommand(()->elevatorSubsystem.setElevatorPosition(ElevatorEnums.Reef3), elevatorSubsystem),
+      new WaitUntil(()->elevatorSubsystem.isElevatorAtPose()),
       new InstantCommand(()->elevatorSubsystem.setElevatorPosition(ElevatorEnums.Barge), elevatorSubsystem),
       new WaitUntil(()->elevatorSubsystem.isElevatorAtPose()),
       new ParallelRaceGroup(
