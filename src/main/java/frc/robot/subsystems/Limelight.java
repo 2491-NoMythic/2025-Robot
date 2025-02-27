@@ -321,12 +321,13 @@ public class Limelight {
 
   private boolean isValid(String limelightName, PoseEstimate estimate) {
     Boolean valid = false;
-    if(isPoseNotNull(limelightName)) {
-      valid = (estimate.pose.getX() < FIELD_CORNER.getX()
-            && estimate.pose.getX() > 0.0
-            && estimate.pose.getY() < FIELD_CORNER.getY()
-            && estimate.pose.getY() > 0.0);
+    if(estimate == null) {
+      return false;
     }
+    valid = (estimate.pose.getX() < FIELD_CORNER.getX()
+          && estimate.pose.getX() > 0.0
+          && estimate.pose.getY() < FIELD_CORNER.getY()
+          && estimate.pose.getY() > 0.0);
 
     if (limelightName.equalsIgnoreCase(APRILTAG_LIMELIGHTB_NAME)) {
       SmartDashboard.putBoolean("Vision/Left/valid", valid);
