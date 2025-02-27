@@ -117,7 +117,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     if(Preferences.getBoolean("Motor Logging", false)){
     logMotors();
     }
-    if(elevatorMotor1.getReverseLimit().getValue() == ReverseLimitValue.Open) {
+    if(limitSwitchTrig()) {
       RobotState.getInstance().elevatorZeroSet = true;
     }
     SmartDashboard.putNumber("TESTING/limit switch value", elevatorMotor1.getClosedLoopReference().getValueAsDouble());
@@ -301,6 +301,10 @@ public class ElevatorSubsystem extends SubsystemBase {
    */
   public void stopElevator(){
     elevatorMotor1.setControl(new MotionMagicVoltage(elevatorMotor1.getPosition().getValueAsDouble()));
+  }
+
+  public boolean limitSwitchTrig(){
+    return elevatorMotor1.getReverseLimit().getValue() == ReverseLimitValue.Open;
   }
 
 }
