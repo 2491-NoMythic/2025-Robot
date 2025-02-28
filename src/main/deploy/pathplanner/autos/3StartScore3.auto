@@ -76,12 +76,6 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "LineUpCoralInEndeffector"
-                }
-              },
-              {
                 "type": "path",
                 "data": {
                   "pathName": "HPToC"
@@ -93,7 +87,7 @@
         {
           "type": "named",
           "data": {
-            "name": "DeliverCoralRight2"
+            "name": "DeliverCoralLeft4"
           }
         },
         {

@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.78175,
-        "y": 2.5429999999999997
+        "x": 6.600750000000001,
+        "y": 5.4777499999999995
       },
       "isLocked": false,
       "linkedName": "ReefG"
     },
     {
       "anchor": {
-        "x": 1.5655397727272726,
-        "y": 0.7493323863636363
+        "x": 1.6769999999999998,
+        "y": 7.38875
       },
       "prevControl": {
-        "x": 4.066481553549191,
-        "y": 0.04289146170610092
+        "x": 3.188249999999999,
+        "y": 6.823249999999999
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "humanPlayerProcessor"
+      "linkedName": "BargeSideTopFeeder"
     }
   ],
   "rotationTargets": [],
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 52.431407971172504
+    "rotation": -54.0
   },
   "reversed": false,
   "folder": null,

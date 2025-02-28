@@ -13,7 +13,7 @@
         {
           "type": "named",
           "data": {
-            "name": "DeliverCoralRight1"
+            "name": "DeliverCoralLeft4"
           }
         },
         {
@@ -50,7 +50,7 @@
         {
           "type": "named",
           "data": {
-            "name": "DeliverCoralLeft4"
+            "name": "DeliverCoralRight4"
           }
         },
         {
@@ -76,12 +76,6 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "LineUpCoralInEndeffector"
-                }
-              },
-              {
                 "type": "path",
                 "data": {
                   "pathName": "HPToC"
@@ -93,7 +87,7 @@
         {
           "type": "named",
           "data": {
-            "name": "DeliverCoralRight3"
+            "name": "DeliverCoralLeft4"
           }
         },
         {
