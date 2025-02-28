@@ -58,18 +58,20 @@ public class IndicatorLights extends Command {
     if(RobotState.getInstance().goForAlgae) {
       lights.setSystemLights(LightsEnums.ElevatorLeftAlgaeIndicator, 0, 0, 100);
       lights.setSystemLights(LightsEnums.ElevatorRightAlgaeIndicator, 0, 0, 100);
+      lights.setSystemLights(LightsEnums.Drivetrain, 0, 0, 200);
     } else {
       lights.setSystemLights(LightsEnums.ElevatorLeftAlgaeIndicator, 0, 0, 0);
       lights.setSystemLights(LightsEnums.ElevatorRightAlgaeIndicator, 0, 0, 0);
-    }
-    //updates drivetrain lights
-    if(RobotState.getInstance().bargeLineUp){
-     lights.setSystemLights(LightsEnums.Drivetrain, 100, 50, 50);
-    } else if (RobotState.getInstance().LimelightsUpdated){
-      lights.setSystemLights(LightsEnums.Drivetrain, 0, 100, 0);
-    } else {
       lights.setSystemLights(LightsEnums.Drivetrain, 100, 0, 0);
     }
+    //updates drivetrain lights
+    // if(RobotState.getInstance().bargeLineUp){
+    //  lights.setSystemLights(LightsEnums.Drivetrain, 100, 50, 50);
+    // } else if (RobotState.getInstance().LimelightsUpdated){
+    //   lights.setSystemLights(LightsEnums.Drivetrain, 0, 100, 0);
+    // } else {
+    //   lights.setSystemLights(LightsEnums.Drivetrain, 100, 0, 0);
+    // }
   }
 
   // Called once the command ends or is interrupted.
