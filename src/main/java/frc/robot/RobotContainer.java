@@ -529,7 +529,7 @@ public class RobotContainer {
     SmartDashboard.putData(new InstantCommand(driveTrain::forceUpdateOdometryWithVision));
     if(coralEndeffectorExists&&funnelIntakeExists&&elevatorExists) {
       Command coralIntake = new CoralIntake(elevator, funnelIntake, coralEndDefector);
-      new Trigger(()-> (CoralIntakeSup.getAsBoolean() || driveTrain.drivetrainInIntakeZones()) && (!RobotState.getInstance().isCoralSeen()) && DriverStation.isTeleop()).whileTrue(coralIntake);
+      new Trigger(()-> (CoralIntakeSup.getAsBoolean() || driveTrain.drivetrainInIntakeZones()) && (!RobotState.getInstance().isCoralSeen()) && !DriverStation.isAutonomous()).whileTrue(coralIntake);
     } else {
       new Trigger(()->(CoralIntakeSup.getAsBoolean()||driveTrain.drivetrainInIntakeZones())&&!RobotState.getInstance().isCoralSeen())
       .onTrue(new InstantCommand(()->SmartDashboard.putBoolean("INTAKE/in intake zone", true)))
@@ -901,8 +901,19 @@ public class RobotContainer {
     }
   }
   public void teleopInit() {
+    resetStatus();
   }
+  private void resetStatus() {
+    RobotState.getInstance().coralLineupRunning = false;
+    RobotState.getInstance().coralAligned = false;
+    if(coralEndeffectorExists) {
+      coralEndDefector.stopCoralEndEffector();
+    }
+    if(funnelIntakeExists) {
+      funnelIntake.stopFunnel();
+    }
 
+  }
   public void teleopPeriodic() {
     if(DrivetrainExists) {
       SmartDashboard.putData(driveTrain.getCurrentCommand());
