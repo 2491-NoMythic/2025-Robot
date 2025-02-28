@@ -102,12 +102,10 @@ public class ClimberSubsystem extends SubsystemBase {
     }
     if(moveWithPower) {
       if(movingPower < 0) {
-        if(climberAngleSensor.getVelocity().getValueAsDouble() > 0.1) {
+        if(climberAngleSensor.getVelocity().getValueAsDouble() > 0.01) {
           overSpooled = true;
-        } else {
-          overSpooled = false;
         }
-      } else if(movingPower > 0){
+      } else if(movingPower > 0 || climberAngleSensor.getVelocity().getValueAsDouble() < 0){
         overSpooled = false;
       }
       if(overSpooled && movingPower < 0) {
