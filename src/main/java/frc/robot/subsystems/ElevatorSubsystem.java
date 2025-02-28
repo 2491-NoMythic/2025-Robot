@@ -120,6 +120,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     if(limitSwitchTrig()) {
       RobotState.getInstance().elevatorZeroSet = true;
     }
+    SmartDashboard.putNumber("TESTING/elevatorHeight", elevatorMotor1.getPosition().getValueAsDouble());
     SmartDashboard.putNumber("TESTING/limit switch value", elevatorMotor1.getClosedLoopReference().getValueAsDouble());
     SmartDashboard.putBoolean("TESTING/elevatorAtPose", isElevatorAtPose());
     SmartDashboard.putNumber("TESTING/elevatorTarget", elevatorTarget);
