@@ -323,9 +323,9 @@ public class RobotContainer {
       ForceElevator = ()->operatorControllerXbox.getLeftTriggerAxis() > 0.1;
       ForceElevatorUp = ()->false;//operatorControllerXbox.getLeftY() < -0.5;
       ForceElevatorDown = ()->false;//operatorControllerXbox.getLeftY() > 0.5;
-      ClimbCommandSupplier = ()->operatorControllerXbox.getRightStickButton();
+      ClimbCommandSupplier = ()->false;//operatorControllerXbox.getRightStickButton();
       ClimbModeAuthorizer = ()->false;//operatorControllerXbox::getRightStickButton;
-      climberResetSupplier = operatorControllerXbox::getLeftStickButton;
+      climberResetSupplier = ()->false;//operatorControllerXbox::getLeftStickButton;
     } else if (OCTEnum == ControllerEnums.PS4Controller){
       //Controller IDs
       operatorControllerPS4 = new PS4Controller(OPERATOR_CONTROLLER_ID);
