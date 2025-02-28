@@ -594,6 +594,8 @@ public class RobotContainer {
               ()->RobotState.getInstance().deliveringLeft,
               algaeEndDefector,
               ()->RobotState.getInstance().goForAlgae),
+            new MoveMeters(driveTrain, -0.5, -0.8, 0, 0),
+            new InstantCommand(()->elevator.setElevatorPositionDynamicConfigs(HUMAN_PLAYER_STATION_CENTIMETERS, MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION, MOTION_MAGIC_ELEVATOR_VELOCITY, 0), elevator), //sets elevator back to the bottom position
             new InstantCommand(()->RobotState.getInstance().reefLineupRunning = false))
           ).onFalse(new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer)));
     } else if(DrivetrainExists&&distanceSensorsExist) {
@@ -619,6 +621,8 @@ public class RobotContainer {
           ()->RobotState.getInstance().deliveringLeft, 
           algaeEndDefector,
           ()->RobotState.getInstance().goForAlgae),
+          new MoveMeters(driveTrain, -0.5, -0.8, 0, 0),
+          new InstantCommand(()->elevator.setElevatorPositionDynamicConfigs(HUMAN_PLAYER_STATION_CENTIMETERS, MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION, MOTION_MAGIC_ELEVATOR_VELOCITY, 0), elevator), //sets elevator back to the bottom position
           new InstantCommand(()->RobotState.getInstance().reefLineupRunning = false))
           ).onFalse(new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer)));
     }

@@ -111,8 +111,7 @@ public class ClimberSubsystem extends SubsystemBase {
         overSpooled = false;
       }
       if(overSpooled && movingPower < 0) {
-        climberMotor1.set(
-          0);
+        climberMotor1.set(0);
       } else {
         climberMotor1.set(movingPower);
       }
