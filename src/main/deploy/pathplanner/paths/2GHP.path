@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.754098360655737,
-        "y": 4.066956967213113
+        "x": 5.694,
+        "y": 3.952
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.50325,
-        "y": 2.114
+        "x": 6.443151639344263,
+        "y": 1.9990430327868864
       },
       "isLocked": false,
-      "linkedName": "2G"
+      "linkedName": "ReefG"
     },
     {
       "anchor": {
@@ -48,7 +48,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -178.85423716182487
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

@@ -13,7 +13,7 @@
         {
           "type": "named",
           "data": {
-            "name": "DeliverCoralRight4"
+            "name": "DeliverCoralLeft2"
           }
         },
         {
@@ -39,12 +39,6 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "LineUpCoralInEndeffector"
-                }
-              },
-              {
                 "type": "path",
                 "data": {
                   "pathName": "BargeSideTopToReefK"
@@ -56,7 +50,7 @@
         {
           "type": "named",
           "data": {
-            "name": "DeliverCoralLeft4"
+            "name": "DeliverCoralLeft3"
           }
         },
         {
