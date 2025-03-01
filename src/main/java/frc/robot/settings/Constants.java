@@ -330,7 +330,7 @@ public final class Constants {
     /** Value used to differentiate between angle 0 and rest position. */
     public static final double NO_INPUT = 404;
 
-    public static final double DEADBAND_NORMAL = 0.08;
+    public static final double DEADBAND_NORMAL = 0.03;
     public static final double DEADBAND_LARGE = 0.1;
   }
 

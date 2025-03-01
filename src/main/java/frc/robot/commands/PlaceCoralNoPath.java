@@ -47,7 +47,7 @@ public class PlaceCoralNoPath extends SequentialCommandGroup{
             // new LineUp(drivetrain, leftPlace, REEF_LINEUP_SPEED),//align with reef
             new ParallelRaceGroup(
                 //elevator command will stop this so modify it
-                new AlgaeIntakeCommand(algaeEndeffectorSubsystem, () -> goForAlgea.getAsBoolean() ? ALGAE_INTAKE_SPEED : 0),
+                new AlgaeIntakeCommand(algaeEndeffectorSubsystem, () -> goForAlgea.getAsBoolean() ? ALGAE_INTAKE_SPEED : -0.5),
                 new SequentialCommandGroup(
                     new ParallelRaceGroup(
                         new ElevatorCommand(elevator, elevatorPose),//raises elevator to position)
