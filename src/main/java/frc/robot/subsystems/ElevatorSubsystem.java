@@ -121,7 +121,7 @@ public class ElevatorSubsystem extends SubsystemBase {
       RobotState.getInstance().elevatorZeroSet = true;
     }
     SmartDashboard.putNumber("TESTING/elevatorHeight", elevatorMotor1.getPosition().getValueAsDouble());
-    SmartDashboard.putNumber("TESTING/limit switch value", elevatorMotor1.getClosedLoopReference().getValueAsDouble());
+    SmartDashboard.putBoolean("TESTING/limit switch value", limitSwitchTrig());
     SmartDashboard.putBoolean("TESTING/elevatorAtPose", isElevatorAtPose());
     SmartDashboard.putNumber("TESTING/elevatorTarget", elevatorTarget);
     SmartDashboard.putNumber("TESTING/elevatorClosedLoopError", Math.abs(elevatorTarget-elevatorMotor1.getPosition().getValueAsDouble()));

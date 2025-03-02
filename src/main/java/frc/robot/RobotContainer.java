@@ -58,6 +58,7 @@ import frc.robot.commands.AlgaeIntakeCommand;
 import frc.robot.commands.Drive;
 import frc.robot.commands.IndicatorLights;
 import frc.robot.commands.ElevatorCommand;
+import frc.robot.commands.ElevatorReset;
 import frc.robot.commands.FunClimbedLights;
 import frc.robot.commands.FunnelRotatorCommand;
 import frc.robot.commands.LineUp;
@@ -639,6 +640,7 @@ public class RobotContainer {
       new Trigger(ForceElevator).onTrue(new InstantCommand(()-> elevator.setElevatorPosition(RobotState.getInstance().deliveringCoralHeight), elevator)).onFalse(new InstantCommand(()-> elevator.setElevatorPositionDynamicConfigs(HUMAN_PLAYER_STATION_CENTIMETERS, MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION, MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY, 0), elevator));
       new Trigger(ForceElevatorUp).whileTrue(new InstantCommand(()-> elevator.setVoltage(5), elevator)).onFalse(new InstantCommand(()-> elevator.setVoltage(0), elevator));
       new Trigger(ForceElevatorDown).whileTrue(new InstantCommand(()-> elevator.setVoltage(-1.2), elevator)).onFalse(new InstantCommand(()-> elevator.setVoltage(0), elevator));
+      SmartDashboard.putData("ELEVATOR RESET", new ElevatorReset(elevator));
     }
 
     if(coralEndeffectorExists){
