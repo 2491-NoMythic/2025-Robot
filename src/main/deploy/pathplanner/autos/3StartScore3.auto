@@ -5,6 +5,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "RaiseElevator"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "processorStartToF"
@@ -13,7 +19,7 @@
         {
           "type": "named",
           "data": {
-            "name": "DeliverCoralRight4"
+            "name": "SpitCoral"
           }
         },
         {
@@ -29,9 +35,9 @@
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "CoralIntake"
+            "waitTime": 0.75
           }
         },
         {
@@ -43,6 +49,12 @@
                 "data": {
                   "pathName": "HPToD"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeAlignAndRaiseCoral"
+                }
               }
             ]
           }
@@ -50,7 +62,7 @@
         {
           "type": "named",
           "data": {
-            "name": "DeliverCoralRight4"
+            "name": "SpitCoral"
           }
         },
         {
@@ -66,9 +78,9 @@
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "CoralIntake"
+            "waitTime": 0.75
           }
         },
         {
@@ -80,6 +92,12 @@
                 "data": {
                   "pathName": "HPToC"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeAlignAndRaiseCoral"
+                }
               }
             ]
           }
@@ -87,7 +105,7 @@
         {
           "type": "named",
           "data": {
-            "name": "DeliverCoralLeft4"
+            "name": "SpitCoral"
           }
         },
         {
