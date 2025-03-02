@@ -31,6 +31,9 @@ import frc.robot.subsystems.RobotState;
 
 import static frc.robot.settings.Constants.DriveConstants.CANIVORE_DRIVETRAIN;
 import static frc.robot.settings.Constants.ElevatorConstants.*;
+
+import java.util.function.Supplier;
+
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -159,6 +162,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     elevatorTarget = height;
     DynamicMotionMagicVoltage request = new DynamicMotionMagicVoltage(targetHeight, velocity, acceleration, jerk);
     elevatorMotor1.setControl(request);
+  }
+  public void setElevatorPosition(Supplier<ElevatorEnums> heightSupplier) {
+    setElevatorPosition(heightSupplier.get());
   }
   /**
    * sets the height of the elvator using constants associated with different values of ElevatorEnums

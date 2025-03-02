@@ -41,6 +41,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -49,6 +50,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AutoAngleAtReef;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.DepositAlgae;
+import frc.robot.settings.Constants.AlgaeEndeffectorConstants;
 import frc.robot.settings.Constants.LightConstants;
 import frc.robot.settings.Constants.Vision;
 import frc.robot.settings.ControllerEnums;
@@ -56,6 +58,7 @@ import frc.robot.commands.AlgaeEndeffectorCommand;
 import frc.robot.commands.ApproachReef;
 import frc.robot.commands.AlgaeIntakeCommand;
 import frc.robot.commands.Drive;
+import frc.robot.commands.DriveToPose;
 import frc.robot.commands.IndicatorLights;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.ElevatorReset;
@@ -82,6 +85,7 @@ import frc.robot.settings.SensorNameEnums;
 import frc.robot.settings.CommandSelectorEnum;
 import frc.robot.settings.ElevatorEnums;
 import frc.robot.settings.LightsEnums;
+import frc.robot.settings.PlacementLocations;
 import frc.robot.settings.ReefSideEnum;
 import frc.robot.subsystems.AlgaeEndeffectorSubsystem;
 import frc.robot.subsystems.CoralEndeffectorSubsystem;
@@ -548,21 +552,7 @@ public class RobotContainer {
       new Trigger(climberResetSupplier).onTrue(new InstantCommand(()->climber.setClimberPower(-0.7), climber)).onFalse(new InstantCommand(()->climber.stopClimber(), climber));
     }
     if (funnelIntakeExists&&elevatorExists&&coralEndeffectorExists) {
-      // // if the coral is triggering the funnel, but hasn't been aligned, and there elevator isn't in place, lineup the coral in the funnel
-      // new Trigger(()->
-      //   !RobotState.getInstance().coralAligned &&
-      //   RobotState.getInstance().funnelSensorTrig &&
-      //   !elevator.isElevatorAtIntakeHeight() &&
-      //   !RobotState.getInstance().coralLineupRunning)
-      //     .onTrue(new LineupCoralInFunnel(funnelIntake));
-      //if the coral hasn't been aligned, but has traveled all the way through to the coralEndEffector, lineup the coral in the endeffector
-      // new Trigger(()->
-      // !RobotState.getInstance().coralAligned &&
-      // !RobotState.getInstance().funnelSensorTrig &&
-      // RobotState.getInstance().coralEndeffSensorTrig &&
-      // !RobotState.getInstance().coralLineupRunning)
-      //   .onTrue(new PassCoralToEndEffectorSequential(coralEndDefector, funnelIntake));
-      //if the coral is in the funnel, and the elevator is in place, pass the coral to the endeffector
+      //if the coral is in the end effector, and the elevator is in place, pass the coral to the endeffector and line up the coral within it
       new Trigger(()->
         RobotState.getInstance().coralEndeffSensorTrig &&
         elevator.isElevatorAtPose() &&
@@ -582,19 +572,17 @@ public class RobotContainer {
       new Trigger(CoralPlaceTeleSupplier).whileTrue(
           new SequentialCommandGroup(
             new InstantCommand(()->RobotState.getInstance().reefLineupRunning = true),
-            pathFindToReef,
-            new PlaceCoralNoPath(
-              elevator,
-              ()->RobotState.getInstance().deliveringCoralHeight,
-              distanceSensors,
-              driveTrain,
-              ControllerSidewaysAxisSupplier,
-              ControllerForwardAxisSupplier,
-              ControllerZAxisSupplier,
-              coralEndDefector,
-              ()->RobotState.getInstance().deliveringLeft,
-              algaeEndDefector,
-              ()->RobotState.getInstance().goForAlgae),
+            new InstantCommand(()->algaeEndDefector.runAlgaeEndDefector(() -> RobotState.getInstance().goForAlgae ? AlgaeEndeffectorConstants.ALGAE_INTAKE_SPEED : -0.5), algaeEndDefector),
+            new ParallelCommandGroup(
+              new DriveToPose(()->selectCommand(()->RobotState.getInstance().deliveringLeft), driveTrain),
+              new SequentialCommandGroup(
+                new WaitUntil(()->driveTrain.getPositionTargetingError() < 0.2),
+                new InstantCommand(()->elevator.setElevatorPosition(()->RobotState.getInstance().deliveringCoralHeight), elevator),
+                new WaitUntil(()->driveTrain.getPositionTargetingError() < 0.02 && elevator.isElevatorAtPose()),
+                new ParallelRaceGroup(
+                  new DeliverCoral(coralEndDefector),//drops coral
+                  new WaitCommand(()->0.75)))),
+            new InstantCommand(()->coralEndDefector.stopCoralEndEffector()),
             new MoveMeters(driveTrain, -0.5, -0.8, 0, 0),
             new InstantCommand(()->elevator.setElevatorPositionDynamicConfigs(HUMAN_PLAYER_STATION_CENTIMETERS, MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION, MOTION_MAGIC_ELEVATOR_VELOCITY, 0), elevator), //sets elevator back to the bottom position
             new InstantCommand(()->RobotState.getInstance().reefLineupRunning = false))
@@ -832,19 +820,19 @@ public class RobotContainer {
     try {
       pathFindToReef = new SelectCommand<>(
         Map.ofEntries(
-          Map.entry(CommandSelectorEnum.FrontCenterReefLeft, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupA"), DEFAULT_PATH_CONSTRAINTS)),
-          Map.entry(CommandSelectorEnum.FrontCenterReefRight, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupB"), DEFAULT_PATH_CONSTRAINTS)),
-          Map.entry(CommandSelectorEnum.FrontRightReefLeft, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupC"), DEFAULT_PATH_CONSTRAINTS)),
-          Map.entry(CommandSelectorEnum.FrontRightReefRight, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupD"), DEFAULT_PATH_CONSTRAINTS)),
-          Map.entry(CommandSelectorEnum.BackRightReefLeft, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupE"), DEFAULT_PATH_CONSTRAINTS)),
-          Map.entry(CommandSelectorEnum.BackRightReefRight, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupF"), DEFAULT_PATH_CONSTRAINTS)),
-          Map.entry(CommandSelectorEnum.BackCenterReefLeft, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupG"), DEFAULT_PATH_CONSTRAINTS)),
-          Map.entry(CommandSelectorEnum.BackCenterReefRight, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupH"), DEFAULT_PATH_CONSTRAINTS)),
-          Map.entry(CommandSelectorEnum.BackLeftReefLeft, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupI"), DEFAULT_PATH_CONSTRAINTS)),
-          Map.entry(CommandSelectorEnum.BackLeftReefRight, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupJ"), DEFAULT_PATH_CONSTRAINTS)),
-          Map.entry(CommandSelectorEnum.FrontLeftReefLeft, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupK"), DEFAULT_PATH_CONSTRAINTS)),
-          Map.entry(CommandSelectorEnum.FrontLeftReefRight, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupL"), DEFAULT_PATH_CONSTRAINTS)),
-          Map.entry(CommandSelectorEnum.NoClosestSide, new InstantCommand(()->System.out.println("No Closest Reef Side")))
+          Map.entry(PlacementLocations.ReefA, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupA"), DEFAULT_PATH_CONSTRAINTS)),
+          Map.entry(PlacementLocations.ReefB, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupB"), DEFAULT_PATH_CONSTRAINTS)),
+          Map.entry(PlacementLocations.ReefC, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupC"), DEFAULT_PATH_CONSTRAINTS)),
+          Map.entry(PlacementLocations.ReefD, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupD"), DEFAULT_PATH_CONSTRAINTS)),
+          Map.entry(PlacementLocations.ReefE, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupE"), DEFAULT_PATH_CONSTRAINTS)),
+          Map.entry(PlacementLocations.ReefF, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupF"), DEFAULT_PATH_CONSTRAINTS)),
+          Map.entry(PlacementLocations.ReefG, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupG"), DEFAULT_PATH_CONSTRAINTS)),
+          Map.entry(PlacementLocations.ReefH, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupH"), DEFAULT_PATH_CONSTRAINTS)),
+          Map.entry(PlacementLocations.ReefI, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupI"), DEFAULT_PATH_CONSTRAINTS)),
+          Map.entry(PlacementLocations.ReefJ, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupJ"), DEFAULT_PATH_CONSTRAINTS)),
+          Map.entry(PlacementLocations.ReefK, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupK"), DEFAULT_PATH_CONSTRAINTS)),
+          Map.entry(PlacementLocations.ReefL, AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("LineupL"), DEFAULT_PATH_CONSTRAINTS)),
+          Map.entry(PlacementLocations.Barge, new InstantCommand(()->System.out.println("No Closest Reef Side")))
           ), 
           ()->selectCommand(()->RobotState.getInstance().deliveringLeft));
         } catch (FileVersionException | IOException | ParseException e) {
@@ -853,46 +841,46 @@ public class RobotContainer {
           pathFindToReef = new InstantCommand(()->System.out.println("Error thrown while creating path!!"));
         }
   }
-  public static CommandSelectorEnum selectCommand(BooleanSupplier LeftSupplier) {
+  public static PlacementLocations selectCommand(BooleanSupplier LeftSupplier) {
     switch(RobotState.getInstance().closestReefSide){
       case middleFar:
         if(LeftSupplier.getAsBoolean()) {
-          return CommandSelectorEnum.BackCenterReefLeft;
+          return PlacementLocations.ReefG;
         } else {
-          return CommandSelectorEnum.BackCenterReefRight;
+          return PlacementLocations.ReefH;
         }
       case processorFar:
         if(LeftSupplier.getAsBoolean()) {
-          return CommandSelectorEnum.BackRightReefLeft;
+          return PlacementLocations.ReefE;
         } else {
-          return CommandSelectorEnum.BackRightReefRight;
+          return PlacementLocations.ReefF;
         }
       case bargeFar:
         if(LeftSupplier.getAsBoolean()) {
-          return CommandSelectorEnum.BackLeftReefLeft;
+          return PlacementLocations.ReefI;
         } else {
-          return CommandSelectorEnum.BackLeftReefRight;
+          return PlacementLocations.ReefJ;
         }
       case middleClose:
         if(LeftSupplier.getAsBoolean()) {
-          return CommandSelectorEnum.FrontCenterReefLeft;
+          return PlacementLocations.ReefA;
         } else { 
-          return CommandSelectorEnum.FrontCenterReefRight;
+          return PlacementLocations.ReefB;
         }
       case processorClose:
         if(LeftSupplier.getAsBoolean()) {
-          return CommandSelectorEnum.FrontRightReefLeft;
+          return PlacementLocations.ReefC;
         } else { 
-          return CommandSelectorEnum.FrontRightReefRight;
+          return PlacementLocations.ReefD;
         }
       case bargeClose:
         if(LeftSupplier.getAsBoolean()) {
-          return CommandSelectorEnum.FrontLeftReefLeft;
+          return PlacementLocations.ReefK;
         } else { 
-          return CommandSelectorEnum.FrontLeftReefRight;
+          return PlacementLocations.ReefL;
         }
       default:
-          return CommandSelectorEnum.NoClosestSide;
+          return PlacementLocations.Barge;
     } 
 
 }
