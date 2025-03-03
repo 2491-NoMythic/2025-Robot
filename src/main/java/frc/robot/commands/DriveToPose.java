@@ -7,6 +7,8 @@ package frc.robot.commands;
 import java.util.function.Supplier;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.settings.PlacementLocations;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -30,43 +32,97 @@ public class DriveToPose extends Command {
   public void initialize() {
     switch (targetSpot.get()) {
       case ReefA:
-        targetPose = ReefA;
-        break;
+        if(DriverStation.getAlliance().get() == Alliance.Red) {
+          targetPose = ReefARed;
+        } else {
+          targetPose = ReefABlue;
+        }
+          break;
       case ReefB:
-        targetPose = ReefB;
+        if(DriverStation.getAlliance().get() == Alliance.Red) {
+          targetPose = ReefBRed;
+        } else {
+          targetPose = ReefBBlue;
+        }
         break;
       case ReefC:
-        targetPose = ReefC;
+        if(DriverStation.getAlliance().get() == Alliance.Red) {
+          targetPose = ReefCRed;
+        } else {
+          targetPose = ReefCBlue;
+        } 
         break;
       case ReefD:
-        targetPose = ReefD;
+        if(DriverStation.getAlliance().get() == Alliance.Red) {
+          targetPose = ReefDRed;
+        } else {
+          targetPose = ReefDBlue;
+        }
         break;
       case ReefE:
-        targetPose = ReefE;
+        if(DriverStation.getAlliance().get() == Alliance.Red) {
+          targetPose = ReefERed;
+        } else {
+          targetPose = ReefEBlue;
+        }
         break;
       case ReefF:
-        targetPose = ReefF;
+        if(DriverStation.getAlliance().get() == Alliance.Red) {
+          targetPose = ReefFRed;
+        } else {
+          targetPose = ReefFBlue;
+        }
         break;
       case ReefG:
-        targetPose = ReefG;
+        if(DriverStation.getAlliance().get() == Alliance.Red) {
+          targetPose = ReefGRed;
+        } else {
+          targetPose = ReefGBlue;
+        }
         break;
       case ReefH:
-        targetPose = ReefH;
+        if(DriverStation.getAlliance().get() == Alliance.Red) {
+          targetPose = ReefHRed;
+        } else {
+          targetPose = ReefHBlue;
+        }
         break;
       case ReefI:
-        targetPose = ReefI;
+        if(DriverStation.getAlliance().get() == Alliance.Red) {
+          targetPose = ReefIRed;
+        } else {
+          targetPose = ReefIBlue;
+        }
         break;
       case ReefJ:
-        targetPose = ReefJ;
+        if(DriverStation.getAlliance().get() == Alliance.Red) {
+          targetPose = ReefJRed;
+        } else {
+          targetPose = ReefJBlue;
+        }
         break;
       case ReefK:
-        targetPose = ReefK;
+        if(DriverStation.getAlliance().get() == Alliance.Red) {
+          targetPose = ReefKRed;
+        } else {
+          targetPose = ReefKBlue;
+        }
         break;
       case ReefL:
-        targetPose = ReefL;
+        if(DriverStation.getAlliance().get() == Alliance.Red) {
+          targetPose = ReefLRed;
+        } else {
+          targetPose = ReefLBlue;
+        }
         break;
+      case Barge:
+        if(DriverStation.getAlliance().get() == Alliance.Red) {
+          targetPose = BargePoseRed;
+        } else {
+          targetPose = BargePoseBlue;
+        }
       default:
-        targetPose = BargePose;
+        targetPose = BargePoseBlue;
     }
   }
 
