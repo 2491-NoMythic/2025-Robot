@@ -25,6 +25,7 @@ import static frc.robot.settings.Constants.DriveConstants.FR_DRIVE_MOTOR_ID;
 import static frc.robot.settings.Constants.DriveConstants.FR_STEER_ENCODER_ID;
 import static frc.robot.settings.Constants.DriveConstants.FR_STEER_MOTOR_ID;
 import static frc.robot.settings.Constants.DriveConstants.ROBOT_ANGLE_TOLERANCE;
+import static frc.robot.settings.Constants.ElevatorConstants.METERS_FROM_POSE_TO_RAISE_ELEVATOR;
 import static frc.robot.settings.Constants.Field.*;
 import static frc.robot.settings.Constants.Vision.APRILTAG_LIMELIGHTA_NAME;
 import static frc.robot.settings.Constants.Vision.APRILTAG_LIMELIGHTB_NAME;
@@ -461,6 +462,16 @@ public class DrivetrainSubsystem extends SubsystemBase {
       xSpeed = -xSpeed;
       ySpeed = -ySpeed;
     }
+    //if the elevator is about to be up, limit the speed to 2 meters per second. Otherwise, limit speed to 3.5 meters per second
+    if(getPositionTargetingError() < METERS_FROM_POSE_TO_RAISE_ELEVATOR + 0.1) {
+      xSpeed = MythicalMath.absoluteCap(xSpeed, 2);
+      ySpeed = MythicalMath.absoluteCap(ySpeed, 2);
+    } else {
+      xSpeed = MythicalMath.absoluteCap(xSpeed, 3.5);
+      ySpeed = MythicalMath.absoluteCap(ySpeed, 3.5);
+    }
+    SmartDashboard.putNumber("TARGETINGPOSE/yspeed", ySpeed);
+    SmartDashboard.putNumber("TARGETINGPOSE/xspeed", xSpeed);
     //drive!
     moveTowardsRotationTarget(xSpeed, ySpeed);
   }

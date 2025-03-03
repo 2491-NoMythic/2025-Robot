@@ -41,6 +41,31 @@ public class MythicalMath {
   public static Pose2d divideOnlyPos(Pose2d pose, Double scalar) {
     return new Pose2d(pose.getX() / scalar, pose.getY() / scalar, pose.getRotation());
   }
+  /**
+   * limits a number in both the positive and negative direction by a number
+   * @param number the number to limit
+   * @param cap a POSITIVE number to be the limit in the negative and positive direction
+   * @return 
+   */
+  public static double absoluteCap(double number, double cap) {
+    return cap(number, -cap, cap);
+  }
+  /**
+   * limits a number with an upper and lower limit. Will return the upper or lower limit if the number exceeds that.
+   * @param number the number to limit
+   * @param lowerCap the number to return if NUMBER is less than it
+   * @param upperCap the number to return if NUMBER is greater than it
+   * @return
+   */
+  public static double cap(double number, double lowerCap, double upperCap) {
+    if(number<lowerCap) {
+      return lowerCap;
+    }
+    if(number>upperCap) {
+      return upperCap;
+    }
+    return number;
+  }
 /**
  * returns the minimum of two values, but treats any vaue that is 0 as 10,000
  * @param value1
