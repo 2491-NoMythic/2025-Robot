@@ -396,6 +396,10 @@ public final class Constants {
     public static final Pose2d ReefKBlue = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
     public static final Pose2d ReefLBlue = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
     public static final Pose2d BargePoseBlue = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
+
+    public static final double BARGE_POSITION_THRESHOLD = 0.02;
+    public static final double REEF_POSITION_THRESHOLD = 0.02;
+
   }
 
   public final class Vision {
@@ -510,6 +514,7 @@ public final class Constants {
     public static final double REEF_LEVEL_4_CENTIMETERS = 182.69;
     public static final double BARGE_SHOOT_CENTIMETERS = 192;
     public static final double ELEVATOR_THRESHOLD = 1.5;
+    public static final double METERS_FROM_POSE_TO_RAISE_ELEVATOR = 0.2;
 
     public static final double MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY = 320;
     public static final double MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION = 400;

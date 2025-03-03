@@ -11,11 +11,13 @@ import static frc.robot.settings.Constants.ClimberConstants.CLIMBER_NOT_CLIMBED_
 import static frc.robot.settings.Constants.CoralEndeffectorConstants.CORAL_ENDEFFECTOR_SPEED;
 import static frc.robot.settings.Constants.DriveConstants.*;
 import static frc.robot.settings.Constants.ElevatorConstants.HUMAN_PLAYER_STATION_CENTIMETERS;
+import static frc.robot.settings.Constants.ElevatorConstants.METERS_FROM_POSE_TO_RAISE_ELEVATOR;
 import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_ACCLERATION;
 import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_JERK;
 import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION;
 import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY;
 import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_VELOCITY;
+import static frc.robot.settings.Constants.Field.REEF_POSITION_THRESHOLD;
 import static frc.robot.settings.Constants.FunnelConstants.FUNNEL_INTAKE_SPEED;
 import static frc.robot.settings.Constants.PS4Driver.*;
 
@@ -576,9 +578,9 @@ public class RobotContainer {
             new ParallelCommandGroup(
               new DriveToPose(()->selectCommand(()->RobotState.getInstance().deliveringLeft), driveTrain),
               new SequentialCommandGroup(
-                new WaitUntil(()->driveTrain.getPositionTargetingError() < 0.2),
+                new WaitUntil(()->driveTrain.getPositionTargetingError() < METERS_FROM_POSE_TO_RAISE_ELEVATOR),
                 new InstantCommand(()->elevator.setElevatorPosition(()->RobotState.getInstance().deliveringCoralHeight), elevator),
-                new WaitUntil(()->driveTrain.getPositionTargetingError() < 0.02 && elevator.isElevatorAtPose()),
+                new WaitUntil(()->driveTrain.getPositionTargetingError() < REEF_POSITION_THRESHOLD && elevator.isElevatorAtPose()),
                 new ParallelRaceGroup(
                   new DeliverCoral(coralEndDefector),//drops coral
                   new WaitCommand(()->0.75)))),
@@ -638,7 +640,7 @@ public class RobotContainer {
 
     if(algaeEndeffectorExists && DrivetrainExists && elevatorExists) {
         new Trigger(AlgaeBargeSup)
-            .whileTrue(new ShootInBarge(driveTrain, elevator, algaeEndDefector, ControllerSidewaysAxisSupplier));
+            .whileTrue(new ShootInBarge(driveTrain, elevator, algaeEndDefector, ControllerSidewaysAxisSupplier)).onFalse(new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer), elevator));
       }
       if (funnelIntakeExists) {
         new Trigger(ManualCoralIntake).whileTrue(new Command() {
