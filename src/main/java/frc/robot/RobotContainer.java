@@ -76,6 +76,7 @@ import frc.robot.commands.LineupCoralInFunnel;
 import frc.robot.commands.MoveMeters;
 import frc.robot.commands.PassCoralToEndEffector;
 import frc.robot.commands.PassCoralToEndEffectorSequential;
+import frc.robot.commands.PlaceCoralDuringLineupSequential;
 import frc.robot.commands.PlaceCoralNoPath;
 import frc.robot.commands.ResetClimber;
 import frc.robot.commands.ShootInBarge;
@@ -576,19 +577,7 @@ public class RobotContainer {
     if(elevatorExists && coralEndeffectorExists && distanceSensorsExist && algaeEndeffectorExists){
       new Trigger(CoralPlaceTeleSupplier).whileTrue(
           new SequentialCommandGroup(
-            new InstantCommand(()->RobotState.getInstance().reefLineupRunning = true),
-            new InstantCommand(()->algaeEndDefector.runAlgaeEndDefector(() -> RobotState.getInstance().goForAlgae ? AlgaeEndeffectorConstants.ALGAE_INTAKE_SPEED : -0.5), algaeEndDefector),
-            new ParallelDeadlineGroup(
-              new SequentialCommandGroup(
-                new WaitUntil(()->driveTrain.getPositionTargetingError() < METERS_FROM_POSE_TO_RAISE_ELEVATOR),
-                new InstantCommand(()->elevator.setElevatorPosition(()->RobotState.getInstance().deliveringCoralHeight), elevator),
-                new WaitUntil(()->driveTrain.getPositionTargetingError() < REEF_POSITION_THRESHOLD && elevator.isElevatorAtPose()),
-                new ParallelRaceGroup(
-                  new DeliverCoral(coralEndDefector),//drops coral
-                  new WaitCommand(()->0.75))),
-              new SequentialCommandGroup(
-                new DriveToPose(()->selectCommand(()->RobotState.getInstance().deliveringLeft), driveTrain, ()->0),
-                new InstantCommand(()->driveTrain.drive(new ChassisSpeeds(0.5, 0, 0))))),
+            new PlaceCoralDuringLineupSequential(algaeEndDefector, driveTrain, elevator, coralEndDefector, ()->selectCommand(()->RobotState.getInstance().deliveringLeft)),
             new InstantCommand(()->coralEndDefector.stopCoralEndEffector()),
             new MoveMeters(driveTrain, -0.5, -0.8, 0, 0),
             new InstantCommand(()->elevator.setElevatorPositionDynamicConfigs(HUMAN_PLAYER_STATION_CENTIMETERS, MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION, MOTION_MAGIC_ELEVATOR_VELOCITY, 0), elevator), //sets elevator back to the bottom position
