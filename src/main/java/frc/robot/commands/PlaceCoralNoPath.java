@@ -45,6 +45,7 @@ public class PlaceCoralNoPath extends SequentialCommandGroup{
         addCommands(
             new ParallelRaceGroup(
                 new AlgaeIntakeCommand(algaeEndeffectorSubsystem, () -> goForAlgea.getAsBoolean() ? ALGAE_INTAKE_SPEED : -0.5),
+                new Drive(drivetrain, ()->true, ()->0.1, ()->0, ()->0),
                 new SequentialCommandGroup(
                     new ParallelRaceGroup(
                         new ElevatorCommand(elevator, elevatorPose),//raises elevator to position)

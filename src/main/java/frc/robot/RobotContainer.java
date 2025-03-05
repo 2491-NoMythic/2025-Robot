@@ -31,6 +31,7 @@ import com.playingwithfusion.TimeOfFlight;
 import com.playingwithfusion.jni.TimeOfFlightJNI;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -44,6 +45,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -52,6 +54,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AutoAngleAtReef;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.DepositAlgae;
+import frc.robot.commands.DepositAlgaeSequential;
 import frc.robot.settings.Constants.AlgaeEndeffectorConstants;
 import frc.robot.settings.Constants.LightConstants;
 import frc.robot.settings.Constants.Vision;
@@ -575,15 +578,17 @@ public class RobotContainer {
           new SequentialCommandGroup(
             new InstantCommand(()->RobotState.getInstance().reefLineupRunning = true),
             new InstantCommand(()->algaeEndDefector.runAlgaeEndDefector(() -> RobotState.getInstance().goForAlgae ? AlgaeEndeffectorConstants.ALGAE_INTAKE_SPEED : -0.5), algaeEndDefector),
-            new ParallelCommandGroup(
-              new DriveToPose(()->selectCommand(()->RobotState.getInstance().deliveringLeft), driveTrain),
+            new ParallelDeadlineGroup(
               new SequentialCommandGroup(
                 new WaitUntil(()->driveTrain.getPositionTargetingError() < METERS_FROM_POSE_TO_RAISE_ELEVATOR),
                 new InstantCommand(()->elevator.setElevatorPosition(()->RobotState.getInstance().deliveringCoralHeight), elevator),
                 new WaitUntil(()->driveTrain.getPositionTargetingError() < REEF_POSITION_THRESHOLD && elevator.isElevatorAtPose()),
                 new ParallelRaceGroup(
                   new DeliverCoral(coralEndDefector),//drops coral
-                  new WaitCommand(()->0.75)))),
+                  new WaitCommand(()->0.75))),
+              new SequentialCommandGroup(
+                new DriveToPose(()->selectCommand(()->RobotState.getInstance().deliveringLeft), driveTrain, ()->0),
+                new InstantCommand(()->driveTrain.drive(new ChassisSpeeds(0.5, 0, 0))))),
             new InstantCommand(()->coralEndDefector.stopCoralEndEffector()),
             new MoveMeters(driveTrain, -0.5, -0.8, 0, 0),
             new InstantCommand(()->elevator.setElevatorPositionDynamicConfigs(HUMAN_PLAYER_STATION_CENTIMETERS, MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION, MOTION_MAGIC_ELEVATOR_VELOCITY, 0), elevator), //sets elevator back to the bottom position
@@ -619,7 +624,7 @@ public class RobotContainer {
     }
 
     if(elevatorExists && algaeEndeffectorExists){
-      new Trigger(AlgaeDepositSup).whileTrue(new DepositAlgae(algaeEndDefector,elevator, ALGAE_SHOOT_SPEED));
+      new Trigger(AlgaeDepositSup).whileTrue(new DepositAlgaeSequential(elevator, algaeEndDefector, driveTrain));
     }
 
     if(lightsExist) {
