@@ -18,5 +18,6 @@ public enum PlacementLocations {
     ReefJ,
     ReefK,
     ReefL,
-    Barge
+    Barge,
+    Processor
 }
