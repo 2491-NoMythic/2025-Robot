@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -20,9 +21,11 @@ public class DriveToPose extends Command {
   Supplier<PlacementLocations> targetSpot;
   DrivetrainSubsystem drivetrain;
   Pose2d targetPose;
-  public DriveToPose(Supplier<PlacementLocations> targetSpot, DrivetrainSubsystem drivetrain) {
+  DoubleSupplier yMovementSupplierForBarge;
+  public DriveToPose(Supplier<PlacementLocations> targetSpot, DrivetrainSubsystem drivetrain, DoubleSupplier yMovementSupplierBarge) {
     this.drivetrain = drivetrain;
     this.targetSpot = targetSpot;
+    yMovementSupplierForBarge = yMovementSupplierBarge;
     addRequirements(drivetrain);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -30,96 +33,103 @@ public class DriveToPose extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    boolean redAlliance = DriverStation.getAlliance().get() == Alliance.Red;
     switch (targetSpot.get()) {
       case ReefA:
-        if(DriverStation.getAlliance().get() == Alliance.Red) {
+        if(redAlliance) {
           targetPose = ReefARed;
         } else {
           targetPose = ReefABlue;
         }
           break;
       case ReefB:
-        if(DriverStation.getAlliance().get() == Alliance.Red) {
+        if(redAlliance) {
           targetPose = ReefBRed;
         } else {
           targetPose = ReefBBlue;
         }
         break;
       case ReefC:
-        if(DriverStation.getAlliance().get() == Alliance.Red) {
+        if(redAlliance) {
           targetPose = ReefCRed;
         } else {
           targetPose = ReefCBlue;
         } 
         break;
       case ReefD:
-        if(DriverStation.getAlliance().get() == Alliance.Red) {
+        if(redAlliance) {
           targetPose = ReefDRed;
         } else {
           targetPose = ReefDBlue;
         }
         break;
       case ReefE:
-        if(DriverStation.getAlliance().get() == Alliance.Red) {
+        if(redAlliance) {
           targetPose = ReefERed;
         } else {
           targetPose = ReefEBlue;
         }
         break;
       case ReefF:
-        if(DriverStation.getAlliance().get() == Alliance.Red) {
+        if(redAlliance) {
           targetPose = ReefFRed;
         } else {
           targetPose = ReefFBlue;
         }
         break;
       case ReefG:
-        if(DriverStation.getAlliance().get() == Alliance.Red) {
+        if(redAlliance) {
           targetPose = ReefGRed;
         } else {
           targetPose = ReefGBlue;
         }
         break;
       case ReefH:
-        if(DriverStation.getAlliance().get() == Alliance.Red) {
+        if(redAlliance) {
           targetPose = ReefHRed;
         } else {
           targetPose = ReefHBlue;
         }
         break;
       case ReefI:
-        if(DriverStation.getAlliance().get() == Alliance.Red) {
+        if(redAlliance) {
           targetPose = ReefIRed;
         } else {
           targetPose = ReefIBlue;
         }
         break;
       case ReefJ:
-        if(DriverStation.getAlliance().get() == Alliance.Red) {
+        if(redAlliance) {
           targetPose = ReefJRed;
         } else {
           targetPose = ReefJBlue;
         }
         break;
       case ReefK:
-        if(DriverStation.getAlliance().get() == Alliance.Red) {
+        if(redAlliance) {
           targetPose = ReefKRed;
         } else {
           targetPose = ReefKBlue;
         }
         break;
       case ReefL:
-        if(DriverStation.getAlliance().get() == Alliance.Red) {
+        if(redAlliance) {
           targetPose = ReefLRed;
         } else {
           targetPose = ReefLBlue;
         }
         break;
       case Barge:
-        if(DriverStation.getAlliance().get() == Alliance.Red) {
+        if(redAlliance) {
           targetPose = BargePoseRed;
         } else {
           targetPose = BargePoseBlue;
+        }
+      case Processor:
+        if(redAlliance) {
+          targetPose = ProcessorPoseRed;
+        } else {
+          targetPose = ProcessorPoseBlue;
         }
       default:
         targetPose = BargePoseBlue;
@@ -129,7 +139,11 @@ public class DriveToPose extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drivetrain.moveTowardsPose(targetPose);
+    if(targetPose == BargePoseBlue || targetPose == BargePoseRed) {
+      drivetrain.moveTowardsBargePose(yMovementSupplierForBarge);
+    } else {
+      drivetrain.moveTowardsPose(targetPose);
+    }
   }
 
   // Called once the command ends or is interrupted.

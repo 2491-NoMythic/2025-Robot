@@ -35,6 +35,7 @@ import static frc.robot.settings.Constants.Vision.FIELD_CORNER_FOR_INTAKE;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.function.DoubleSupplier;
 
 // import java.util.logging.Logger;
 import org.littletonrobotics.junction.Logger;
@@ -461,6 +462,36 @@ public class DrivetrainSubsystem extends SubsystemBase {
     if(DriverStation.getAlliance().get() == Alliance.Red) {
       xSpeed = -xSpeed;
       ySpeed = -ySpeed;
+    }
+    //if the elevator is about to be up, limit the speed to 2 meters per second. Otherwise, limit speed to 3.5 meters per second
+    if(getPositionTargetingError() < METERS_FROM_POSE_TO_RAISE_ELEVATOR + 0.1) {
+      xSpeed = MythicalMath.absoluteCap(xSpeed, 2);
+      ySpeed = MythicalMath.absoluteCap(ySpeed, 2);
+    } else {
+      xSpeed = MythicalMath.absoluteCap(xSpeed, 3.5);
+      ySpeed = MythicalMath.absoluteCap(ySpeed, 3.5);
+    }
+    SmartDashboard.putNumber("TARGETINGPOSE/yspeed", ySpeed);
+    SmartDashboard.putNumber("TARGETINGPOSE/xspeed", xSpeed);
+    //drive!
+    moveTowardsRotationTarget(xSpeed, ySpeed);
+  }
+  /**
+   * moves toward a position and rotation using the BARGE_POSE in constnats for red or blue alliance.
+   * @param pose
+   */
+  public void moveTowardsBargePose(DoubleSupplier yMovementSupplier) {
+    //set the targets for the PID loops
+    Pose2d pose = DriverStation.getAlliance().get() == Alliance.Red ? BargePoseRed : BargePoseBlue;
+
+    setRotationTarget(pose.getRotation().getDegrees());
+    DRIVE_TO_POSE_X_CONTROLLER.setSetpoint(pose.getX());
+    //calculate speeds using PID loops
+    double xSpeed = DRIVE_TO_POSE_X_CONTROLLER.calculate(odometer.getEstimatedPosition().getX());
+    double ySpeed = yMovementSupplier.getAsDouble();
+    //reverse speeds for the red alliance, because directions have flipped
+    if(DriverStation.getAlliance().get() == Alliance.Red) {
+      xSpeed = -xSpeed;
     }
     //if the elevator is about to be up, limit the speed to 2 meters per second. Otherwise, limit speed to 3.5 meters per second
     if(getPositionTargetingError() < METERS_FROM_POSE_TO_RAISE_ELEVATOR + 0.1) {

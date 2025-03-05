@@ -31,14 +31,14 @@ public class ShootInBarge extends SequentialCommandGroup {
   DrivetrainSubsystem drivetrainSubsystem;
   ElevatorSubsystem elevatorSubsystem;
   AlgaeEndeffectorSubsystem algaeSubsystem;
-  DoubleSupplier controllerSupplier;
+  DoubleSupplier controllerSidwaysSupplier;
 
   public ShootInBarge(DrivetrainSubsystem drivetrainSubsystem, ElevatorSubsystem elevatorSubsystem,
       AlgaeEndeffectorSubsystem algaeSubsystem, DoubleSupplier controllerSupplier) {
     this.drivetrainSubsystem = drivetrainSubsystem;
     this.elevatorSubsystem = elevatorSubsystem;
     this.algaeSubsystem = algaeSubsystem;
-    this.controllerSupplier = controllerSupplier;
+    this.controllerSidwaysSupplier = controllerSupplier;
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
@@ -52,7 +52,7 @@ public class ShootInBarge extends SequentialCommandGroup {
             new AlgaeIntakeCommand(algaeSubsystem, ()->-1),
             new WaitCommand(()->1.0)),
           new InstantCommand(()->elevatorSubsystem.setElevatorPosition(ElevatorEnums.HumanPlayer), elevatorSubsystem),
-          new DriveToPose(()->PlacementLocations.Barge, drivetrainSubsystem))
+          new DriveToPose(()->PlacementLocations.Barge, drivetrainSubsystem, controllerSupplier))
       )
     );
   }
