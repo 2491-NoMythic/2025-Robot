@@ -4,39 +4,41 @@
 
 package frc.robot.commands;
 
+import com.ctre.phoenix6.signals.SensorDirectionValue;
+
+import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
+
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ClimberCommand extends Command {
- ClimberSubsystem climber;
- double position;
- final double currentForClimbing = 200;
-  /** Creates a new ClimberCommand. */
-  public ClimberCommand(ClimberSubsystem climber) {
-    this.climber = climber;
-    addRequirements(climber);
+public class ElevatorReset extends Command {
+  /** Creates a new ElevatorReset. */
+  ElevatorSubsystem elevator;
+  public ElevatorReset(ElevatorSubsystem elevator) {
+    this.elevator = elevator;
+    addRequirements(elevator);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    elevator.setVoltage(-0.5);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    climber.setClimberPower(1);
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    climber.stopClimber();
+    elevator.setVoltage(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return elevator.limitSwitchTrig();
   }
 }

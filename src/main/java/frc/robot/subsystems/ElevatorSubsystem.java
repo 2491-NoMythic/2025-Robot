@@ -73,7 +73,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         .withForwardLimitType(ForwardLimitTypeValue.NormallyClosed))
       .withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()
         .withForwardSoftLimitEnable(true)
-        .withForwardSoftLimitThreshold(198.39)
+        .withForwardSoftLimitThreshold(196.4)
         .withReverseSoftLimitEnable(true)
         .withReverseSoftLimitThreshold(COMP_HEIGHT_AT_LIMIT_SWITCH+1)
         );
@@ -117,10 +117,11 @@ public class ElevatorSubsystem extends SubsystemBase {
     if(Preferences.getBoolean("Motor Logging", false)){
     logMotors();
     }
-    if(elevatorMotor1.getReverseLimit().getValue() == ReverseLimitValue.Open) {
+    if(limitSwitchTrig()) {
       RobotState.getInstance().elevatorZeroSet = true;
     }
-    SmartDashboard.putNumber("TESTING/limit switch value", elevatorMotor1.getClosedLoopReference().getValueAsDouble());
+    SmartDashboard.putNumber("TESTING/elevatorHeight", elevatorMotor1.getPosition().getValueAsDouble());
+    SmartDashboard.putBoolean("TESTING/limit switch value", limitSwitchTrig());
     SmartDashboard.putBoolean("TESTING/elevatorAtPose", isElevatorAtPose());
     SmartDashboard.putNumber("TESTING/elevatorTarget", elevatorTarget);
     SmartDashboard.putNumber("TESTING/elevatorClosedLoopError", Math.abs(elevatorTarget-elevatorMotor1.getPosition().getValueAsDouble()));
@@ -301,6 +302,10 @@ public class ElevatorSubsystem extends SubsystemBase {
    */
   public void stopElevator(){
     elevatorMotor1.setControl(new MotionMagicVoltage(elevatorMotor1.getPosition().getValueAsDouble()));
+  }
+
+  public boolean limitSwitchTrig(){
+    return elevatorMotor1.getReverseLimit().getValue() == ReverseLimitValue.Open;
   }
 
 }

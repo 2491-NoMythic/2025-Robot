@@ -25,6 +25,8 @@ public class PassCoralToEndEffectorSequential extends SequentialCommandGroup {
       final double endEffectorAdjustingSpeed = CoralEndeffectorConstants.CORAL_ENDEFFECTOR_ADJUSTING_INTAKE_SPEED;
       final double funelAdjustingSpeed = CoralEndeffectorConstants.CORAL_ENDEFFECTOR_ADJUSTING_INTAKE_SPEED;
     addCommands(
+      new ParallelRaceGroup(
+        new ResetCoralStatusOnEnd(),
         new SequentialCommandGroup(
           new InstantCommand(()->RobotState.getInstance().coralLineupRunning = true),
           new InstantCommand(()->coralEndEffector.runCoralEndEffector(CORAL_ENDEFFECTOR_SPEED), coralEndEffector),
@@ -40,6 +42,7 @@ public class PassCoralToEndEffectorSequential extends SequentialCommandGroup {
           new InstantCommand(()->coralEndEffector.stopCoralEndEffector(), coralEndEffector),
           new InstantCommand(()->RobotState.getInstance().coralAligned = true),
           new InstantCommand(()->RobotState.getInstance().coralLineupRunning = false)
+        )
       )
     );
   }

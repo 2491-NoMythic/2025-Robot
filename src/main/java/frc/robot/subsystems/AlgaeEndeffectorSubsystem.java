@@ -33,7 +33,7 @@ public class AlgaeEndeffectorSubsystem extends SubsystemBase {
   public boolean powerSpike;
   /** Creates a new AlgaeEndDefectorSubsystem. */
   public AlgaeEndeffectorSubsystem() {
-    algaeEndeffectorMotor = new SparkMax(ALGAE_ENDEFFECTOR_MOTOR_1_ID, MotorType.kBrushless);
+    algaeEndeffectorMotor = new SparkMax(ALGAE_ENDEFFECTOR_MOTOR_2_ID, MotorType.kBrushless);
     // algaeEndeffectorMotor2 = new SparkMax(ALGAE_ENDEFFECTOR_MOTOR_2_ID, MotorType.kBrushless);
 
     motorLogger1 = new MotorLogger("/algaeEndEffector/motor1");
@@ -71,7 +71,7 @@ public class AlgaeEndeffectorSubsystem extends SubsystemBase {
     // algaeConfig1.smartCurrentLimit(ALGAE_ENDEFFECTOR_CURRENT_LIMIT, ALGAE_ENDEFFECTOR_CURRENT_LIMIT, 1000);
     
     algaeConfig.idleMode(IdleMode.kBrake);
-    // algaeConfig1.inverted(true); TODO: review
+    algaeConfig.inverted(true);
     algaeConfig.smartCurrentLimit(ALGAE_ENDEFFECTOR_CURRENT_LIMIT, ALGAE_ENDEFFECTOR_CURRENT_LIMIT, 1000);
     // algaeConfig2.follow(algaeEndeffectorMotor1);
     // algaeEndeffectorMotor2.configure(algaeConfig2, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);

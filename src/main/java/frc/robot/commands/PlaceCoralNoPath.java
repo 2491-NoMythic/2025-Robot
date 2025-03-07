@@ -43,11 +43,11 @@ public class PlaceCoralNoPath extends SequentialCommandGroup{
         BooleanSupplier goForAlgea)
     {
         addCommands(
-            new ApproachReef(distanceSensors, drivetrain, xSupplier, ySupplier, rSupplier),//approaches reef while raising elevator
-            new LineUp(drivetrain, leftPlace, REEF_LINEUP_SPEED),//align with reef
+            // new ApproachReef(distanceSensors, drivetrain, xSupplier, ySupplier, rSupplier),//approaches reef while raising elevator
+            // new LineUp(drivetrain, leftPlace, REEF_LINEUP_SPEED),//align with reef
             new ParallelRaceGroup(
                 //elevator command will stop this so modify it
-                new AlgaeIntakeCommand(algaeEndeffectorSubsystem, () -> goForAlgea.getAsBoolean() ? ALGAE_INTAKE_SPEED : 0),
+                new AlgaeIntakeCommand(algaeEndeffectorSubsystem, () -> goForAlgea.getAsBoolean() ? ALGAE_INTAKE_SPEED : -0.5),
                 new SequentialCommandGroup(
                     new ParallelRaceGroup(
                         new ElevatorCommand(elevator, elevatorPose),//raises elevator to position)
@@ -56,9 +56,7 @@ public class PlaceCoralNoPath extends SequentialCommandGroup{
                         new DeliverCoral(coralEndeffector),//drops coral
                         new WaitCommand(()->0.75)))
             ),
-            new InstantCommand(()->System.out.println("reeflineupended!!")), //sets elevator back to the bottom position
-            new MoveMeters(drivetrain, -0.5, -0.8, 0, 0),
-            new InstantCommand(()->elevator.setElevatorPositionDynamicConfigs(HUMAN_PLAYER_STATION_CENTIMETERS, MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION, MOTION_MAGIC_ELEVATOR_VELOCITY, 0), elevator) //sets elevator back to the bottom position
+            new InstantCommand(()->System.out.println("reeflineupended!!")) //sets elevator back to the bottom position
         );
 
     }

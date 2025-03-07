@@ -330,7 +330,7 @@ public final class Constants {
     /** Value used to differentiate between angle 0 and rest position. */
     public static final double NO_INPUT = 404;
 
-    public static final double DEADBAND_NORMAL = 0.08;
+    public static final double DEADBAND_NORMAL = 0.03;
     public static final double DEADBAND_LARGE = 0.1;
   }
 
@@ -462,15 +462,15 @@ public final class Constants {
   public final class ElevatorConstants{
     public static final int ELEVATOR_MOTOR_1_ID = 9;
     public static final int ELEVATOR_MOTOR_2_ID = 10;
-    public static final double HUMAN_PLAYER_STATION_CENTIMETERS = 19.2;//31.5;
+    public static final double HUMAN_PLAYER_STATION_CENTIMETERS = 19.1;//31.5;
     public static final double PRAC_HEIGHT_AT_LIMIT_SWITCH = 20;
     public static final double COMP_HEIGHT_AT_LIMIT_SWITCH = 16.828;
     public static final double PROCESSOR_HEIGHT_CENTIMETERS = 19;
     public static final double REEF_LEVEL_1_CENTIMETERS = 80;
     public static final double REEF_LEVEL_2_CENTIMETERS = 81.23;
     public static final double REEF_LEVEL_3_CENTIMETERS = 122.6;
-    public static final double REEF_LEVEL_4_CENTIMETERS = 187;
-    public static final double BARGE_SHOOT_CENTIMETERS = 194.5;
+    public static final double REEF_LEVEL_4_CENTIMETERS = 182.69;
+    public static final double BARGE_SHOOT_CENTIMETERS = 192;
     public static final double ELEVATOR_THRESHOLD = 2;
 
     public static final double MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY = 320;
@@ -497,13 +497,14 @@ public final class Constants {
       .withKD(0)
       .withKS(0))
     .withCurrentLimits(new CurrentLimitsConfigs()
-      .withSupplyCurrentLimit(100)
-      .withSupplyCurrentLimitEnable(true))
+      .withSupplyCurrentLimit(110)
+      .withSupplyCurrentLimitEnable(true)
+      .withStatorCurrentLimitEnable(false))
     .withFeedback(new FeedbackConfigs()
       .withFeedbackRemoteSensorID(CLIMBER_CANCODER_ID)
       .withFeedbackSensorSource(FeedbackSensorSourceValue.RemoteCANcoder))
     .withMotorOutput(new MotorOutputConfigs()
-      .withInverted(InvertedValue.Clockwise_Positive));
+      .withInverted(InvertedValue.CounterClockwise_Positive));
     public static final TalonFXConfiguration ClimberMotorConfigPrac = new TalonFXConfiguration()
     .withSlot0(new Slot0Configs()
       .withKP(1)

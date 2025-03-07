@@ -25,7 +25,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3HP"
+            "pathName": "GtoHP"
           }
         },
         {
@@ -39,12 +39,6 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "LineUpCoralInEndeffector"
-                }
-              },
-              {
                 "type": "path",
                 "data": {
                   "pathName": "BargeSideTopToReefK"
@@ -56,7 +50,7 @@
         {
           "type": "named",
           "data": {
-            "name": "DeliverCoralRight1"
+            "name": "DeliverCoralLeft4"
           }
         },
         {
@@ -82,12 +76,6 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "LineUpCoralInEndeffector"
-                }
-              },
-              {
                 "type": "path",
                 "data": {
                   "pathName": "BargeSideToptoReefL"
@@ -99,7 +87,7 @@
         {
           "type": "named",
           "data": {
-            "name": "DeliverCoralLeft1"
+            "name": "DeliverCoralRight4"
           }
         },
         {
