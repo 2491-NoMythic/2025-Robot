@@ -40,11 +40,11 @@ public class PlaceCoralNoPath extends SequentialCommandGroup{
         CoralEndeffectorSubsystem coralEndeffector,
         BooleanSupplier leftPlace,
         AlgaeEndeffectorSubsystem algaeEndeffectorSubsystem,
-        BooleanSupplier goForAlgea)
+        BooleanSupplier goForAlgae)
     {
         addCommands(
             new ParallelRaceGroup(
-                new AlgaeIntakeCommand(algaeEndeffectorSubsystem, () -> goForAlgea.getAsBoolean() ? ALGAE_INTAKE_SPEED : -0.5),
+                new AlgaeIntakeCommand(algaeEndeffectorSubsystem, () -> goForAlgae.getAsBoolean() ? ALGAE_INTAKE_SPEED : -0.5),
                 new Drive(drivetrain, ()->true, ()->0.1, ()->0, ()->0),
                 new SequentialCommandGroup(
                     new ParallelRaceGroup(
