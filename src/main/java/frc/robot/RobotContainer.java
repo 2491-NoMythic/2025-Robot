@@ -746,6 +746,7 @@ public class RobotContainer {
     Command deliverCoralRight4NamedCommandWithAlgae;
     Command elevatorResetNamedCommand;
     Command lineUpCoralNamedCommand;
+    Command autoBargeShoot;
     if(elevatorExists&&funnelIntakeExists&&coralEndeffectorExists&&algaeEndeffectorExists) {
       coralIntakeNamedCommand =  new SequentialCommandGroup(
         new ParallelRaceGroup(
@@ -768,6 +769,7 @@ public class RobotContainer {
       deliverCoralRight2NamedCommandWithAlgae = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef2, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->false,algaeEndDefector, ()->true);
       deliverCoralRight3NamedCommandWithAlgae = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef3, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->false,algaeEndDefector, ()->true);
       deliverCoralRight4NamedCommandWithAlgae = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef4, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->false,algaeEndDefector, ()->true);
+      autoBargeShoot = new ShootInBarge(driveTrain, elevator, algaeEndDefector, ()->0);
     } else {
       coralIntakeNamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
       deliverCoralLeft1NamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
@@ -786,6 +788,7 @@ public class RobotContainer {
       deliverCoralRight2NamedCommandWithAlgae = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
       deliverCoralRight3NamedCommandWithAlgae = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
       deliverCoralRight4NamedCommandWithAlgae = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
+      autoBargeShoot = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
     }
 
     if(elevatorExists) {
@@ -819,6 +822,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("DeliverCoralRight3Algae", deliverCoralRight3NamedCommandWithAlgae);
     NamedCommands.registerCommand("DeliverCoralRight4Algae", deliverCoralRight4NamedCommandWithAlgae);
     NamedCommands.registerCommand("ElevatorReset", elevatorResetNamedCommand);
+    NamedCommands.registerCommand("AutoBargeShoot", autoBargeShoot);
   }
 
   public void logPower() {
