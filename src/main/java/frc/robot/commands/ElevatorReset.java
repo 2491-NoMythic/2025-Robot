@@ -34,7 +34,7 @@ public class ElevatorReset extends Command {
   @Override
   public void execute() {
     if(timer.get()>0.5) {
-      elevator.setVoltage(-0.5);
+      elevator.setVoltage(-0.1);
     }
   }
 

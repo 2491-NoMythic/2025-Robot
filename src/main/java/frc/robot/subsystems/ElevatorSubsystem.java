@@ -71,15 +71,15 @@ public class ElevatorSubsystem extends SubsystemBase {
         .withReverseLimitAutosetPositionEnable(true)
         .withReverseLimitEnable(true)
         .withReverseLimitType(ReverseLimitTypeValue.NormallyClosed)
-        .withForwardLimitAutosetPositionEnable(false)
+        .withForwardLimitAutosetPositionEnable(true)
+        .withForwardLimitAutosetPositionValue(199.5)
         .withForwardLimitEnable(true)
         .withForwardLimitType(ForwardLimitTypeValue.NormallyClosed))
       .withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()
         .withForwardSoftLimitEnable(true)
         .withForwardSoftLimitThreshold(196.4)
         .withReverseSoftLimitEnable(true)
-        .withReverseSoftLimitThreshold(COMP_HEIGHT_AT_LIMIT_SWITCH+1)
-        );
+        .withReverseSoftLimitThreshold(COMP_HEIGHT_AT_LIMIT_SWITCH+1));
     if (Preferences.getBoolean("CompBot", true)){
       //good values from right before duluth: p: 0.64, d: 0.02, g: 0.8623, a: 0.002, v: 0.01, s: 0.6  
       eleMotorConfig.Slot0 = new Slot0Configs()
@@ -90,6 +90,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         .withKV(0.01)
         .withKS(0.6);
       eleMotorConfig.HardwareLimitSwitch.ReverseLimitAutosetPositionValue = COMP_HEIGHT_AT_LIMIT_SWITCH;
+      eleMotorConfig.HardwareLimitSwitch.ForwardLimitAutosetPositionValue = 199.5;
     } else {
       eleMotorConfig.Slot0 = new Slot0Configs()
         .withKP(0.4)
