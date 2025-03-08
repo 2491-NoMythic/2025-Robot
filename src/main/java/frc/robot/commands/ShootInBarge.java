@@ -45,14 +45,14 @@ public class ShootInBarge extends SequentialCommandGroup {
       new ParallelDeadlineGroup(
         new SequentialCommandGroup(
           new WaitCommand(()->0.1), //ensures driveToPose has started before checking the targeting error
-          new WaitUntil(()->drivetrainSubsystem.getPositionTargetingError() < METERS_FROM_POSE_TO_RAISE_ELEVATOR),
+          new WaitUntil(()->drivetrainSubsystem.getPositionTargetingErrorBarge() < METERS_FROM_POSE_TO_RAISE_ELEVATOR),
           new InstantCommand(()->elevatorSubsystem.setElevatorPosition(ElevatorEnums.Barge), elevatorSubsystem),
-          new WaitUntil(()->drivetrainSubsystem.getPositionTargetingError() < BARGE_POSITION_THRESHOLD && elevatorSubsystem.isElevatorAtPose()),
+          new WaitUntil(()->drivetrainSubsystem.getPositionTargetingErrorBarge() < BARGE_POSITION_THRESHOLD && elevatorSubsystem.isElevatorAtPose()),
           new ParallelRaceGroup(
             new AlgaeIntakeCommand(algaeSubsystem, ()->-1),
             new WaitCommand(()->1.0)),
-          new InstantCommand(()->elevatorSubsystem.setElevatorPosition(ElevatorEnums.HumanPlayer), elevatorSubsystem),
-          new DriveToPose(()->PlacementLocations.Barge, drivetrainSubsystem, controllerSupplier))
+          new InstantCommand(()->elevatorSubsystem.setElevatorPosition(ElevatorEnums.HumanPlayer), elevatorSubsystem)),
+          new DriveToPose(()->PlacementLocations.Barge, drivetrainSubsystem, controllerSupplier)
       )
     );
   }

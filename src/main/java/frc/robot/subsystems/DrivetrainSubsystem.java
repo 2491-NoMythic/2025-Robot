@@ -469,7 +469,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("TARGETINGPOSE/adjustedyspeedAlliance", ySpeed);
     SmartDashboard.putNumber("TARGETINGPOSE/adjustedxspeedAlliance", xSpeed);
     //if the elevator is about to be up, limit the speed to 2 meters per second. Otherwise, limit speed to 3.5 meters per second
-    if(getPositionTargetingError() < METERS_FROM_POSE_TO_RAISE_ELEVATOR + 0.1) {
+    if(true) {
       xSpeed = MythicalMath.absoluteCap(xSpeed, 2);
       ySpeed = MythicalMath.absoluteCap(ySpeed, 2);
     } else {
@@ -522,6 +522,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
     double xError = DRIVE_TO_POSE_X_CONTROLLER.getError();
     double yError = DRIVE_TO_POSE_Y_CONTROLLER.getError();
     return Math.sqrt(Math.pow(xError, 2) + Math.pow(yError, 2));
+  }
+  /**
+   * gets the total distance from the x coordinate of the targeted pose and the robot's x coordinate, should only be called if {@link #moveTowardsPose(Pose2d)} is being run periodically, or else the error's will not be up to date with current robot position and current 
+   * targeted position
+   * @return the distance of error, in meters
+   */
+  public double getPositionTargetingErrorBarge() {
+    return DRIVE_TO_POSE_X_CONTROLLER.getError();
   }
   public boolean isAtRotationTarget() {
     return rotationSpeedController.atSetpoint();

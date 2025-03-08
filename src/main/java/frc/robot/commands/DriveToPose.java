@@ -128,12 +128,14 @@ public class DriveToPose extends Command {
         } else {
           targetPose = BargePoseBlue;
         }
+        break;
       case Processor:
         if(redAlliance) {
           targetPose = ProcessorPoseRed;
         } else {
           targetPose = ProcessorPoseBlue;
         }
+        break;
       default:
         targetPose = BargePoseBlue;
     }
@@ -159,7 +161,7 @@ public class DriveToPose extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    drivetrain.stop();
+    drivetrain.pointWheelsInward();
     cyclesGood = 0;
   }
 
