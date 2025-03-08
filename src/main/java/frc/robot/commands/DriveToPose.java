@@ -10,6 +10,7 @@ import java.util.function.Supplier;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.settings.PlacementLocations;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -21,6 +22,7 @@ public class DriveToPose extends Command {
   Supplier<PlacementLocations> targetSpot;
   DrivetrainSubsystem drivetrain;
   Pose2d targetPose;
+  int cyclesGood;
   DoubleSupplier yMovementSupplierForBarge;
   public DriveToPose(Supplier<PlacementLocations> targetSpot, DrivetrainSubsystem drivetrain, DoubleSupplier yMovementSupplierBarge) {
     this.drivetrain = drivetrain;
@@ -33,6 +35,7 @@ public class DriveToPose extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    cyclesGood = 0;
     boolean redAlliance = DriverStation.getAlliance().get() == Alliance.Red;
     switch (targetSpot.get()) {
       case ReefA:
@@ -134,6 +137,7 @@ public class DriveToPose extends Command {
       default:
         targetPose = BargePoseBlue;
     }
+    SmartDashboard.putString("TESTINGPOSE/targeted pose", targetPose.toString());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -144,17 +148,24 @@ public class DriveToPose extends Command {
     } else {
       drivetrain.moveTowardsPose(targetPose);
     }
+    if(drivetrain.getPositionTargetingError() < 0.012) {
+      cyclesGood++;
+    } else {
+      cyclesGood = 0;
+    }
+    SmartDashboard.putBoolean("TARGETINGPOSE/isAtRotationTArget", drivetrain.isAtRotationTarget());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     drivetrain.stop();
+    cyclesGood = 0;
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return drivetrain.getPositionTargetingError() < 0.01;
+    return cyclesGood>3&&drivetrain.isAtRotationTarget();
   }
 }

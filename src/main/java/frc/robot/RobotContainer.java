@@ -434,6 +434,7 @@ public class RobotContainer {
     if(DrivetrainExists){
       autoChooser = AutoBuilder.buildAutoChooser();
       SmartDashboard.putData("Auto Chooser", autoChooser);
+      SmartDashboard.putData("DriveToPose", new DriveToPose(()->PlacementLocations.ReefA, driveTrain, ()->0));
     //change these two booleans to modify where the NoOdometry command will place coral
     BooleanSupplier leftPlace = ()->true;
     Supplier<ElevatorEnums> elevatorHeightSupplier= ()->ElevatorEnums.Reef2;

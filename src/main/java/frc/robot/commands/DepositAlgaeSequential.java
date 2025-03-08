@@ -30,11 +30,10 @@ public class DepositAlgaeSequential extends SequentialCommandGroup {
           new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.AlgaeInProcessor)),
           new WaitUntil(()->elevator.isElevatorAtPose() && drivetrain.getPositionTargetingError() < 0.05),
           new InstantCommand(()->algaeEndEffector.runAlgaeEndDefector(-0.5)),
-          new WaitCommand(0.25),
-          new DriveTimeCommand(1, 0, 0, 1, drivetrain)
-        ), 
-        new DriveToPose(()->PlacementLocations.Processor, drivetrain, ()->0)
-        )
+          new WaitCommand(0.25)
+          ), 
+        new DriveToPose(()->PlacementLocations.Processor, drivetrain, ()->0)),
+      new DriveTimeCommand(1, 0, 0, 1, drivetrain)
     );
   }
 }

@@ -458,11 +458,16 @@ public class DrivetrainSubsystem extends SubsystemBase {
     //calculate speeds using PID loops
     double xSpeed = DRIVE_TO_POSE_X_CONTROLLER.calculate(odometer.getEstimatedPosition().getX());
     double ySpeed = DRIVE_TO_POSE_Y_CONTROLLER.calculate(odometer.getEstimatedPosition().getY());
-    //reverse speeds for the red alliance, because directions have flipped
+    SmartDashboard.putNumber("TARGETINGPOSE/calculatedyspeed", ySpeed);
+    SmartDashboard.putNumber("TARGETINGPOSE/calculatedxspeed", xSpeed);
+    
+    // reverse speeds for the red alliance, because directions have flipped
     if(DriverStation.getAlliance().get() == Alliance.Red) {
       xSpeed = -xSpeed;
       ySpeed = -ySpeed;
     }
+    SmartDashboard.putNumber("TARGETINGPOSE/adjustedyspeedAlliance", ySpeed);
+    SmartDashboard.putNumber("TARGETINGPOSE/adjustedxspeedAlliance", xSpeed);
     //if the elevator is about to be up, limit the speed to 2 meters per second. Otherwise, limit speed to 3.5 meters per second
     if(getPositionTargetingError() < METERS_FROM_POSE_TO_RAISE_ELEVATOR + 0.1) {
       xSpeed = MythicalMath.absoluteCap(xSpeed, 2);
@@ -474,6 +479,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("TARGETINGPOSE/yspeed", ySpeed);
     SmartDashboard.putNumber("TARGETINGPOSE/xspeed", xSpeed);
     //drive!
+    SmartDashboard.putNumber("TESTINGPOSE/total error", getPositionTargetingError());
     moveTowardsRotationTarget(xSpeed, ySpeed);
   }
   /**

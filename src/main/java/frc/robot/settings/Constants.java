@@ -56,12 +56,15 @@ public final class Constants {
     public static final double BUMPER_TO_SENSOR = 158; // in milliqmeters
     public static final Pose2d DRIVE_ODOMETRY_ORIGIN = new Pose2d(5.0, 5.0, new Rotation2d());
 
-    public static final PIDController DRIVE_TO_POSE_X_CONTROLLER = new PIDController(0, 0, 0);
-    public static final PIDController DRIVE_TO_POSE_Y_CONTROLLER = new PIDController(
-      DRIVE_TO_POSE_X_CONTROLLER.getP(), 
-      DRIVE_TO_POSE_X_CONTROLLER.getI(),
-      DRIVE_TO_POSE_X_CONTROLLER.getD());
+    public static final PIDController DRIVE_TO_POSE_X_CONTROLLER = getTranslationPIDController();
+    public static final PIDController DRIVE_TO_POSE_Y_CONTROLLER = getTranslationPIDController();
     /** The bumper-to-bumper width of the robot. */
+    public static PIDController getTranslationPIDController() {
+      PIDController transltionController = new PIDController(5, 0, 0);
+      transltionController.setIZone(0.025);
+      transltionController.setIntegratorRange(-0.25, 0.25);
+      return transltionController;
+    }
     public static final double DRIVETRAIN_ROBOT_WIDTH_METERS = 0.83;
     /**
      * The left-to-right distance between the drivetrain wheels Should be measured from center to
@@ -370,7 +373,7 @@ public final class Constants {
     public static final Pose2d RED_BACK_LEFT_REEFSIDE_POSE = new Pose2d(redBackXCoord, redLeftYCoord, new Rotation2d());
 
     public static final Translation2d FIELD_CENTER = new Translation2d(8.775, 4.031);
-    public static final Pose2d ReefARed = new Pose2d(14.342, 3.979, Rotation2d.fromDegrees(180));
+    public static final Pose2d ReefARed = new Pose2d(14.642, 3.979, Rotation2d.fromDegrees(180));
     public static final Pose2d ReefBRed = new Pose2d(14.342, 4.3, Rotation2d.fromDegrees(180));
     public static final Pose2d ReefCRed = new Pose2d(13.767, 5.079, Rotation2d.fromDegrees(-120));
     public static final Pose2d ReefDRed = new Pose2d(13.484, 5.285, Rotation2d.fromDegrees(-120));
