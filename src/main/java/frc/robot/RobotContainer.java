@@ -201,39 +201,40 @@ public class RobotContainer {
    */
   public RobotContainer() {
     // preferences are initialized IF they don't already exist on the Rio
-    Preferences.initBoolean("Lights Exist", true);
-    Preferences.initBoolean("CompBot", true);
-    Preferences.initBoolean("Use Limelight", true);
+    Preferences.initBoolean("Lights Exist", false);
+    Preferences.initBoolean("CompBot", false);
+    Preferences.initBoolean("Use Limelight", false);
     Preferences.initString("Driver Controller Type", "PS4Controller");
     Preferences.initString("Operator Controller Type", "PS4Controller");
     Preferences.initBoolean("Elevator", false);
     Preferences.initBoolean("CoralEndDefector", false);
     Preferences.initBoolean("AlgaeEndDefector", false);
-    Preferences.initBoolean("FunnelIntake", true);
+    Preferences.initBoolean("FunnelIntake", false);
     Preferences.initBoolean("FunnelRotator", false);
     Preferences.initBoolean("Climber", false);
     Preferences.initBoolean("DrivetrainExists", false);
     Preferences.initBoolean("AntiTipActive", true);
     Preferences.initBoolean("DistanceSensorsExist", false);
     Preferences.initBoolean("LimelightExists", false);
-    Preferences.initBoolean("Motor Logging", true);
+    Preferences.initBoolean("Motor Logging", false);
     Preferences.initBoolean("Safe Elevator Driving", true);
+    Preferences.initString("My name", "Nigel");
 
     driverControllerTypeString = Preferences.getString("Driver Controller Type", "XboxController");
     operatorControllerTypeString = Preferences.getString("Operator Controller Type", "ButtonBoard");
     DCTEnum = ControllerEnums.valueOf(driverControllerTypeString);
     OCTEnum = ControllerEnums.valueOf(operatorControllerTypeString);
-    algaeEndeffectorExists = Preferences.getBoolean("AlgaeEndDefector", true);
+    algaeEndeffectorExists = Preferences.getBoolean("AlgaeEndDefector", false);
     coralEndeffectorExists = Preferences.getBoolean("CoralEndDefector", false);
-    climberExists = Preferences.getBoolean("Climber", true);
-    elevatorExists = Preferences.getBoolean("Elevator", true);
-    funnelIntakeExists = Preferences.getBoolean("FunnelIntake", true);
-    funnelRotatorExists = Preferences.getBoolean("FunnelRotator", true);
-    DrivetrainExists = Preferences.getBoolean("DrivetrainExists", true);
-    distanceSensorsExist = Preferences.getBoolean("DistanceSensorsExist", true);
-    lightsExist = Preferences.getBoolean("Lights Exist", true);
-    LimelightExists = Preferences.getBoolean("Limelight Exists", true);
-    useMotorLogger = Preferences.getBoolean("Motor Logging", true);
+    climberExists = Preferences.getBoolean("Climber", false);
+    elevatorExists = Preferences.getBoolean("Elevator", false);
+    funnelIntakeExists = Preferences.getBoolean("FunnelIntake", false);
+    funnelRotatorExists = Preferences.getBoolean("FunnelRotator", false);
+    DrivetrainExists = Preferences.getBoolean("DrivetrainExists", false);
+    distanceSensorsExist = Preferences.getBoolean("DistanceSensorsExist", false);
+    lightsExist = Preferences.getBoolean("Lights Exist", false);
+    LimelightExists = Preferences.getBoolean("Limelight Exists", false);
+    useMotorLogger = Preferences.getBoolean("Motor Logging", false);
 
     DataLogManager.start(); // Start logging
     DriverStation.startDataLog(DataLogManager.getLog()); // Joystick Data logging

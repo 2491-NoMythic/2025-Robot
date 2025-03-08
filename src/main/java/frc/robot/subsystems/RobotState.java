@@ -22,7 +22,7 @@ public class RobotState {
   public ReefOffsetEnums reefOffset;
   public boolean funnelSensorTrig;
   public boolean coralEndeffSensorTrig;
-  public ReefSideEnum closestReefSide;
+  public ReefSideEnum closestReefSide = ReefSideEnum.none;
   public boolean deliveringLeft;
   public boolean goForAlgae;
   public boolean reefLineupRunning;
