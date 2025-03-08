@@ -19,6 +19,9 @@ import frc.robot.RobotContainer;
 import frc.robot.helpers.MotorLogger;
 
 import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.*;
+
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -86,6 +89,13 @@ public class AlgaeEndeffectorSubsystem extends SubsystemBase {
    */
   public void runAlgaeEndDefector(double speed){
     algaeEndeffectorMotor.set(speed);
+  }
+  /**
+   * Runs the AlgaeEndEffector at a speed from -1 to 1
+   * @param speed the double supplier for the speed
+   */
+  public void runAlgaeEndDefector(DoubleSupplier speed){
+    algaeEndeffectorMotor.set(speed.getAsDouble());
   }
   /**
    * stops the algae end effector motor by setting speed to 0, with brake mode enabled

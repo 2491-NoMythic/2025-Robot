@@ -16,6 +16,8 @@ import static frc.robot.settings.Constants.DriveConstants.BR_STEER_MOTOR_ID;
 import static frc.robot.settings.Constants.DriveConstants.CANIVORE_DRIVETRAIN;
 import static frc.robot.settings.Constants.DriveConstants.DRIVETRAIN_PIGEON_ID;
 import static frc.robot.settings.Constants.DriveConstants.DRIVE_ODOMETRY_ORIGIN;
+import static frc.robot.settings.Constants.DriveConstants.DRIVE_TO_POSE_X_CONTROLLER;
+import static frc.robot.settings.Constants.DriveConstants.DRIVE_TO_POSE_Y_CONTROLLER;
 import static frc.robot.settings.Constants.DriveConstants.FL_DRIVE_MOTOR_ID;
 import static frc.robot.settings.Constants.DriveConstants.FL_STEER_ENCODER_ID;
 import static frc.robot.settings.Constants.DriveConstants.FL_STEER_MOTOR_ID;
@@ -23,6 +25,7 @@ import static frc.robot.settings.Constants.DriveConstants.FR_DRIVE_MOTOR_ID;
 import static frc.robot.settings.Constants.DriveConstants.FR_STEER_ENCODER_ID;
 import static frc.robot.settings.Constants.DriveConstants.FR_STEER_MOTOR_ID;
 import static frc.robot.settings.Constants.DriveConstants.ROBOT_ANGLE_TOLERANCE;
+import static frc.robot.settings.Constants.ElevatorConstants.METERS_FROM_POSE_TO_RAISE_ELEVATOR;
 import static frc.robot.settings.Constants.Field.*;
 import static frc.robot.settings.Constants.Vision.APRILTAG_LIMELIGHTA_NAME;
 import static frc.robot.settings.Constants.Vision.APRILTAG_LIMELIGHTB_NAME;
@@ -32,10 +35,12 @@ import static frc.robot.settings.Constants.Vision.FIELD_CORNER_FOR_INTAKE;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.function.DoubleSupplier;
 
 // import java.util.logging.Logger;
 import org.littletonrobotics.junction.Logger;
 
+import com.ctre.phoenix6.controls.MotionMagicVelocityDutyCycle;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
@@ -424,17 +429,107 @@ public class DrivetrainSubsystem extends SubsystemBase {
           "No valid limelight estimate to reset from. (Drivetrain.forceUpdateOdometryWithVision)");
     }
   }
-  /** Prepares to rotate the robot to a specific angle
+  /** Prepares to rotate the robot to a specific angle. Angle 0 is ALWAYS facing away from blue alliance wall
    * @param desiredAngle the angle to rotate the robot to (in degrees relative to the field)
    */
   public void setRotationTarget(double desiredAngle) {
     rotationSpeedController.setSetpoint(desiredAngle);
   }
   /** Applies power to the motors to rotate the robot to the angle set by 
-   * {@link #setRotationTarget(double) setRotationTarget}
+   * {@link #setRotationTarget(double) setRotationTarget} <p>
+   * positive x is away from your alliance wall <p>
+   * positive y is to the drivers left
+   * @param vx the field relative speed, in meters per second, for the drivetrain to move
+   * @param vy the field relative speed, in meters per second, for the drivetrain to move
    */
   public void moveTowardsRotationTarget(double vx, double vy) {
     drive(ChassisSpeeds.fromFieldRelativeSpeeds(new ChassisSpeeds(vx, vy, rotationSpeedController.calculate(getPose().getRotation().getDegrees())), getGyroscopeRotation()));
+  }
+  /**
+   * moves toward a position and rotation using {@link #moveTowardsRotationTarget(double, double)}. The position is set as if 0 degrees is away from
+   * the Blue alliance Wall, positive x is towards red alliance, and positive Y is to the left of the blue drivers
+   * @param pose
+   */
+  public void moveTowardsPose(Pose2d pose) {
+    //set the targets for the PID loops
+    setRotationTarget(pose.getRotation().getDegrees());
+    DRIVE_TO_POSE_X_CONTROLLER.setSetpoint(pose.getX());
+    DRIVE_TO_POSE_Y_CONTROLLER.setSetpoint(pose.getY());
+    //calculate speeds using PID loops
+    double xSpeed = DRIVE_TO_POSE_X_CONTROLLER.calculate(odometer.getEstimatedPosition().getX());
+    double ySpeed = DRIVE_TO_POSE_Y_CONTROLLER.calculate(odometer.getEstimatedPosition().getY());
+    SmartDashboard.putNumber("TARGETINGPOSE/calculatedyspeed", ySpeed);
+    SmartDashboard.putNumber("TARGETINGPOSE/calculatedxspeed", xSpeed);
+    
+    // reverse speeds for the red alliance, because directions have flipped
+    if(DriverStation.getAlliance().get() == Alliance.Red) {
+      xSpeed = -xSpeed;
+      ySpeed = -ySpeed;
+    }
+    SmartDashboard.putNumber("TARGETINGPOSE/adjustedyspeedAlliance", ySpeed);
+    SmartDashboard.putNumber("TARGETINGPOSE/adjustedxspeedAlliance", xSpeed);
+    //if the elevator is about to be up, limit the speed to 2 meters per second. Otherwise, limit speed to 3.5 meters per second
+    if(true) {
+      xSpeed = MythicalMath.absoluteCap(xSpeed, 2);
+      ySpeed = MythicalMath.absoluteCap(ySpeed, 2);
+    } else {
+      xSpeed = MythicalMath.absoluteCap(xSpeed, 3.5);
+      ySpeed = MythicalMath.absoluteCap(ySpeed, 3.5);
+    }
+    SmartDashboard.putNumber("TARGETINGPOSE/yspeed", ySpeed);
+    SmartDashboard.putNumber("TARGETINGPOSE/xspeed", xSpeed);
+    //drive!
+    SmartDashboard.putNumber("TESTINGPOSE/total error", getPositionTargetingError());
+    moveTowardsRotationTarget(xSpeed, ySpeed);
+  }
+  /**
+   * moves toward a position and rotation using the BARGE_POSE in constnats for red or blue alliance.
+   * @param pose
+   */
+  public void moveTowardsBargePose(DoubleSupplier yMovementSupplier) {
+    //set the targets for the PID loops
+    Pose2d pose = DriverStation.getAlliance().get() == Alliance.Red ? BargePoseRed : BargePoseBlue;
+
+    setRotationTarget(pose.getRotation().getDegrees());
+    DRIVE_TO_POSE_X_CONTROLLER.setSetpoint(pose.getX());
+    //calculate speeds using PID loops
+    double xSpeed = DRIVE_TO_POSE_X_CONTROLLER.calculate(odometer.getEstimatedPosition().getX());
+    double ySpeed = yMovementSupplier.getAsDouble();
+    //reverse speeds for the red alliance, because directions have flipped
+    if(DriverStation.getAlliance().get() == Alliance.Red) {
+      xSpeed = -xSpeed;
+    }
+    //if the elevator is about to be up, limit the speed to 2 meters per second. Otherwise, limit speed to 3.5 meters per second
+    if(getPositionTargetingError() < METERS_FROM_POSE_TO_RAISE_ELEVATOR + 0.1) {
+      xSpeed = MythicalMath.absoluteCap(xSpeed, 2);
+      ySpeed = MythicalMath.absoluteCap(ySpeed, 2);
+    } else {
+      xSpeed = MythicalMath.absoluteCap(xSpeed, 3.5);
+      ySpeed = MythicalMath.absoluteCap(ySpeed, 3.5);
+    }
+    SmartDashboard.putNumber("TARGETINGPOSE/yspeed", ySpeed);
+    SmartDashboard.putNumber("TARGETINGPOSE/xspeed", xSpeed);
+    //drive!
+    moveTowardsRotationTarget(xSpeed, ySpeed);
+  }
+  /**
+   * gets the total distance from the targeted pose and the robot's pose, by finding the hypotenuse of x error and y error <p>
+   * should only be called if {@link #moveTowardsPose(Pose2d)} is being run periodically, or else the error's will not be up to date with current robot position and current 
+   * targeted position
+   * @return the distance of error, in meters
+   */
+  public double getPositionTargetingError() {
+    double xError = DRIVE_TO_POSE_X_CONTROLLER.getError();
+    double yError = DRIVE_TO_POSE_Y_CONTROLLER.getError();
+    return Math.sqrt(Math.pow(xError, 2) + Math.pow(yError, 2));
+  }
+  /**
+   * gets the total distance from the x coordinate of the targeted pose and the robot's x coordinate, should only be called if {@link #moveTowardsPose(Pose2d)} is being run periodically, or else the error's will not be up to date with current robot position and current 
+   * targeted position
+   * @return the distance of error, in meters
+   */
+  public double getPositionTargetingErrorBarge() {
+    return DRIVE_TO_POSE_X_CONTROLLER.getError();
   }
   public boolean isAtRotationTarget() {
     return rotationSpeedController.atSetpoint();

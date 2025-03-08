@@ -5,6 +5,7 @@
 package frc.robot.helpers;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 
 /** Add your docs here. */
 public class MythicalMath {
@@ -21,13 +22,49 @@ public class MythicalMath {
     double Distance2d = Math.sqrt(Math.pow(YfromOrigin, 2) + Math.pow(XfromOrigin, 2));
     return Math.sqrt(Math.pow(Distance2d, 2) + Math.pow(ZfromOrigin, 2));
   }
-
+  /**
+   * mirrors a starting pose around a coordinate. very useful for changing a coordinate from blue alliance to red alliance. The angle will also flip 180 degrees
+   * @param startingPose
+   * @param pivotX the x coordinate of the point to mirror around
+   * @param pivotY the y coordinate of the point to mirror around
+   * @return a new Pose2d, which is the starting pose mirrored around the pivot point
+   */
+  public static Pose2d mirrorPoseAround(Pose2d startingPose, double pivotX, double pivotY) {
+    double mirroredX = 2 * pivotX - startingPose.getX();
+    double mirroredY = 2 * pivotY - startingPose.getY();
+    return new Pose2d(mirroredX, mirroredY, Rotation2d.fromRadians(-startingPose.getRotation().getRadians()));
+  }
   public static Pose2d multiplyOnlyPos(Pose2d pose, Double scalar) {
     return new Pose2d(pose.getX() * scalar, pose.getY() * scalar, pose.getRotation());
   }
 
   public static Pose2d divideOnlyPos(Pose2d pose, Double scalar) {
     return new Pose2d(pose.getX() / scalar, pose.getY() / scalar, pose.getRotation());
+  }
+  /**
+   * limits a number in both the positive and negative direction by a number
+   * @param number the number to limit
+   * @param cap a POSITIVE number to be the limit in the negative and positive direction
+   * @return 
+   */
+  public static double absoluteCap(double number, double cap) {
+    return cap(number, -cap, cap);
+  }
+  /**
+   * limits a number with an upper and lower limit. Will return the upper or lower limit if the number exceeds that.
+   * @param number the number to limit
+   * @param lowerCap the number to return if NUMBER is less than it
+   * @param upperCap the number to return if NUMBER is greater than it
+   * @return
+   */
+  public static double cap(double number, double lowerCap, double upperCap) {
+    if(number<lowerCap) {
+      return lowerCap;
+    }
+    if(number>upperCap) {
+      return upperCap;
+    }
+    return number;
   }
 /**
  * returns the minimum of two values, but treats any vaue that is 0 as 10,000

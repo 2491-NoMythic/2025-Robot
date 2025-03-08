@@ -4,6 +4,8 @@
 
 package frc.robot.settings;
 
+import static frc.robot.settings.Constants.DriveConstants.DRIVE_TO_POSE_Y_CONTROLLER;
+
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
@@ -15,6 +17,8 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.pathplanner.lib.path.PathConstraints;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -51,7 +55,16 @@ public final class Constants {
     public static final double REEF_LINEUP_SPEED = 0.6;
     public static final double BUMPER_TO_SENSOR = 158; // in milliqmeters
     public static final Pose2d DRIVE_ODOMETRY_ORIGIN = new Pose2d(5.0, 5.0, new Rotation2d());
+
+    public static final PIDController DRIVE_TO_POSE_X_CONTROLLER = getTranslationPIDController();
+    public static final PIDController DRIVE_TO_POSE_Y_CONTROLLER = getTranslationPIDController();
     /** The bumper-to-bumper width of the robot. */
+    public static PIDController getTranslationPIDController() {
+      PIDController transltionController = new PIDController(5, 0, 0);
+      transltionController.setIZone(0.025);
+      transltionController.setIntegratorRange(-0.25, 0.25); 
+      return transltionController;
+    }
     public static final double DRIVETRAIN_ROBOT_WIDTH_METERS = 0.83;
     /**
      * The left-to-right distance between the drivetrain wheels Should be measured from center to
@@ -358,6 +371,40 @@ public final class Constants {
     public static final Pose2d RED_BACK_CENTER_REEFSIDE_POSE = new Pose2d(12.225, centerYCoord, new Rotation2d());
     public static final Pose2d RED_BACK_RIGHT_REEFSIDE_POSE = new Pose2d(redBackXCoord, redRightYCoord, new Rotation2d());
     public static final Pose2d RED_BACK_LEFT_REEFSIDE_POSE = new Pose2d(redBackXCoord, redLeftYCoord, new Rotation2d());
+
+    public static final Translation2d FIELD_CENTER = new Translation2d(8.775, 4.031);
+    public static final Pose2d ReefARed = new Pose2d(14.39, 3.96, Rotation2d.fromDegrees(180));
+    public static final Pose2d ReefBRed = new Pose2d(14.38, 4.29, Rotation2d.fromDegrees(180));
+    public static final Pose2d ReefCRed = new Pose2d(13.78, 5.13, Rotation2d.fromDegrees(-120));
+    public static final Pose2d ReefDRed = new Pose2d(13.49, 5.3, Rotation2d.fromDegrees(-120));
+    public static final Pose2d ReefERed = new Pose2d(12.45, 5.19, Rotation2d.fromDegrees(-60));
+    public static final Pose2d ReefFRed = new Pose2d(12.25, 5.03, Rotation2d.fromDegrees(-60));
+    public static final Pose2d ReefGRed = new Pose2d(11.73, 4.09, Rotation2d.fromDegrees(0));
+    public static final Pose2d ReefHRed = new Pose2d(11.73, 3.73, Rotation2d.fromDegrees(0));
+    public static final Pose2d ReefIRed = new Pose2d(12.35, 2.91, Rotation2d.fromDegrees(60));
+    public static final Pose2d ReefJRed = new Pose2d(12.64, 2.78, Rotation2d.fromDegrees(60));
+    public static final Pose2d ReefKRed = new Pose2d(13.66, 2.83, Rotation2d.fromDegrees(120));
+    public static final Pose2d ReefLRed = new Pose2d(13.89, 3.05, Rotation2d.fromDegrees(120));
+    public static final Pose2d BargePoseRed = new Pose2d(9.878, 0, Rotation2d.fromDegrees(180));
+    public static final Pose2d ProcessorPoseRed = new Pose2d(11.57, 6.89, Rotation2d.fromDegrees(90));
+    public static final Pose2d ReefABlue = new Pose2d(3.208, 4.083, Rotation2d.fromDegrees(0));
+    public static final Pose2d ReefBBlue = new Pose2d(3.208, 3.762, Rotation2d.fromDegrees(0));
+    public static final Pose2d ReefCBlue = new Pose2d(3.783, 2.983, Rotation2d.fromDegrees(60));
+    public static final Pose2d ReefDBlue = new Pose2d(4.066, 2.777, Rotation2d.fromDegrees(60));
+    public static final Pose2d ReefEBlue = new Pose2d(5.07, 2.884, Rotation2d.fromDegrees(120));
+    public static final Pose2d ReefFBlue = new Pose2d(5.343, 3.03, Rotation2d.fromDegrees(120));
+    public static final Pose2d ReefGBlue = new Pose2d(5.801, 3.957, Rotation2d.fromDegrees(180));
+    public static final Pose2d ReefHBlue = new Pose2d(5.801, 4.278, Rotation2d.fromDegrees(180));
+    public static final Pose2d ReefIBlue = new Pose2d(5.187, 5.117, Rotation2d.fromDegrees(-120));
+    public static final Pose2d ReefJBlue = new Pose2d(4.924, 5.273, Rotation2d.fromDegrees(-120));
+    public static final Pose2d ReefKBlue = new Pose2d(3.89, 5.175, Rotation2d.fromDegrees(-60));
+    public static final Pose2d ReefLBlue = new Pose2d(3.793, 5.088, Rotation2d.fromDegrees(-60));
+    public static final Pose2d BargePoseBlue = new Pose2d(7.672, 0, Rotation2d.fromDegrees(0));
+    public static final Pose2d ProcessorPoseBlue = new Pose2d(5.982, 0.531, Rotation2d.fromDegrees(-90));
+
+    public static final double BARGE_POSITION_THRESHOLD = 0.02;
+    public static final double REEF_POSITION_THRESHOLD = 0.015;
+
   }
 
   public final class Vision {
@@ -471,7 +518,8 @@ public final class Constants {
     public static final double REEF_LEVEL_3_CENTIMETERS = 122.6;
     public static final double REEF_LEVEL_4_CENTIMETERS = 182.69;
     public static final double BARGE_SHOOT_CENTIMETERS = 192;
-    public static final double ELEVATOR_THRESHOLD = 2;
+    public static final double ELEVATOR_THRESHOLD = 1.5;
+    public static final double METERS_FROM_POSE_TO_RAISE_ELEVATOR = 0.2;
 
     public static final double MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY = 320;
     public static final double MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION = 400;
