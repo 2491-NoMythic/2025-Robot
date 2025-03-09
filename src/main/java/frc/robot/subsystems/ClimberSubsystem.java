@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.HardwareLimitSwitchConfigs;
 import com.ctre.phoenix6.controls.PositionVoltage;
@@ -16,6 +17,10 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.ForwardLimitTypeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Preferences;
@@ -28,6 +33,7 @@ import static frc.robot.settings.Constants.ElevatorConstants.ELEVATOR_MOTOR_2_ID
 
 public class ClimberSubsystem extends SubsystemBase {
   TalonFX climberMotor1;
+  SparkMax cageGrabber;
   MotorLogger motorLogger1;
   CANcoder climberAngleSensor;
   boolean moveWithPower;
@@ -36,6 +42,7 @@ public class ClimberSubsystem extends SubsystemBase {
   /** Creates a new CimberSubsystem. */
   public ClimberSubsystem() {
     climberMotor1 = new TalonFX(CLIMBER_MOTOR_ID, CANIVORE_DRIVETRAIN);
+    cageGrabber = new SparkMax(ELEVATOR_MOTOR_2_ID, MotorType.kBrushless);
     climberAngleSensor = new CANcoder(CLIMBER_CANCODER_ID, CANIVORE_DRIVETRAIN);
     //TODO spend some time figuring out how to use the absolute encoder with the motor.
     
@@ -61,6 +68,11 @@ public class ClimberSubsystem extends SubsystemBase {
         .withReverseLimitAutosetPositionEnable(false));
     }
 
+    SparkMaxConfig cageGrabberConfig = new SparkMaxConfig();
+    cageGrabberConfig.idleMode(IdleMode.kCoast);
+    cageGrabberConfig.inverted(true);
+    cageGrabberConfig.smartCurrentLimit(25, 40, 1000);
+    cageGrabberConfig.apply(cageGrabberConfig);
     motorLogger1 = new MotorLogger("/climber/motor1");
   }
 
@@ -90,6 +102,19 @@ public class ClimberSubsystem extends SubsystemBase {
   public void setMotorTorqueFOC(double current) {
     moveWithPower = false;
     climberMotor1.setControl(new TorqueCurrentFOC(current));
+  }
+  /**
+   * sets the cage grabber to a speed, from -1 to 1
+   * @param dutyCycle
+   */
+  public void setCageGrabber(double dutyCycle) {
+    cageGrabber.set(dutyCycle);
+  }
+  /**
+   * sets the dutyCycleOut of the cage grabber motor to 0
+   */
+  public void stopCageGrabber() {
+    setCageGrabber(0);
   }
   @Override
   public void periodic() {

@@ -208,6 +208,8 @@ public class RobotContainer {
   BooleanSupplier funnelRotatorSupplier;
   BooleanSupplier climberResetSupplier;
   BooleanSupplier inEndgameSupplier;
+  BooleanSupplier cageGrabberSupplier;
+
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
@@ -284,7 +286,7 @@ public class RobotContainer {
       funnelRotatorSupplier = driverControllerXbox::getLeftStickButton;
       AlgaeShooterSup = ()->driverControllerXbox.getPOV() == 270 || operatorControllerXbox.getXButton();
       ManualCoralIntake = ()->false;
-      
+      cageGrabberSupplier = ()->driverControllerXbox.getPOV() == 0;
 
     } else if (DCTEnum == ControllerEnums.PS4Controller) {
 
@@ -313,6 +315,7 @@ public class RobotContainer {
       AlgaeShooterSup =  ()-> driverControllerPS4.getPOV() == 180;
       CoralIntakeSup = driverControllerPS4::getSquareButton;
       funnelRotatorSupplier = driverControllerPS4::getShareButton;
+      cageGrabberSupplier = ()->driverControllerPS4.getPOV() == 0;
     } 
     if (OCTEnum == ControllerEnums.XboxController) {
       operatorControllerXbox = new XboxController(OPERATOR_CONTROLLER_ID);
@@ -557,6 +560,7 @@ public class RobotContainer {
       new Trigger(ClimbCommandSupplier).whileTrue(new ClimberCommand(climber));
       new Trigger(ClimbCommandSupplier).onTrue(new InstantCommand(()->elevator.setVoltage(0), elevator));
       new Trigger(climberResetSupplier).onTrue(new InstantCommand(()->climber.setClimberPower(-0.7), climber)).onFalse(new InstantCommand(()->climber.stopClimber(), climber));
+      new Trigger(cageGrabberSupplier).onTrue(new InstantCommand(()->climber.setCageGrabber(0.5), climber)).onFalse(new InstantCommand(climber::stopCageGrabber, climber));
     }
     if (funnelIntakeExists&&elevatorExists&&coralEndeffectorExists) {
       //if the coral is in the end effector, and the elevator is in place, pass the coral to the endeffector and line up the coral within it

@@ -530,6 +530,7 @@ public final class Constants {
 
   public final class ClimberConstants{
     public static final int CLIMBER_MOTOR_ID = 11;
+    public static final int CAGE_GRABBER_MOTOR_ID = 19;
     public static final int CLIMBER_CANCODER_ID = 5;
 
     public static final double COMP_ENCODER_OFFSET = -0.824951;
