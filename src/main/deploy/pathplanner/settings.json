@@ -4,6 +4,7 @@
   "holonomicMode": true,
   "pathFolders": [
     "InitialPaths",
+    "BargePaths",
     "ReefSideLineup"
   ],
   "autoFolders": [

@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.306967572304996,
+        "y": 4.09
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.92075,
+        "y": 4.17125
+      },
+      "isLocked": false,
+      "linkedName": "ReefA"
+    },
+    {
+      "anchor": {
+        "x": 7.5075,
+        "y": 6.140750000000001
+      },
+      "prevControl": {
+        "x": 3.12,
+        "y": 6.189500000000002
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Barge"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "reversed": false,
+  "folder": "BargePaths",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}
