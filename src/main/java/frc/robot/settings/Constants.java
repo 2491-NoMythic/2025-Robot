@@ -509,15 +509,15 @@ public final class Constants {
   public final class ElevatorConstants{
     public static final int ELEVATOR_MOTOR_1_ID = 9;
     public static final int ELEVATOR_MOTOR_2_ID = 10;
-    public static final double HUMAN_PLAYER_STATION_CENTIMETERS = 19.721;//19.1;//31.5;
+    public static final double HUMAN_PLAYER_STATION_CENTIMETERS = 23.2;//19.1;//31.5;
     public static final double PRAC_HEIGHT_AT_LIMIT_SWITCH = 20;
-    public static final double COMP_HEIGHT_AT_LIMIT_SWITCH = 16.828;
+    public static final double COMP_HEIGHT_AT_LIMIT_SWITCH = 20;//before second limit switch was added (and for all of duluth): 16.828;
     public static final double PROCESSOR_HEIGHT_CENTIMETERS = 19;
     public static final double REEF_LEVEL_1_CENTIMETERS = 80;
-    public static final double REEF_LEVEL_2_CENTIMETERS = 78.916;
-    public static final double REEF_LEVEL_3_CENTIMETERS = 118.2;
-    public static final double REEF_LEVEL_4_CENTIMETERS = 185.085;
-    public static final double BARGE_SHOOT_CENTIMETERS = 192;
+    public static final double REEF_LEVEL_2_CENTIMETERS = 81.23;
+    public static final double REEF_LEVEL_3_CENTIMETERS = 122.6;
+    public static final double REEF_LEVEL_4_CENTIMETERS = 188.7;//182.69;
+    public static final double BARGE_SHOOT_CENTIMETERS = 190;
     public static final double ELEVATOR_THRESHOLD = 1.5;
     public static final double METERS_FROM_POSE_TO_RAISE_ELEVATOR = 0.2;
 
