@@ -39,7 +39,8 @@ public class L1ScoringCommandGroup extends SequentialCommandGroup {
       new InstantCommand(()->algaeEndDefector.runAlgaeEndDefector(() -> RobotState.getInstance().goForAlgae ? ALGAE_INTAKE_SPEED : -0.5), algaeEndDefector),
       new ParallelDeadlineGroup(
         new SequentialCommandGroup(
-          new WaitCommand(0.1),
+          new WaitCommand(0.5),
+          
           new ParallelRaceGroup(
             new DeliverCoral(coralEndDefector),//drops coral
             new WaitCommand(0.75)),
