@@ -65,6 +65,7 @@ import frc.robot.commands.AlgaeIntakeCommand;
 import frc.robot.commands.Drive;
 import frc.robot.commands.DriveToPose;
 import frc.robot.commands.IndicatorLights;
+import frc.robot.commands.L1ScoringCommandGroup;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.ElevatorReset;
 import frc.robot.commands.FunClimbedLights;
@@ -587,7 +588,7 @@ public class RobotContainer {
       
       new Trigger(()->CoralPlaceTeleSupplier.getAsBoolean()&&(RobotState.getInstance().goForAlgae||RobotState.getInstance().deliveringCoralHeight==ElevatorEnums.Reef1)).whileTrue(
           new SequentialCommandGroup(
-            new PlaceCoralDuringLineupSequential(algaeEndDefector, driveTrain, elevator, coralEndDefector, ()->selectCommand(()->RobotState.getInstance().deliveringLeft)),
+            new L1ScoringCommandGroup(algaeEndDefector, driveTrain, elevator, coralEndDefector, ()->selectCommand(()->RobotState.getInstance().deliveringLeft)),
             new InstantCommand(()->coralEndDefector.stopCoralEndEffector()),
             new MoveMeters(driveTrain, -0.5, -0.8, 0, 0),
             new InstantCommand(()->elevator.setElevatorPositionDynamicConfigs(HUMAN_PLAYER_STATION_CENTIMETERS, MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION, MOTION_MAGIC_ELEVATOR_VELOCITY, 0), elevator), //sets elevator back to the bottom position
