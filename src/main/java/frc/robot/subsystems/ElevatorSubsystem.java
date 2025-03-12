@@ -72,14 +72,14 @@ public class ElevatorSubsystem extends SubsystemBase {
         .withReverseLimitEnable(true)
         .withReverseLimitType(ReverseLimitTypeValue.NormallyClosed)
         .withForwardLimitAutosetPositionEnable(true)
-        .withForwardLimitAutosetPositionValue(190.8)
+        .withForwardLimitAutosetPositionValue(COMP_HEIGHT_AT_UPPER_LIMIT_SWITCH)
         .withForwardLimitEnable(true)
         .withForwardLimitType(ForwardLimitTypeValue.NormallyClosed))
       .withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()
         .withForwardSoftLimitEnable(true)
-        .withForwardSoftLimitThreshold(190)
+        .withForwardSoftLimitThreshold(COMP_HEIGHT_AT_UPPER_LIMIT_SWITCH-0.8)
         .withReverseSoftLimitEnable(true)
-        .withReverseSoftLimitThreshold(COMP_HEIGHT_AT_LIMIT_SWITCH+1));
+        .withReverseSoftLimitThreshold(COMP_HEIGHT_AT_LOWER_LIMIT_SWITCH+1));
     if (Preferences.getBoolean("CompBot", true)){
       //good values from right before duluth: p: 0.64, d: 0.02, g: 0.8623, a: 0.002, v: 0.01, s: 0.6  
       eleMotorConfig.Slot0 = new Slot0Configs()
@@ -89,8 +89,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         .withKA(0.002)
         .withKV(0.01)
         .withKS(0.6);
-      eleMotorConfig.HardwareLimitSwitch.ReverseLimitAutosetPositionValue = COMP_HEIGHT_AT_LIMIT_SWITCH;
-      eleMotorConfig.HardwareLimitSwitch.ForwardLimitAutosetPositionValue = 190.8;//199.5;
+      eleMotorConfig.HardwareLimitSwitch.ReverseLimitAutosetPositionValue = COMP_HEIGHT_AT_LOWER_LIMIT_SWITCH;
+      eleMotorConfig.HardwareLimitSwitch.ForwardLimitAutosetPositionValue = COMP_HEIGHT_AT_UPPER_LIMIT_SWITCH;//199.5;
     } else {
       eleMotorConfig.Slot0 = new Slot0Configs()
         .withKP(0.4)
@@ -202,7 +202,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         break;
       case Bottom:
       if(Preferences.getBoolean("CompBot", true)) {
-        setElevatorPosition(COMP_HEIGHT_AT_LIMIT_SWITCH);
+        setElevatorPosition(COMP_HEIGHT_AT_LOWER_LIMIT_SWITCH);
       } else {
         setElevatorPosition(PRAC_HEIGHT_AT_LIMIT_SWITCH);
       }
@@ -257,7 +257,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         break;
       case Bottom:
       if(Preferences.getBoolean("CompBot", true)) {
-        setElevatorPosition(COMP_HEIGHT_AT_LIMIT_SWITCH);
+        setElevatorPosition(COMP_HEIGHT_AT_LOWER_LIMIT_SWITCH);
       } else {
         setElevatorPosition(PRAC_HEIGHT_AT_LIMIT_SWITCH);
       }
@@ -278,7 +278,7 @@ public class ElevatorSubsystem extends SubsystemBase {
    */
   private double calculateRotations(double desiredHeight) {
     if(Preferences.getBoolean("CompBot", true)) {
-      return (Math.max(desiredHeight, COMP_HEIGHT_AT_LIMIT_SWITCH));
+      return (Math.max(desiredHeight, COMP_HEIGHT_AT_LOWER_LIMIT_SWITCH));
     } else {
       return (Math.max(desiredHeight, PRAC_HEIGHT_AT_LIMIT_SWITCH));
     }
