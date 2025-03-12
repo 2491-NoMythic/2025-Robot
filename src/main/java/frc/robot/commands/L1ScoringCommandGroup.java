@@ -40,7 +40,6 @@ public class L1ScoringCommandGroup extends SequentialCommandGroup {
       new ParallelDeadlineGroup(
         new SequentialCommandGroup(
           new WaitCommand(0.5),
-          
           new ParallelRaceGroup(
             new DeliverCoral(coralEndDefector),//drops coral
             new WaitCommand(0.75)),
