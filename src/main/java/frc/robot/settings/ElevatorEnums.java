@@ -4,6 +4,7 @@ public enum ElevatorEnums {
     HumanPlayer,
     AlgaeInProcessor,
     Bottom,
+    ReefLip,
     Reef1,
     Reef2,
     Reef3,

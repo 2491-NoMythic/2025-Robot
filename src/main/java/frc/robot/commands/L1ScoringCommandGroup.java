@@ -20,6 +20,7 @@ import frc.robot.commands.DriveToPose;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import frc.robot.commands.NamedCommands.DeliverCoral;
+import frc.robot.settings.ElevatorEnums;
 import frc.robot.settings.PlacementLocations;
 import frc.robot.commands.WaitUntil;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
@@ -40,12 +41,13 @@ public class L1ScoringCommandGroup extends SequentialCommandGroup {
       new ParallelDeadlineGroup(
         new SequentialCommandGroup(
           new WaitCommand(0.5),
+          new WaitUntil(()->driveTrain.getPositionTargetingError() < METERS_FROM_POSE_TO_RAISE_ELEVATOR),
+          new InstantCommand(()->elevator.setElevatorPosition(()->ElevatorEnums.ReefLip), elevator),
+          new WaitUntil(()->driveTrain.getPositionTargetingError() < REEF_POSITION_THRESHOLD && elevator.isElevatorAtPose()),
           new ParallelRaceGroup(
             new DeliverCoral(coralEndDefector),//drops coral
-            new WaitCommand(0.75)),
-          new WaitUntil(()->driveTrain.getPositionTargetingError() < METERS_FROM_POSE_TO_RAISE_ELEVATOR),
-          new InstantCommand(()->elevator.setElevatorPosition(()->RobotState.getInstance().deliveringCoralHeight), elevator),
-          new WaitUntil(()->driveTrain.getPositionTargetingError() < REEF_POSITION_THRESHOLD && elevator.isElevatorAtPose())
+            new WaitCommand(0.5)),
+          new InstantCommand(()->elevator.setElevatorPosition(()->ElevatorEnums.Reef1), elevator)
         ),
         new SequentialCommandGroup(
           new DriveToPose(placementSupplier, driveTrain, ()->0),

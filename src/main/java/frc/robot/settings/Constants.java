@@ -514,6 +514,7 @@ public final class Constants {
     public static final double COMP_HEIGHT_AT_LOWER_LIMIT_SWITCH = 20;//before second limit switch was added (and for all of duluth): 16.828;
     public static final double COMP_HEIGHT_AT_UPPER_LIMIT_SWITCH = 190.8;
     public static final double PROCESSOR_HEIGHT_CENTIMETERS = 19;
+    public static final double REEF_LIP_CENTIMETERS = 2491;
     public static final double REEF_LEVEL_1_CENTIMETERS = 80;
     public static final double REEF_LEVEL_2_CENTIMETERS = 81.23;
     public static final double REEF_LEVEL_3_CENTIMETERS = 122.6;

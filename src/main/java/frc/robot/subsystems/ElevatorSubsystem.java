@@ -268,6 +268,9 @@ public class ElevatorSubsystem extends SubsystemBase {
       case Barge:
         setElevatorPositionDynamicConfigs(BARGE_SHOOT_CENTIMETERS, MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION, MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY, 0);
         break;
+      case ReefLip:
+       setElevatorPosition(REEF_LIP_CENTIMETERS);
+        break; 
     }
   }
   /**
