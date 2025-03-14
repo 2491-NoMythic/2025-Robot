@@ -9,19 +9,19 @@
       "prevControl": null,
       "nextControl": {
         "x": 2.71793386908095,
-        "y": 1.6871970159964025
+        "y": 1.6871970159964027
       },
       "isLocked": false,
       "linkedName": "humanPlayerProcessor"
     },
     {
       "anchor": {
-        "x": 4.11,
-        "y": 2.819
+        "x": 4.0637,
+        "y": 2.726
       },
       "prevControl": {
-        "x": 2.59816329812959,
-        "y": 1.6073618621227856
+        "x": 2.5518632981295895,
+        "y": 1.5143618621227688
       },
       "nextControl": null,
       "isLocked": false,
