@@ -463,8 +463,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     
     // reverse speeds for the red alliance, because directions have flipped
     if(DriverStation.getAlliance().get() == Alliance.Red) {
-      xSpeed = -xSpeed;
-      ySpeed = -ySpeed;
+      xSpeed = xSpeed;
+      ySpeed = ySpeed;
     }
     SmartDashboard.putNumber("TARGETINGPOSE/adjustedyspeedAlliance", ySpeed);
     SmartDashboard.putNumber("TARGETINGPOSE/adjustedxspeedAlliance", xSpeed);
@@ -497,7 +497,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     double ySpeed = yMovementSupplier.getAsDouble();
     //reverse speeds for the red alliance, because directions have flipped
     if(DriverStation.getAlliance().get() == Alliance.Red) {
-      xSpeed = -xSpeed;
+      xSpeed = xSpeed;
     }
     //if the elevator is about to be up, limit the speed to 2 meters per second. Otherwise, limit speed to 3.5 meters per second
     if(getPositionTargetingError() < METERS_FROM_POSE_TO_RAISE_ELEVATOR + 0.1) {

@@ -385,7 +385,7 @@ public final class Constants {
     public static final Pose2d ReefJRed = new Pose2d(12.64, 2.78, Rotation2d.fromDegrees(60));
     public static final Pose2d ReefKRed = new Pose2d(13.66, 2.83, Rotation2d.fromDegrees(120));
     public static final Pose2d ReefLRed = new Pose2d(13.89, 3.05, Rotation2d.fromDegrees(120));
-    public static final Pose2d BargePoseRed = new Pose2d(9.878, 0, Rotation2d.fromDegrees(180));
+    public static final Pose2d BargePoseRed = new Pose2d(9.82, 0, Rotation2d.fromDegrees(180));
     public static final Pose2d ProcessorPoseRed = new Pose2d(11.57, 6.89, Rotation2d.fromDegrees(90));
     public static final Pose2d ReefABlue = new Pose2d(3.1157, 4.098, Rotation2d.fromDegrees(0));
     public static final Pose2d ReefBBlue = new Pose2d(3.1625, 3.741, Rotation2d.fromDegrees(0));
@@ -399,7 +399,7 @@ public final class Constants {
     public static final Pose2d ReefJBlue = new Pose2d(4.921, 5.304, Rotation2d.fromDegrees(-120));
     public static final Pose2d ReefKBlue = new Pose2d(3.895, 5.198, Rotation2d.fromDegrees(-60));
     public static final Pose2d ReefLBlue = new Pose2d(3.642, 5.018, Rotation2d.fromDegrees(-60));
-    public static final Pose2d BargePoseBlue = new Pose2d(7.672, 0, Rotation2d.fromDegrees(0));
+    public static final Pose2d BargePoseBlue = new Pose2d(7.77, 0, Rotation2d.fromDegrees(0));
     public static final Pose2d ProcessorPoseBlue = new Pose2d(5.982, 0.531, Rotation2d.fromDegrees(-90));
 
     public static final double BARGE_POSITION_THRESHOLD = 0.02;
