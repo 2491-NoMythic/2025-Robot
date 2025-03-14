@@ -372,7 +372,7 @@ public class RobotContainer {
       ReefHeight3Supplier = buttonBoard::getReefHeight3Button;
       ReefHeight4Supplier = buttonBoard::getReefHeight4Button;
 
-      ProcessorHeightSupplier = buttonBoard::getProcessorHeightButton;
+      ProcessorHeightSupplier = ()->false;
       ForceElevator = ()->false;
       ForceElevatorUp = ()->false;
       ForceElevatorDown = ()->false;

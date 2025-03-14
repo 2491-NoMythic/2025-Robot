@@ -13,9 +13,9 @@ public class ButtonBoard extends GenericHID implements Sendable{
         reefHeight2Button(2),
         reefHeight3Button(3),
         reefHeight4Button(4),
-        processorHeightButton(5),
-        bargeHeightButton(6),
-        forceEjectCoralButton(7),
+        bargeHeightButton(5),
+        forceEjectCoralButton(6),
+        forceEjectAlgaeButton(7),
         leftReefLineupButton(8),
         rightReefLineupButton(9),
         goForAlgaeButton(10),
@@ -44,14 +44,14 @@ public class ButtonBoard extends GenericHID implements Sendable{
     public boolean getReefHeight4Button(){
         return getRawButton(Button.reefHeight4Button.value);
     }
-    public boolean getProcessorHeightButton(){
-        return getRawButton(Button.processorHeightButton.value);
-    }
     public boolean getBargeHeightButton(){
         return getRawButton(Button.bargeHeightButton.value);
     }
     public boolean getForceEjectCoralButton() {
         return getRawButton(Button.forceEjectCoralButton.value);
+    }
+    public boolean getForceEjectAlgaeButton() {
+        return getRawButton(Button.forceEjectAlgaeButton.value);
     }
     public boolean getLeftReefLineupButton(){
         return getRawButton(Button.leftReefLineupButton.value);
@@ -77,9 +77,9 @@ public class ButtonBoard extends GenericHID implements Sendable{
         builder.addBooleanProperty("Reef Height 2 Button", this::getReefHeight2Button, null);
         builder.addBooleanProperty("Reef Height 3 Button", this::getReefHeight3Button, null);
         builder.addBooleanProperty("Reef Height 4 Button", this::getReefHeight4Button, null);
-        builder.addBooleanProperty("Processor Height Button", this::getProcessorHeightButton, null);
         builder.addBooleanProperty("Barge Height Button", this::getBargeHeightButton, null);
         builder.addBooleanProperty("Force Eject Coral Button", this::getForceEjectCoralButton, null);
+        builder.addBooleanProperty("Force Eject Algae Button", this::getForceEjectAlgaeButton, null);
         builder.addBooleanProperty("Left Reef Lineup Button", this::getLeftReefLineupButton, null);
         builder.addBooleanProperty("Right Reef Lineup Button", this::getRightReefLineupButton, null);
         builder.addBooleanProperty("Go For Algae Button", this::getGoForAlgaeButton, null);
