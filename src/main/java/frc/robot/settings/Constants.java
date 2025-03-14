@@ -512,7 +512,7 @@ public final class Constants {
     public static final double HUMAN_PLAYER_STATION_CENTIMETERS = 23.2;//19.1;//31.5;
     public static final double PRAC_HEIGHT_AT_LIMIT_SWITCH = 20;
     public static final double COMP_HEIGHT_AT_LOWER_LIMIT_SWITCH = 20;//before second limit switch was added (and for all of duluth): 16.828;
-    public static final double COMP_HEIGHT_AT_UPPER_LIMIT_SWITCH = 198;
+    public static final double COMP_HEIGHT_AT_UPPER_LIMIT_SWITCH = 197.335;
     public static final double PROCESSOR_HEIGHT_CENTIMETERS = 19;
     public static final double REEF_LEVEL_1_CENTIMETERS = 80;
     public static final double REEF_LEVEL_2_CENTIMETERS = 81.23;

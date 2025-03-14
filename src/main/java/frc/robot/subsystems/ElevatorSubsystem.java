@@ -80,7 +80,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         .withForwardLimitType(ForwardLimitTypeValue.NormallyClosed))
       .withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()
         .withForwardSoftLimitEnable(true)
-        .withForwardSoftLimitThreshold(COMP_HEIGHT_AT_UPPER_LIMIT_SWITCH-2)
+        .withForwardSoftLimitThreshold(COMP_HEIGHT_AT_UPPER_LIMIT_SWITCH-1)
         .withReverseSoftLimitEnable(true)
         .withReverseSoftLimitThreshold(COMP_HEIGHT_AT_LOWER_LIMIT_SWITCH+1));
     if (Preferences.getBoolean("CompBot", true)){
@@ -93,7 +93,6 @@ public class ElevatorSubsystem extends SubsystemBase {
         .withKV(0.014)//0.0075 worked well for 20 cm/s on 3-13 5:27
         .withKS(0.6);
       eleMotorConfig.HardwareLimitSwitch.ReverseLimitAutosetPositionValue = COMP_HEIGHT_AT_LOWER_LIMIT_SWITCH;
-      eleMotorConfig.HardwareLimitSwitch.ForwardLimitAutosetPositionValue = COMP_HEIGHT_AT_UPPER_LIMIT_SWITCH;//199.5;
     } else {
       eleMotorConfig.Slot0 = new Slot0Configs()
         .withKP(0.4)
