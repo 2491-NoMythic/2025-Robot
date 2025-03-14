@@ -512,21 +512,21 @@ public final class Constants {
     public static final double HUMAN_PLAYER_STATION_CENTIMETERS = 23.2;//19.1;//31.5;
     public static final double PRAC_HEIGHT_AT_LIMIT_SWITCH = 20;
     public static final double COMP_HEIGHT_AT_LOWER_LIMIT_SWITCH = 20;//before second limit switch was added (and for all of duluth): 16.828;
-    public static final double COMP_HEIGHT_AT_UPPER_LIMIT_SWITCH = 190.8;
+    public static final double COMP_HEIGHT_AT_UPPER_LIMIT_SWITCH = 198;
     public static final double PROCESSOR_HEIGHT_CENTIMETERS = 19;
     public static final double REEF_LEVEL_1_CENTIMETERS = 80;
     public static final double REEF_LEVEL_2_CENTIMETERS = 81.23;
     public static final double REEF_LEVEL_3_CENTIMETERS = 122.6;
     public static final double REEF_LEVEL_4_CENTIMETERS = 188.7;//182.69;
-    public static final double BARGE_SHOOT_CENTIMETERS = 190;
+    public static final double BARGE_SHOOT_CENTIMETERS = 195;
     public static final double ELEVATOR_THRESHOLD = 1.5;
-    public static final double METERS_FROM_POSE_TO_RAISE_ELEVATOR = 0.2;
+    public static final double METERS_FROM_POSE_TO_RAISE_ELEVATOR = 0.8;
 
     public static final double MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY = 320;
     public static final double MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION = 400;
-    public static final double MOTION_MAGIC_ELEVATOR_VELOCITY = 320;
-    public static final double MOTION_MAGIC_ELEVATOR_ACCLERATION = 640;
-    public static final double MOTION_MAGIC_ELEVATOR_JERK = 0;
+    public static final double MOTION_MAGIC_ELEVATOR_VELOCITY = 300;
+    public static final double MOTION_MAGIC_ELEVATOR_ACCLERATION = 840;
+    public static final double MOTION_MAGIC_ELEVATOR_JERK = 9200;
   }
 
   public final class ClimberConstants{
