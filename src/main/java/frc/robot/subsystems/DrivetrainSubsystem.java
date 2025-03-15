@@ -313,7 +313,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @param chassisSpeeds the desired speed and direction
    */
   public void drive(ChassisSpeeds chassisSpeeds) {
-    if (Preferences.getBoolean("AntiTipActive", false)) {
+    if (Preferences.getBoolean("AntiTipActive", false) && !DriverStation.isTest()) {
       if (pigeon.getRoll().getValueAsDouble() > 3) {
         chassisSpeeds.vxMetersPerSecond = chassisSpeeds.vxMetersPerSecond
             + (pigeon.getRoll().getValueAsDouble()/10);
@@ -329,7 +329,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
             + (-pigeon.getPitch().getValueAsDouble()/10);
       }
     }
-      if (Preferences.getBoolean ("Safe Elevator Driving",false && RobotState.getInstance().elevatorIsHigh)){
+      if (Preferences.getBoolean("Safe Elevator Driving", false) && RobotState.getInstance().elevatorIsHigh){
        chassisSpeeds.vxMetersPerSecond = chassisSpeeds.vxMetersPerSecond / 2; 
        chassisSpeeds.vyMetersPerSecond = chassisSpeeds.vyMetersPerSecond / 2; 
       }

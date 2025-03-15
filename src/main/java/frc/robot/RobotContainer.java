@@ -74,6 +74,7 @@ import frc.robot.commands.PassCoralToEndEffectorSequential;
 import frc.robot.commands.PlaceCoralNoPath;
 import frc.robot.commands.ResetClimber;
 import frc.robot.commands.ShootInBarge;
+import frc.robot.commands.TestDrive;
 import frc.robot.commands.WaitCommand;
 import frc.robot.commands.WaitUntil;
 import frc.robot.subsystems.DistanceSensors;
@@ -928,7 +929,7 @@ public class RobotContainer {
   }
   public void testInit() {
     if(DrivetrainExists) {
-      new Drive(driveTrain, ()->false, ControllerForwardAxisSupplier, ControllerSidewaysAxisSupplier, ControllerZAxisSupplier) {
+      new TestDrive(driveTrain, ()->false, ControllerForwardAxisSupplier, ControllerSidewaysAxisSupplier, ControllerZAxisSupplier) {
         @Override
         public boolean isFinished() {
           return !DriverStation.isTest();
@@ -948,7 +949,6 @@ public class RobotContainer {
   }
 
   public void testPeriodic() {
-    
   }
   public void robotInit(){
     if(lightsExist) {
