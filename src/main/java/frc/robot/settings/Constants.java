@@ -384,7 +384,7 @@ public final class Constants {
     public static final Pose2d ReefIRed = new Pose2d(12.35, 2.91, Rotation2d.fromDegrees(60));
     public static final Pose2d ReefJRed = new Pose2d(12.64, 2.78, Rotation2d.fromDegrees(60));
     public static final Pose2d ReefKRed = new Pose2d(13.66, 2.83, Rotation2d.fromDegrees(120));
-    public static final Pose2d ReefLRed = new Pose2d(13.89, 3.05, Rotation2d.fromDegrees(120));
+    public static final Pose2d ReefLRed = new Pose2d(13.98, 3.05, Rotation2d.fromDegrees(120));
     public static final Pose2d BargePoseRed = new Pose2d(9.82, 0, Rotation2d.fromDegrees(180));
     public static final Pose2d ProcessorPoseRed = new Pose2d(11.57, 6.89, Rotation2d.fromDegrees(90));
     public static final Pose2d ReefABlue = new Pose2d(3.2, 4.098, Rotation2d.fromDegrees(0));
@@ -512,18 +512,20 @@ public final class Constants {
     public static final double HUMAN_PLAYER_STATION_CENTIMETERS = 23.2;//19.1;//31.5;
     public static final double PRAC_HEIGHT_AT_LIMIT_SWITCH = 20;
     public static final double COMP_HEIGHT_AT_LOWER_LIMIT_SWITCH = 20;//before second limit switch was added (and for all of duluth): 16.828;
-    public static final double COMP_HEIGHT_AT_UPPER_LIMIT_SWITCH = 197.335;
+    public static final double COMP_HEIGHT_AT_UPPER_LIMIT_SWITCH = 195.7;
     public static final double PROCESSOR_HEIGHT_CENTIMETERS = 19;
     public static final double REEF_LEVEL_1_CENTIMETERS = 80;
     public static final double REEF_LEVEL_2_CENTIMETERS = 81.23;
     public static final double REEF_LEVEL_3_CENTIMETERS = 122.6;
     public static final double REEF_LEVEL_4_CENTIMETERS = 188.7;//182.69;
-    public static final double BARGE_SHOOT_CENTIMETERS = 195;
+    public static final double BARGE_SHOOT_CENTIMETERS = 194.5;
     public static final double ELEVATOR_THRESHOLD = 1.5;
     public static final double METERS_FROM_POSE_TO_RAISE_ELEVATOR = 0.8;
 
-    public static final double MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY = 320;
-    public static final double MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION = 400;
+    public static final double MOTION_MAGIC_ELEVATOR_HIGH_VELOCITY = 300;
+    public static final double MOTION_MAGIC_ELEVATOR_HIGH_ACCLERATION = 600;
+    public static final double MOTION_MAGIC_ELEVATOR_HP_VELOCITY = 320;
+    public static final double MOTION_MAGIC_ELEVATOR_HP_ACCLERATION = 400;
     public static final double MOTION_MAGIC_ELEVATOR_VELOCITY = 300;
     public static final double MOTION_MAGIC_ELEVATOR_ACCLERATION = 840;
     public static final double MOTION_MAGIC_ELEVATOR_JERK = 9200;
