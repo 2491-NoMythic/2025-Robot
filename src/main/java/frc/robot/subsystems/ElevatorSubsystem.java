@@ -87,7 +87,7 @@ public class ElevatorSubsystem extends SubsystemBase {
       //good values from right before duluth: p: 0.64, d: 0.02, g: 0.8623, a: 0.002, v: 0.01, s: 0.6  
       eleMotorConfig.Slot0 = new Slot0Configs()
         .withKP(0.64)
-        .withKD(0.035)
+        .withKD(0.025)
         .withKG(0.97754)
         .withKA(0.0002)
         .withKV(0.014)//0.0075 worked well for 20 cm/s on 3-13 5:27
