@@ -92,13 +92,16 @@ public class ClimberSubsystem extends SubsystemBase {
   /**
    * Sets climber speed to zero
    */
+  /**
+   * Sets climber speed to zero
+   */
   public void stopClimber(){
     climberMotor1.set(0);
     moveWithPower = false;
     movingPower = 0;
   }
   /**
-   * Sets the climber motor to a given power.
+   * Takes in a double, sets moving power to that value
    * @param power
    */
   public void setClimberPower(double power) {
