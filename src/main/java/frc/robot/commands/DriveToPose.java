@@ -8,12 +8,15 @@ import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.settings.PlacementLocations;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.RobotState;
+
 import static frc.robot.settings.Constants.Field.*;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -161,7 +164,11 @@ public class DriveToPose extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    drivetrain.pointWheelsInward();
+    if(RobotState.getInstance().goForAlgae) {
+      drivetrain.drive(new ChassisSpeeds(0.7, 0, 0));
+    } else {
+      drivetrain.pointWheelsInward();
+    }
     cyclesGood = 0;
   }
 
