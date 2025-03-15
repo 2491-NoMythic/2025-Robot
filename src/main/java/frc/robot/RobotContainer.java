@@ -49,6 +49,7 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AutoAngleAtReef;
@@ -538,7 +539,14 @@ public class RobotContainer {
       };
     };
   
+    InstantCommand zeroGyroscope = new InstantCommand(driveTrain::zeroGyroscope) {
+      public boolean runsWhenDisabled() {
+        return true;
+      };
+    };
+  
     SmartDashboard.putData("set offsets", setOffsets);
+    SmartDashboard.putData("zeroGyroscope", zeroGyroscope);
     SmartDashboard.putData(new InstantCommand(driveTrain::forceUpdateOdometryWithVision));
     if(coralEndeffectorExists&&funnelIntakeExists&&elevatorExists) {
       Command coralIntake = new CoralIntake(elevator, funnelIntake, coralEndDefector);
@@ -765,14 +773,15 @@ public class RobotContainer {
     Command autoBargeShoot;
     if(elevatorExists&&funnelIntakeExists&&coralEndeffectorExists&&algaeEndeffectorExists) {
       //this command will raise the elevator after the coral has been lined up in the end effector, and more than 1 second has passed (s wer are not stlil accelerating)
-      coralHandlingCommand = new SequentialCommandGroup(
-        new ParallelCommandGroup(
-          new WaitCommand(()->1),
-          new SequentialCommandGroup(
-            new CoralIntake(elevator, funnelIntake, coralEndDefector),
-            new PassCoralToEndEffectorSequential(coralEndDefector, funnelIntake))),
-        new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.Reef4), elevator),
-        new WaitUntil(()->elevator.isElevatorAtPose()));
+      coralHandlingCommand = new ParallelRaceGroup(
+        new SequentialCommandGroup(
+          new ParallelCommandGroup(
+            new WaitCommand(()->1),
+            new SequentialCommandGroup(
+              new CoralIntake(elevator, funnelIntake, coralEndDefector),
+              new PassCoralToEndEffectorSequential(coralEndDefector, funnelIntake))),
+          new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.Reef4), elevator),
+          new WaitUntil(()->elevator.isElevatorAtPose())));
       deliverCoralLeft1NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef1, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true,algaeEndDefector, ()-> false);
       deliverCoralLeft2NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef2, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true,algaeEndDefector, ()-> false);
       deliverCoralLeft3NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef3, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true,algaeEndDefector, ()-> false);
@@ -860,6 +869,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("SpitCoral", spitCoralNamedCommand);
     NamedCommands.registerCommand("IntakeAlignAndRaiseCoral", coralHandlingCommand);
     NamedCommands.registerCommand("AutoBargeShoot", autoBargeShoot);
+    NamedCommands.registerCommand("WaitForIntake", new WaitUntilCommand(0.7));
   }
 
   public void logPower() {
