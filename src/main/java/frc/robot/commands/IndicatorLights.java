@@ -74,7 +74,7 @@ public class IndicatorLights extends Command {
     // }
   }
 
-  // Called once the command ends or is interrupted.
+  // Called once the command ends or is interrupted. Turns lights off
   @Override
   public void end(boolean interrupted) {
     lights.lightsOut();
