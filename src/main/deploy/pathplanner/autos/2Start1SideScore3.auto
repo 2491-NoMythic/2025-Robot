@@ -19,6 +19,12 @@
         {
           "type": "named",
           "data": {
+            "name": "PlaceWithLineupLeft"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "SpitCoral"
           }
         },
@@ -62,6 +68,12 @@
         {
           "type": "named",
           "data": {
+            "name": "PlaceWithLineupRight"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "SpitCoral"
           }
         },
@@ -100,6 +112,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PlaceWithLineupLeft"
           }
         },
         {
