@@ -13,6 +13,8 @@ import static frc.robot.settings.Constants.DriveConstants.*;
 import static frc.robot.settings.Constants.ElevatorConstants.HUMAN_PLAYER_STATION_CENTIMETERS;
 import static frc.robot.settings.Constants.ElevatorConstants.METERS_FROM_POSE_TO_RAISE_ELEVATOR;
 import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_ACCLERATION;
+import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_HP_ACCLERATION;
+import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_HP_VELOCITY;
 import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_JERK;
 import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_VELOCITY;
 import static frc.robot.settings.Constants.Field.REEF_POSITION_THRESHOLD;
@@ -109,6 +111,8 @@ import java.util.Map;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
+
+import javax.lang.model.element.ElementKind;
 
 import org.json.simple.parser.ParseException;
 
@@ -594,6 +598,7 @@ public class RobotContainer {
       
       new Trigger(()->CoralPlaceTeleSupplier.getAsBoolean() && RobotState.getInstance().goForAlgae && !(RobotState.getInstance().deliveringCoralHeight==ElevatorEnums.Reef1)).whileTrue(
         new SequentialCommandGroup(
+          new InstantCommand(()->elevator.setElevatorPositionDynamicConfigs(HUMAN_PLAYER_STATION_CENTIMETERS+5, MOTION_MAGIC_ELEVATOR_HP_ACCLERATION, MOTION_MAGIC_ELEVATOR_HP_VELOCITY, MOTION_MAGIC_ELEVATOR_JERK), elevator),
           new DriveToPose(()->selectCommand(()->RobotState.getInstance().deliveringLeft), driveTrain, ()->0),
           new ParallelRaceGroup(
               new AlgaeIntakeCommand(algaeEndDefector, () -> RobotState.getInstance().goForAlgae ? ALGAE_INTAKE_SPEED : -0.5),
@@ -604,7 +609,7 @@ public class RobotContainer {
                   new ParallelRaceGroup(
                       new DeliverCoral(coralEndDefector),//drops coral
                       new WaitCommand(()->0.75)))),
-          new InstantCommand(()->coralEndDefector.stopCoralEndEffector()),
+          new InstantCommand(()->coralEndDefector.stopCoralEndEffector(), coralEndDefector),
           new MoveMeters(driveTrain, -0.5, -0.8, 0, 0),
           new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer), elevator), //sets elevator back to the bottom position
           new InstantCommand(()->RobotState.getInstance().reefLineupRunning = false))
