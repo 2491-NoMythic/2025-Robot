@@ -184,6 +184,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
 		return pigeon.getRotation2d();
 	}
   /**
+   * gets the angle of odometer reading, but adds 180 degrees if we are on red alliance. this is useful for whne using ChassisSpeeds.fromFieldRelativeSpeeds(ChassisSpeeds, getAllianceSpecificRotation())
+   * @return the angle of the robot, if 0 degrees is away from your alliance wall
+   */
+  private Rotation2d getAllianceSpecificRotation() {
+    double angle = DriverStation.getAlliance().get() == Alliance.Blue ? odometer.getEstimatedPosition().getRotation().getDegrees() : odometer.getEstimatedPosition().getRotation().getDegrees() + 180;
+    return Rotation2d.fromDegrees(angle);
+  }
+  /**
    * returns the pitch of the pigeon as a double
    * @return the pitch, returned as a double
    */
@@ -443,7 +451,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @param vy the field relative speed, in meters per second, for the drivetrain to move
    */
   public void moveTowardsRotationTarget(double vx, double vy) {
-    drive(ChassisSpeeds.fromFieldRelativeSpeeds(new ChassisSpeeds(vx, vy, rotationSpeedController.calculate(getPose().getRotation().getDegrees())), getGyroscopeRotation()));
+    drive(ChassisSpeeds.fromFieldRelativeSpeeds(new ChassisSpeeds(vx, vy, rotationSpeedController.calculate(getPose().getRotation().getDegrees())), getAllianceSpecificRotation()));
   }
   /**
    * moves toward a position and rotation using {@link #moveTowardsRotationTarget(double, double)}. The position is set as if 0 degrees is away from
@@ -463,8 +471,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     
     // reverse speeds for the red alliance, because directions have flipped
     if(DriverStation.getAlliance().get() == Alliance.Red) {
-      xSpeed = xSpeed;
-      ySpeed = ySpeed;
+      xSpeed = -xSpeed;
+      ySpeed = -ySpeed;
     }
     SmartDashboard.putNumber("TARGETINGPOSE/adjustedyspeedAlliance", ySpeed);
     SmartDashboard.putNumber("TARGETINGPOSE/adjustedxspeedAlliance", xSpeed);
@@ -497,7 +505,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     double ySpeed = yMovementSupplier.getAsDouble();
     //reverse speeds for the red alliance, because directions have flipped
     if(DriverStation.getAlliance().get() == Alliance.Red) {
-      xSpeed = xSpeed;
+      xSpeed = -xSpeed;
     }
     //if the elevator is about to be up, limit the speed to 2 meters per second. Otherwise, limit speed to 3.5 meters per second
     if(getPositionTargetingError() < METERS_FROM_POSE_TO_RAISE_ELEVATOR + 0.1) {
