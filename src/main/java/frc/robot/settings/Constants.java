@@ -382,9 +382,9 @@ public final class Constants {
     public static final Pose2d ReefGRed = new Pose2d(11.73, 4.09, Rotation2d.fromDegrees(0));
     public static final Pose2d ReefHRed = new Pose2d(11.73, 3.73, Rotation2d.fromDegrees(0));
     public static final Pose2d ReefIRed = new Pose2d(12.35, 2.91, Rotation2d.fromDegrees(60));
-    public static final Pose2d ReefJRed = new Pose2d(12.64, 2.78, Rotation2d.fromDegrees(60));
-    public static final Pose2d ReefKRed = new Pose2d(13.66, 2.83, Rotation2d.fromDegrees(120));
-    public static final Pose2d ReefLRed = new Pose2d(13.98, 3.05, Rotation2d.fromDegrees(120));
+    public static final Pose2d ReefJRed = new Pose2d(12.66, 2.75, Rotation2d.fromDegrees(60));
+    public static final Pose2d ReefKRed = new Pose2d(13.69, 2.92, Rotation2d.fromDegrees(120));
+    public static final Pose2d ReefLRed = new Pose2d(13.98, 3.09, Rotation2d.fromDegrees(120));
     public static final Pose2d BargePoseRed = new Pose2d(9.82, 0, Rotation2d.fromDegrees(180));
     public static final Pose2d ProcessorPoseRed = new Pose2d(11.57, 6.89, Rotation2d.fromDegrees(90));
     public static final Pose2d ReefABlue = new Pose2d(3.2, 4.098, Rotation2d.fromDegrees(0));

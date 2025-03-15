@@ -20,18 +20,20 @@ import frc.robot.commands.DriveToPose;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import frc.robot.commands.NamedCommands.DeliverCoral;
+import frc.robot.settings.ElevatorEnums;
 import frc.robot.settings.PlacementLocations;
 import frc.robot.commands.WaitUntil;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import frc.robot.subsystems.RobotState;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.DriverStation;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class PlaceCoralDuringLineupSequential extends SequentialCommandGroup {
   /** Creates a new PlaceCoralDuringLineupSequential. */
-  public PlaceCoralDuringLineupSequential(AlgaeEndeffectorSubsystem algaeEndDefector, DrivetrainSubsystem driveTrain, ElevatorSubsystem elevator, CoralEndeffectorSubsystem coralEndDefector, Supplier<PlacementLocations> placementSupplier) {
+  public PlaceCoralDuringLineupSequential(AlgaeEndeffectorSubsystem algaeEndDefector, DrivetrainSubsystem driveTrain, ElevatorSubsystem elevator, CoralEndeffectorSubsystem coralEndDefector, Supplier<PlacementLocations> placementSupplier, Supplier<ElevatorEnums> heightSupplier) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
@@ -41,8 +43,8 @@ public class PlaceCoralDuringLineupSequential extends SequentialCommandGroup {
         new SequentialCommandGroup(
           new WaitCommand(0.1),
           new WaitUntil(()->driveTrain.getPositionTargetingError() < METERS_FROM_POSE_TO_RAISE_ELEVATOR),
-          new InstantCommand(()->elevator.setElevatorPosition(()->RobotState.getInstance().deliveringCoralHeight), elevator),
-          new WaitUntil(()->driveTrain.getPositionTargetingError() < REEF_POSITION_THRESHOLD && elevator.isElevatorAtPose()),
+          new InstantCommand(()->elevator.setElevatorPosition(heightSupplier), elevator),
+          new WaitUntil(()-> (DriverStation.isAutonomous() ? driveTrain.getPositionTargetingError() < 0.02 : driveTrain.getPositionTargetingError() < REEF_POSITION_THRESHOLD) && elevator.isElevatorAtPose()),
           new ParallelRaceGroup(
             new DeliverCoral(coralEndDefector),//drops coral
             new WaitCommand(0.75))),

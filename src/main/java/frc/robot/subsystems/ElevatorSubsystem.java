@@ -191,13 +191,13 @@ public class ElevatorSubsystem extends SubsystemBase {
         }
         break;
       case Reef4:
-        setElevatorPosition(REEF_LEVEL_4_CENTIMETERS);;
+        setElevatorPositionDynamicConfigs(REEF_LEVEL_4_CENTIMETERS, MOTION_MAGIC_ELEVATOR_HIGH_ACCLERATION, MOTION_MAGIC_ELEVATOR_HIGH_VELOCITY, MOTION_MAGIC_ELEVATOR_JERK);
         if(isElevatorAtPose()){
           RobotState.getInstance().elevatorIsHigh = true;
         }
         break;
       case HumanPlayer:
-        setElevatorPosition(HUMAN_PLAYER_STATION_CENTIMETERS);
+        setElevatorPositionDynamicConfigs(HUMAN_PLAYER_STATION_CENTIMETERS, MOTION_MAGIC_ELEVATOR_HP_ACCLERATION, MOTION_MAGIC_ELEVATOR_HP_VELOCITY, MOTION_MAGIC_ELEVATOR_JERK);
         if(isElevatorAtPose()){
           RobotState.getInstance().elevatorIsHigh = false;
         }
@@ -213,7 +213,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         setElevatorPosition(PROCESSOR_HEIGHT_CENTIMETERS);
         break;
       case Barge:
-        setElevatorPositionDynamicConfigs(BARGE_SHOOT_CENTIMETERS, MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION, MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY, MOTION_MAGIC_ELEVATOR_JERK);
+        setElevatorPositionDynamicConfigs(BARGE_SHOOT_CENTIMETERS, MOTION_MAGIC_ELEVATOR_HIGH_ACCLERATION, MOTION_MAGIC_ELEVATOR_HIGH_VELOCITY, MOTION_MAGIC_ELEVATOR_JERK);
         break;
     }
   }
@@ -268,7 +268,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         setElevatorPosition(PROCESSOR_HEIGHT_CENTIMETERS);
         break;
       case Barge:
-        setElevatorPositionDynamicConfigs(BARGE_SHOOT_CENTIMETERS, MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION, MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY, 0);
+        setElevatorPositionDynamicConfigs(BARGE_SHOOT_CENTIMETERS, MOTION_MAGIC_ELEVATOR_HIGH_ACCLERATION, MOTION_MAGIC_ELEVATOR_HIGH_VELOCITY, 0);
         break;
     }
   }

@@ -5,8 +5,6 @@
 package frc.robot.commands;
 
 import static frc.robot.settings.Constants.ElevatorConstants.HUMAN_PLAYER_STATION_CENTIMETERS;
-import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION;
-import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY;
 
 import java.util.function.Supplier;
 

@@ -6,8 +6,6 @@ package frc.robot.commands.NamedCommands;
 
 import static frc.robot.settings.Constants.CoralEndeffectorConstants.CORAL_ENDEFFECTOR_SPEED;
 import static frc.robot.settings.Constants.ElevatorConstants.HUMAN_PLAYER_STATION_CENTIMETERS;
-import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION;
-import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY;
 import static frc.robot.settings.Constants.FunnelConstants.FUNNEL_INTAKE_SPEED;
 
 import frc.robot.subsystems.RobotState;
