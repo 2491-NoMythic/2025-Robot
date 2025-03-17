@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.2000972031292045,
-        "y": 6.781921173240559
+        "x": 0.6473360655737701,
+        "y": 6.704252049180327
       },
       "isLocked": false,
       "linkedName": "BargeSideTopFeeder"
@@ -20,8 +20,8 @@
         "y": 5.57525
       },
       "prevControl": {
-        "x": 1.7625658396602595,
-        "y": 7.375168100336857
+        "x": 2.1577868852459012,
+        "y": 6.4764856557377035
       },
       "nextControl": null,
       "isLocked": false,
@@ -47,7 +47,7 @@
   "reversed": false,
   "folder": null,
   "idealStartingState": {
-    "velocity": 0,
+    "velocity": 0.25,
     "rotation": -54.0
   },
   "useDefaultConstraints": true

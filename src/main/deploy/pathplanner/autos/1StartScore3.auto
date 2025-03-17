@@ -19,7 +19,7 @@
         {
           "type": "named",
           "data": {
-            "name": "PlaceWithLineupRight"
+            "name": "PlaceWithLineupRightL4"
           }
         },
         {
@@ -32,12 +32,6 @@
           "type": "path",
           "data": {
             "pathName": "BargeSidePickup"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "WaitForIntake"
           }
         },
         {
@@ -62,7 +56,7 @@
         {
           "type": "named",
           "data": {
-            "name": "PlaceWithLineupLeft"
+            "name": "PlaceWithLineupLeftL4"
           }
         },
         {
@@ -75,12 +69,6 @@
           "type": "path",
           "data": {
             "pathName": "ReefKtoBargeSideTopFeeder"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "WaitForIntake"
           }
         },
         {
@@ -105,13 +93,44 @@
         {
           "type": "named",
           "data": {
-            "name": "PlaceWithLineupRight"
+            "name": "PlaceWithLineupRightL4"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "SpitCoral"
+            "name": "ElevatorReset"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ReefLtoBargeSideTopFeeder"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "BargeSideToptoReefL"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeAlignAndRaiseCoral"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PlaceWithLineupRightL3"
           }
         },
         {

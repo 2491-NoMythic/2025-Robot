@@ -774,12 +774,16 @@ public class RobotContainer {
     Command spitCoralNamedCommand;
     Command coralHandlingCommand;
     Command autoBargeShoot;
-    Command placeWithLineupRight;
-    Command placeWithLineupLeft;
+    Command placeWithLineupRightL4;
+    Command placeWithLineupRightL3;
+    Command placeWithLineupLeftL4;
+    Command placeWithLineupLeftL3;
     if(elevatorExists&&funnelIntakeExists&&coralEndeffectorExists&&algaeEndeffectorExists) {
       //this command will raise the elevator after the coral has been lined up in the end effector, and more than 1 second has passed (s wer are not stlil accelerating)
-      placeWithLineupRight = new PlaceCoralDuringLineupSequential(algaeEndDefector, driveTrain, elevator, coralEndDefector, ()-> selectCommand(()-> false), ()->ElevatorEnums.Reef4);
-      placeWithLineupLeft = new PlaceCoralDuringLineupSequential(algaeEndDefector, driveTrain, elevator, coralEndDefector, ()-> selectCommand(()-> true), ()->ElevatorEnums.Reef4);
+      placeWithLineupRightL4 = new PlaceCoralDuringLineupSequential(algaeEndDefector, driveTrain, elevator, coralEndDefector, ()-> selectCommand(()-> false), ()->ElevatorEnums.Reef4);
+      placeWithLineupLeftL4 = new PlaceCoralDuringLineupSequential(algaeEndDefector, driveTrain, elevator, coralEndDefector, ()-> selectCommand(()-> true), ()->ElevatorEnums.Reef4);
+      placeWithLineupRightL3 = new PlaceCoralDuringLineupSequential(algaeEndDefector, driveTrain, elevator, coralEndDefector, ()-> selectCommand(()-> false), ()->ElevatorEnums.Reef3);
+      placeWithLineupLeftL3 = new PlaceCoralDuringLineupSequential(algaeEndDefector, driveTrain, elevator, coralEndDefector, ()-> selectCommand(()-> true), ()->ElevatorEnums.Reef3);
       coralHandlingCommand = new ParallelRaceGroup(
         new SequentialCommandGroup(
           new ParallelCommandGroup(
@@ -823,8 +827,10 @@ public class RobotContainer {
       deliverCoralRight2NamedCommandWithAlgae = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
       deliverCoralRight3NamedCommandWithAlgae = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
       deliverCoralRight4NamedCommandWithAlgae = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
-      placeWithLineupRight = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
-      placeWithLineupLeft = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
+      placeWithLineupRightL4 = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
+      placeWithLineupLeftL4 = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
+      placeWithLineupRightL3 = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
+      placeWithLineupLeftL3 = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
       autoBargeShoot = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
     }
 
@@ -877,8 +883,10 @@ public class RobotContainer {
     NamedCommands.registerCommand("SpitCoral", spitCoralNamedCommand);
     NamedCommands.registerCommand("IntakeAlignAndRaiseCoral", coralHandlingCommand);
     NamedCommands.registerCommand("AutoBargeShoot", autoBargeShoot);
-    NamedCommands.registerCommand("PlaceWithLineupRight", placeWithLineupRight);
-    NamedCommands.registerCommand("PlaceWithLineupLeft", placeWithLineupLeft);
+    NamedCommands.registerCommand("PlaceWithLineupRightL4", placeWithLineupRightL4);
+    NamedCommands.registerCommand("PlaceWithLineupLeftL4", placeWithLineupLeftL4);
+    NamedCommands.registerCommand("PlaceWithLineupRightL3", placeWithLineupRightL3);
+    NamedCommands.registerCommand("PlaceWithLineupLeftL3", placeWithLineupLeftL3);
     NamedCommands.registerCommand("WaitForIntake", new WaitUntilCommand(0.7));
   }
 

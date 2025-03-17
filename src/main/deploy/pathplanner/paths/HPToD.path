@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.71793386908095,
-        "y": 1.6871970159964027
+        "x": 0.6233606557377052,
+        "y": 1.741342213114755
       },
       "isLocked": false,
       "linkedName": "humanPlayerProcessor"
@@ -20,8 +20,8 @@
         "y": 2.2407499999999994
       },
       "prevControl": {
-        "x": 2.1346632981295897,
-        "y": 1.029111862122768
+        "x": 2.697233606557377,
+        "y": 1.7053790983606554
       },
       "nextControl": null,
       "isLocked": false,
@@ -41,13 +41,13 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
+    "velocity": 1.5,
     "rotation": 59.99999999999999
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
-    "velocity": 0,
+    "velocity": 0.5,
     "rotation": 52.431407971172504
   },
   "useDefaultConstraints": true

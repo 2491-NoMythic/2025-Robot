@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3883068181818183,
-        "y": 1.6967443181818171
+        "x": 0.5873975409836064,
+        "y": 1.5855020491803269
       },
       "isLocked": false,
       "linkedName": "humanPlayerProcessor"
@@ -41,13 +41,13 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
+    "velocity": 1.5,
     "rotation": 59.99999999999999
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
-    "velocity": 0,
+    "velocity": 0.25,
     "rotation": 52.431407971172504
   },
   "useDefaultConstraints": true

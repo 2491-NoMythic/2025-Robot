@@ -19,13 +19,7 @@
         {
           "type": "named",
           "data": {
-            "name": "PlaceWithLineupRight"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "SpitCoral"
+            "name": "PlaceWithLineupRightL4"
           }
         },
         {
@@ -38,12 +32,6 @@
           "type": "path",
           "data": {
             "pathName": "reefFToHP"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "WaitForIntake"
           }
         },
         {
@@ -68,13 +56,7 @@
         {
           "type": "named",
           "data": {
-            "name": "PlaceWithLineupRight"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "SpitCoral"
+            "name": "PlaceWithLineupRightL4"
           }
         },
         {
@@ -87,12 +69,6 @@
           "type": "path",
           "data": {
             "pathName": "reefDToHP"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "WaitForIntake"
           }
         },
         {
@@ -117,13 +93,44 @@
         {
           "type": "named",
           "data": {
-            "name": "PlaceWithLineupLeft"
+            "name": "PlaceWithLineupLeftL4"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "SpitCoral"
+            "name": "ElevatorReset"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "reefCToHP"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "HPToC"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeAlignAndRaiseCoral"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PlaceWithLineupLeftL3"
           }
         },
         {
