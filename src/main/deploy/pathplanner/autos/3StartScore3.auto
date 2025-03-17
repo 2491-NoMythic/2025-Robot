@@ -31,7 +31,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "reefFToHP"
+            "pathName": "reefFToHPSlower"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForIntake"
           }
         },
         {
@@ -41,7 +47,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "HPToD"
+                  "pathName": "Copy of HPToD"
                 }
               },
               {
@@ -68,7 +74,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "reefDToHP"
+            "pathName": "reefDToHPSlower"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForIntake"
           }
         },
         {
@@ -78,7 +90,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "HPToC"
+                  "pathName": "Copy of HPToC"
                 }
               },
               {
@@ -94,43 +106,6 @@
           "type": "named",
           "data": {
             "name": "PlaceWithLineupLeftL4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ElevatorReset"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "reefCToHP"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "HPToC"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "IntakeAlignAndRaiseCoral"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "PlaceWithLineupLeftL3"
           }
         },
         {

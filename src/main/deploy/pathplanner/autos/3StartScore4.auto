@@ -13,13 +13,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "BargeStartToJ"
+            "pathName": "processorStartToF"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "PlaceWithLineupRight"
+            "name": "PlaceWithLineupRightL4"
           }
         },
         {
@@ -31,13 +31,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "BargeSidePickup"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "WaitForIntake"
+            "pathName": "reefFToHPFaster"
           }
         },
         {
@@ -47,7 +41,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "BargeSideTopToReefK"
+                  "pathName": "HPToDFaster"
                 }
               },
               {
@@ -62,7 +56,7 @@
         {
           "type": "named",
           "data": {
-            "name": "PlaceWithLineupLeft"
+            "name": "PlaceWithLineupRightL4"
           }
         },
         {
@@ -74,13 +68,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "ReefKtoBargeSideTopFeeder"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "WaitForIntake"
+            "pathName": "reefDToHPFaster"
           }
         },
         {
@@ -90,7 +78,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "BargeSideToptoReefL"
+                  "pathName": "HPToCFaster"
                 }
               },
               {
@@ -105,13 +93,44 @@
         {
           "type": "named",
           "data": {
-            "name": "PlaceWithLineupRight"
+            "name": "PlaceWithLineupLeftL4"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "SpitCoral"
+            "name": "ElevatorReset"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "reefCToHPFaster"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "HPToCFaster"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeAlignAndRaiseCoral"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PlaceWithLineupLeftL3"
           }
         },
         {
@@ -123,7 +142,7 @@
       ]
     }
   },
-  "resetOdom": true,
+  "resetOdom": false,
   "folder": null,
   "choreoAuto": false
 }

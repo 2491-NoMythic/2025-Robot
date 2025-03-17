@@ -31,7 +31,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "BargeSidePickup"
+            "pathName": "BargeSidePickupSlower"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForIntake"
           }
         },
         {
@@ -41,7 +47,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "BargeSideTopToReefK"
+                  "pathName": "BargeSideTopToReefKSlower"
                 }
               },
               {
@@ -68,7 +74,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "ReefKtoBargeSideTopFeeder"
+            "pathName": "ReefKtoBargeSideTopFeederSlower"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForIntake"
           }
         },
         {
@@ -78,7 +90,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "BargeSideToptoReefL"
+                  "pathName": "BargeSideToptoReefLSlower"
                 }
               },
               {
@@ -99,38 +111,7 @@
         {
           "type": "named",
           "data": {
-            "name": "ElevatorReset"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "ReefLtoBargeSideTopFeeder"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "BargeSideToptoReefL"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "IntakeAlignAndRaiseCoral"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "PlaceWithLineupRightL3"
+            "name": "SpitCoral"
           }
         },
         {
