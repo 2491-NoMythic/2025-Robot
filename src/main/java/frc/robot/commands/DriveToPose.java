@@ -153,7 +153,7 @@ public class DriveToPose extends Command {
     } else {
       drivetrain.moveTowardsPose(targetPose);
     }
-    if(drivetrain.getPositionTargetingError() < 0.012) {
+    if(drivetrain.getPositionTargetingError() < 0.015) {
       cyclesGood++;
     } else {
       cyclesGood = 0;

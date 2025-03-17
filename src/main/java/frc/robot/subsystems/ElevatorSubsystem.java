@@ -176,22 +176,22 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void setElevatorPosition(ElevatorEnums height){
     switch(height){
       case Reef1:
-        setElevatorPosition(REEF_LEVEL_1_CENTIMETERS);
+        setElevatorPosition(REEF_LEVEL_1_CENTIMETERS_AWAY_FROM_REEF);
         break;
       case Reef2:
-        setElevatorPosition(REEF_LEVEL_2_CENTIMETERS);
+        setElevatorPosition(REEF_LEVEL_2_CENTIMETERS_AWAY_FROM_REEF);
         if(isElevatorAtPose()){
           RobotState.getInstance().elevatorIsHigh = true;
         }
         break;
       case Reef3:
-        setElevatorPosition(REEF_LEVEL_3_CENTIMETERS);
+        setElevatorPosition(REEF_LEVEL_3_CENTIMETERS_AWAY_FROM_REEF);
         if(isElevatorAtPose()){
           RobotState.getInstance().elevatorIsHigh = true;
         }
         break;
       case Reef4:
-        setElevatorPositionDynamicConfigs(REEF_LEVEL_4_CENTIMETERS, MOTION_MAGIC_ELEVATOR_HIGH_ACCLERATION, MOTION_MAGIC_ELEVATOR_HIGH_VELOCITY, MOTION_MAGIC_ELEVATOR_JERK);
+        setElevatorPositionDynamicConfigs(REEF_LEVEL_4_CENTIMETERS_AWAY_FROM_REEF, MOTION_MAGIC_ELEVATOR_HIGH_ACCLERATION, MOTION_MAGIC_ELEVATOR_HIGH_VELOCITY, MOTION_MAGIC_ELEVATOR_JERK);
         if(isElevatorAtPose()){
           RobotState.getInstance().elevatorIsHigh = true;
         }
@@ -231,22 +231,22 @@ public class ElevatorSubsystem extends SubsystemBase {
     final double algaeVelocity = 200;
     switch(height){
       case Reef1:
-      setElevatorPositionDynamicConfigs(REEF_LEVEL_1_CENTIMETERS, algaeAcceleration, algaeVelocity, 0);
+      setElevatorPositionDynamicConfigs(REEF_LEVEL_1_CENTIMETERS_AGAINST_REEF, algaeAcceleration, algaeVelocity, 0);
         break;
       case Reef2:
-      setElevatorPositionDynamicConfigs(REEF_LEVEL_2_CENTIMETERS, algaeAcceleration, algaeVelocity, 0);
+      setElevatorPositionDynamicConfigs(REEF_LEVEL_2_CENTIMETERS_AGAINST_REEF, algaeAcceleration, algaeVelocity, 0);
         if(isElevatorAtPose()){
           RobotState.getInstance().elevatorIsHigh = true;
         }
         break;
       case Reef3:
-      setElevatorPositionDynamicConfigs(REEF_LEVEL_3_CENTIMETERS, algaeAcceleration, algaeVelocity, 0);
+      setElevatorPositionDynamicConfigs(REEF_LEVEL_3_CENTIMETERS_AGAINST_REEF, algaeAcceleration, algaeVelocity, 0);
         if(isElevatorAtPose()){
           RobotState.getInstance().elevatorIsHigh = true;
         }
         break;
       case Reef4:
-        setElevatorPositionDynamicConfigs(REEF_LEVEL_4_CENTIMETERS, algaeAcceleration, algaeVelocity, 0);
+        setElevatorPositionDynamicConfigs(REEF_LEVEL_4_CENTIMETERS_AGAINST_REEF, algaeAcceleration, algaeVelocity, 0);
         if(isElevatorAtPose()){
           RobotState.getInstance().elevatorIsHigh = true;
         }
