@@ -538,6 +538,14 @@ public final class Constants {
     public static final double CLIMBER_CLIMBED_ANGLE = 100;
     public static final double CLIMBER_NOT_CLIMBED_ANGLE = 0;
 
+    public static final double CLIMBER_RACHET_TRUE = 2491;
+    public static final double CLIMBER_RACHET_FALSE = 2491;
+
+    public static final double CLIMBER_POWER_FORWARD = 2491;
+    public static final double CLIMBER_POWER_REVERSE = 2491;
+
+    public static final int SERVO_CHANNEL = 2491;
+
     public static final TalonFXConfiguration ClimberMotorConfigComp = new TalonFXConfiguration()
     .withSlot0(new Slot0Configs()
       .withKP(1)

@@ -53,6 +53,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AutoAngleAtReef;
 import frc.robot.commands.ClimberCommand;
+import frc.robot.commands.ClimberCommandGroup;
 import frc.robot.commands.DepositAlgae;
 import frc.robot.commands.DepositAlgaeSequential;
 import frc.robot.settings.Constants.AlgaeEndeffectorConstants;
@@ -208,6 +209,8 @@ public class RobotContainer {
   BooleanSupplier funnelRotatorSupplier;
   BooleanSupplier climberResetSupplier;
   BooleanSupplier inEndgameSupplier;
+  BooleanSupplier climberGroupForward;
+  BooleanSupplier climberGroupReverse;
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
@@ -337,6 +340,8 @@ public class RobotContainer {
       ClimbCommandSupplier = ()->false;//operatorControllerXbox.getRightStickButton();
       ClimbModeAuthorizer = ()->false;//operatorControllerXbox::getRightStickButton;
       climberResetSupplier = ()->false;//operatorControllerXbox::getLeftStickButton;
+      climberGroupForward = ()-> operatorControllerXbox.getLeftStickButton();
+      climberGroupReverse = ()-> operatorControllerXbox.getRightStickButton();
     } else if (OCTEnum == ControllerEnums.PS4Controller){
       //Controller IDs
       operatorControllerPS4 = new PS4Controller(OPERATOR_CONTROLLER_ID);
@@ -358,8 +363,10 @@ public class RobotContainer {
       ForceElevatorUp = ()->operatorControllerPS4.getRawAxis(1) < -0.5;
       ForceElevatorDown = ()->operatorControllerPS4.getRawAxis(1) > 0.5;
       ClimbCommandSupplier = operatorControllerPS4::getSquareButton;
-      ClimbModeAuthorizer = operatorControllerPS4::getR3Button;
-      climberResetSupplier = operatorControllerPS4::getL3Button;
+      //ClimbModeAuthorizer = operatorControllerPS4::getR3Button;
+      //climberResetSupplier = operatorControllerPS4::getL3Button;
+      climberGroupForward = ()-> operatorControllerPS4.getL3Button();
+      climberGroupReverse = ()-> operatorControllerPS4.getR3Button();
     } else if (OCTEnum == ControllerEnums.ButtonBoard){
       buttonBoard = new ButtonBoard(OPERATOR_CONTROLLER_ID);
       //These are not sorted based on manual or automatic, but rather location on the physical board. 
@@ -555,6 +562,8 @@ public class RobotContainer {
     }
     if (climberExists){
       new Trigger(ClimbCommandSupplier).whileTrue(new ClimberCommand(climber));
+      new Trigger(climberGroupForward).whileTrue(new ClimberCommandGroup(climber, true));
+      new Trigger(climberGroupReverse).whileTrue(new ClimberCommandGroup(climber, false));
       new Trigger(ClimbCommandSupplier).onTrue(new InstantCommand(()->elevator.setVoltage(0), elevator));
       new Trigger(climberResetSupplier).onTrue(new InstantCommand(()->climber.setClimberPower(-0.7), climber)).onFalse(new InstantCommand(()->climber.stopClimber(), climber));
     }
