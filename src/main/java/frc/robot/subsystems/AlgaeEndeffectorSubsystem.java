@@ -4,8 +4,14 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.configs.TalonFXSConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.hardware.TalonFXS;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -17,6 +23,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
+import frc.robot.commands.AlgaeIntakeCommand;
 import frc.robot.helpers.MotorLogger;
 
 import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.*;
@@ -29,7 +36,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class AlgaeEndeffectorSubsystem extends SubsystemBase {
   TalonFXS algaeEndeffectorMotor;
   // SparkBaseConfig algaeConfig1;
-  SparkBaseConfig algaeConfig;
+  TalonFXSConfiguration algaeConfig;
   PIDController algendController;
   MotorLogger motorLogger1;
   // MotorLogger motorLogger2;
@@ -43,42 +50,10 @@ public class AlgaeEndeffectorSubsystem extends SubsystemBase {
     // motorLogger2 = new MotorLogger("/algaeEndEffector/motor2");
 
     // algaeConfig1 = new SparkMaxConfig();
-    algaeConfig = new SparkMaxConfig();
-
-    //applying PID settings based on if we are using the CompBot or the PracticeBot
-    if(Preferences.getBoolean("CompBot", true)) {
-      // algaeConfig1.apply(new ClosedLoopConfig().pidf(
-      //   ALGAE_ENDEFFECTOR_KP_1,
-      //   ALGAE_ENDEFFECTOR_KI_1,
-      //   ALGAE_ENDEFFECTOR_KD_1,
-      //   ALGAE_ENDEFFECTOR_KFF_1));
-      algaeConfig.apply(new ClosedLoopConfig().pidf(
-        ALGAE_ENDEFFECTOR_KP_2,
-        ALGAE_ENDEFFECTOR_KI_2,
-        ALGAE_ENDEFFECTOR_KD_2,
-        ALGAE_ENDEFFECTOR_KFF_2));}
-    else{
-      // algaeConfig1.apply(new ClosedLoopConfig().pidf(
-      //   ALGAE_ENDEFFECTOR_KP_1_PRACTICE,
-      //   ALGAE_ENDEFFECTOR_KI_1_PRACTICE,
-      //   ALGAE_ENDEFFECTOR_KD_1_PRACTICE,
-      //   ALGAE_ENDEFFECTOR_KFF_1_PRACTICE));
-      algaeConfig.apply(new ClosedLoopConfig().pidf(
-        ALGAE_ENDEFFECTOR_KP_2_PRACTICE,
-        ALGAE_ENDEFFECTOR_KI_2_PRACTICE,
-        ALGAE_ENDEFFECTOR_KD_2_PRACTICE,          
-        ALGAE_ENDEFFECTOR_KFF_2_PRACTICE));}
-
-    // algaeConfig1.idleMode(IdleMode.kBrake);
-    // algaeConfig1.inverted(true);
-    // algaeConfig1.smartCurrentLimit(ALGAE_ENDEFFECTOR_CURRENT_LIMIT, ALGAE_ENDEFFECTOR_CURRENT_LIMIT, 1000);
-    
-    algaeConfig.idleMode(IdleMode.kBrake);
-    algaeConfig.inverted(true);
-    algaeConfig.smartCurrentLimit(ALGAE_ENDEFFECTOR_CURRENT_LIMIT, ALGAE_ENDEFFECTOR_CURRENT_LIMIT, 1000);
-    // algaeConfig2.follow(algaeEndeffectorMotor1);
-    // algaeEndeffectorMotor2.configure(algaeConfig2, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    
+    algaeConfig = new TalonFXSConfiguration();
+    algaeConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    algaeConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    algaeEndeffectorMotor.getConfigurator().apply(algaeConfig);
     powerSpike = false;
   }
   /**
@@ -99,7 +74,7 @@ public class AlgaeEndeffectorSubsystem extends SubsystemBase {
    * stops the algae end effector motor by setting speed to 0, with brake mode enabled
    */
   public void stopAlgaeEndDefectorHard(){
-    algaeEndeffectorMotor.set(0.1);
+    algaeEndeffectorMotor.set(0);
   }
   /**
    * stop the algae end effector motor be setting voltage to 0, letting it coast out
