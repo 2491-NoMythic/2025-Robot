@@ -1,6 +1,7 @@
 package frc.robot.helpers;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.hardware.TalonFXS;
 import com.ctre.phoenix6.swerve.SwerveModule;
 import com.revrobotics.spark.SparkMax;
 
@@ -53,6 +54,13 @@ public class MotorLogger {
     // voltage.append(motor.getMotorVoltage().getValueAsDouble());
     // velocity.append(motor.getVelocity().getValueAsDouble());
 
+    currentEntry.setDouble(motor.getStatorCurrent().getValueAsDouble());
+    voltageEntry.setDouble(motor.getMotorVoltage().getValueAsDouble());
+    velocityEntry.setDouble(motor.getVelocity().getValueAsDouble());
+    temperatureEntry.setDouble(motor.getDeviceTemp().getValueAsDouble());
+  }
+  public void log(TalonFXS motor) {
+    
     currentEntry.setDouble(motor.getStatorCurrent().getValueAsDouble());
     voltageEntry.setDouble(motor.getMotorVoltage().getValueAsDouble());
     velocityEntry.setDouble(motor.getVelocity().getValueAsDouble());
