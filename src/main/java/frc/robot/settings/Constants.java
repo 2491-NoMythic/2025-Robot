@@ -454,8 +454,7 @@ public final class Constants {
   }
 
   public final class AlgaeEndeffectorConstants{
-    public static final int ALGAE_ENDEFFECTOR_MOTOR_1_ID = 23;
-    public static final int ALGAE_ENDEFFECTOR_MOTOR_2_ID = 25;
+    public static final int ALGAE_ENDEFFECTOR_MOTOR_ID = 23;
     
     public static final int ALGAE_ENDEFFECTOR_CURRENT_LIMIT = 25;
     public static final double ALGAE_INTAKE_SPEED = 1;

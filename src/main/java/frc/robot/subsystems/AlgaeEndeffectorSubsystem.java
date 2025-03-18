@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.hardware.TalonFXS;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -26,7 +27,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class AlgaeEndeffectorSubsystem extends SubsystemBase {
-  SparkMax algaeEndeffectorMotor;
+  TalonFXS algaeEndeffectorMotor;
   // SparkBaseConfig algaeConfig1;
   SparkBaseConfig algaeConfig;
   PIDController algendController;
@@ -36,8 +37,7 @@ public class AlgaeEndeffectorSubsystem extends SubsystemBase {
   public boolean powerSpike;
   /** Creates a new AlgaeEndDefectorSubsystem. */
   public AlgaeEndeffectorSubsystem() {
-    algaeEndeffectorMotor = new SparkMax(ALGAE_ENDEFFECTOR_MOTOR_2_ID, MotorType.kBrushless);
-    // algaeEndeffectorMotor2 = new SparkMax(ALGAE_ENDEFFECTOR_MOTOR_2_ID, MotorType.kBrushless);
+    algaeEndeffectorMotor = new TalonFXS(ALGAE_ENDEFFECTOR_MOTOR_ID);
 
     motorLogger1 = new MotorLogger("/algaeEndEffector/motor1");
     // motorLogger2 = new MotorLogger("/algaeEndEffector/motor2");
@@ -79,9 +79,7 @@ public class AlgaeEndeffectorSubsystem extends SubsystemBase {
     // algaeConfig2.follow(algaeEndeffectorMotor1);
     // algaeEndeffectorMotor2.configure(algaeConfig2, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     
-    algaeEndeffectorMotor.configure(algaeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     powerSpike = false;
-
   }
   /**
    * Runs the AlgaeEndEffector at a speed from -1 to 1
@@ -110,7 +108,7 @@ public class AlgaeEndeffectorSubsystem extends SubsystemBase {
     algaeEndeffectorMotor.setVoltage(0);
   }
 
-  public SparkMax getMotor(){
+  public TalonFXS getMotor(){
     return algaeEndeffectorMotor;
   }
   /**
@@ -118,9 +116,9 @@ public class AlgaeEndeffectorSubsystem extends SubsystemBase {
    */
   public void powerCheck(){
 
-    SmartDashboard.putNumber("AlgaeMotorCurrent",algaeEndeffectorMotor.getOutputCurrent());
+    SmartDashboard.putNumber("AlgaeMotorCurrent",algaeEndeffectorMotor.getStatorCurrent().getValueAsDouble());
     //if we are at 80%+ percent of the current limit, assume it's becuse we have an algae
-    if(algaeEndeffectorMotor.getOutputCurrent()>ALGAE_ENDEFFECTOR_CURRENT_LIMIT*0.95){ 
+    if(algaeEndeffectorMotor.getStatorCurrent().getValueAsDouble()>ALGAE_ENDEFFECTOR_CURRENT_LIMIT*0.95){ 
       loops++;
       if(loops > 10){
         RobotState.getInstance().hasAlgae = true;
