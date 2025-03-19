@@ -47,7 +47,7 @@ public class PlaceCoralDuringLineupSequential extends SequentialCommandGroup {
           new WaitUntil(()-> (DriverStation.isAutonomous() ? driveTrain.getPositionTargetingError() < 0.02 : driveTrain.getPositionTargetingError() < REEF_POSITION_THRESHOLD) && elevator.isElevatorAtPose()),
           new ParallelRaceGroup(
             new DeliverCoral(coralEndDefector),//drops coral
-            new WaitCommand(0.75))),
+            new WaitCommand(0.15))),
         new SequentialCommandGroup(
           new DriveToPose(placementSupplier, driveTrain, ()->0),
           new InstantCommand(()->driveTrain.drive(new ChassisSpeeds(0, 0, 0)))))

@@ -787,7 +787,6 @@ public class RobotContainer {
       coralHandlingCommand = new ParallelRaceGroup(
         new SequentialCommandGroup(
           new ParallelCommandGroup(
-            new WaitCommand(()->1),
             new SequentialCommandGroup(
               new CoralIntake(elevator, funnelIntake, coralEndDefector),
               new PassCoralToEndEffectorSequential(coralEndDefector, funnelIntake))),
