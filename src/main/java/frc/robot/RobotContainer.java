@@ -180,7 +180,7 @@ public class RobotContainer {
   BooleanSupplier DvRightReefLineupSup;
   BooleanSupplier SlowFrontSup;
   BooleanSupplier AlgaeIntakeSup;
-  BooleanSupplier AlgaeShooterSup;
+  BooleanSupplier AlgaeShooterSupDriver;
   BooleanSupplier AlgaeDepositSup;
   BooleanSupplier AlgaeBargeSup;
   BooleanSupplier ReefHeight1Supplier;
@@ -212,6 +212,7 @@ public class RobotContainer {
   BooleanSupplier funnelRotatorSupplier;
   BooleanSupplier climberResetSupplier;
   BooleanSupplier inEndgameSupplier;
+  BooleanSupplier algaeShooterSupOperator;
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
@@ -286,7 +287,7 @@ public class RobotContainer {
       PlaceCoralNoPathSup = driverControllerXbox::getYButton;
       CoralIntakeSup = driverControllerXbox::getRightStickButton;
       funnelRotatorSupplier = driverControllerXbox::getLeftStickButton;
-      AlgaeShooterSup = ()->driverControllerXbox.getPOV() == 270 || operatorControllerXbox.getXButton();
+      AlgaeShooterSupDriver = ()->driverControllerXbox.getPOV() == 270;
       ManualCoralIntake = ()->false;
       
 
@@ -314,7 +315,7 @@ public class RobotContainer {
       ManualCoralIntake = driverControllerPS4:: getOptionsButton;
       PlaceCoralNoPathSup = driverControllerPS4::getTriangleButton;
       AlgaeIntakeSup = driverControllerPS4::getCrossButton;
-      AlgaeShooterSup =  ()-> driverControllerPS4.getPOV() == 180;
+      AlgaeShooterSupDriver =  ()-> driverControllerPS4.getPOV() == 180;
       CoralIntakeSup = driverControllerPS4::getSquareButton;
       funnelRotatorSupplier = driverControllerPS4::getShareButton;
     } 
@@ -336,6 +337,7 @@ public class RobotContainer {
       //operator manual controls, should not be used unless other controls not working
       ForceEjectCoral = ()-> operatorControllerXbox.getRightTriggerAxis() > 0.5;
       ForceElevator = ()->operatorControllerXbox.getLeftTriggerAxis() > 0.1;
+      algaeShooterSupOperator = operatorControllerXbox::getXButton;
       ForceElevatorUp = ()->false;//operatorControllerXbox.getLeftY() < -0.5;
       ForceElevatorDown = ()->false;//operatorControllerXbox.getLeftY() > 0.5;
       ClimbCommandSupplier = ()->false;//operatorControllerXbox.getRightStickButton();
@@ -371,17 +373,18 @@ public class RobotContainer {
       OpRightReefLineupSup = buttonBoard::getRightReefLineupButton;
       goForAlgaeTrue = buttonBoard::getGoForAlgaeButton;
 
-      ReefHeight2Supplier = buttonBoard::getReefHeight1Button;
-      ReefHeight1Supplier = buttonBoard::getReefHeight2Button;
+      ReefHeight1Supplier = buttonBoard::getReefHeight1Button;
+      ReefHeight2Supplier = buttonBoard::getReefHeight2Button;
       ReefHeight3Supplier = buttonBoard::getReefHeight3Button;
       ReefHeight4Supplier = buttonBoard::getReefHeight4Button;
 
-      ProcessorHeightSupplier = buttonBoard::getProcessorHeightButton;
-      ForceElevator = ()->false;
+      ProcessorHeightSupplier = ()->false;//buttonBoard::getProcessorHeightButton;
+      ForceElevator = buttonBoard::getForceElevatorButton;
       ForceElevatorUp = ()->false;
       ForceElevatorDown = ()->false;
-      BargeHeightSupplier = ()->false;
+      BargeHeightSupplier = buttonBoard::getBargeHeightButton;
       ForceEjectCoral = buttonBoard::getForceEjectCoralButton;
+      algaeShooterSupOperator = buttonBoard::getForceEjectAlgaeButton;
 
       ClimbModeAuthorizer = buttonBoard::getClimbModeAuthorizer;
       climberResetSupplier = buttonBoard::getClimberResetButton;
@@ -509,14 +512,18 @@ public class RobotContainer {
    */
   private void configureBindings() {
 //all the triggers that change RobotState
-    new Trigger(ReefHeight1Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef1));
-    new Trigger(ReefHeight2Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef2));
-    new Trigger(ReefHeight3Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef3));
-    new Trigger(ReefHeight4Supplier).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef4));
-    new Trigger(BargeHeightSupplier).onTrue(new InstantCommand(()-> RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Barge));
-    new Trigger(OpLeftReefLineupSup).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringLeft = true));
-    new Trigger(OpRightReefLineupSup).onTrue(new InstantCommand(()->RobotState.getInstance().deliveringLeft = false));
-    new Trigger(goForAlgaeTrue).onTrue(new InstantCommand(()->RobotState.getInstance().goForAlgae = !RobotState.getInstance().goForAlgae));
+    new Trigger(ReefHeight1Supplier).whileTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef1));
+    new Trigger(ReefHeight2Supplier).whileTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef2));
+    new Trigger(ReefHeight3Supplier).whileTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef3));
+    new Trigger(ReefHeight4Supplier).whileTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef4));
+    new Trigger(BargeHeightSupplier).whileTrue(new InstantCommand(()-> RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Barge));
+    new Trigger(OpLeftReefLineupSup).whileTrue(new InstantCommand(()->RobotState.getInstance().deliveringLeft = true));
+    new Trigger(OpRightReefLineupSup).whileTrue(new InstantCommand(()->RobotState.getInstance().deliveringLeft = false));
+    if(OCTEnum == ControllerEnums.ButtonBoard) {
+      new Trigger(goForAlgaeTrue).whileTrue(new InstantCommand(()->RobotState.getInstance().goForAlgae = true)).onFalse(new InstantCommand(()->RobotState.getInstance().goForAlgae = false));
+    } else {
+      new Trigger(goForAlgaeTrue).onTrue(new InstantCommand(()->RobotState.getInstance().goForAlgae = !RobotState.getInstance().goForAlgae));
+    }
     // new Trigger(goForAlgaeTrue).onTrue(new InstantCommand(()->RobotState.getInstance().goForAlgae = true));
     // new Trigger(goForAlgaeFalse).onTrue(new InstantCommand(()->RobotState.getInstance().goForAlgae = false));
     SmartDashboard.putData("toggle algae pickup", new InstantCommand(()->RobotState.getInstance().goForAlgae = !RobotState.getInstance().goForAlgae));
@@ -562,7 +569,7 @@ public class RobotContainer {
 
     if (algaeEndeffectorExists) {
       new Trigger(AlgaeIntakeSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector, ()->ALGAE_INTAKE_SPEED));
-      new Trigger(AlgaeShooterSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector, ()->ALGAE_SHOOT_SPEED));
+      new Trigger(()->AlgaeShooterSupDriver.getAsBoolean() || algaeShooterSupOperator.getAsBoolean()).whileTrue(new AlgaeIntakeCommand(algaeEndDefector, ()->ALGAE_SHOOT_SPEED));
     }
     if (climberExists){
       new Trigger(ClimbCommandSupplier).whileTrue(new ClimberCommand(climber));
@@ -599,6 +606,7 @@ public class RobotContainer {
       new Trigger(()->CoralPlaceTeleSupplier.getAsBoolean() && RobotState.getInstance().goForAlgae && !(RobotState.getInstance().deliveringCoralHeight==ElevatorEnums.Reef1)).whileTrue(
         new SequentialCommandGroup(
           new InstantCommand(()->elevator.setElevatorPositionDynamicConfigs(HUMAN_PLAYER_STATION_CENTIMETERS+10, MOTION_MAGIC_ELEVATOR_HP_ACCLERATION, MOTION_MAGIC_ELEVATOR_HP_VELOCITY, MOTION_MAGIC_ELEVATOR_JERK), elevator),
+          new InstantCommand(()->algaeEndDefector.runAlgaeEndDefector(ALGAE_INTAKE_SPEED), algaeEndDefector),
           new DriveToPose(()->selectCommand(()->RobotState.getInstance().deliveringLeft), driveTrain, ()->0),
           new ParallelRaceGroup(
               new AlgaeIntakeCommand(algaeEndDefector, () -> RobotState.getInstance().goForAlgae ? ALGAE_INTAKE_SPEED : -0.5),
@@ -886,7 +894,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("PlaceWithLineupLeftL4", placeWithLineupLeftL4);
     NamedCommands.registerCommand("PlaceWithLineupRightL3", placeWithLineupRightL3);
     NamedCommands.registerCommand("PlaceWithLineupLeftL3", placeWithLineupLeftL3);
-    NamedCommands.registerCommand("WaitForIntake", new WaitUntilCommand(0.2));
+    NamedCommands.registerCommand("WaitForIntake", new WaitUntilCommand(0.5));
   }
 
   public void logPower() {
