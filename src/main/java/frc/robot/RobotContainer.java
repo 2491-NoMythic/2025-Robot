@@ -887,7 +887,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("PlaceWithLineupLeftL4", placeWithLineupLeftL4);
     NamedCommands.registerCommand("PlaceWithLineupRightL3", placeWithLineupRightL3);
     NamedCommands.registerCommand("PlaceWithLineupLeftL3", placeWithLineupLeftL3);
-    NamedCommands.registerCommand("WaitForIntake", new WaitUntilCommand(0.7));
+    NamedCommands.registerCommand("WaitForIntake", new WaitUntilCommand(0.2));
   }
 
   public void logPower() {

@@ -31,7 +31,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "BargeSidePickupFaster"
+            "pathName": "BargeSidePickupSlower"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForIntake"
           }
         },
         {
@@ -41,7 +47,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "BargeSideTopToReefKFaster"
+                  "pathName": "BargeSideTopToReefKSlower"
                 }
               },
               {
@@ -68,7 +74,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "ReefKtoBargeSideTopFeederFaster"
+            "pathName": "ReefKtoBargeSideTopFeederSlower"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForIntake"
           }
         },
         {
@@ -78,7 +90,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "BargeSideToptoReefLFaster"
+                  "pathName": "BargeSideToptoReefLSlower"
                 }
               },
               {
@@ -109,13 +121,19 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "WaitForIntake"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "BargeSideToptoReefLFaster"
+                  "pathName": "BargeSideTopToReefAFaster"
                 }
               },
               {
@@ -130,7 +148,7 @@
         {
           "type": "named",
           "data": {
-            "name": "PlaceWithLineupRightL3"
+            "name": "PlaceWithLineupLeftL4"
           }
         },
         {
