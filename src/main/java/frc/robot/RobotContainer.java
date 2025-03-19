@@ -550,8 +550,8 @@ public class RobotContainer {
       new Trigger(AlgaeShooterSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector, ()->ALGAE_SHOOT_SPEED));
     }
     if (climberExists){
-      new Trigger(climberGroupForward).whileTrue(new ClimberCommandGroup(climber, true));
-      new Trigger(climberGroupReverse).whileTrue(new ClimberCommandGroup(climber, false));
+      new Trigger(climberGroupForward).whileTrue(new ClimberCommandGroup(climber, true)).onFalse(new InstantCommand(()-> climber.stopClimber()));
+      new Trigger(climberGroupReverse).whileTrue(new ClimberCommandGroup(climber, false)).onFalse(new InstantCommand(()-> climber.stopClimber()));
     }
     if (funnelIntakeExists&&elevatorExists&&coralEndeffectorExists) {
       //if the coral is in the end effector, and the elevator is in place, pass the coral to the endeffector and line up the coral within it
