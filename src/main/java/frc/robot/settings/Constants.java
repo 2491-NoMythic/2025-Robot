@@ -531,6 +531,8 @@ public final class Constants {
   public final class ClimberConstants{
     public static final int CLIMBER_MOTOR_ID = 11;
     public static final int CLIMBER_CANCODER_ID = 5;
+    public static final int CLIMBER_WHEELS_MOTOR_ID = 2491;
+    public static final int SERVO_CHANNEL = 2491;
 
     public static final double COMP_ENCODER_OFFSET = -0.824951;
     public static final double PRAC_ENCODER_OFFSET = 0;
@@ -544,7 +546,9 @@ public final class Constants {
     public static final double CLIMBER_POWER_FORWARD = 2491;
     public static final double CLIMBER_POWER_REVERSE = 2491;
 
-    public static final int SERVO_CHANNEL = 2491;
+    public static final int CLIMBER_WHEELS_CURRENT_LIMIT = 2491;
+    public static final int CLIMBER_WHEELS_RPM_LIMIT = 2491;
+
 
     public static final TalonFXConfiguration ClimberMotorConfigComp = new TalonFXConfiguration()
     .withSlot0(new Slot0Configs()
@@ -605,6 +609,8 @@ public final class Constants {
     public static final double FUNNEL_ROTATOR_KI = 2491;
     public static final double FUNNEL_ROTATOR_KD = 2491;
     public static final double FUNNEL_ROTATOR_KFF = 2491;
+
+    public static final double FUNNEL_ROTATOR_DOWN_POSITION = 2491;
 
     public static final double FUNNEL_ROTATOR_KP_PRACTICE = 2491;
     public static final double FUNNEL_ROTATOR_KI_PRACTICE = 2491;

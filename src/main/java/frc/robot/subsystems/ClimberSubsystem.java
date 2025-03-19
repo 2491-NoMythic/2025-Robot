@@ -16,17 +16,22 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.ForwardLimitTypeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.helpers.MotorLogger;
 
 import static frc.robot.settings.Constants.ClimberConstants.*;
 import static frc.robot.settings.Constants.DriveConstants.CANIVORE_DRIVETRAIN;
 import static frc.robot.settings.Constants.ElevatorConstants.ELEVATOR_MOTOR_2_ID;
-import static frc.robot.settings.Constants.ClimberConstants.SERVO_CHANNEL;
 
 public class ClimberSubsystem extends SubsystemBase {
   TalonFX climberMotor1;
@@ -34,11 +39,19 @@ public class ClimberSubsystem extends SubsystemBase {
   boolean moveWithPower;
   double movingPower;
   Servo climberServo;
+  SparkMax climberWheels;
+  SparkMaxConfig climberWheelsConfig;
+  int loops = 0;
   /** Creates a new CimberSubsystem. */
   public ClimberSubsystem() {
     climberMotor1 = new TalonFX(CLIMBER_MOTOR_ID, CANIVORE_DRIVETRAIN);
     climberServo = new Servo(SERVO_CHANNEL);
+    climberWheels = new SparkMax(CLIMBER_WHEELS_MOTOR_ID, MotorType.kBrushless);
     //TODO spend some time figuring out how to use the absolute encoder with the motor.
+
+    climberWheelsConfig = new SparkMaxConfig();
+    climberWheelsConfig.smartCurrentLimit(CLIMBER_WHEELS_CURRENT_LIMIT, CLIMBER_WHEELS_CURRENT_LIMIT, CLIMBER_WHEELS_RPM_LIMIT);
+    climberWheels.configure(climberWheelsConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     
     CANcoderConfiguration encoderConfig = new CANcoderConfiguration();
     encoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
@@ -93,11 +106,40 @@ public class ClimberSubsystem extends SubsystemBase {
       climberServo.setAngle(CLIMBER_RACHET_FALSE);
     }
   }
+
+  public void runWheels(double speed){
+    climberWheels.set(speed);
+  }
+
+  public void stopWheels(){
+    climberWheels.set(0);
+  }
+
+  public void powerCheck() {
+
+    SmartDashboard.putNumber("AlgaeMotorCurrent", climberWheels.getOutputCurrent());
+    // if we are at 80%+ percent of the current limit, assume it's becuse we have an
+    // algae
+    if (climberWheels.getOutputCurrent() > CLIMBER_WHEELS_CURRENT_LIMIT * 0.95) {
+      loops++;
+      if (loops > 10) {
+        RobotState.getInstance().climberIn = true;
+      }
+    } else {
+      RobotState.getInstance().climberIn = false;
+      loops = 0;
+    }
+  }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     if(Preferences.getBoolean("Motor Logging", false)){
       logMotors();
+    }
+    powerCheck();
+
+    if(!RobotState.getInstance().climberIn && RobotState.getInstance().funnelDown){
+      runWheels(0.25);
     }
   }
 }

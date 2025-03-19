@@ -187,8 +187,6 @@ public class RobotContainer {
   BooleanSupplier CoralPlaceTeleSupplier;
   BooleanSupplier BargeHeightSupplier;
   BooleanSupplier ProcessorHeightSupplier;
-  BooleanSupplier ClimbCommandSupplier;
-  BooleanSupplier ClimbModeAuthorizer;
   DoubleSupplier ControllerForwardAxisSupplier;
   DoubleSupplier ControllerSidewaysAxisSupplier;
   DoubleSupplier ControllerZAxisSupplier;
@@ -207,7 +205,6 @@ public class RobotContainer {
   BooleanSupplier goForAlgaeFalse;
   BooleanSupplier CoralIntakeSup;
   BooleanSupplier funnelRotatorSupplier;
-  BooleanSupplier climberResetSupplier;
   BooleanSupplier inEndgameSupplier;
   BooleanSupplier climberGroupForward;
   BooleanSupplier climberGroupReverse;
@@ -337,9 +334,6 @@ public class RobotContainer {
       ForceElevator = ()->operatorControllerXbox.getLeftTriggerAxis() > 0.1;
       ForceElevatorUp = ()->false;//operatorControllerXbox.getLeftY() < -0.5;
       ForceElevatorDown = ()->false;//operatorControllerXbox.getLeftY() > 0.5;
-      ClimbCommandSupplier = ()->false;//operatorControllerXbox.getRightStickButton();
-      ClimbModeAuthorizer = ()->false;//operatorControllerXbox::getRightStickButton;
-      climberResetSupplier = ()->false;//operatorControllerXbox::getLeftStickButton;
       climberGroupForward = ()-> operatorControllerXbox.getLeftStickButton();
       climberGroupReverse = ()-> operatorControllerXbox.getRightStickButton();
     } else if (OCTEnum == ControllerEnums.PS4Controller){
@@ -362,7 +356,6 @@ public class RobotContainer {
       ForceElevator = ()->operatorControllerPS4.getL2Button();
       ForceElevatorUp = ()->operatorControllerPS4.getRawAxis(1) < -0.5;
       ForceElevatorDown = ()->operatorControllerPS4.getRawAxis(1) > 0.5;
-      ClimbCommandSupplier = operatorControllerPS4::getSquareButton;
       //ClimbModeAuthorizer = operatorControllerPS4::getR3Button;
       //climberResetSupplier = operatorControllerPS4::getL3Button;
       climberGroupForward = ()-> operatorControllerPS4.getL3Button();
@@ -385,10 +378,6 @@ public class RobotContainer {
       ForceElevatorDown = ()->false;
       BargeHeightSupplier = ()->false;
       ForceEjectCoral = buttonBoard::getForceEjectCoralButton;
-
-      ClimbModeAuthorizer = buttonBoard::getClimbModeAuthorizer;
-      climberResetSupplier = buttonBoard::getClimberResetButton;
-      ClimbCommandSupplier = buttonBoard::getclimbCommandButton;
     }
     if (LimelightExists) {limelightInit();}
     if (distanceSensorsExist) {sensorInit();}   
@@ -561,11 +550,8 @@ public class RobotContainer {
       new Trigger(AlgaeShooterSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector, ()->ALGAE_SHOOT_SPEED));
     }
     if (climberExists){
-      new Trigger(ClimbCommandSupplier).whileTrue(new ClimberCommand(climber));
       new Trigger(climberGroupForward).whileTrue(new ClimberCommandGroup(climber, true));
       new Trigger(climberGroupReverse).whileTrue(new ClimberCommandGroup(climber, false));
-      new Trigger(ClimbCommandSupplier).onTrue(new InstantCommand(()->elevator.setVoltage(0), elevator));
-      new Trigger(climberResetSupplier).onTrue(new InstantCommand(()->climber.setClimberPower(-0.7), climber)).onFalse(new InstantCommand(()->climber.stopClimber(), climber));
     }
     if (funnelIntakeExists&&elevatorExists&&coralEndeffectorExists) {
       //if the coral is in the end effector, and the elevator is in place, pass the coral to the endeffector and line up the coral within it
