@@ -111,12 +111,6 @@
         {
           "type": "named",
           "data": {
-            "name": "SpitCoral"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "ElevatorReset"
           }
         }
