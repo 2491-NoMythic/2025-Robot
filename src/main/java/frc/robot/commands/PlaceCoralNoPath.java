@@ -18,7 +18,7 @@ import java.util.function.Supplier;
 import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.ALGAE_INTAKE_SPEED;
 import static frc.robot.settings.Constants.DriveConstants.REEF_LINEUP_SPEED;
 import static frc.robot.settings.Constants.ElevatorConstants.HUMAN_PLAYER_STATION_CENTIMETERS;
-import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION;
+import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_HIGH_ACCLERATION;
 import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_VELOCITY;
 
 import java.util.function.BooleanSupplier;

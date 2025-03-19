@@ -19,7 +19,7 @@
         {
           "type": "named",
           "data": {
-            "name": "SpitCoral"
+            "name": "PlaceWithLineupRight"
           }
         },
         {
@@ -35,9 +35,9 @@
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 0.75
+            "name": "WaitForIntake"
           }
         },
         {
@@ -62,7 +62,7 @@
         {
           "type": "named",
           "data": {
-            "name": "SpitCoral"
+            "name": "PlaceWithLineupLeft"
           }
         },
         {
@@ -78,9 +78,9 @@
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 0.75
+            "name": "WaitForIntake"
           }
         },
         {
@@ -100,6 +100,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PlaceWithLineupRight"
           }
         },
         {

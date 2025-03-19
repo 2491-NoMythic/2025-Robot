@@ -21,6 +21,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.ForwardLimitTypeValue;
 import com.ctre.phoenix6.signals.ForwardLimitValue;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.ReverseLimitTypeValue;
 import com.ctre.phoenix6.signals.ReverseLimitValue;
 
@@ -52,14 +53,16 @@ public class ElevatorSubsystem extends SubsystemBase {
     elevatorMotor2 = new TalonFX(ELEVATOR_MOTOR_2_ID, CANIVORE_DRIVETRAIN);
     eleMotorConfig = new TalonFXConfiguration()
       .withMotorOutput(new MotorOutputConfigs()
-        .withInverted(InvertedValue.Clockwise_Positive))
+        .withInverted(InvertedValue.Clockwise_Positive)
+        .withNeutralMode(NeutralModeValue.Brake))
       .withFeedback(new FeedbackConfigs()
         .withSensorToMechanismRatio(0.08910703))
       .withCurrentLimits(new CurrentLimitsConfigs()
-        .withSupplyCurrentLimit(70)
+        .withSupplyCurrentLimit(200)
         .withSupplyCurrentLowerLimit(40)
         .withSupplyCurrentLowerTime(1)
-        .withSupplyCurrentLimitEnable(true))
+        .withSupplyCurrentLimitEnable(true)
+        .withStatorCurrentLimitEnable(false))
       .withVoltage(new VoltageConfigs()
         .withPeakForwardVoltage(7)
         .withPeakReverseVoltage(-7))
@@ -72,25 +75,24 @@ public class ElevatorSubsystem extends SubsystemBase {
         .withReverseLimitEnable(true)
         .withReverseLimitType(ReverseLimitTypeValue.NormallyClosed)
         .withForwardLimitAutosetPositionEnable(true)
-        .withForwardLimitAutosetPositionValue(199.5)
+        .withForwardLimitAutosetPositionValue(COMP_HEIGHT_AT_UPPER_LIMIT_SWITCH)
         .withForwardLimitEnable(true)
         .withForwardLimitType(ForwardLimitTypeValue.NormallyClosed))
       .withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()
         .withForwardSoftLimitEnable(true)
-        .withForwardSoftLimitThreshold(196.4)
+        .withForwardSoftLimitThreshold(COMP_HEIGHT_AT_UPPER_LIMIT_SWITCH-1)
         .withReverseSoftLimitEnable(true)
-        .withReverseSoftLimitThreshold(COMP_HEIGHT_AT_LIMIT_SWITCH+1));
+        .withReverseSoftLimitThreshold(COMP_HEIGHT_AT_LOWER_LIMIT_SWITCH+1));
     if (Preferences.getBoolean("CompBot", true)){
       //good values from right before duluth: p: 0.64, d: 0.02, g: 0.8623, a: 0.002, v: 0.01, s: 0.6  
       eleMotorConfig.Slot0 = new Slot0Configs()
         .withKP(0.64)
-        .withKD(0.02)
-        .withKG(0.8623)
-        .withKA(0.002)
-        .withKV(0.01)
+        .withKD(0.025)
+        .withKG(0.97754)
+        .withKA(0.0002)
+        .withKV(0.014)//0.0075 worked well for 20 cm/s on 3-13 5:27
         .withKS(0.6);
-      eleMotorConfig.HardwareLimitSwitch.ReverseLimitAutosetPositionValue = COMP_HEIGHT_AT_LIMIT_SWITCH;
-      eleMotorConfig.HardwareLimitSwitch.ForwardLimitAutosetPositionValue = 199.5;
+      eleMotorConfig.HardwareLimitSwitch.ReverseLimitAutosetPositionValue = COMP_HEIGHT_AT_LOWER_LIMIT_SWITCH;
     } else {
       eleMotorConfig.Slot0 = new Slot0Configs()
         .withKP(0.4)
@@ -174,35 +176,35 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void setElevatorPosition(ElevatorEnums height){
     switch(height){
       case Reef1:
-        setElevatorPosition(REEF_LEVEL_1_CENTIMETERS);
+        setElevatorPosition(REEF_LEVEL_1_CENTIMETERS_AWAY_FROM_REEF);
         break;
       case Reef2:
-        setElevatorPosition(REEF_LEVEL_2_CENTIMETERS);
+        setElevatorPosition(REEF_LEVEL_2_CENTIMETERS_AWAY_FROM_REEF);
         if(isElevatorAtPose()){
           RobotState.getInstance().elevatorIsHigh = true;
         }
         break;
       case Reef3:
-        setElevatorPosition(REEF_LEVEL_3_CENTIMETERS);
+        setElevatorPosition(REEF_LEVEL_3_CENTIMETERS_AWAY_FROM_REEF);
         if(isElevatorAtPose()){
           RobotState.getInstance().elevatorIsHigh = true;
         }
         break;
       case Reef4:
-        setElevatorPositionDynamicConfigs(REEF_LEVEL_4_CENTIMETERS, MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION, MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY, 0);
+        setElevatorPositionDynamicConfigs(REEF_LEVEL_4_CENTIMETERS_AWAY_FROM_REEF, MOTION_MAGIC_ELEVATOR_HIGH_ACCLERATION, MOTION_MAGIC_ELEVATOR_HIGH_VELOCITY, MOTION_MAGIC_ELEVATOR_JERK);
         if(isElevatorAtPose()){
           RobotState.getInstance().elevatorIsHigh = true;
         }
         break;
       case HumanPlayer:
-        setElevatorPositionDynamicConfigs(HUMAN_PLAYER_STATION_CENTIMETERS, MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION, MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY, 0);
+        setElevatorPositionDynamicConfigs(HUMAN_PLAYER_STATION_CENTIMETERS, MOTION_MAGIC_ELEVATOR_HP_ACCLERATION, MOTION_MAGIC_ELEVATOR_HP_VELOCITY, MOTION_MAGIC_ELEVATOR_JERK);
         if(isElevatorAtPose()){
           RobotState.getInstance().elevatorIsHigh = false;
         }
         break;
       case Bottom:
       if(Preferences.getBoolean("CompBot", true)) {
-        setElevatorPosition(COMP_HEIGHT_AT_LIMIT_SWITCH);
+        setElevatorPosition(COMP_HEIGHT_AT_LOWER_LIMIT_SWITCH);
       } else {
         setElevatorPosition(PRAC_HEIGHT_AT_LIMIT_SWITCH);
       }
@@ -211,7 +213,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         setElevatorPosition(PROCESSOR_HEIGHT_CENTIMETERS);
         break;
       case Barge:
-        setElevatorPositionDynamicConfigs(BARGE_SHOOT_CENTIMETERS, MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION, MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY, 0);
+        setElevatorPositionDynamicConfigs(BARGE_SHOOT_CENTIMETERS, MOTION_MAGIC_ELEVATOR_HIGH_ACCLERATION, MOTION_MAGIC_ELEVATOR_HIGH_VELOCITY, MOTION_MAGIC_ELEVATOR_JERK);
         break;
     }
   }
@@ -229,22 +231,22 @@ public class ElevatorSubsystem extends SubsystemBase {
     final double algaeVelocity = 200;
     switch(height){
       case Reef1:
-      setElevatorPositionDynamicConfigs(REEF_LEVEL_1_CENTIMETERS, algaeAcceleration, algaeVelocity, 0);
+      setElevatorPositionDynamicConfigs(REEF_LEVEL_1_CENTIMETERS_AGAINST_REEF, algaeAcceleration, algaeVelocity, 0);
         break;
       case Reef2:
-      setElevatorPositionDynamicConfigs(REEF_LEVEL_2_CENTIMETERS, algaeAcceleration, algaeVelocity, 0);
+      setElevatorPositionDynamicConfigs(REEF_LEVEL_2_CENTIMETERS_AGAINST_REEF, algaeAcceleration, algaeVelocity, 0);
         if(isElevatorAtPose()){
           RobotState.getInstance().elevatorIsHigh = true;
         }
         break;
       case Reef3:
-      setElevatorPositionDynamicConfigs(REEF_LEVEL_3_CENTIMETERS, algaeAcceleration, algaeVelocity, 0);
+      setElevatorPositionDynamicConfigs(REEF_LEVEL_3_CENTIMETERS_AGAINST_REEF, algaeAcceleration, algaeVelocity, 0);
         if(isElevatorAtPose()){
           RobotState.getInstance().elevatorIsHigh = true;
         }
         break;
       case Reef4:
-        setElevatorPositionDynamicConfigs(REEF_LEVEL_4_CENTIMETERS, algaeAcceleration, algaeVelocity, 0);
+        setElevatorPositionDynamicConfigs(REEF_LEVEL_4_CENTIMETERS_AGAINST_REEF, algaeAcceleration, algaeVelocity, 0);
         if(isElevatorAtPose()){
           RobotState.getInstance().elevatorIsHigh = true;
         }
@@ -257,7 +259,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         break;
       case Bottom:
       if(Preferences.getBoolean("CompBot", true)) {
-        setElevatorPosition(COMP_HEIGHT_AT_LIMIT_SWITCH);
+        setElevatorPosition(COMP_HEIGHT_AT_LOWER_LIMIT_SWITCH);
       } else {
         setElevatorPosition(PRAC_HEIGHT_AT_LIMIT_SWITCH);
       }
@@ -266,7 +268,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         setElevatorPosition(PROCESSOR_HEIGHT_CENTIMETERS);
         break;
       case Barge:
-        setElevatorPositionDynamicConfigs(BARGE_SHOOT_CENTIMETERS, MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION, MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY, 0);
+        setElevatorPositionDynamicConfigs(BARGE_SHOOT_CENTIMETERS, MOTION_MAGIC_ELEVATOR_HIGH_ACCLERATION, MOTION_MAGIC_ELEVATOR_HIGH_VELOCITY, 0);
         break;
     }
   }
@@ -278,7 +280,7 @@ public class ElevatorSubsystem extends SubsystemBase {
    */
   private double calculateRotations(double desiredHeight) {
     if(Preferences.getBoolean("CompBot", true)) {
-      return (Math.max(desiredHeight, COMP_HEIGHT_AT_LIMIT_SWITCH));
+      return (Math.max(desiredHeight, COMP_HEIGHT_AT_LOWER_LIMIT_SWITCH));
     } else {
       return (Math.max(desiredHeight, PRAC_HEIGHT_AT_LIMIT_SWITCH));
     }
@@ -288,7 +290,7 @@ public class ElevatorSubsystem extends SubsystemBase {
    * @return true if closed loop error is less than our threshold, false otherwise
    */
   public boolean isElevatorAtPose() {
-    return Math.abs(getPIDTarget()-elevatorMotor1.getPosition().getValueAsDouble()) < ELEVATOR_THRESHOLD;
+    return Math.abs(getPIDTarget()-elevatorMotor1.getPosition().getValueAsDouble()) < ELEVATOR_THRESHOLD && Math.abs(elevatorMotor1.getVelocity().getValueAsDouble()) < 15;
   }
   /**
    * asks if the error on the closed loop is less than our ELEVATOR_THRESHOLD constant

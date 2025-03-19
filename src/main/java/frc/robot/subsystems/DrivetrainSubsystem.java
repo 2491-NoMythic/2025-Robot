@@ -184,6 +184,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
 		return pigeon.getRotation2d();
 	}
   /**
+   * gets the angle of odometer reading, but adds 180 degrees if we are on red alliance. this is useful for whne using ChassisSpeeds.fromFieldRelativeSpeeds(ChassisSpeeds, getAllianceSpecificRotation())
+   * @return the angle of the robot, if 0 degrees is away from your alliance wall
+   */
+  private Rotation2d getAllianceSpecificRotation() {
+    double angle = DriverStation.getAlliance().get() == Alliance.Blue ? odometer.getEstimatedPosition().getRotation().getDegrees() : odometer.getEstimatedPosition().getRotation().getDegrees() + 180;
+    return Rotation2d.fromDegrees(angle);
+  }
+  /**
    * returns the pitch of the pigeon as a double
    * @return the pitch, returned as a double
    */
@@ -443,7 +451,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @param vy the field relative speed, in meters per second, for the drivetrain to move
    */
   public void moveTowardsRotationTarget(double vx, double vy) {
-    drive(ChassisSpeeds.fromFieldRelativeSpeeds(new ChassisSpeeds(vx, vy, rotationSpeedController.calculate(getPose().getRotation().getDegrees())), getGyroscopeRotation()));
+    drive(ChassisSpeeds.fromFieldRelativeSpeeds(new ChassisSpeeds(vx, vy, rotationSpeedController.calculate(getPose().getRotation().getDegrees())), getAllianceSpecificRotation()));
   }
   /**
    * moves toward a position and rotation using {@link #moveTowardsRotationTarget(double, double)}. The position is set as if 0 degrees is away from
@@ -469,17 +477,16 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("TARGETINGPOSE/adjustedyspeedAlliance", ySpeed);
     SmartDashboard.putNumber("TARGETINGPOSE/adjustedxspeedAlliance", xSpeed);
     //if the elevator is about to be up, limit the speed to 2 meters per second. Otherwise, limit speed to 3.5 meters per second
-    if(true) {
+    if(DriverStation.isAutonomous()) {
+      xSpeed = MythicalMath.absoluteCap(xSpeed, 1.5);
+      ySpeed = MythicalMath.absoluteCap(ySpeed, 1.5);
+    } else {
       xSpeed = MythicalMath.absoluteCap(xSpeed, 2);
       ySpeed = MythicalMath.absoluteCap(ySpeed, 2);
-    } else {
-      xSpeed = MythicalMath.absoluteCap(xSpeed, 3.5);
-      ySpeed = MythicalMath.absoluteCap(ySpeed, 3.5);
     }
     SmartDashboard.putNumber("TARGETINGPOSE/yspeed", ySpeed);
     SmartDashboard.putNumber("TARGETINGPOSE/xspeed", xSpeed);
     //drive!
-    SmartDashboard.putNumber("TESTINGPOSE/total error", getPositionTargetingError());
     moveTowardsRotationTarget(xSpeed, ySpeed);
   }
   /**
@@ -549,6 +556,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * Logs important data for the drivetrain
    */
   private void logDrivetrainData(){
+    SmartDashboard.putNumber("TESTINGPOSE/total error", getPositionTargetingError());
     SmartDashboard.putNumber("DRIVETRAIN/Robot Angle", getOdometryRotation().getDegrees());
     SmartDashboard.putString("DRIVETRAIN/Robot Location", getPose().getTranslation().toString());
     SmartDashboard.putNumber("DRIVETRAIN/forward speed", getChassisSpeeds().vxMetersPerSecond);

@@ -373,7 +373,9 @@ public final class Constants {
     public static final Pose2d RED_BACK_LEFT_REEFSIDE_POSE = new Pose2d(redBackXCoord, redLeftYCoord, new Rotation2d());
 
     public static final Translation2d FIELD_CENTER = new Translation2d(8.775, 4.031);
-    public static final Pose2d ReefARed = new Pose2d(14.39, 3.96, Rotation2d.fromDegrees(180));
+    //poses that are up against the reef wall
+    /* 
+    public static final Pose2d ReefARed = new Pose2d(14.38, 3.96, Rotation2d.fromDegrees(180));
     public static final Pose2d ReefBRed = new Pose2d(14.38, 4.29, Rotation2d.fromDegrees(180));
     public static final Pose2d ReefCRed = new Pose2d(13.78, 5.13, Rotation2d.fromDegrees(-120));
     public static final Pose2d ReefDRed = new Pose2d(13.49, 5.3, Rotation2d.fromDegrees(-120));
@@ -382,26 +384,54 @@ public final class Constants {
     public static final Pose2d ReefGRed = new Pose2d(11.73, 4.09, Rotation2d.fromDegrees(0));
     public static final Pose2d ReefHRed = new Pose2d(11.73, 3.73, Rotation2d.fromDegrees(0));
     public static final Pose2d ReefIRed = new Pose2d(12.35, 2.91, Rotation2d.fromDegrees(60));
-    public static final Pose2d ReefJRed = new Pose2d(12.64, 2.78, Rotation2d.fromDegrees(60));
-    public static final Pose2d ReefKRed = new Pose2d(13.66, 2.83, Rotation2d.fromDegrees(120));
-    public static final Pose2d ReefLRed = new Pose2d(13.89, 3.05, Rotation2d.fromDegrees(120));
-    public static final Pose2d BargePoseRed = new Pose2d(9.878, 0, Rotation2d.fromDegrees(180));
+    public static final Pose2d ReefJRed = new Pose2d(12.66, 2.75, Rotation2d.fromDegrees(60));
+    public static final Pose2d ReefKRed = new Pose2d(13.69, 2.92, Rotation2d.fromDegrees(120));
+    public static final Pose2d ReefLRed = new Pose2d(13.98, 3.09, Rotation2d.fromDegrees(120));
+    public static final Pose2d ReefABlue = new Pose2d(3.2, 4.098, Rotation2d.fromDegrees(0));
+    public static final Pose2d ReefBBlue = new Pose2d(3.2, 3.741, Rotation2d.fromDegrees(0));
+    public static final Pose2d ReefCBlue = new Pose2d(3.7887, 2.9072, Rotation2d.fromDegrees(60));
+    public static final Pose2d ReefDBlue = new Pose2d(4.0637, 2.7254, Rotation2d.fromDegrees(60));
+    public static final Pose2d ReefEBlue = new Pose2d(5.0963, 2.8290, Rotation2d.fromDegrees(120));
+    public static final Pose2d ReefFBlue = new Pose2d(5.396, 3.032, Rotation2d.fromDegrees(120));
+    public static final Pose2d ReefGBlue = new Pose2d(5.785, 3.95, Rotation2d.fromDegrees(180));
+    public static final Pose2d ReefHBlue = new Pose2d(5.7752, 4.2612, Rotation2d.fromDegrees(180));
+    public static final Pose2d ReefIBlue = new Pose2d(5.2231, 5.1051, Rotation2d.fromDegrees(-120));
+    public static final Pose2d ReefJBlue = new Pose2d(4.921, 5.304, Rotation2d.fromDegrees(-120));
+    public static final Pose2d ReefKBlue = new Pose2d(3.895, 5.198, Rotation2d.fromDegrees(-60));
+    public static final Pose2d ReefLBlue = new Pose2d(3.642, 5.018, Rotation2d.fromDegrees(-60));
+    */
+    public static final Pose2d BargePoseRed = new Pose2d(9.82, 0, Rotation2d.fromDegrees(180));
     public static final Pose2d ProcessorPoseRed = new Pose2d(11.57, 6.89, Rotation2d.fromDegrees(90));
-    public static final Pose2d ReefABlue = new Pose2d(3.208, 4.083, Rotation2d.fromDegrees(0));
-    public static final Pose2d ReefBBlue = new Pose2d(3.208, 3.762, Rotation2d.fromDegrees(0));
-    public static final Pose2d ReefCBlue = new Pose2d(3.783, 2.983, Rotation2d.fromDegrees(60));
-    public static final Pose2d ReefDBlue = new Pose2d(4.066, 2.777, Rotation2d.fromDegrees(60));
-    public static final Pose2d ReefEBlue = new Pose2d(5.07, 2.884, Rotation2d.fromDegrees(120));
-    public static final Pose2d ReefFBlue = new Pose2d(5.343, 3.03, Rotation2d.fromDegrees(120));
-    public static final Pose2d ReefGBlue = new Pose2d(5.801, 3.957, Rotation2d.fromDegrees(180));
-    public static final Pose2d ReefHBlue = new Pose2d(5.801, 4.278, Rotation2d.fromDegrees(180));
-    public static final Pose2d ReefIBlue = new Pose2d(5.187, 5.117, Rotation2d.fromDegrees(-120));
-    public static final Pose2d ReefJBlue = new Pose2d(4.924, 5.273, Rotation2d.fromDegrees(-120));
-    public static final Pose2d ReefKBlue = new Pose2d(3.89, 5.175, Rotation2d.fromDegrees(-60));
-    public static final Pose2d ReefLBlue = new Pose2d(3.793, 5.088, Rotation2d.fromDegrees(-60));
-    public static final Pose2d BargePoseBlue = new Pose2d(7.672, 0, Rotation2d.fromDegrees(0));
+    public static final Pose2d BargePoseBlue = new Pose2d(7.77, 0, Rotation2d.fromDegrees(0));
     public static final Pose2d ProcessorPoseBlue = new Pose2d(5.982, 0.531, Rotation2d.fromDegrees(-90));
+    
+    //poses that are an inch and a half from the edge of the reef
+    public static final Pose2d ReefABlue = new Pose2d(3.2, 4.098, Rotation2d.fromDegrees(0));
+    public static final Pose2d ReefBBlue = new Pose2d(3.2, 3.741, Rotation2d.fromDegrees(0));
+    public static final Pose2d ReefCBlue = new Pose2d(3.7887, 2.9072, Rotation2d.fromDegrees(60));
+    public static final Pose2d ReefDBlue = new Pose2d(4.0637, 2.7254, Rotation2d.fromDegrees(60));
+    public static final Pose2d ReefEBlue = new Pose2d(5.0963, 2.8290, Rotation2d.fromDegrees(120));
+    public static final Pose2d ReefFBlue = new Pose2d(5.396, 3.032, Rotation2d.fromDegrees(120));
+    public static final Pose2d ReefGBlue = new Pose2d(5.785, 3.95, Rotation2d.fromDegrees(180));
+    public static final Pose2d ReefHBlue = new Pose2d(5.7752, 4.2612, Rotation2d.fromDegrees(180));
+    public static final Pose2d ReefIBlue = new Pose2d(5.2231, 5.1051, Rotation2d.fromDegrees(-120));
+    public static final Pose2d ReefJBlue = new Pose2d(4.921, 5.304, Rotation2d.fromDegrees(-120));
+    public static final Pose2d ReefKBlue = new Pose2d(3.895, 5.198, Rotation2d.fromDegrees(-60));
+    public static final Pose2d ReefLBlue = new Pose2d(3.642, 5.018, Rotation2d.fromDegrees(-60));
 
+    public static final Pose2d ReefARed = new Pose2d(14.38, 4.02, Rotation2d.fromDegrees(180));
+    public static final Pose2d ReefBRed = new Pose2d(14.41, 4.3, Rotation2d.fromDegrees(180));
+    public static final Pose2d ReefCRed = new Pose2d(13.78, 5.13, Rotation2d.fromDegrees(-120));
+    public static final Pose2d ReefDRed = new Pose2d(13.49, 5.3, Rotation2d.fromDegrees(-120));
+    public static final Pose2d ReefERed = new Pose2d(12.45, 5.19, Rotation2d.fromDegrees(-60));
+    public static final Pose2d ReefFRed = new Pose2d(12.25, 5.03, Rotation2d.fromDegrees(-60));
+    public static final Pose2d ReefGRed = new Pose2d(11.73, 4.09, Rotation2d.fromDegrees(0));
+    public static final Pose2d ReefHRed = new Pose2d(11.73, 3.73, Rotation2d.fromDegrees(0));
+    public static final Pose2d ReefIRed = new Pose2d(12.35, 2.91, Rotation2d.fromDegrees(60));
+    public static final Pose2d ReefJRed = new Pose2d(12.66, 2.75, Rotation2d.fromDegrees(60));
+    public static final Pose2d ReefKRed = new Pose2d(13.69, 2.92, Rotation2d.fromDegrees(120));
+    public static final Pose2d ReefLRed = new Pose2d(13.98, 3.09, Rotation2d.fromDegrees(120));
+    
     public static final double BARGE_POSITION_THRESHOLD = 0.02;
     public static final double REEF_POSITION_THRESHOLD = 0.015;
 
@@ -508,23 +538,33 @@ public final class Constants {
   public final class ElevatorConstants{
     public static final int ELEVATOR_MOTOR_1_ID = 9;
     public static final int ELEVATOR_MOTOR_2_ID = 10;
-    public static final double HUMAN_PLAYER_STATION_CENTIMETERS = 19.1;//31.5;
+    public static final double HUMAN_PLAYER_STATION_CENTIMETERS = 23.2;//19.1;//31.5;
     public static final double PRAC_HEIGHT_AT_LIMIT_SWITCH = 20;
-    public static final double COMP_HEIGHT_AT_LIMIT_SWITCH = 16.828;
+    public static final double COMP_HEIGHT_AT_LOWER_LIMIT_SWITCH = 20;//before second limit switch was added (and for all of duluth): 16.828;
+    public static final double COMP_HEIGHT_AT_UPPER_LIMIT_SWITCH = 195.7;
     public static final double PROCESSOR_HEIGHT_CENTIMETERS = 19;
-    public static final double REEF_LEVEL_1_CENTIMETERS = 80;
-    public static final double REEF_LEVEL_2_CENTIMETERS = 81.23;
-    public static final double REEF_LEVEL_3_CENTIMETERS = 122.6;
-    public static final double REEF_LEVEL_4_CENTIMETERS = 182.69;
-    public static final double BARGE_SHOOT_CENTIMETERS = 192;
     public static final double ELEVATOR_THRESHOLD = 1.5;
-    public static final double METERS_FROM_POSE_TO_RAISE_ELEVATOR = 0.2;
+    public static final double METERS_FROM_POSE_TO_RAISE_ELEVATOR = 2;
+    
+    //reef heights that are for when we are against the reef
+    public static final double REEF_LEVEL_1_CENTIMETERS_AGAINST_REEF = 80;
+    public static final double REEF_LEVEL_2_CENTIMETERS_AGAINST_REEF = 81.23;
+    public static final double REEF_LEVEL_3_CENTIMETERS_AGAINST_REEF = 122.6;
+    public static final double REEF_LEVEL_4_CENTIMETERS_AGAINST_REEF = 188.7;//182.69;
+    public static final double BARGE_SHOOT_CENTIMETERS = 194.5;
+    //reef heights that are for when we are about an inch and a half from the reef
+    public static final double REEF_LEVEL_1_CENTIMETERS_AWAY_FROM_REEF = 80;
+    public static final double REEF_LEVEL_2_CENTIMETERS_AWAY_FROM_REEF = 84.1;
+    public static final double REEF_LEVEL_3_CENTIMETERS_AWAY_FROM_REEF = 125.5;
+    public static final double REEF_LEVEL_4_CENTIMETERS_AWAY_FROM_REEF = 190;//182.69;
 
-    public static final double MOTION_MAGIC_ELEVATOR_SLOWER_VELOCITY = 320;
-    public static final double MOTION_MAGIC_ELEVATOR_SLOWER_ACCLERATION = 400;
-    public static final double MOTION_MAGIC_ELEVATOR_VELOCITY = 320;
-    public static final double MOTION_MAGIC_ELEVATOR_ACCLERATION = 640;
-    public static final double MOTION_MAGIC_ELEVATOR_JERK = 0;
+    public static final double MOTION_MAGIC_ELEVATOR_HIGH_VELOCITY = 300;
+    public static final double MOTION_MAGIC_ELEVATOR_HIGH_ACCLERATION = 600;
+    public static final double MOTION_MAGIC_ELEVATOR_HP_VELOCITY = 320;
+    public static final double MOTION_MAGIC_ELEVATOR_HP_ACCLERATION = 400;
+    public static final double MOTION_MAGIC_ELEVATOR_VELOCITY = 300;
+    public static final double MOTION_MAGIC_ELEVATOR_ACCLERATION = 840;
+    public static final double MOTION_MAGIC_ELEVATOR_JERK = 9200;
   }
 
   public final class ClimberConstants{
