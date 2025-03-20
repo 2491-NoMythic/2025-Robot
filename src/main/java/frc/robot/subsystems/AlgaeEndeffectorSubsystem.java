@@ -11,6 +11,7 @@ import com.ctre.phoenix6.configs.TalonFXSConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.hardware.TalonFXS;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.MotorArrangementValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkMax;
@@ -52,7 +53,9 @@ public class AlgaeEndeffectorSubsystem extends SubsystemBase {
     // algaeConfig1 = new SparkMaxConfig();
     algaeConfig = new TalonFXSConfiguration();
     algaeConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-    algaeConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    algaeConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+    algaeConfig.CurrentLimits.SupplyCurrentLimit = ALGAE_ENDEFFECTOR_CURRENT_LIMIT;
+    algaeConfig.Commutation.MotorArrangement = MotorArrangementValue.Minion_JST;
     algaeEndeffectorMotor.getConfigurator().apply(algaeConfig);
     powerSpike = false;
   }
@@ -93,7 +96,7 @@ public class AlgaeEndeffectorSubsystem extends SubsystemBase {
 
     SmartDashboard.putNumber("AlgaeMotorCurrent",algaeEndeffectorMotor.getStatorCurrent().getValueAsDouble());
     //if we are at 80%+ percent of the current limit, assume it's becuse we have an algae
-    if(algaeEndeffectorMotor.getStatorCurrent().getValueAsDouble()>ALGAE_ENDEFFECTOR_CURRENT_LIMIT*0.95){ 
+    if(algaeEndeffectorMotor.getSupplyCurrent().getValueAsDouble()>ALGAE_ENDEFFECTOR_CURRENT_LIMIT*0.8){ 
       loops++;
       if(loops > 10){
         RobotState.getInstance().hasAlgae = true;

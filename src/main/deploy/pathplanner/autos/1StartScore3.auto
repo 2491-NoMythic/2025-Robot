@@ -19,7 +19,7 @@
         {
           "type": "named",
           "data": {
-            "name": "PlaceWithLineupRight"
+            "name": "PlaceWithLineupRightL4"
           }
         },
         {
@@ -31,7 +31,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "BargeSidePickup"
+            "pathName": "BargeSidePickupSlower"
           }
         },
         {
@@ -47,7 +47,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "BargeSideTopToReefK"
+                  "pathName": "BargeSideTopToReefKSlower"
                 }
               },
               {
@@ -62,7 +62,7 @@
         {
           "type": "named",
           "data": {
-            "name": "PlaceWithLineupLeft"
+            "name": "PlaceWithLineupLeftL4"
           }
         },
         {
@@ -74,7 +74,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "ReefKtoBargeSideTopFeeder"
+            "pathName": "ReefKtoBargeSideTopFeederSlower"
           }
         },
         {
@@ -90,7 +90,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "BargeSideToptoReefL"
+                  "pathName": "BargeSideToptoReefLSlower"
                 }
               },
               {
@@ -105,13 +105,7 @@
         {
           "type": "named",
           "data": {
-            "name": "PlaceWithLineupRight"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "SpitCoral"
+            "name": "PlaceWithLineupRightL4"
           }
         },
         {

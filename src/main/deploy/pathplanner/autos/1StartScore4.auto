@@ -13,7 +13,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "processorStartToF"
+            "pathName": "BargeStartToJ"
           }
         },
         {
@@ -31,7 +31,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "reefFToHPSlower"
+            "pathName": "BargeSidePickupSlower"
           }
         },
         {
@@ -47,7 +47,50 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "HPToDSlower"
+                  "pathName": "BargeSideTopToReefKSlower"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeAlignAndRaiseCoral"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PlaceWithLineupLeftL4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ElevatorReset"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ReefKtoBargeSideTopFeederSlower"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForIntake"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "BargeSideToptoReefLSlower"
                 }
               },
               {
@@ -74,7 +117,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "reefDToHPSlower"
+            "pathName": "ReefLtoBargeSideTopFeederFaster"
           }
         },
         {
@@ -90,7 +133,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "HPToCSlower"
+                  "pathName": "BargeSideTopToReefAFaster"
                 }
               },
               {
