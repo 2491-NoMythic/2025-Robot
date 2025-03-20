@@ -780,14 +780,15 @@ public class RobotContainer {
       //this command will raise the elevator after the coral has been lined up in the end effector, and more than 1 second has passed (s wer are not stlil accelerating)
       placeWithLineupRight = new PlaceCoralDuringLineupSequential(algaeEndDefector, driveTrain, elevator, coralEndDefector, ()-> selectCommand(()-> false), ()->ElevatorEnums.Reef4);
       placeWithLineupLeft = new PlaceCoralDuringLineupSequential(algaeEndDefector, driveTrain, elevator, coralEndDefector, ()-> selectCommand(()-> true), ()->ElevatorEnums.Reef4);
-      coralHandlingCommand = new ParallelRaceGroup(
-        new SequentialCommandGroup(
-          new ParallelCommandGroup(
-            new WaitCommand(()->1),
-            new SequentialCommandGroup(
-              new CoralIntake(elevator, funnelIntake, coralEndDefector),
-              new PassCoralToEndEffectorSequential(coralEndDefector, funnelIntake))),
-          new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.Reef4), elevator)));
+      coralHandlingCommand = new ParallelRaceGroup(new ParallelRaceGroup(
+          new SequentialCommandGroup(
+              new ParallelCommandGroup(
+                  new WaitCommand(() -> 1),
+                  new SequentialCommandGroup(
+                      new CoralIntake(elevator, funnelIntake, coralEndDefector),
+                      new PassCoralToEndEffectorSequential(coralEndDefector, funnelIntake)))),
+          new InstantCommand(() -> elevator.setElevatorPosition(ElevatorEnums.Reef4), elevator)),
+          new WaitCommand(() -> 3));
       deliverCoralLeft1NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef1, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true,algaeEndDefector, ()-> false);
       deliverCoralLeft2NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef2, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true,algaeEndDefector, ()-> false);
       deliverCoralLeft3NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef3, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true,algaeEndDefector, ()-> false);
@@ -879,7 +880,11 @@ public class RobotContainer {
     NamedCommands.registerCommand("AutoBargeShoot", autoBargeShoot);
     NamedCommands.registerCommand("PlaceWithLineupRight", placeWithLineupRight);
     NamedCommands.registerCommand("PlaceWithLineupLeft", placeWithLineupLeft);
-    NamedCommands.registerCommand("WaitForIntake", new WaitUntilCommand(0.7));
+    NamedCommands.registerCommand("WaitForIntake",
+        new ParallelRaceGroup(
+            new ParallelCommandGroup(new InstantCommand(() -> funnelIntake.runFunnelSine(), funnelIntake),
+                new WaitUntilCommand(0.7)),
+            new WaitUntilCommand(() -> RobotState.getInstance().isCoralSeen())));
   }
 
   public void logPower() {
