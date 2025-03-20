@@ -75,9 +75,6 @@ public class ButtonBoard extends GenericHID implements Sendable{
     public boolean getClimberResetButton(){
         return getRawButton(Button.climberResetButton.value);
     }
-    public boolean getForceElevatorButton(){
-        return getRawButton(Button.forceElevatorButton.value);
-    }
     public void initSendable(SendableBuilder builder){
         builder.setSmartDashboardType("HID");
         builder.addBooleanProperty("Reef Height 1 Button", this::getReefHeight1Button, null);
