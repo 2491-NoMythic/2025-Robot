@@ -1,5 +1,5 @@
 --LED--
-L1 = 10
+L1 = 6
 L2 = 2
 L3 = 3
 L4 = 4
@@ -10,7 +10,7 @@ Climb up = 8
 Climb Reset = 9
 ForceElevator = 12
 --Button--
-L1 = 31
+L1 = 7
 L2 = 30
 L3 = 29
 L4 = 28
