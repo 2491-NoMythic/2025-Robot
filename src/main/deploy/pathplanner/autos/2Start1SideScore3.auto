@@ -53,7 +53,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "BargeSideTopToReefK"
+                  "pathName": "BargeSideTopToReefKFaster"
                 }
               },
               {
@@ -86,7 +86,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "ReefKtoBargeSideTopFeeder"
+            "pathName": "ReefKtoBargeSideTopFeederFaster"
           }
         },
         {
@@ -102,7 +102,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "BargeSideToptoReefL"
+                  "pathName": "BargeSideToptoReefLFaster"
                 }
               },
               {

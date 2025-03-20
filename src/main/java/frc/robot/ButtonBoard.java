@@ -14,8 +14,8 @@ public class ButtonBoard extends GenericHID implements Sendable{
         reefHeight3Button(3),
         reefHeight4Button(4),
         bargeHeightButton(5),
-        forceEjectCoralButton(6),
-        forceEjectAlgaeButton(7),
+        forceEjectAlgaeButton(6),
+        forceEjectCoralButton(7),
         leftReefLineupButton(8),
         rightReefLineupButton(9),
         goForAlgaeButton(10),
@@ -35,6 +35,9 @@ public class ButtonBoard extends GenericHID implements Sendable{
     }
     public boolean getReefHeight1Button(){
         return getRawButton(Button.reefHeight1Button.value);
+    }
+    public boolean getForceElevatorButton(){
+        return getRawButton(Button.forceElevatorButton.value);
     }
     public boolean getReefHeight2Button(){
         return getRawButton(Button.reefHeight2Button.value);
@@ -71,9 +74,6 @@ public class ButtonBoard extends GenericHID implements Sendable{
     }
     public boolean getClimberResetButton(){
         return getRawButton(Button.climberResetButton.value);
-    }
-    public boolean getForceElevatorButton(){
-        return getRawButton(Button.forceElevatorButton.value);
     }
     public void initSendable(SendableBuilder builder){
         builder.setSmartDashboardType("HID");

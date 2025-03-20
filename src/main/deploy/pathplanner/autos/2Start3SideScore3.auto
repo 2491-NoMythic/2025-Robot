@@ -53,7 +53,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "HPToD"
+                  "pathName": "HPToDFaster"
                 }
               },
               {
@@ -86,7 +86,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "reefDToHP"
+            "pathName": "reefDToHPFaster"
           }
         },
         {
@@ -102,7 +102,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "HPToC"
+                  "pathName": "HPToCFaster"
                 }
               },
               {

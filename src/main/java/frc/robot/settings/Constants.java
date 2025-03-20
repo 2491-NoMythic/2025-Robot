@@ -419,18 +419,20 @@ public final class Constants {
     public static final Pose2d ReefKBlue = new Pose2d(3.895, 5.198, Rotation2d.fromDegrees(-60));
     public static final Pose2d ReefLBlue = new Pose2d(3.642, 5.018, Rotation2d.fromDegrees(-60));
 
-    public static final Pose2d ReefARed = new Pose2d(14.38, 4.02, Rotation2d.fromDegrees(180));
-    public static final Pose2d ReefBRed = new Pose2d(14.41, 4.3, Rotation2d.fromDegrees(180));
-    public static final Pose2d ReefCRed = new Pose2d(13.78, 5.13, Rotation2d.fromDegrees(-120));
-    public static final Pose2d ReefDRed = new Pose2d(13.49, 5.3, Rotation2d.fromDegrees(-120));
-    public static final Pose2d ReefERed = new Pose2d(12.45, 5.19, Rotation2d.fromDegrees(-60));
-    public static final Pose2d ReefFRed = new Pose2d(12.25, 5.03, Rotation2d.fromDegrees(-60));
-    public static final Pose2d ReefGRed = new Pose2d(11.73, 4.09, Rotation2d.fromDegrees(0));
-    public static final Pose2d ReefHRed = new Pose2d(11.73, 3.73, Rotation2d.fromDegrees(0));
-    public static final Pose2d ReefIRed = new Pose2d(12.35, 2.91, Rotation2d.fromDegrees(60));
-    public static final Pose2d ReefJRed = new Pose2d(12.66, 2.75, Rotation2d.fromDegrees(60));
-    public static final Pose2d ReefKRed = new Pose2d(13.69, 2.92, Rotation2d.fromDegrees(120));
-    public static final Pose2d ReefLRed = new Pose2d(13.98, 3.09, Rotation2d.fromDegrees(120));
+    // public static final Pose2d ReefARed = new Pose2d(14.49, 3.95, Rotation2d.fromDegrees(180));
+    public static final Pose2d ReefARed = new Pose2d(14.49, 3.963, Rotation2d.fromDegrees(180));
+    // public static final Pose2d ReefBRed = new Pose2d(14.48, 4.28, Rotation2d.fromDegrees(180));
+    public static final Pose2d ReefBRed = new Pose2d(14.46, 4.323, Rotation2d.fromDegrees(180));
+    public static final Pose2d ReefCRed = new Pose2d(13.81, 5.24, Rotation2d.fromDegrees(-120));
+    public static final Pose2d ReefDRed = new Pose2d(13.51, 5.4, Rotation2d.fromDegrees(-120));
+    public static final Pose2d ReefERed = new Pose2d(12.41, 5.3, Rotation2d.fromDegrees(-60));
+    public static final Pose2d ReefFRed = new Pose2d(12.11, 5.1, Rotation2d.fromDegrees(-60));
+    public static final Pose2d ReefGRed = new Pose2d(11.64, 4.09, Rotation2d.fromDegrees(0));
+    public static final Pose2d ReefHRed = new Pose2d(11.64, 3.75, Rotation2d.fromDegrees(0));
+    public static final Pose2d ReefIRed = new Pose2d(12.29, 2.825, Rotation2d.fromDegrees(60));
+    public static final Pose2d ReefJRed = new Pose2d(12.585, 2.67, Rotation2d.fromDegrees(60));
+    public static final Pose2d ReefKRed = new Pose2d(13.73, 2.77, Rotation2d.fromDegrees(120));
+    public static final Pose2d ReefLRed = new Pose2d(14, 2.94, Rotation2d.fromDegrees(120));
     
     public static final double BARGE_POSITION_THRESHOLD = 0.02;
     public static final double REEF_POSITION_THRESHOLD = 0.015;
@@ -487,7 +489,7 @@ public final class Constants {
     public static final int ALGAE_ENDEFFECTOR_MOTOR_ID = 23;
     
     public static final int ALGAE_ENDEFFECTOR_CURRENT_LIMIT = 25;
-    public static final double ALGAE_INTAKE_SPEED = 1;
+    public static final double ALGAE_INTAKE_SPEED = 0.7;
     public static final double ALGAE_SHOOT_SPEED = -1;
 
     //2 volts ~= 1822 rpm
@@ -544,7 +546,7 @@ public final class Constants {
     public static final double COMP_HEIGHT_AT_UPPER_LIMIT_SWITCH = 195.7;
     public static final double PROCESSOR_HEIGHT_CENTIMETERS = 19;
     public static final double ELEVATOR_THRESHOLD = 1.5;
-    public static final double METERS_FROM_POSE_TO_RAISE_ELEVATOR = 2;
+    public static final double METERS_FROM_POSE_TO_RAISE_ELEVATOR = 2.5;
     
     //reef heights that are for when we are against the reef
     public static final double REEF_LEVEL_1_CENTIMETERS_AGAINST_REEF = 80;
@@ -552,11 +554,12 @@ public final class Constants {
     public static final double REEF_LEVEL_3_CENTIMETERS_AGAINST_REEF = 122.6;
     public static final double REEF_LEVEL_4_CENTIMETERS_AGAINST_REEF = 188.7;//182.69;
     public static final double BARGE_SHOOT_CENTIMETERS = 194.5;
-    //reef heights that are for when we are about an inch and a half from the reef
+
+    //reef heights that are for when we are about a corals width from the reef
     public static final double REEF_LEVEL_1_CENTIMETERS_AWAY_FROM_REEF = 80;
-    public static final double REEF_LEVEL_2_CENTIMETERS_AWAY_FROM_REEF = 84.1;
-    public static final double REEF_LEVEL_3_CENTIMETERS_AWAY_FROM_REEF = 125.5;
-    public static final double REEF_LEVEL_4_CENTIMETERS_AWAY_FROM_REEF = 190;//182.69;
+    public static final double REEF_LEVEL_2_CENTIMETERS_AWAY_FROM_REEF = 90;//84.1 for a 2x4 away from reef
+    public static final double REEF_LEVEL_3_CENTIMETERS_AWAY_FROM_REEF = 131;
+    public static final double REEF_LEVEL_4_CENTIMETERS_AWAY_FROM_REEF = 195;//182.69;
 
     public static final double MOTION_MAGIC_ELEVATOR_HIGH_VELOCITY = 300;
     public static final double MOTION_MAGIC_ELEVATOR_HIGH_ACCLERATION = 600;

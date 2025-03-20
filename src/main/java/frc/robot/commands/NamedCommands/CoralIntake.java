@@ -44,7 +44,7 @@ public class CoralIntake extends Command {
   public void execute() {
     if(elevatorSubsystem.isElevatorAtIntakeHeight()) {
       coralIntake.runCoralEndEffector(CORAL_ENDEFFECTOR_SPEED);
-      funnelIntake.runFunnelSine();
+      funnelIntake.runFunnel(FUNNEL_INTAKE_SPEED);
     }
   }
 
