@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.2946721311475409,
-        "y": 0.9022028688524597
+        "x": 0.7911885245901638,
+        "y": 1.273821721311475
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.3872827868852462,
-        "y": 1.9140450819672152
+        "x": -0.11620081967213092,
+        "y": 2.2856639344262306
       },
       "isLocked": false,
       "linkedName": "humanPlayerProcessor"
     },
     {
       "anchor": {
-        "x": 3.6464999999999996,
-        "y": 2.2407499999999994
+        "x": 3.404508196721311,
+        "y": 1.9091700819672122
       },
       "prevControl": {
-        "x": 2.697233606557377,
-        "y": 1.7053790983606554
+        "x": 2.4552418032786885,
+        "y": 1.3737991803278682
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxAcceleration": 3.9,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
