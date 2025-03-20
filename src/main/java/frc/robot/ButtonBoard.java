@@ -13,8 +13,8 @@ public class ButtonBoard extends GenericHID implements Sendable{
         reefHeight2Button(2),
         reefHeight3Button(3),
         reefHeight4Button(4),
-        forceEjectAlgaeButton(6),
         bargeHeightButton(5),
+        forceEjectAlgaeButton(6),
         forceEjectCoralButton(7),
         leftReefLineupButton(8),
         rightReefLineupButton(9),
@@ -48,14 +48,14 @@ public class ButtonBoard extends GenericHID implements Sendable{
     public boolean getReefHeight4Button(){
         return getRawButton(Button.reefHeight4Button.value);
     }
-    public boolean getForceEjectAlgaeButton(){
-        return getRawButton(Button.forceEjectAlgaeButton.value);
-    }
     public boolean getBargeHeightButton(){
         return getRawButton(Button.bargeHeightButton.value);
     }
     public boolean getForceEjectCoralButton() {
         return getRawButton(Button.forceEjectCoralButton.value);
+    }
+    public boolean getForceEjectAlgaeButton() {
+        return getRawButton(Button.forceEjectAlgaeButton.value);
     }
     public boolean getLeftReefLineupButton(){
         return getRawButton(Button.leftReefLineupButton.value);
@@ -75,20 +75,24 @@ public class ButtonBoard extends GenericHID implements Sendable{
     public boolean getClimberResetButton(){
         return getRawButton(Button.climberResetButton.value);
     }
+    public boolean getForceElevatorButton(){
+        return getRawButton(Button.forceElevatorButton.value);
+    }
     public void initSendable(SendableBuilder builder){
         builder.setSmartDashboardType("HID");
         builder.addBooleanProperty("Reef Height 1 Button", this::getReefHeight1Button, null);
         builder.addBooleanProperty("Reef Height 2 Button", this::getReefHeight2Button, null);
         builder.addBooleanProperty("Reef Height 3 Button", this::getReefHeight3Button, null);
         builder.addBooleanProperty("Reef Height 4 Button", this::getReefHeight4Button, null);
-        builder.addBooleanProperty("force eject algae Button", this::getForceEjectAlgaeButton, null);
         builder.addBooleanProperty("Barge Height Button", this::getBargeHeightButton, null);
         builder.addBooleanProperty("Force Eject Coral Button", this::getForceEjectCoralButton, null);
+        builder.addBooleanProperty("Force Eject Algae Button", this::getForceEjectAlgaeButton, null);
         builder.addBooleanProperty("Left Reef Lineup Button", this::getLeftReefLineupButton, null);
         builder.addBooleanProperty("Right Reef Lineup Button", this::getRightReefLineupButton, null);
         builder.addBooleanProperty("Go For Algae Button", this::getGoForAlgaeButton, null);
         builder.addBooleanProperty("Climb Command Button", this::getclimbCommandButton, null);
         builder.addBooleanProperty("Climb Mode Authorizer", this::getClimbModeAuthorizer, null);
         builder.addBooleanProperty("Climber Reset Button", this::getClimberResetButton, null);
+        builder.addBooleanProperty("Force Elevator Button", this::getForceElevatorButton, null);
     }
 }

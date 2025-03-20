@@ -554,6 +554,7 @@ public final class Constants {
     public static final double REEF_LEVEL_3_CENTIMETERS_AGAINST_REEF = 122.6;
     public static final double REEF_LEVEL_4_CENTIMETERS_AGAINST_REEF = 188.7;//182.69;
     public static final double BARGE_SHOOT_CENTIMETERS = 194.5;
+
     //reef heights that are for when we are about a corals width from the reef
     public static final double REEF_LEVEL_1_CENTIMETERS_AWAY_FROM_REEF = 80;
     public static final double REEF_LEVEL_2_CENTIMETERS_AWAY_FROM_REEF = 90;//84.1 for a 2x4 away from reef
