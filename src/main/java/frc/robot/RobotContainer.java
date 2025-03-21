@@ -799,14 +799,11 @@ public class RobotContainer {
           coralEndDefector, () -> selectCommand(() -> false), () -> ElevatorEnums.Reef3);
       placeWithLineupLeftL3 = new PlaceCoralDuringLineupSequential(algaeEndDefector, driveTrain, elevator,
           coralEndDefector, () -> selectCommand(() -> true), () -> ElevatorEnums.Reef3);
-      coralHandlingCommand = new ParallelRaceGroup(new ParallelRaceGroup(
+      coralHandlingCommand = new ParallelRaceGroup(
           new SequentialCommandGroup(
-              new ParallelCommandGroup(
-                  new WaitCommand(() -> 1),
-                  new SequentialCommandGroup(
-                      new CoralIntake(elevator, funnelIntake, coralEndDefector),
-                      new PassCoralToEndEffectorSequential(coralEndDefector, funnelIntake)))),
-          new InstantCommand(() -> elevator.setElevatorPosition(ElevatorEnums.Reef4), elevator)),
+              new CoralIntake(elevator, funnelIntake, coralEndDefector),
+              new PassCoralToEndEffectorSequential(coralEndDefector, funnelIntake),
+              new InstantCommand(() -> elevator.setElevatorPosition(ElevatorEnums.Reef4), elevator)),
           new WaitCommand(() -> 3));
       deliverCoralLeft1NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef1, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true,algaeEndDefector, ()-> false);
       deliverCoralLeft2NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef2, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true,algaeEndDefector, ()-> false);
@@ -905,8 +902,9 @@ public class RobotContainer {
     NamedCommands.registerCommand("PlaceWithLineupLeftL3", placeWithLineupLeftL3);
     NamedCommands.registerCommand("WaitForIntake",
         new ParallelRaceGroup(
-            new ParallelCommandGroup(new InstantCommand(() -> funnelIntake.runFunnelSine(), funnelIntake),
-                new WaitUntilCommand(0.7)),
+            new ParallelCommandGroup(
+              new InstantCommand(() -> funnelIntake.runFunnelSine(), funnelIntake),
+              new WaitUntilCommand(0.5)),
             new WaitUntilCommand(() -> RobotState.getInstance().isCoralSeen())));
   }
 
