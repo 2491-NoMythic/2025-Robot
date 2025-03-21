@@ -5,7 +5,9 @@
 package frc.robot.commands;
 
 import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.ALGAE_INTAKE_SPEED;
+import static frc.robot.settings.Constants.CoralEndeffectorConstants.CORAL_ENDEFFECTOR_SPEED;
 import static frc.robot.settings.Constants.ElevatorConstants.METERS_FROM_POSE_TO_RAISE_ELEVATOR;
+import static frc.robot.settings.Constants.ElevatorConstants.REEF_LEVEL_1_CENTIMETERS_AGAINST_REEF;
 import static frc.robot.settings.Constants.Field.REEF_POSITION_THRESHOLD;
 
 import java.util.function.Supplier;
@@ -20,6 +22,7 @@ import frc.robot.commands.DriveToPose;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import frc.robot.commands.NamedCommands.DeliverCoral;
+import frc.robot.settings.ElevatorEnums;
 import frc.robot.settings.PlacementLocations;
 import frc.robot.commands.WaitUntil;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
@@ -37,19 +40,19 @@ public class L1ScoringCommandGroup extends SequentialCommandGroup {
     addCommands(
       new InstantCommand(()->RobotState.getInstance().reefLineupRunning = true),
       new InstantCommand(()->algaeEndDefector.runAlgaeEndDefector(() -> RobotState.getInstance().goForAlgae ? ALGAE_INTAKE_SPEED : -0.5), algaeEndDefector),
+      new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.Reef1), elevator),
       new ParallelDeadlineGroup(
         new SequentialCommandGroup(
+          new DriveToPose(placementSupplier, driveTrain, ()->0),
+          new WaitUntil(()->elevator.isElevatorAtPose()),
+          new InstantCommand(()->driveTrain.drive(new ChassisSpeeds(0.1, 0.3, 0))),
           new WaitCommand(0.5),
-          new ParallelRaceGroup(
-            new DeliverCoral(coralEndDefector),//drops coral
-            new WaitCommand(0.75)),
-          new WaitUntil(()->driveTrain.getPositionTargetingError() < METERS_FROM_POSE_TO_RAISE_ELEVATOR),
-          new InstantCommand(()->elevator.setElevatorPosition(()->RobotState.getInstance().deliveringCoralHeight), elevator),
-          new WaitUntil(()->driveTrain.getPositionTargetingError() < REEF_POSITION_THRESHOLD && elevator.isElevatorAtPose())
+          new InstantCommand(()->coralEndDefector.runCoralEndEffector(CORAL_ENDEFFECTOR_SPEED)),
+          new InstantCommand(()->elevator.setElevatorPositionDynamicConfigs(REEF_LEVEL_1_CENTIMETERS_AGAINST_REEF+30, 800, 300, 0), elevator),
+          new WaitCommand(0.1),
+          new WaitUntil(()->elevator.isElevatorAtPose())
         ),
         new SequentialCommandGroup(
-          new DriveToPose(placementSupplier, driveTrain, ()->0),
-          new InstantCommand(()->driveTrain.drive(new ChassisSpeeds(0, 0, 0)))
         )
       )
     );
