@@ -9,7 +9,7 @@
       "prevControl": null,
       "nextControl": {
         "x": 0.1291475409836066,
-        "y": 1.9267520491803272
+        "y": 1.926752049180327
       },
       "isLocked": false,
       "linkedName": "humanPlayerProcessor"
