@@ -14,6 +14,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.hardware.core.CoreTalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.ForwardLimitTypeValue;
+import com.ctre.phoenix6.signals.ReverseLimitTypeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -71,8 +72,10 @@ public class ClimberSubsystem extends SubsystemBase {
         .withForwardLimitEnable(true)
         .withForwardLimitAutosetPositionEnable(false)
         .withForwardLimitType(ForwardLimitTypeValue.NormallyClosed)
-        .withReverseLimitEnable(false)
-        .withReverseLimitAutosetPositionEnable(false));
+        .withReverseLimitEnable(true)
+        .withReverseLimitAutosetPositionEnable(false)
+        .withReverseLimitRemoteTalonFX(new TalonFX(ELEVATOR_MOTOR_2_ID, CANIVORE_DRIVETRAIN))
+        .withReverseLimitType(ReverseLimitTypeValue.NormallyClosed));
     }
 
     motorLogger1 = new MotorLogger("/climber/motor1");
@@ -112,6 +115,9 @@ public class ClimberSubsystem extends SubsystemBase {
   public void runWheels(double speed){
     climberWheels.set(speed);
   }
+  public void runWheels(DoubleSupplier speed){
+    climberWheels.set(speed.getAsDouble());
+  }
 
   public void stopWheels(){
     climberWheels.set(0);
@@ -139,7 +145,7 @@ public class ClimberSubsystem extends SubsystemBase {
       logMotors();
     }
     powerCheck();
-
+    SmartDashboard.putNumber("servo angle", climberServo.getAngle());
     if(!RobotState.getInstance().climberIn && RobotState.getInstance().funnelDown){
       runWheels(0.25);
     }

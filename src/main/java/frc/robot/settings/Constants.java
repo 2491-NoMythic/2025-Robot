@@ -531,8 +531,8 @@ public final class Constants {
   public final class ClimberConstants{
     public static final int CLIMBER_MOTOR_ID = 11;
     public static final int CLIMBER_CANCODER_ID = 5;
-    public static final int CLIMBER_WHEELS_MOTOR_ID = 2491;
-    public static final int SERVO_CHANNEL = 2491;
+    public static final int CLIMBER_WHEELS_MOTOR_ID = 26;
+    public static final int SERVO_CHANNEL = 0;
 
     public static final double COMP_ENCODER_OFFSET = -0.824951;
     public static final double PRAC_ENCODER_OFFSET = 0;
@@ -540,11 +540,11 @@ public final class Constants {
     public static final double CLIMBER_CLIMBED_ANGLE = 100;
     public static final double CLIMBER_NOT_CLIMBED_ANGLE = 0;
 
-    public static final double CLIMBER_RACHET_TRUE = 2491;
-    public static final double CLIMBER_RACHET_FALSE = 2491;
+    public static final double CLIMBER_RACHET_TRUE = 0;
+    public static final double CLIMBER_RACHET_FALSE = -10;
 
-    public static final double CLIMBER_POWER_FORWARD = 1;
-    public static final double CLIMBER_POWER_REVERSE = -0.5;
+    public static final double CLIMBER_POWER_FORWARD = -0.1;
+    public static final double CLIMBER_POWER_REVERSE = 0.1;
 
     public static final int CLIMBER_WHEELS_CURRENT_LIMIT = 2491;
     public static final int CLIMBER_WHEELS_RPM_LIMIT = 2491;
