@@ -387,9 +387,8 @@ public class RobotContainer {
       ForceEjectCoral = buttonBoard::getForceEjectCoralButton;
       algaeShooterSupOperator = buttonBoard::getForceEjectAlgaeButton;
 
-      ClimbModeAuthorizer = buttonBoard::getClimbModeAuthorizer;
-      climberResetSupplier = buttonBoard::getClimberResetButton;
-      ClimbCommandSupplier = buttonBoard::getclimbCommandButton;
+      climberGroupForward = buttonBoard::getclimbCommandButton;
+      climberGroupReverse = buttonBoard::getClimberResetButton;
     }
     if (LimelightExists) {limelightInit();}
     if (distanceSensorsExist) {sensorInit();}   
