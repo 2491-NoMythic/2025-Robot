@@ -59,7 +59,7 @@ class SingleButton:
 
 js = Joystick()
 heightButtons = [
-    StrangeButton(0, board.D31, board.D10),
+    StrangeButton(0, board.D7, board.D6),
     StrangeButton(1, board.D30, board.D2),
     StrangeButton(2, board.D29, board.D3),
     StrangeButton(3, board.D28, board.D4),
@@ -92,5 +92,3 @@ while True:
     for i in buttons:
         i.update()
     js.update()
-
-
