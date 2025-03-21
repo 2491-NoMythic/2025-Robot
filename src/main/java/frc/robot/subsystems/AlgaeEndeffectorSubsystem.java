@@ -96,9 +96,9 @@ public class AlgaeEndeffectorSubsystem extends SubsystemBase {
 
     SmartDashboard.putNumber("AlgaeMotorCurrent",algaeEndeffectorMotor.getStatorCurrent().getValueAsDouble());
     //if we are at 80%+ percent of the current limit, assume it's becuse we have an algae
-    if(algaeEndeffectorMotor.getSupplyCurrent().getValueAsDouble()>ALGAE_ENDEFFECTOR_CURRENT_LIMIT*0.8){ 
+    if(algaeEndeffectorMotor.getSupplyCurrent().getValueAsDouble()>10){ 
       loops++;
-      if(loops > 10){
+      if(loops > 2){
         RobotState.getInstance().hasAlgae = true;
       }
     }else{
