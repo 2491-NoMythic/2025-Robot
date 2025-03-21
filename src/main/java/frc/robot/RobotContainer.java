@@ -70,6 +70,7 @@ import frc.robot.commands.IndicatorLights;
 import frc.robot.commands.L1ScoringCommandGroup;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.ElevatorReset;
+import frc.robot.commands.ElevatorTestCommand;
 import frc.robot.commands.FunClimbedLights;
 import frc.robot.commands.FunnelRotatorCommand;
 import frc.robot.commands.LineUp;
@@ -1014,6 +1015,23 @@ public class RobotContainer {
       SmartDashboard.putString("TESTING/funnelintakeCommand", funnelIntake.getCurrentCommand().toString());
     }
     
+  }
+  public void testInit() {
+    if(DrivetrainExists) {
+      new Drive(driveTrain, ()->false, ControllerForwardAxisSupplier, ControllerSidewaysAxisSupplier, ControllerZAxisSupplier) {
+        @Override
+        public boolean isFinished() {
+          return !DriverStation.isTest();
+        }
+        @Override
+        public InterruptionBehavior getInterruptionBehavior() {
+          return InterruptionBehavior.kCancelIncoming;
+        }
+      }.schedule();
+    }
+    if(elevatorExists) {
+      new ElevatorTestCommand(elevator, ForceElevator).schedule();
+    }
   }
   public void robotInit(){
     if(lightsExist) {

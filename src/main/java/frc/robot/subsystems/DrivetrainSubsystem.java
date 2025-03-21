@@ -342,9 +342,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
             + (-pigeon.getPitch().getValueAsDouble()/10);
       }
     }
-      if (Preferences.getBoolean ("Safe Elevator Driving",false && RobotState.getInstance().elevatorIsHigh)){
-       chassisSpeeds.vxMetersPerSecond = chassisSpeeds.vxMetersPerSecond / 2; 
-       chassisSpeeds.vyMetersPerSecond = chassisSpeeds.vyMetersPerSecond / 2; 
+      if (DriverStation.isTest()){
+       chassisSpeeds.vxMetersPerSecond = chassisSpeeds.vxMetersPerSecond / 4; 
+       chassisSpeeds.vyMetersPerSecond = chassisSpeeds.vyMetersPerSecond / 4; 
+       chassisSpeeds.omegaRadiansPerSecond = chassisSpeeds.omegaRadiansPerSecond / 4;
       }
     SwerveModuleState[] desiredStates =
         kinematics.toSwerveModuleStates(ChassisSpeeds.discretize(chassisSpeeds, 0.02));
