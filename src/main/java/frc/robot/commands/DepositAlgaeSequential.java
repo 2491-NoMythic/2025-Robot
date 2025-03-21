@@ -4,14 +4,9 @@
 
 package frc.robot.commands;
 
-import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.ALGAE_SHOOT_SPEED;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.settings.ElevatorEnums;
 import frc.robot.subsystems.AlgaeEndeffectorSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;

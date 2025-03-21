@@ -9,7 +9,6 @@ import static frc.robot.settings.Constants.CoralEndeffectorConstants.CORAL_ENDEF
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.settings.ElevatorEnums;
 import frc.robot.subsystems.CoralEndeffectorSubsystem;
-import frc.robot.subsystems.RobotState;
 
 public class DeliverCoral extends Command {
   /** Creates a new deliverCoral. */
