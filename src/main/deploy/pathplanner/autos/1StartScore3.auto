@@ -19,7 +19,7 @@
         {
           "type": "named",
           "data": {
-            "name": "SpitCoral"
+            "name": "PlaceWithLineupRightL4"
           }
         },
         {
@@ -31,13 +31,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "BargeSidePickup"
+            "pathName": "BargeSidePickupSlower"
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 0.75
+            "name": "WaitForIntake"
           }
         },
         {
@@ -47,7 +47,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "BargeSideTopToReefK"
+                  "pathName": "BargeSideTopToReefKSlower"
                 }
               },
               {
@@ -62,7 +62,7 @@
         {
           "type": "named",
           "data": {
-            "name": "SpitCoral"
+            "name": "PlaceWithLineupLeftL4"
           }
         },
         {
@@ -74,13 +74,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "ReefKtoBargeSideTopFeeder"
+            "pathName": "ReefKtoBargeSideTopFeederSlower"
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 0.75
+            "name": "WaitForIntake"
           }
         },
         {
@@ -90,7 +90,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "BargeSideToptoReefL"
+                  "pathName": "BargeSideToptoReefLSlower"
                 }
               },
               {
@@ -105,7 +105,7 @@
         {
           "type": "named",
           "data": {
-            "name": "SpitCoral"
+            "name": "PlaceWithLineupRightL4"
           }
         },
         {

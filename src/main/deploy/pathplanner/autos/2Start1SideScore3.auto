@@ -19,6 +19,12 @@
         {
           "type": "named",
           "data": {
+            "name": "PlaceWithLineupLeft"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "SpitCoral"
           }
         },
@@ -47,7 +53,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "BargeSideTopToReefK"
+                  "pathName": "BargeSideTopToReefKFaster"
                 }
               },
               {
@@ -57,6 +63,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PlaceWithLineupRight"
           }
         },
         {
@@ -74,7 +86,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "ReefKtoBargeSideTopFeeder"
+            "pathName": "ReefKtoBargeSideTopFeederFaster"
           }
         },
         {
@@ -90,7 +102,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "BargeSideToptoReefL"
+                  "pathName": "BargeSideToptoReefLFaster"
                 }
               },
               {
@@ -100,6 +112,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PlaceWithLineupLeft"
           }
         },
         {
