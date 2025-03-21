@@ -788,18 +788,23 @@ public class RobotContainer {
     Command placeWithLineupLeftL4;
     Command placeWithLineupLeftL3;
     if(elevatorExists&&funnelIntakeExists&&coralEndeffectorExists&&algaeEndeffectorExists) {
-      //this command will raise the elevator after the coral has been lined up in the end effector, and more than 1 second has passed (s wer are not stlil accelerating)
-      placeWithLineupRightL4 = new PlaceCoralDuringLineupSequential(algaeEndDefector, driveTrain, elevator, coralEndDefector, ()-> selectCommand(()-> false), ()->ElevatorEnums.Reef4);
-      placeWithLineupLeftL4 = new PlaceCoralDuringLineupSequential(algaeEndDefector, driveTrain, elevator, coralEndDefector, ()-> selectCommand(()-> true), ()->ElevatorEnums.Reef4);
-      placeWithLineupRightL3 = new PlaceCoralDuringLineupSequential(algaeEndDefector, driveTrain, elevator, coralEndDefector, ()-> selectCommand(()-> false), ()->ElevatorEnums.Reef3);
-      placeWithLineupLeftL3 = new PlaceCoralDuringLineupSequential(algaeEndDefector, driveTrain, elevator, coralEndDefector, ()-> selectCommand(()-> true), ()->ElevatorEnums.Reef3);
+      // this command will raise the elevator after the coral has been lined up in the
+      // end effector, and more than 1 second has passed (s wer are not stlil
+      // accelerating)
+      placeWithLineupRightL4 = new PlaceCoralDuringLineupSequential(algaeEndDefector, driveTrain, elevator,
+          coralEndDefector, () -> selectCommand(() -> false), () -> ElevatorEnums.Reef4);
+      placeWithLineupLeftL4 = new PlaceCoralDuringLineupSequential(algaeEndDefector, driveTrain, elevator,
+          coralEndDefector, () -> selectCommand(() -> true), () -> ElevatorEnums.Reef4);
+      placeWithLineupRightL3 = new PlaceCoralDuringLineupSequential(algaeEndDefector, driveTrain, elevator,
+          coralEndDefector, () -> selectCommand(() -> false), () -> ElevatorEnums.Reef3);
+      placeWithLineupLeftL3 = new PlaceCoralDuringLineupSequential(algaeEndDefector, driveTrain, elevator,
+          coralEndDefector, () -> selectCommand(() -> true), () -> ElevatorEnums.Reef3);
       coralHandlingCommand = new ParallelRaceGroup(
-        new SequentialCommandGroup(
-          new ParallelCommandGroup(
-            new SequentialCommandGroup(
+          new SequentialCommandGroup(
               new CoralIntake(elevator, funnelIntake, coralEndDefector),
-              new PassCoralToEndEffectorSequential(coralEndDefector, funnelIntake))),
-          new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.Reef4), elevator)));
+              new PassCoralToEndEffectorSequential(coralEndDefector, funnelIntake),
+              new InstantCommand(() -> elevator.setElevatorPosition(ElevatorEnums.Reef4), elevator)),
+          new WaitCommand(() -> 3));
       deliverCoralLeft1NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef1, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true,algaeEndDefector, ()-> false);
       deliverCoralLeft2NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef2, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true,algaeEndDefector, ()-> false);
       deliverCoralLeft3NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef3, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true,algaeEndDefector, ()-> false);
@@ -895,7 +900,12 @@ public class RobotContainer {
     NamedCommands.registerCommand("PlaceWithLineupLeftL4", placeWithLineupLeftL4);
     NamedCommands.registerCommand("PlaceWithLineupRightL3", placeWithLineupRightL3);
     NamedCommands.registerCommand("PlaceWithLineupLeftL3", placeWithLineupLeftL3);
-    NamedCommands.registerCommand("WaitForIntake", new WaitUntilCommand(0.4));
+    NamedCommands.registerCommand("WaitForIntake",
+        new ParallelRaceGroup(
+            new ParallelCommandGroup(
+              new InstantCommand(() -> funnelIntake.runFunnelSine(), funnelIntake),
+              new WaitUntilCommand(0.5)),
+            new WaitUntilCommand(() -> RobotState.getInstance().isCoralSeen())));
   }
 
   public void logPower() {
