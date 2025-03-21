@@ -602,7 +602,7 @@ public class RobotContainer {
             new MoveMeters(driveTrain, -0.5, -0.8, 0, 0),
             new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer), elevator), //sets elevator back to the bottom position
             new InstantCommand(()->RobotState.getInstance().reefLineupRunning = false))
-            ).onFalse(new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer)));
+            ).onFalse(new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer))).onFalse(new InstantCommand(()->algaeEndDefector.stopAlgaeEndDefectorHard(), algaeEndDefector));
       
       new Trigger(()->CoralPlaceTeleSupplier.getAsBoolean() && RobotState.getInstance().goForAlgae && !(RobotState.getInstance().deliveringCoralHeight==ElevatorEnums.Reef1)).whileTrue(
         new SequentialCommandGroup(
