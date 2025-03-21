@@ -543,8 +543,8 @@ public final class Constants {
     public static final double CLIMBER_RACHET_TRUE = 2491;
     public static final double CLIMBER_RACHET_FALSE = 2491;
 
-    public static final double CLIMBER_POWER_FORWARD = 2491;
-    public static final double CLIMBER_POWER_REVERSE = 2491;
+    public static final double CLIMBER_POWER_FORWARD = 1;
+    public static final double CLIMBER_POWER_REVERSE = -0.5;
 
     public static final int CLIMBER_WHEELS_CURRENT_LIMIT = 2491;
     public static final int CLIMBER_WHEELS_RPM_LIMIT = 2491;

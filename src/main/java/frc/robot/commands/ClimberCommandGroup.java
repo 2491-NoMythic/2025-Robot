@@ -25,12 +25,9 @@ public class ClimberCommandGroup extends SequentialCommandGroup {
     this.isClimbing = isClimbing;
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    if (isClimbing) {
-      addCommands(new InstantCommand(() -> climber.setServo(true)), new WaitCommand(() -> 0.5),
-          new InstantCommand(() -> climber.setClimberPower(CLIMBER_POWER_FORWARD)));
-    } else if (!isClimbing) {
-      addCommands(new InstantCommand(() -> climber.setServo(false)), new WaitCommand(() -> 0.5),
-          new InstantCommand(() -> climber.setClimberPower(CLIMBER_POWER_REVERSE)));
-    }
+    addCommands(
+      new InstantCommand(() -> climber.setServo( ()-> isClimbing), climber),
+      new WaitCommand(() -> 0.5),
+      new InstantCommand(() -> climber.setClimberPower(()->isClimbing ? CLIMBER_POWER_FORWARD : CLIMBER_POWER_REVERSE), climber));
   }
 }

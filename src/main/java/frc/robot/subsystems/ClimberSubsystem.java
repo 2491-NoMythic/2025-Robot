@@ -33,11 +33,12 @@ import static frc.robot.settings.Constants.ClimberConstants.*;
 import static frc.robot.settings.Constants.DriveConstants.CANIVORE_DRIVETRAIN;
 import static frc.robot.settings.Constants.ElevatorConstants.ELEVATOR_MOTOR_2_ID;
 
+import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
+
 public class ClimberSubsystem extends SubsystemBase {
   TalonFX climberMotor1;
   MotorLogger motorLogger1;
-  boolean moveWithPower;
-  double movingPower;
   Servo climberServo;
   SparkMax climberWheels;
   SparkMaxConfig climberWheelsConfig;
@@ -81,28 +82,29 @@ public class ClimberSubsystem extends SubsystemBase {
    * @param angle the desired angle
    */
   public void stopClimber(){
-    moveWithPower = false;
     climberMotor1.set(0);
   }
   public void setClimberPower(double power) {
     climberMotor1.set(power);
   }
+  public void setClimberPower(DoubleSupplier power) {
+    climberMotor1.set(power.getAsDouble());
+  }
   private void logMotors(){
     motorLogger1.log(climberMotor1);
   }
   public void setMotorTorqueFOC(double current) {
-    moveWithPower = false;
     climberMotor1.setControl(new TorqueCurrentFOC(current));
   }
   /**
    * sets the climberServo to one of two states
    * @param state true is when the rachet is active, false is when it is not
    */
-  public void setServo(boolean rachet){
-    if(rachet){
+  public void setServo(BooleanSupplier rachet){
+    if(rachet.getAsBoolean()){
       climberServo.setAngle(CLIMBER_RACHET_TRUE);
     }
-    else if(!rachet){
+    else {
       climberServo.setAngle(CLIMBER_RACHET_FALSE);
     }
   }
