@@ -54,7 +54,7 @@ public class PlaceCoralNoPath extends SequentialCommandGroup{
                         new DeliverCoral(coralEndeffector),//drops coral
                         new WaitCommand(()->0.75)))
             ),
-            new InstantCommand(()->System.out.println("reeflineupended!!")) //sets elevator back to the bottom position
+            new InstantCommand(()->System.out.println("Reef Lineup Ended!")) //sets elevator back to the bottom position
         );
 
     }

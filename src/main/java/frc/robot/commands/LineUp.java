@@ -6,14 +6,9 @@ package frc.robot.commands;
 
 import java.util.function.BooleanSupplier;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.Robot;
-import frc.robot.RobotContainer;
 import frc.robot.settings.ReefOffsetEnums;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.RobotState;
@@ -36,7 +31,7 @@ public class LineUp extends Command {
   double speed;
 
 /**
- * this command will align your robot side-to-side on one of the reef poles. 
+ * This command will align your robot side-to-side on one of the reef poles. 
  * @param drivetrain
  * @param movingLeft true if you are aligning on the left pole, false, if you are aligning on the right pole
  * @param speed the speed at which the drivetrain will drive, right or left depending on sensor position

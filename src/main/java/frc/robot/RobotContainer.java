@@ -61,7 +61,6 @@ import frc.robot.settings.Constants.AlgaeEndeffectorConstants;
 import frc.robot.settings.Constants.LightConstants;
 import frc.robot.settings.Constants.Vision;
 import frc.robot.settings.ControllerEnums;
-import frc.robot.commands.AlgaeEndeffectorCommand;
 import frc.robot.commands.ApproachReef;
 import frc.robot.commands.AlgaeIntakeCommand;
 import frc.robot.commands.Drive;

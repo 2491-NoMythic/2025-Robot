@@ -19,14 +19,18 @@ import frc.robot.subsystems.RobotState;
 
 import static frc.robot.settings.Constants.Field.*;
 
-/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class DriveToPose extends Command {
-  /** Creates a new DriveToPose. */
   Supplier<PlacementLocations> targetSpot;
   DrivetrainSubsystem drivetrain;
   Pose2d targetPose;
   int cyclesGood;
   DoubleSupplier yMovementSupplierForBarge;
+  /**
+   * Drives the robot to a given position. 
+   * @param targetSpot
+   * @param drivetrain
+   * @param yMovementSupplierBarge
+   */
   public DriveToPose(Supplier<PlacementLocations> targetSpot, DrivetrainSubsystem drivetrain, DoubleSupplier yMovementSupplierBarge) {
     this.drivetrain = drivetrain;
     this.targetSpot = targetSpot;

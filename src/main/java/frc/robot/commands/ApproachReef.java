@@ -4,7 +4,6 @@
 
 package frc.robot.commands;
 
-import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -17,9 +16,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.settings.Constants.DriveConstants;
 import frc.robot.subsystems.DistanceSensors;
 import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.RobotState;
 
-/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ApproachReef extends Command {
   private final double kP = 0.01;//0.0023;
   private final double kI = 0.001;
@@ -35,7 +32,14 @@ public class ApproachReef extends Command {
   Timer timer;
   double lastDistance;
   int loopsLastDistanceGreater;
-  /** Creates a new ApproachReef. */
+  /**
+   * This is a complex command meant to line up the robot with the reef using the distance sensors. It primarily works as a speed control. 
+   * @param distanceSensorsSubssytem
+   * @param drivetrainSubsystem
+   * @param translationXSupplier
+   * @param translationYSupplier
+   * @param rotationSupplier
+   */
   public ApproachReef(
     DistanceSensors distanceSensorsSubssytem,
     DrivetrainSubsystem drivetrainSubsystem,

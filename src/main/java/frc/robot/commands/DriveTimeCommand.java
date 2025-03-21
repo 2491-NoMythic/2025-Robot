@@ -17,7 +17,14 @@ public class DriveTimeCommand extends Command {
   Timer timer;
   DrivetrainSubsystem drivetrain;
 
-  /** Creates a new DriveTimeCommand. */
+  /**
+   * Drives the robot at a given speed, direction, and rotational speed in a set amount of time. 
+   * @param forwardSpeed
+   * @param sidewaysSpeed
+   * @param radiansPerSecond
+   * @param time
+   * @param drivetrain
+   */
   public DriveTimeCommand(
       double forwardSpeed,
       double sidewaysSpeed,

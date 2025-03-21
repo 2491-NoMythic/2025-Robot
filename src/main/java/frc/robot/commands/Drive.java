@@ -19,7 +19,7 @@ public class Drive extends Command {
   private int invert;
 
   /**
-   * drives the robot at a specific forward velocity, sideways velocity, and rotational velocity.
+   * Drives the robot at a specific forward velocity, sideways velocity, and rotational velocity.
    *
    * @param drivetrainSubsystem Swerve drive subsytem
    * @param robotCentricMode while this is pressed, the robot will drive in RobotCentric mode.

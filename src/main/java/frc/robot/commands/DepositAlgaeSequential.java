@@ -4,8 +4,6 @@
 
 package frc.robot.commands;
 
-import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.ALGAE_SHOOT_SPEED;
-
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -16,11 +14,15 @@ import frc.robot.subsystems.AlgaeEndeffectorSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
+
 public class DepositAlgaeSequential extends SequentialCommandGroup {
-  /** Creates a new DepositAlgaeSequential. */
+  /**
+   * Aligns the elevator with the processor, dumps collected algae, then aligns elevator with the human player station. 
+   * But this time, it's a sequential command group that also includes driving to the processor automatically. 
+   * @param elevator
+   * @param algaeEndEffector
+   * @param drivetrain
+   */
   public DepositAlgaeSequential(ElevatorSubsystem elevator, AlgaeEndeffectorSubsystem algaeEndEffector, DrivetrainSubsystem drivetrain) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());

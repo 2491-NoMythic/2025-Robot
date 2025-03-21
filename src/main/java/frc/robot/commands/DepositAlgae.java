@@ -11,19 +11,21 @@ import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVAT
 import static frc.robot.settings.Constants.ElevatorConstants.PROCESSOR_HEIGHT_CENTIMETERS;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.settings.ElevatorEnums;
 import frc.robot.subsystems.AlgaeEndeffectorSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.RobotState;
 
 
-/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class DepositAlgae extends Command {
   AlgaeEndeffectorSubsystem algaeEndeffector;
   ElevatorSubsystem elevator;
   double shootSpeed;
   
-  /** Creates a new AlgaeIntakeCommand. */
+  /**
+   * Aligns the elevator with the processor, dumps collected algae, then aligns elevator with the human player station. 
+   * @param algaeEndeffector
+   * @param elevator
+   * @param shootSpeed
+  */
   public DepositAlgae(AlgaeEndeffectorSubsystem algaeEndeffector, ElevatorSubsystem elevator, double shootSpeed) {
     this.algaeEndeffector = algaeEndeffector;
     this.elevator = elevator;

@@ -16,12 +16,10 @@ import frc.robot.subsystems.AlgaeEndeffectorSubsystem;
 import frc.robot.subsystems.CoralEndeffectorSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.commands.DriveToPose;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import frc.robot.commands.NamedCommands.DeliverCoral;
 import frc.robot.settings.PlacementLocations;
-import frc.robot.commands.WaitUntil;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import frc.robot.subsystems.RobotState;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -30,7 +28,15 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class L1ScoringCommandGroup extends SequentialCommandGroup {
-  /** Creates a new PlaceCoralDuringLineupSequential. */
+  /**
+   * Does the very complicated process of scoring in L1.
+   * If the regular delivercoral command were used, the coral would bounce out of the trough. 
+   * @param algaeEndDefector
+   * @param driveTrain
+   * @param elevator
+   * @param coralEndDefector
+   * @param placementSupplier
+   */
   public L1ScoringCommandGroup(AlgaeEndeffectorSubsystem algaeEndDefector, DrivetrainSubsystem driveTrain, ElevatorSubsystem elevator, CoralEndeffectorSubsystem coralEndDefector, Supplier<PlacementLocations> placementSupplier) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());

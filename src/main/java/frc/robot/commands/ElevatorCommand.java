@@ -4,24 +4,19 @@
 
 package frc.robot.commands;
 
-import static frc.robot.settings.Constants.ElevatorConstants.HUMAN_PLAYER_STATION_CENTIMETERS;
-
 import java.util.function.Supplier;
 
 import frc.robot.subsystems.RobotState;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.settings.Constants.ElevatorConstants;
-import frc.robot.Robot;
 import frc.robot.settings.ElevatorEnums;
 
 
-/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ElevatorCommand extends Command {
   ElevatorSubsystem elevator;
   ElevatorEnums level;
   Supplier<ElevatorEnums> levelSupplier;
-  /** Creates a new ElevatorCommand. 
+  /** Sets the elevator to a supplied position. 
    * @param elevator elevator subsystem
    * @param level level of reef, human player station is 0. 
   */

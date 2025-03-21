@@ -5,25 +5,22 @@
 package frc.robot.commands.NamedCommands;
 
 import static frc.robot.settings.Constants.CoralEndeffectorConstants.CORAL_ENDEFFECTOR_SPEED;
-import static frc.robot.settings.Constants.ElevatorConstants.HUMAN_PLAYER_STATION_CENTIMETERS;
-
-import frc.robot.subsystems.RobotState;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.commands.ElevatorCommand;
 import frc.robot.subsystems.CoralEndeffectorSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.FunnelIntake;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class EjectCoral extends Command {
-  /** Creates a new CoralIntake. */
+  /** Creates a new coralEndeffector. */
 
-  CoralEndeffectorSubsystem coralIntake;
-  
-  public EjectCoral(CoralEndeffectorSubsystem coralIntake) {
+  CoralEndeffectorSubsystem coralEndeffector;
+  /**
+   * Runs the coral endeffector. Use this one when something goes wrong and we need to dump the coral immediately. 
+   * @param coralEndeffector
+   */
+  public EjectCoral(CoralEndeffectorSubsystem coralEndeffector) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(coralIntake);
-    this.coralIntake = coralIntake;
+    addRequirements(coralEndeffector);
+    this.coralEndeffector = coralEndeffector;
   }
 
   // Called when the command is initially scheduled.
@@ -34,13 +31,13 @@ public class EjectCoral extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    coralIntake.runCoralEndEffector(CORAL_ENDEFFECTOR_SPEED);
+    coralEndeffector.runCoralEndEffector(CORAL_ENDEFFECTOR_SPEED);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    coralIntake.stopCoralEndEffector();
+    coralEndeffector.stopCoralEndEffector();
   }
 
   // Returns true when the command should end.

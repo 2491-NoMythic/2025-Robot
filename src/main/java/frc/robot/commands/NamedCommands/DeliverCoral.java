@@ -8,14 +8,15 @@ import static frc.robot.settings.Constants.CoralEndeffectorConstants.CORAL_ENDEF
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.CoralEndeffectorSubsystem;
-import frc.robot.subsystems.RobotState;
 
-/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class DeliverCoral extends Command {
+  /** Creates a new deliverCoral. */
   CoralEndeffectorSubsystem coralEndeffector;
 
-
-  /** Creates a new deliverCoral. */
+  /**
+   * Runs the coral endeffector. Use this one for standard delivery.
+   * @param coralEndeffector
+   */
   public DeliverCoral( CoralEndeffectorSubsystem coralEndeffector) {
     addRequirements(coralEndeffector);
     this.coralEndeffector = coralEndeffector;
