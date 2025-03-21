@@ -543,7 +543,7 @@ public final class Constants {
     public static final double HUMAN_PLAYER_STATION_CENTIMETERS = 23.2;//19.1;//31.5;
     public static final double PRAC_HEIGHT_AT_LIMIT_SWITCH = 20;
     public static final double COMP_HEIGHT_AT_LOWER_LIMIT_SWITCH = 20;//before second limit switch was added (and for all of duluth): 16.828;
-    public static final double COMP_HEIGHT_AT_UPPER_LIMIT_SWITCH = 195.7;
+    public static final double COMP_HEIGHT_AT_UPPER_LIMIT_SWITCH = 201.5;
     public static final double PROCESSOR_HEIGHT_CENTIMETERS = 19;
     public static final double ELEVATOR_THRESHOLD = 1.5;
     public static final double METERS_FROM_POSE_TO_RAISE_ELEVATOR = 2.5;
@@ -559,7 +559,7 @@ public final class Constants {
     public static final double REEF_LEVEL_1_CENTIMETERS_AWAY_FROM_REEF = 80;
     public static final double REEF_LEVEL_2_CENTIMETERS_AWAY_FROM_REEF = 90;//84.1 for a 2x4 away from reef
     public static final double REEF_LEVEL_3_CENTIMETERS_AWAY_FROM_REEF = 131;
-    public static final double REEF_LEVEL_4_CENTIMETERS_AWAY_FROM_REEF = 195;//182.69;
+    public static final double REEF_LEVEL_4_CENTIMETERS_AWAY_FROM_REEF = 196.5;//182.69;
 
     public static final double MOTION_MAGIC_ELEVATOR_HIGH_VELOCITY = 300;
     public static final double MOTION_MAGIC_ELEVATOR_HIGH_ACCLERATION = 600;

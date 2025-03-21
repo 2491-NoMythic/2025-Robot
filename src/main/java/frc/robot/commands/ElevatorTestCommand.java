@@ -25,7 +25,7 @@ public class ElevatorTestCommand extends Command {
   /** Creates a new ElevatorTestCommand. */
   ElevatorSubsystem elevator;
   BooleanSupplier selectedHeightSup;
-  final double TEST_ACCELERATION = 200;
+  final double TEST_ACCELERATION = 80;
   final double TEST_VELOCITY = 100;
   public ElevatorTestCommand(ElevatorSubsystem elevator, BooleanSupplier goToSelectedHeight) {
     this.elevator = elevator;
