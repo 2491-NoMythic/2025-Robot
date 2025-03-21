@@ -559,7 +559,7 @@ public final class Constants {
     //reef heights that are for when we are about a corals width from the reef
     public static final double REEF_LEVEL_1_CENTIMETERS_AWAY_FROM_REEF = 50;
     public static final double REEF_LEVEL_2_CENTIMETERS_AWAY_FROM_REEF = 90;//84.1 for a 2x4 away from reef
-    public static final double REEF_LEVEL_3_CENTIMETERS_AWAY_FROM_REEF = 131;
+    public static final double REEF_LEVEL_3_CENTIMETERS_AWAY_FROM_REEF = 130.2;
     public static final double REEF_LEVEL_4_CENTIMETERS_AWAY_FROM_REEF = 196.5;//182.69;
 
     public static final double MOTION_MAGIC_ELEVATOR_HIGH_VELOCITY = 300;
