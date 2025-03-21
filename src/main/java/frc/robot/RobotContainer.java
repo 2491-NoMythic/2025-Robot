@@ -1004,16 +1004,48 @@ public class RobotContainer {
     }
 
   }
+  private void logCurrentCommands() {
+    if(DrivetrainExists) {
+      if(driveTrain.getCurrentCommand() != null) {
+        SmartDashboard.putString("CURRENT COMMANDS/drivetrain", driveTrain.getCurrentCommand().toString());
+      }
+    }
+    if(funnelIntakeExists) {
+      if(funnelIntake.getCurrentCommand() != null) {
+        SmartDashboard.putString("CURRENT COMMANDS/funnel intake", funnelIntake.getCurrentCommand().toString());
+      }
+    }
+    if(elevatorExists) {
+      if(elevator.getCurrentCommand() != null) {
+        SmartDashboard.putString("CURRENT COMMANDS/elevator", elevator.getCurrentCommand().toString());
+      }
+    }
+    if(algaeEndeffectorExists) {
+      if(algaeEndDefector.getCurrentCommand() != null) {
+        SmartDashboard.putString("CURRENT COMMANDS/algae end effector", algaeEndDefector.getCurrentCommand().toString());
+      }
+    }
+    if(coralEndeffectorExists) {
+      if(coralEndDefector.getCurrentCommand() != null) {
+        SmartDashboard.putString("CURRENT COMMANDS/coral end effector", coralEndDefector.getCurrentCommand().toString());
+      }
+    }
+    if(climberExists) {
+      if(climber.getCurrentCommand() != null) {
+        SmartDashboard.putString("CURRENT COMMANDS/climber", climber.getCurrentCommand().toString());
+      }
+    }
+    if(funnelRotatorExists) {
+      if(funnelRotator.getCurrentCommand() != null) {
+        SmartDashboard.putString("CURRENT COMMANDS/funnel rotator", funnelRotator.getCurrentCommand().toString());
+      }
+    }
+  }
   public void teleopPeriodic() {
     if(DrivetrainExists) {
       SmartDashboard.putData(driveTrain.getCurrentCommand());
     }
-    if (elevatorExists) {
-      SmartDashboard.putData(elevator.getCurrentCommand());
-    }
-    if(funnelIntakeExists && funnelIntake.getCurrentCommand() != null) {
-      SmartDashboard.putString("TESTING/funnelintakeCommand", funnelIntake.getCurrentCommand().toString());
-    }
+    logCurrentCommands();
     
   }
   public void testInit() {
@@ -1070,6 +1102,7 @@ public class RobotContainer {
       }else{
         lights.setCandleLights(LightConstants.TOTAL_LIGHTS_CANDLE_STRIP_START, LightConstants.DRIVETRAIN_LIGHTS_END, 200, 0, 0);  
       }
+      logCurrentCommands();
     }
   }
   
@@ -1078,5 +1111,9 @@ public class RobotContainer {
     if(coralEndeffectorExists) {
       new InstantCommand(()->coralEndDefector.stopCoralEndEffector(), coralEndDefector);
     }
+  }
+
+  public void autonomousPeriodic() {
+    logCurrentCommands();
   }
 }
