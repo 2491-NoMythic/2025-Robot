@@ -43,14 +43,16 @@ public class L1ScoringCommandGroup extends SequentialCommandGroup {
       new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.Reef1), elevator),
       new ParallelDeadlineGroup(
         new SequentialCommandGroup(
-          new WaitCommand(0.1),
-          new WaitUntil(()->driveTrain.getPositionTargetingError() < REEF_POSITION_THRESHOLD && elevator.isElevatorAtPose()),
+          new DriveToPose(placementSupplier, driveTrain, ()->0),
+          new WaitUntil(()->elevator.isElevatorAtPose()),
+          new InstantCommand(()->driveTrain.drive(new ChassisSpeeds(0.1, 0.3, 0))),
+          new WaitCommand(0.5),
           new InstantCommand(()->coralEndDefector.runCoralEndEffector(CORAL_ENDEFFECTOR_SPEED)),
-          new InstantCommand(()->elevator.setElevatorPositionDynamicConfigs(REEF_LEVEL_1_CENTIMETERS_AGAINST_REEF+10, 500, 300, 0), elevator),
+          new InstantCommand(()->elevator.setElevatorPositionDynamicConfigs(REEF_LEVEL_1_CENTIMETERS_AGAINST_REEF+30, 800, 300, 0), elevator),
+          new WaitCommand(0.1),
           new WaitUntil(()->elevator.isElevatorAtPose())
         ),
         new SequentialCommandGroup(
-          new DriveToPose(placementSupplier, driveTrain, ()->0)
         )
       )
     );
