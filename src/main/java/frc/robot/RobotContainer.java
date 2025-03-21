@@ -940,11 +940,8 @@ public class RobotContainer {
         }
       }.schedule();
     }
-    if(climberExists){
-      new ClimberTestCommand(climber, ClimbCommandSupplier, climberResetSupplier).schedule();
-    }
     if(elevatorExists){
-      new ElevatorTestCommand(elevator, ForceElevatorUp, ForceElevatorDown, ForceElevator).schedule();
+      new ElevatorTestCommand(elevator, ForceElevator).schedule();
     }
   }
 

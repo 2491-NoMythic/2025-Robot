@@ -4,12 +4,17 @@
 
 package frc.robot.commands;
 
+import static frc.robot.settings.Constants.ElevatorConstants.BARGE_SHOOT_CENTIMETERS;
+import static frc.robot.settings.Constants.ElevatorConstants.REEF_LEVEL_1_CENTIMETERS;
+import static frc.robot.settings.Constants.ElevatorConstants.REEF_LEVEL_2_CENTIMETERS;
+
 import java.util.function.BooleanSupplier;
 
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.settings.ElevatorEnums;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.RobotState;
 
@@ -17,13 +22,11 @@ import frc.robot.subsystems.RobotState;
 public class ElevatorTestCommand extends Command {
   /** Creates a new ElevatorTestCommand. */
   ElevatorSubsystem elevator;
-  BooleanSupplier elevatorUpSup;
-  BooleanSupplier elevatorDownSup;
   BooleanSupplier selectedHeightSup;
-  public ElevatorTestCommand(ElevatorSubsystem elevator, BooleanSupplier elevatorUp, BooleanSupplier elevatorDown, BooleanSupplier goToSelectedHeight) {
+  final double TEST_ACCELERATION = 200;
+  final double TEST_VELOCITY = 100;
+  public ElevatorTestCommand(ElevatorSubsystem elevator, BooleanSupplier goToSelectedHeight) {
     this.elevator = elevator;
-    elevatorUpSup = elevatorUp;
-    elevatorDownSup = elevatorDown;
     selectedHeightSup = goToSelectedHeight;
     addRequirements(elevator);
     // Use addRequirements() here to declare subsystem dependencies.
@@ -37,12 +40,23 @@ public class ElevatorTestCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(elevatorUpSup.getAsBoolean()) {
-      elevator.setVoltage(2);
-    } else if(elevatorDownSup.getAsBoolean()) {
-      elevator.setVoltage(-0.5);
-    } else if(selectedHeightSup.getAsBoolean()) {
+    if(selectedHeightSup.getAsBoolean()) {
       elevator.setElevatorPosition(RobotState.getInstance().deliveringCoralHeight);
+      if(RobotState.getInstance().deliveringCoralHeight == ElevatorEnums.Reef1){
+        elevator.setElevatorPositionDynamicConfigs(REEF_LEVEL_1_CENTIMETERS_AGAINST_REEF, TEST_ACCELERATION, TEST_VELOCITY, 0);
+      }
+      if(RobotState.getInstance().deliveringCoralHeight == ElevatorEnums.Reef2){
+        elevator.setElevatorPositionDynamicConfigs(REEF_LEVEL_2_CENTIMETERS_AGAINST_REEF, TEST_ACCELERATION, TEST_VELOCITY, 0);
+      }
+      if(RobotState.getInstance().deliveringCoralHeight == ElevatorEnums.Reef3){
+        elevator.setElevatorPositionDynamicConfigs(REEF_LEVEL_3_CENTIMETERS_AGAINST_REEF, TEST_ACCELERATION, TEST_VELOCITY, 0);
+      }
+      if(RobotState.getInstance().deliveringCoralHeight == ElevatorEnums.Reef4){
+        elevator.setElevatorPositionDynamicConfigs(REEF_LEVEL_4_CENTIMETERS_AGAINST_REEF, TEST_ACCELERATION, TEST_VELOCITY, 0);
+      }
+      if(RobotState.getInstance().deliveringCoralHeight == ElevatorEnums.Barge){
+        elevator.setElevatorPositionDynamicConfigs(BARGE_SHOOT_CENTIMETERS, TEST_ACCELERATION, TEST_VELOCITY, 0);
+      }
     } else {
       elevator.holdElevatorPose();
     }

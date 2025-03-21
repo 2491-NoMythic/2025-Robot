@@ -61,24 +61,24 @@ public class TestDrive extends Command {
       drivetrain.drive(
           new ChassisSpeeds(
               translationXSupplier.getAsDouble()
-                  * DriveConstants.MAX_VELOCITY_METERS_PER_SECOND*0.5
+                  * DriveConstants.MAX_VELOCITY_METERS_PER_SECOND*0.25
                   * invert,
               translationYSupplier.getAsDouble()
-                  * DriveConstants.MAX_VELOCITY_METERS_PER_SECOND*0.5
+                  * DriveConstants.MAX_VELOCITY_METERS_PER_SECOND*0.25
                   * invert,
               rotationSupplier.getAsDouble()
-                  * DriveConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND*0.5));
+                  * DriveConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND*0.25));
     } else {
       drivetrain.drive(
           ChassisSpeeds.fromFieldRelativeSpeeds(
               translationXSupplier.getAsDouble()
-                  * DriveConstants.MAX_VELOCITY_METERS_PER_SECOND*0.5
+                  * DriveConstants.MAX_VELOCITY_METERS_PER_SECOND*0.25
                   * invert,
               translationYSupplier.getAsDouble()
-                  * DriveConstants.MAX_VELOCITY_METERS_PER_SECOND*0.5
+                  * DriveConstants.MAX_VELOCITY_METERS_PER_SECOND*0.25
                   * invert,
               rotationSupplier.getAsDouble()
-                  * DriveConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND*0.5,
+                  * DriveConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND*0.25,
               drivetrain.getPose().getRotation()));
     }
   }
