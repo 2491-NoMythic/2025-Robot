@@ -87,7 +87,13 @@ public class ClimberSubsystem extends SubsystemBase {
     pulleyMotorLogger = new MotorLogger("/climber/pulleymotor");
     wheelMotorLogger = new MotorLogger("/climber/wheelmotor");
   }
-
+  /**
+   * Gets the postion of the climber in rotation.
+   * @return
+   */
+  public double getClimberAngle() {
+    return climberAngleSensor.getAbsolutePosition().getValueAsDouble();
+  }
   /**
    * Sets climber speed to zero
    */
@@ -97,7 +103,7 @@ public class ClimberSubsystem extends SubsystemBase {
     movingPower = 0;
   }
   /**
-   * Takes in a double, sets moving power to that value
+   * Sets the climber motor to a given power.
    * @param power
    */
   public void setClimberPower(double power) {
