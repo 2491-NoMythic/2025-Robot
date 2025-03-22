@@ -6,13 +6,17 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.HardwareLimitSwitchConfigs;
-import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.TorqueCurrentFOC;
-import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.ForwardLimitTypeValue;
 import com.ctre.phoenix6.signals.ReverseLimitTypeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkMaxConfig;
+
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -70,35 +74,22 @@ public class ClimberSubsystem extends SubsystemBase {
     motorLogger1 = new MotorLogger("/climber/motor1");
   }
   /**
-   * Gets the postion of the climber in rotation.
-   * @return
-   */
-  public double getClimberAngle() {
-    return climberAngleSensor.getAbsolutePosition().getValueAsDouble();
-  }
-
-  /**
-   * Takes a desired angle and moves climberMotor1 to it
-   * @param angle the desired angle
-   */
-  public void setClimberAngle(double angle) {
-    moveWithPower = false;
-    climberMotor1.setControl(new PositionVoltage(angle));
-  }
-  /**
    * Sets climber speed to zero
    */
-
   public void stopClimber(){
     climberMotor1.set(0);
   }
   /**
-   * Takes in a double, sets moving power to that value
+   * Sets the climber motor to a given power.
    * @param power
    */
   public void setClimberPower(double power) {
     climberMotor1.set(power);
   }
+  /**
+   * Sets the climber motor to a given power, but uses a doublesupplier.
+   * @param power
+   */
   public void setClimberPower(DoubleSupplier power) {
     climberMotor1.set(power.getAsDouble());
   }
@@ -113,7 +104,7 @@ public class ClimberSubsystem extends SubsystemBase {
     climberMotor1.setControl(new TorqueCurrentFOC(current));
   }
   /**
-   * sets the climberServo to one of two states
+   * Sets the climberServo to one of two states
    * @param state true is when the rachet is active, false is when it is not
    */
   public void setServo(BooleanSupplier rachet){
@@ -124,14 +115,23 @@ public class ClimberSubsystem extends SubsystemBase {
       climberServo.setAngle(CLIMBER_RACHET_FALSE);
     }
   }
-
+  /**
+   * Runs the climber wheels at a given speed.
+   * @param speed
+   */
   public void runWheels(double speed){
     climberWheels.set(speed);
   }
+  /**
+   * Runs the climber wheels at a given speed, but uses a doublesupplier.
+   * @param speed
+   */
   public void runWheels(DoubleSupplier speed){
     climberWheels.set(speed.getAsDouble());
   }
-
+  /**
+   * Stops the climber wheels.
+   */
   public void stopWheels(){
     climberWheels.set(0);
   }
