@@ -1,3 +1,8 @@
+Black to ground for led
+Yellow to ground for switch
+Red gets resistor then to pin for led
+Blue to pin for switch
+
 --LED--
 L1 = 6
 L2 = 2
