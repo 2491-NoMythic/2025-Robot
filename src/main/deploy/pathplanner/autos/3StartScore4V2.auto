@@ -7,13 +7,19 @@
         {
           "type": "named",
           "data": {
+            "name": "DriveForwardHalfSec"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "RaiseElevator"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "PlaceWithLineupRightL4"
+            "name": "PlaceWithLineupLeftL4"
           }
         },
         {
@@ -115,7 +121,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "IntakeAlignAndRaiseCoral"
+                  "name": "IntakeAlignAndRaiseCoralL2"
                 }
               }
             ]
@@ -124,13 +130,7 @@
         {
           "type": "named",
           "data": {
-            "name": "PlaceWithLineupLeftL3"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ElevatorReset"
+            "name": "PlaceWithLineupRightL2"
           }
         }
       ]

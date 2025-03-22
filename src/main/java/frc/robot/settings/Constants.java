@@ -449,7 +449,7 @@ public final class Constants {
     public static final String LIMELIGHT_SHUFFLEBOARD_TAB = "Vision";
 
     public static final double ALLOWABLE_POSE_DIFFERENCE = 0.5;
-    public static final double MAX_TAG_DISTANCE = 3.5;
+    public static final double MAX_TAG_DISTANCE = 3;
 
     public static final Translation2d FIELD_CORNER = new Translation2d(17.54, 8.02);
     public static final Translation2d FIELD_CORNER_FOR_INTAKE = new Translation2d(16.65, 7.5);
@@ -541,9 +541,9 @@ public final class Constants {
   public final class ElevatorConstants{
     public static final int ELEVATOR_MOTOR_1_ID = 9;
     public static final int ELEVATOR_MOTOR_2_ID = 10;
-    public static final double HUMAN_PLAYER_STATION_CENTIMETERS = 23.2;//19.1;//31.5;
+    public static final double HUMAN_PLAYER_STATION_CENTIMETERS = 22.5;//19.1;//31.5;
     public static final double PRAC_HEIGHT_AT_LIMIT_SWITCH = 20;
-    public static final double COMP_HEIGHT_AT_LOWER_LIMIT_SWITCH = 20;//before second limit switch was added (and for all of duluth): 16.828;
+    public static final double COMP_HEIGHT_AT_LOWER_LIMIT_SWITCH = 20.32;//before second limit switch was added (and for all of duluth): 16.828;
     public static final double COMP_HEIGHT_AT_UPPER_LIMIT_SWITCH = 201.5;
     public static final double PROCESSOR_HEIGHT_CENTIMETERS = 20;
     public static final double ELEVATOR_THRESHOLD = 1.5;
@@ -558,9 +558,9 @@ public final class Constants {
 
     //reef heights that are for when we are about a corals width from the reef
     public static final double REEF_LEVEL_1_CENTIMETERS_AWAY_FROM_REEF = 50;
-    public static final double REEF_LEVEL_2_CENTIMETERS_AWAY_FROM_REEF = 90;//84.1 for a 2x4 away from reef
+    public static final double REEF_LEVEL_2_CENTIMETERS_AWAY_FROM_REEF = 90.5;//84.1 for a 2x4 away from reef
     public static final double REEF_LEVEL_3_CENTIMETERS_AWAY_FROM_REEF = 130.2;
-    public static final double REEF_LEVEL_4_CENTIMETERS_AWAY_FROM_REEF = 196.5;//182.69;
+    public static final double REEF_LEVEL_4_CENTIMETERS_AWAY_FROM_REEF = 197;//182.69;
 
     public static final double MOTION_MAGIC_ELEVATOR_HIGH_VELOCITY = 300;
     public static final double MOTION_MAGIC_ELEVATOR_HIGH_ACCLERATION = 600;

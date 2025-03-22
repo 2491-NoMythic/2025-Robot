@@ -11,7 +11,6 @@ import static frc.robot.settings.Constants.Field.REEF_POSITION_THRESHOLD;
 import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.AlgaeEndeffectorSubsystem;
 import frc.robot.subsystems.CoralEndeffectorSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -41,13 +40,13 @@ public class PlaceCoralDuringLineupSequential extends SequentialCommandGroup {
       new InstantCommand(()->algaeEndDefector.runAlgaeEndDefector(() -> RobotState.getInstance().goForAlgae ? ALGAE_INTAKE_SPEED : -0.5), algaeEndDefector),
       new ParallelDeadlineGroup(
         new SequentialCommandGroup(
-          new WaitCommand(0.1),
+          new WaitCommand(()->0.1),
           new WaitUntil(()->driveTrain.getPositionTargetingError() < METERS_FROM_POSE_TO_RAISE_ELEVATOR),
           new InstantCommand(()->elevator.setElevatorPosition(heightSupplier), elevator),
           new WaitUntil(()-> (DriverStation.isAutonomous() ? driveTrain.getPositionTargetingError() < 0.02 : driveTrain.getPositionTargetingError() < REEF_POSITION_THRESHOLD) && elevator.isElevatorAtPose()),
           new ParallelRaceGroup(
             new DeliverCoral(coralEndDefector),//drops coral
-            new WaitCommand(0.17))),
+            new WaitCommand(()-> DriverStation.isTeleop() ? 0.25 : 0.17))),
         new SequentialCommandGroup(
           new DriveToPose(placementSupplier, driveTrain, ()->0),
           new InstantCommand(()->driveTrain.drive(new ChassisSpeeds(0, 0, 0)))))

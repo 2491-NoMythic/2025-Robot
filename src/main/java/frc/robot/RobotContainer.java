@@ -780,11 +780,13 @@ public class RobotContainer {
     Command raiseElevatorNamedCommand;
     Command spitCoralNamedCommand;
     Command coralHandlingCommand;
+    Command coralHandlingCommandL2;
     Command autoBargeShoot;
     Command placeWithLineupRightL4;
-    Command placeWithLineupRightL3;
+    Command placeWithLineupRightL2;
     Command placeWithLineupLeftL4;
-    Command placeWithLineupLeftL3;
+    Command placeWithLineupLeftL2;
+    Command driveForwardForHalfSec;
     if(elevatorExists&&funnelIntakeExists&&coralEndeffectorExists&&algaeEndeffectorExists) {
       // this command will raise the elevator after the coral has been lined up in the
       // end effector, and more than 1 second has passed (s wer are not stlil
@@ -793,15 +795,21 @@ public class RobotContainer {
           coralEndDefector, () -> selectCommand(() -> false), () -> ElevatorEnums.Reef4);
       placeWithLineupLeftL4 = new PlaceCoralDuringLineupSequential(algaeEndDefector, driveTrain, elevator,
           coralEndDefector, () -> selectCommand(() -> true), () -> ElevatorEnums.Reef4);
-      placeWithLineupRightL3 = new PlaceCoralDuringLineupSequential(algaeEndDefector, driveTrain, elevator,
-          coralEndDefector, () -> selectCommand(() -> false), () -> ElevatorEnums.Reef3);
-      placeWithLineupLeftL3 = new PlaceCoralDuringLineupSequential(algaeEndDefector, driveTrain, elevator,
-          coralEndDefector, () -> selectCommand(() -> true), () -> ElevatorEnums.Reef3);
+      placeWithLineupRightL2 = new PlaceCoralDuringLineupSequential(algaeEndDefector, driveTrain, elevator,
+          coralEndDefector, () -> selectCommand(() -> false), () -> ElevatorEnums.Reef2);
+      placeWithLineupLeftL2 = new PlaceCoralDuringLineupSequential(algaeEndDefector, driveTrain, elevator,
+          coralEndDefector, () -> selectCommand(() -> true), () -> ElevatorEnums.Reef2);
       coralHandlingCommand = new ParallelRaceGroup(
           new SequentialCommandGroup(
               new CoralIntake(elevator, funnelIntake, coralEndDefector),
               new PassCoralToEndEffectorSequential(coralEndDefector, funnelIntake),
-              new InstantCommand(() -> elevator.setElevatorPosition(ElevatorEnums.Reef4), elevator)),
+              new InstantCommand(() -> elevator.setElevatorPosition(ElevatorEnums.Reef2), elevator)),
+          new WaitCommand(() -> 3));
+      coralHandlingCommandL2 = new ParallelRaceGroup(
+          new SequentialCommandGroup(
+              new CoralIntake(elevator, funnelIntake, coralEndDefector),
+              new PassCoralToEndEffectorSequential(coralEndDefector, funnelIntake),
+              new InstantCommand(() -> elevator.setElevatorPosition(ElevatorEnums.Reef2), elevator)),
           new WaitCommand(() -> 3));
       deliverCoralLeft1NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef1, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true,algaeEndDefector, ()-> false);
       deliverCoralLeft2NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef2, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true,algaeEndDefector, ()-> false);
@@ -821,6 +829,7 @@ public class RobotContainer {
       deliverCoralRight4NamedCommandWithAlgae = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef4, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->false,algaeEndDefector, ()->true);
       autoBargeShoot = new ShootInBarge(driveTrain, elevator, algaeEndDefector, ()->0);
     } else {
+      coralHandlingCommandL2 = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
       coralHandlingCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
       deliverCoralLeft1NamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
       deliverCoralLeft2NamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
@@ -840,14 +849,25 @@ public class RobotContainer {
       deliverCoralRight4NamedCommandWithAlgae = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
       placeWithLineupRightL4 = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
       placeWithLineupLeftL4 = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
-      placeWithLineupRightL3 = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
-      placeWithLineupLeftL3 = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
+      placeWithLineupRightL2 = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
+      placeWithLineupLeftL2 = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
       autoBargeShoot = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
     }
 
+    if(DrivetrainExists) {
+      driveForwardForHalfSec = new SequentialCommandGroup(
+        new InstantCommand(()->driveTrain.drive(new ChassisSpeeds(1, 0, 0))),
+        new WaitUntilCommand(0.8)
+      );
+    } else {
+      driveForwardForHalfSec = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
+    }
+
     if(elevatorExists) {
-      raiseElevatorNamedCommand = new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.Reef4), elevator);
-      elevatorResetNamedCommand = new InstantCommand(()->elevator.setElevatorPositionDynamicConfigs(HUMAN_PLAYER_STATION_CENTIMETERS, MOTION_MAGIC_ELEVATOR_ACCLERATION, MOTION_MAGIC_ELEVATOR_VELOCITY, MOTION_MAGIC_ELEVATOR_JERK), elevator);
+      raiseElevatorNamedCommand = new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.Reef2), elevator);
+      elevatorResetNamedCommand = new SequentialCommandGroup(
+        new InstantCommand(()->elevator.setElevatorPositionDynamicConfigs(HUMAN_PLAYER_STATION_CENTIMETERS, MOTION_MAGIC_ELEVATOR_HIGH_ACCLERATION, MOTION_MAGIC_ELEVATOR_VELOCITY, MOTION_MAGIC_ELEVATOR_JERK), elevator),
+        new WaitCommand(()->0.2));
     } else {
       raiseElevatorNamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
       elevatorResetNamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
@@ -893,16 +913,18 @@ public class RobotContainer {
     NamedCommands.registerCommand("RaiseElevator", raiseElevatorNamedCommand);
     NamedCommands.registerCommand("SpitCoral", spitCoralNamedCommand);
     NamedCommands.registerCommand("IntakeAlignAndRaiseCoral", coralHandlingCommand);
+    NamedCommands.registerCommand("IntakeAlignAndRaiseCoralL2", coralHandlingCommandL2);
     NamedCommands.registerCommand("AutoBargeShoot", autoBargeShoot);
     NamedCommands.registerCommand("PlaceWithLineupRightL4", placeWithLineupRightL4);
     NamedCommands.registerCommand("PlaceWithLineupLeftL4", placeWithLineupLeftL4);
-    NamedCommands.registerCommand("PlaceWithLineupRightL3", placeWithLineupRightL3);
-    NamedCommands.registerCommand("PlaceWithLineupLeftL3", placeWithLineupLeftL3);
+    NamedCommands.registerCommand("PlaceWithLineupRightL2", placeWithLineupRightL2);
+    NamedCommands.registerCommand("PlaceWithLineupLeftL2", placeWithLineupLeftL2);
+    NamedCommands.registerCommand("DriveForwardHalfSec", driveForwardForHalfSec);
     NamedCommands.registerCommand("WaitForIntake",
         new ParallelRaceGroup(
             new ParallelCommandGroup(
               new InstantCommand(() -> funnelIntake.runFunnelSine(), funnelIntake),
-              new WaitUntilCommand(0.5)),
+              new WaitUntilCommand(0.75)),
             new WaitUntilCommand(() -> RobotState.getInstance().isCoralSeen())));
   }
 
@@ -1043,7 +1065,7 @@ public class RobotContainer {
       SmartDashboard.putData(driveTrain.getCurrentCommand());
     }
     logCurrentCommands();
-    
+    SmartDashboard.putNumber("limelight closest tag", limelight.getClosestTagDist(Vision.APRILTAG_LIMELIGHTA_NAME));
   }
   public void testInit() {
     if(DrivetrainExists) {
