@@ -283,6 +283,9 @@ public class ElevatorSubsystem extends SubsystemBase {
       return (Math.max(desiredHeight, PRAC_HEIGHT_AT_LIMIT_SWITCH));
     }
   }
+  public void holdElevatorPose() {
+    setVoltage(eleMotorConfig.Slot0.kG);
+  }
   /**
    * asks if the error on the closed loop is less than our ELEVATOR_THRESHOLD constant
    * @return true if closed loop error is less than our threshold, false otherwise

@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import static frc.robot.settings.Constants.ClimberConstants.CLIMBER_POWER_REVERSE;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ClimberSubsystem;
 public class ResetClimber extends Command {
@@ -25,7 +27,7 @@ public class ResetClimber extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    climber.setClimberAngle(0);
+    climber.setClimberPower(CLIMBER_POWER_REVERSE);
   }
 
   // Called once the command ends or is interrupted.

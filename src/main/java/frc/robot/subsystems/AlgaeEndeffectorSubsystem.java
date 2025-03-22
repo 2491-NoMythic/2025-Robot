@@ -69,7 +69,7 @@ public class AlgaeEndeffectorSubsystem extends SubsystemBase {
    * stops the algae end effector motor by setting speed to 0, with brake mode enabled.
    */
   public void stopAlgaeEndDefectorHard(){
-    algaeEndeffectorMotor.set(0);
+    algaeEndeffectorMotor.set(0.01);
   }
   /**
    * Stop the algae end effector motor by setting voltage to 0, letting it coast out.
@@ -84,9 +84,9 @@ public class AlgaeEndeffectorSubsystem extends SubsystemBase {
 
     SmartDashboard.putNumber("AlgaeMotorCurrent",algaeEndeffectorMotor.getStatorCurrent().getValueAsDouble());
     //if we are at 80%+ percent of the current limit, assume it's becuse we have an algae
-    if(algaeEndeffectorMotor.getSupplyCurrent().getValueAsDouble()>ALGAE_ENDEFFECTOR_CURRENT_LIMIT*0.8){ 
+    if(algaeEndeffectorMotor.getSupplyCurrent().getValueAsDouble()>10){ 
       loops++;
-      if(loops > 10){
+      if(loops > 2){
         RobotState.getInstance().hasAlgae = true;
       }
     }else{

@@ -541,23 +541,23 @@ public final class Constants {
     public static final double HUMAN_PLAYER_STATION_CENTIMETERS = 23.2;//19.1;//31.5;
     public static final double PRAC_HEIGHT_AT_LIMIT_SWITCH = 20;
     public static final double COMP_HEIGHT_AT_LOWER_LIMIT_SWITCH = 20;//before second limit switch was added (and for all of duluth): 16.828;
-    public static final double COMP_HEIGHT_AT_UPPER_LIMIT_SWITCH = 195.7;
-    public static final double PROCESSOR_HEIGHT_CENTIMETERS = 19;
+    public static final double COMP_HEIGHT_AT_UPPER_LIMIT_SWITCH = 201.5;
+    public static final double PROCESSOR_HEIGHT_CENTIMETERS = 20;
     public static final double ELEVATOR_THRESHOLD = 1.5;
     public static final double METERS_FROM_POSE_TO_RAISE_ELEVATOR = 2.5;
     
     //reef heights that are for when we are against the reef
-    public static final double REEF_LEVEL_1_CENTIMETERS_AGAINST_REEF = 80;
+    public static final double REEF_LEVEL_1_CENTIMETERS_AGAINST_REEF = 50;
     public static final double REEF_LEVEL_2_CENTIMETERS_AGAINST_REEF = 81.23;
     public static final double REEF_LEVEL_3_CENTIMETERS_AGAINST_REEF = 122.6;
     public static final double REEF_LEVEL_4_CENTIMETERS_AGAINST_REEF = 188.7;//182.69;
     public static final double BARGE_SHOOT_CENTIMETERS = 194.5;
 
     //reef heights that are for when we are about a corals width from the reef
-    public static final double REEF_LEVEL_1_CENTIMETERS_AWAY_FROM_REEF = 80;
+    public static final double REEF_LEVEL_1_CENTIMETERS_AWAY_FROM_REEF = 50;
     public static final double REEF_LEVEL_2_CENTIMETERS_AWAY_FROM_REEF = 90;//84.1 for a 2x4 away from reef
     public static final double REEF_LEVEL_3_CENTIMETERS_AWAY_FROM_REEF = 131;
-    public static final double REEF_LEVEL_4_CENTIMETERS_AWAY_FROM_REEF = 195;//182.69;
+    public static final double REEF_LEVEL_4_CENTIMETERS_AWAY_FROM_REEF = 196.5;//182.69;
 
     public static final double MOTION_MAGIC_ELEVATOR_HIGH_VELOCITY = 300;
     public static final double MOTION_MAGIC_ELEVATOR_HIGH_ACCLERATION = 600;
@@ -571,12 +571,24 @@ public final class Constants {
   public final class ClimberConstants{
     public static final int CLIMBER_MOTOR_ID = 11;
     public static final int CLIMBER_CANCODER_ID = 5;
+    public static final int CLIMBER_WHEELS_MOTOR_ID = 26;
+    public static final int SERVO_CHANNEL = 0;
 
     public static final double COMP_ENCODER_OFFSET = -0.824951;
     public static final double PRAC_ENCODER_OFFSET = 0;
 
     public static final double CLIMBER_CLIMBED_ANGLE = 100;
     public static final double CLIMBER_NOT_CLIMBED_ANGLE = 0;
+
+    public static final double CLIMBER_RACHET_TRUE = 0;
+    public static final double CLIMBER_RACHET_FALSE = -10;
+
+    public static final double CLIMBER_POWER_FORWARD = -0.1;
+    public static final double CLIMBER_POWER_REVERSE = 0.1;
+
+    public static final int CLIMBER_WHEELS_CURRENT_LIMIT = 2491;
+    public static final int CLIMBER_WHEELS_RPM_LIMIT = 2491;
+
 
     public static final TalonFXConfiguration ClimberMotorConfigComp = new TalonFXConfiguration()
     .withSlot0(new Slot0Configs()
@@ -637,6 +649,8 @@ public final class Constants {
     public static final double FUNNEL_ROTATOR_KI = 2491;
     public static final double FUNNEL_ROTATOR_KD = 2491;
     public static final double FUNNEL_ROTATOR_KFF = 2491;
+
+    public static final double FUNNEL_ROTATOR_DOWN_POSITION = 2491;
 
     public static final double FUNNEL_ROTATOR_KP_PRACTICE = 2491;
     public static final double FUNNEL_ROTATOR_KI_PRACTICE = 2491;

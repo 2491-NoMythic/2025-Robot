@@ -77,5 +77,8 @@ public class FunnelRotator extends SubsystemBase {
     if(Preferences.getBoolean("Motor Logging", false)){
     logMotors();
     }
+    if(rotatorMotor.getEncoder().getPosition() > FUNNEL_ROTATOR_DOWN_POSITION){
+      RobotState.getInstance().funnelDown = true;
+    }
   }
 }

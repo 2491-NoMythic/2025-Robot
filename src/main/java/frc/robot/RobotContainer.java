@@ -44,6 +44,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AutoAngleAtReef;
 import frc.robot.commands.ClimberCommand;
+import frc.robot.commands.ClimberCommandGroup;
+import frc.robot.commands.DepositAlgae;
 import frc.robot.commands.DepositAlgaeSequential;
 import frc.robot.settings.Constants.LightConstants;
 import frc.robot.settings.Constants.Vision;
@@ -56,6 +58,7 @@ import frc.robot.commands.IndicatorLights;
 import frc.robot.commands.L1ScoringCommandGroup;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.ElevatorReset;
+import frc.robot.commands.ElevatorTestCommand;
 import frc.robot.commands.FunClimbedLights;
 import frc.robot.commands.FunnelRotatorCommand;
 import frc.robot.commands.LineUp;
@@ -166,8 +169,6 @@ public class RobotContainer {
   BooleanSupplier CoralPlaceTeleSupplier;
   BooleanSupplier BargeHeightSupplier;
   BooleanSupplier ProcessorHeightSupplier;
-  BooleanSupplier ClimbCommandSupplier;
-  BooleanSupplier ClimbModeAuthorizer;
   DoubleSupplier ControllerForwardAxisSupplier;
   DoubleSupplier ControllerSidewaysAxisSupplier;
   DoubleSupplier ControllerZAxisSupplier;
@@ -186,8 +187,9 @@ public class RobotContainer {
   BooleanSupplier goForAlgaeFalse;
   BooleanSupplier CoralIntakeSup;
   BooleanSupplier funnelRotatorSupplier;
-  BooleanSupplier climberResetSupplier;
   BooleanSupplier inEndgameSupplier;
+  BooleanSupplier climberGroupForward;
+  BooleanSupplier climberGroupReverse;
   BooleanSupplier algaeShooterSupOperator;
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -316,9 +318,8 @@ public class RobotContainer {
       algaeShooterSupOperator = operatorControllerXbox::getXButton;
       ForceElevatorUp = ()->false;//operatorControllerXbox.getLeftY() < -0.5;
       ForceElevatorDown = ()->false;//operatorControllerXbox.getLeftY() > 0.5;
-      ClimbCommandSupplier = ()->false;//operatorControllerXbox.getRightStickButton();
-      ClimbModeAuthorizer = ()->false;//operatorControllerXbox::getRightStickButton;
-      climberResetSupplier = ()->false;//operatorControllerXbox::getLeftStickButton;
+      climberGroupForward = ()-> operatorControllerXbox.getLeftStickButton();
+      climberGroupReverse = ()-> operatorControllerXbox.getRightStickButton();
     } else if (OCTEnum == ControllerEnums.PS4Controller){
       //Controller IDs
       operatorControllerPS4 = new PS4Controller(OPERATOR_CONTROLLER_ID);
@@ -339,9 +340,10 @@ public class RobotContainer {
       ForceElevator = ()->operatorControllerPS4.getL2Button();
       ForceElevatorUp = ()->operatorControllerPS4.getRawAxis(1) < -0.5;
       ForceElevatorDown = ()->operatorControllerPS4.getRawAxis(1) > 0.5;
-      ClimbCommandSupplier = operatorControllerPS4::getSquareButton;
-      ClimbModeAuthorizer = operatorControllerPS4::getR3Button;
-      climberResetSupplier = operatorControllerPS4::getL3Button;
+      //ClimbModeAuthorizer = operatorControllerPS4::getR3Button;
+      //climberResetSupplier = operatorControllerPS4::getL3Button;
+      climberGroupForward = ()-> operatorControllerPS4.getL3Button();
+      climberGroupReverse = ()-> operatorControllerPS4.getR3Button();
     } else if (OCTEnum == ControllerEnums.ButtonBoard){
       buttonBoard = new ButtonBoard(OPERATOR_CONTROLLER_ID);
       //These are not sorted based on manual or automatic, but rather location on the physical board. 
@@ -362,9 +364,8 @@ public class RobotContainer {
       ForceEjectCoral = buttonBoard::getForceEjectCoralButton;
       algaeShooterSupOperator = buttonBoard::getForceEjectAlgaeButton;
 
-      ClimbModeAuthorizer = buttonBoard::getClimbModeAuthorizer;
-      climberResetSupplier = buttonBoard::getClimberResetButton;
-      ClimbCommandSupplier = buttonBoard::getclimbCommandButton;
+      climberGroupForward = buttonBoard::getclimbCommandButton;
+      climberGroupReverse = buttonBoard::getClimberResetButton;
     }
     if (LimelightExists) {limelightInit();}
     if (distanceSensorsExist) {sensorInit();}   
@@ -548,9 +549,8 @@ public class RobotContainer {
       new Trigger(()->AlgaeShooterSupDriver.getAsBoolean() || algaeShooterSupOperator.getAsBoolean()).whileTrue(new AlgaeIntakeCommand(algaeEndDefector, ()->ALGAE_SHOOT_SPEED));
     }
     if (climberExists){
-      new Trigger(ClimbCommandSupplier).whileTrue(new ClimberCommand(climber));
-      new Trigger(ClimbCommandSupplier).onTrue(new InstantCommand(()->elevator.setVoltage(0), elevator));
-      new Trigger(climberResetSupplier).onTrue(new InstantCommand(()->climber.setClimberPower(-0.7), climber)).onFalse(new InstantCommand(()->climber.stopClimber(), climber));
+      new Trigger(climberGroupForward).whileTrue(new ClimberCommandGroup(climber, true)).onFalse(new InstantCommand(()-> climber.stopClimber(), climber)).onFalse(new InstantCommand(()-> climber.runWheels(0), climber));
+      new Trigger(climberGroupReverse).whileTrue(new ClimberCommandGroup(climber, false)).onFalse(new InstantCommand(()-> climber.stopClimber(), climber)).onFalse(new InstantCommand(()-> climber.runWheels(0), climber));
     }
     if (funnelIntakeExists&&elevatorExists&&coralEndeffectorExists) {
       // if the coral is in the end effector, and the elevator is in place, pass the coral to the endeffector and line up the coral within it
@@ -577,7 +577,7 @@ public class RobotContainer {
             new MoveMeters(driveTrain, -0.5, -0.8, 0, 0),
             new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer), elevator), //sets elevator back to the bottom position
             new InstantCommand(()->RobotState.getInstance().reefLineupRunning = false))
-            ).onFalse(new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer)));
+            ).onFalse(new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer))).onFalse(new InstantCommand(()->algaeEndDefector.stopAlgaeEndDefectorHard(), algaeEndDefector));
       
       new Trigger(()->CoralPlaceTeleSupplier.getAsBoolean() && RobotState.getInstance().goForAlgae && !(RobotState.getInstance().deliveringCoralHeight==ElevatorEnums.Reef1)).whileTrue(
         new SequentialCommandGroup(
@@ -603,7 +603,6 @@ public class RobotContainer {
           new SequentialCommandGroup(
             new L1ScoringCommandGroup(algaeEndDefector, driveTrain, elevator, coralEndDefector, ()->selectCommand(()->RobotState.getInstance().deliveringLeft)),
             new InstantCommand(()->coralEndDefector.stopCoralEndEffector()),
-            new MoveMeters(driveTrain, -0.5, -0.8, 0, 0),
             new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer), elevator), //sets elevator back to the bottom position
             new InstantCommand(()->RobotState.getInstance().reefLineupRunning = false))
           ).onFalse(new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer)));
@@ -761,18 +760,23 @@ public class RobotContainer {
     Command placeWithLineupLeftL4;
     Command placeWithLineupLeftL3;
     if(elevatorExists&&funnelIntakeExists&&coralEndeffectorExists&&algaeEndeffectorExists) {
-      //this command will raise the elevator after the coral has been lined up in the end effector, and more than 1 second has passed (s wer are not stlil accelerating)
-      placeWithLineupRightL4 = new PlaceCoralDuringLineupSequential(algaeEndDefector, driveTrain, elevator, coralEndDefector, ()-> selectCommand(()-> false), ()->ElevatorEnums.Reef4);
-      placeWithLineupLeftL4 = new PlaceCoralDuringLineupSequential(algaeEndDefector, driveTrain, elevator, coralEndDefector, ()-> selectCommand(()-> true), ()->ElevatorEnums.Reef4);
-      placeWithLineupRightL3 = new PlaceCoralDuringLineupSequential(algaeEndDefector, driveTrain, elevator, coralEndDefector, ()-> selectCommand(()-> false), ()->ElevatorEnums.Reef3);
-      placeWithLineupLeftL3 = new PlaceCoralDuringLineupSequential(algaeEndDefector, driveTrain, elevator, coralEndDefector, ()-> selectCommand(()-> true), ()->ElevatorEnums.Reef3);
+      // this command will raise the elevator after the coral has been lined up in the
+      // end effector, and more than 1 second has passed (s wer are not stlil
+      // accelerating)
+      placeWithLineupRightL4 = new PlaceCoralDuringLineupSequential(algaeEndDefector, driveTrain, elevator,
+          coralEndDefector, () -> selectCommand(() -> false), () -> ElevatorEnums.Reef4);
+      placeWithLineupLeftL4 = new PlaceCoralDuringLineupSequential(algaeEndDefector, driveTrain, elevator,
+          coralEndDefector, () -> selectCommand(() -> true), () -> ElevatorEnums.Reef4);
+      placeWithLineupRightL3 = new PlaceCoralDuringLineupSequential(algaeEndDefector, driveTrain, elevator,
+          coralEndDefector, () -> selectCommand(() -> false), () -> ElevatorEnums.Reef3);
+      placeWithLineupLeftL3 = new PlaceCoralDuringLineupSequential(algaeEndDefector, driveTrain, elevator,
+          coralEndDefector, () -> selectCommand(() -> true), () -> ElevatorEnums.Reef3);
       coralHandlingCommand = new ParallelRaceGroup(
-        new SequentialCommandGroup(
-          new ParallelCommandGroup(
-            new SequentialCommandGroup(
+          new SequentialCommandGroup(
               new CoralIntake(elevator, funnelIntake, coralEndDefector),
-              new PassCoralToEndEffectorSequential(coralEndDefector, funnelIntake))),
-          new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.Reef4), elevator)));
+              new PassCoralToEndEffectorSequential(coralEndDefector, funnelIntake),
+              new InstantCommand(() -> elevator.setElevatorPosition(ElevatorEnums.Reef4), elevator)),
+          new WaitCommand(() -> 3));
       deliverCoralLeft1NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef1, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true,algaeEndDefector, ()-> false);
       deliverCoralLeft2NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef2, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true,algaeEndDefector, ()-> false);
       deliverCoralLeft3NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef3, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true,algaeEndDefector, ()-> false);
@@ -868,7 +872,12 @@ public class RobotContainer {
     NamedCommands.registerCommand("PlaceWithLineupLeftL4", placeWithLineupLeftL4);
     NamedCommands.registerCommand("PlaceWithLineupRightL3", placeWithLineupRightL3);
     NamedCommands.registerCommand("PlaceWithLineupLeftL3", placeWithLineupLeftL3);
-    NamedCommands.registerCommand("WaitForIntake", new WaitUntilCommand(0.4));
+    NamedCommands.registerCommand("WaitForIntake",
+        new ParallelRaceGroup(
+            new ParallelCommandGroup(
+              new InstantCommand(() -> funnelIntake.runFunnelSine(), funnelIntake),
+              new WaitUntilCommand(0.5)),
+            new WaitUntilCommand(() -> RobotState.getInstance().isCoralSeen())));
   }
 
   public void logPower() {
@@ -965,17 +974,66 @@ public class RobotContainer {
     }
 
   }
+  private void logCurrentCommands() {
+    if(DrivetrainExists) {
+      if(driveTrain.getCurrentCommand() != null) {
+        SmartDashboard.putString("CURRENT COMMANDS/drivetrain", driveTrain.getCurrentCommand().toString());
+      }
+    }
+    if(funnelIntakeExists) {
+      if(funnelIntake.getCurrentCommand() != null) {
+        SmartDashboard.putString("CURRENT COMMANDS/funnel intake", funnelIntake.getCurrentCommand().toString());
+      }
+    }
+    if(elevatorExists) {
+      if(elevator.getCurrentCommand() != null) {
+        SmartDashboard.putString("CURRENT COMMANDS/elevator", elevator.getCurrentCommand().toString());
+      }
+    }
+    if(algaeEndeffectorExists) {
+      if(algaeEndDefector.getCurrentCommand() != null) {
+        SmartDashboard.putString("CURRENT COMMANDS/algae end effector", algaeEndDefector.getCurrentCommand().toString());
+      }
+    }
+    if(coralEndeffectorExists) {
+      if(coralEndDefector.getCurrentCommand() != null) {
+        SmartDashboard.putString("CURRENT COMMANDS/coral end effector", coralEndDefector.getCurrentCommand().toString());
+      }
+    }
+    if(climberExists) {
+      if(climber.getCurrentCommand() != null) {
+        SmartDashboard.putString("CURRENT COMMANDS/climber", climber.getCurrentCommand().toString());
+      }
+    }
+    if(funnelRotatorExists) {
+      if(funnelRotator.getCurrentCommand() != null) {
+        SmartDashboard.putString("CURRENT COMMANDS/funnel rotator", funnelRotator.getCurrentCommand().toString());
+      }
+    }
+  }
   public void teleopPeriodic() {
     if(DrivetrainExists) {
       SmartDashboard.putData(driveTrain.getCurrentCommand());
     }
-    if (elevatorExists) {
-      SmartDashboard.putData(elevator.getCurrentCommand());
-    }
-    if(funnelIntakeExists && funnelIntake.getCurrentCommand() != null) {
-      SmartDashboard.putString("TESTING/funnelintakeCommand", funnelIntake.getCurrentCommand().toString());
-    }
+    logCurrentCommands();
     
+  }
+  public void testInit() {
+    if(DrivetrainExists) {
+      new Drive(driveTrain, ()->false, ControllerForwardAxisSupplier, ControllerSidewaysAxisSupplier, ControllerZAxisSupplier) {
+        @Override
+        public boolean isFinished() {
+          return !DriverStation.isTest();
+        }
+        @Override
+        public InterruptionBehavior getInterruptionBehavior() {
+          return InterruptionBehavior.kCancelIncoming;
+        }
+      }.schedule();
+    }
+    if(elevatorExists) {
+      new ElevatorTestCommand(elevator, ForceElevator).schedule();
+    }
   }
   public void robotInit(){
     if(lightsExist) {
@@ -1014,6 +1072,7 @@ public class RobotContainer {
       }else{
         lights.setCandleLights(LightConstants.TOTAL_LIGHTS_CANDLE_STRIP_START, LightConstants.DRIVETRAIN_LIGHTS_END, 200, 0, 0);  
       }
+      logCurrentCommands();
     }
   }
   
@@ -1022,5 +1081,9 @@ public class RobotContainer {
     if(coralEndeffectorExists) {
       new InstantCommand(()->coralEndDefector.stopCoralEndEffector(), coralEndDefector);
     }
+  }
+
+  public void autonomousPeriodic() {
+    logCurrentCommands();
   }
 }

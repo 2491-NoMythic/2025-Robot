@@ -11,8 +11,11 @@ import com.ctre.phoenix6.controls.TorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.ForwardLimitTypeValue;
+import com.ctre.phoenix6.signals.ReverseLimitTypeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.helpers.MotorLogger;
 
@@ -20,18 +23,26 @@ import static frc.robot.settings.Constants.ClimberConstants.*;
 import static frc.robot.settings.Constants.DriveConstants.CANIVORE_DRIVETRAIN;
 import static frc.robot.settings.Constants.ElevatorConstants.ELEVATOR_MOTOR_2_ID;
 
+import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
+
 public class ClimberSubsystem extends SubsystemBase {
   TalonFX climberMotor1;
   MotorLogger motorLogger1;
-  CANcoder climberAngleSensor;
-  boolean moveWithPower;
-  double movingPower;
-  boolean overSpooled;
+  Servo climberServo;
+  SparkMax climberWheels;
+  SparkMaxConfig climberWheelsConfig;
+  int loops = 0;
   /** Creates a new CimberSubsystem. */
   public ClimberSubsystem() {
     climberMotor1 = new TalonFX(CLIMBER_MOTOR_ID, CANIVORE_DRIVETRAIN);
-    climberAngleSensor = new CANcoder(CLIMBER_CANCODER_ID, CANIVORE_DRIVETRAIN);
+    climberServo = new Servo(SERVO_CHANNEL);
+    climberWheels = new SparkMax(CLIMBER_WHEELS_MOTOR_ID, MotorType.kBrushless);
     //TODO spend some time figuring out how to use the absolute encoder with the motor.
+
+    climberWheelsConfig = new SparkMaxConfig();
+    climberWheelsConfig.smartCurrentLimit(CLIMBER_WHEELS_CURRENT_LIMIT, CLIMBER_WHEELS_CURRENT_LIMIT, CLIMBER_WHEELS_RPM_LIMIT);
+    climberWheels.configure(climberWheelsConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     
     CANcoderConfiguration encoderConfig = new CANcoderConfiguration();
     encoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
@@ -44,15 +55,16 @@ public class ClimberSubsystem extends SubsystemBase {
       encoderConfig.MagnetSensor.MagnetOffset = PRAC_ENCODER_OFFSET;
     }
     encoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1;
-    climberAngleSensor.getConfigurator().apply(encoderConfig);
     if(Preferences.getBoolean("Elevator", false)) {
       climberMotor1.getConfigurator().apply(new HardwareLimitSwitchConfigs()
         .withForwardLimitRemoteTalonFX(new TalonFX(ELEVATOR_MOTOR_2_ID, CANIVORE_DRIVETRAIN))
         .withForwardLimitEnable(true)
         .withForwardLimitAutosetPositionEnable(false)
         .withForwardLimitType(ForwardLimitTypeValue.NormallyClosed)
-        .withReverseLimitEnable(false)
-        .withReverseLimitAutosetPositionEnable(false));
+        .withReverseLimitEnable(true)
+        .withReverseLimitAutosetPositionEnable(false)
+        .withReverseLimitRemoteTalonFX(new TalonFX(ELEVATOR_MOTOR_2_ID, CANIVORE_DRIVETRAIN))
+        .withReverseLimitType(ReverseLimitTypeValue.NormallyClosed));
     }
 
     motorLogger1 = new MotorLogger("/climber/motor1");
@@ -64,6 +76,7 @@ public class ClimberSubsystem extends SubsystemBase {
   public double getClimberAngle() {
     return climberAngleSensor.getAbsolutePosition().getValueAsDouble();
   }
+
   /**
    * Takes a desired angle and moves climberMotor1 to it
    * @param angle the desired angle
@@ -75,8 +88,8 @@ public class ClimberSubsystem extends SubsystemBase {
   /**
    * Sets climber speed to zero
    */
+
   public void stopClimber(){
-    moveWithPower = false;
     climberMotor1.set(0);
   }
   /**
@@ -84,9 +97,10 @@ public class ClimberSubsystem extends SubsystemBase {
    * @param power
    */
   public void setClimberPower(double power) {
-    moveWithPower = true;
-    movingPower = power;
-
+    climberMotor1.set(power);
+  }
+  public void setClimberPower(DoubleSupplier power) {
+    climberMotor1.set(power.getAsDouble());
   }
   private void logMotors(){
     motorLogger1.log(climberMotor1);
@@ -96,8 +110,46 @@ public class ClimberSubsystem extends SubsystemBase {
    * @param current
    */
   public void setMotorTorqueFOC(double current) {
-    moveWithPower = false;
     climberMotor1.setControl(new TorqueCurrentFOC(current));
+  }
+  /**
+   * sets the climberServo to one of two states
+   * @param state true is when the rachet is active, false is when it is not
+   */
+  public void setServo(BooleanSupplier rachet){
+    if(rachet.getAsBoolean()){
+      climberServo.setAngle(CLIMBER_RACHET_TRUE);
+    }
+    else {
+      climberServo.setAngle(CLIMBER_RACHET_FALSE);
+    }
+  }
+
+  public void runWheels(double speed){
+    climberWheels.set(speed);
+  }
+  public void runWheels(DoubleSupplier speed){
+    climberWheels.set(speed.getAsDouble());
+  }
+
+  public void stopWheels(){
+    climberWheels.set(0);
+  }
+
+  public void powerCheck() {
+
+    SmartDashboard.putNumber("AlgaeMotorCurrent", climberWheels.getOutputCurrent());
+    // if we are at 80%+ percent of the current limit, assume it's becuse we have an
+    // algae
+    if (climberWheels.getOutputCurrent() > CLIMBER_WHEELS_CURRENT_LIMIT * 0.95) {
+      loops++;
+      if (loops > 10) {
+        RobotState.getInstance().climberIn = true;
+      }
+    } else {
+      RobotState.getInstance().climberIn = false;
+      loops = 0;
+    }
   }
   @Override
   public void periodic() {
@@ -105,22 +157,10 @@ public class ClimberSubsystem extends SubsystemBase {
     if(Preferences.getBoolean("Motor Logging", false)){
       logMotors();
     }
-    if(Math.abs(climberAngleSensor.getAbsolutePosition().getValueAsDouble() - CLIMBER_CLIMBED_ANGLE) < 2) {
-      RobotState.getInstance().climbed = true;
-    }
-    if(moveWithPower) {
-      if(movingPower < 0) {
-        if(climberAngleSensor.getVelocity().getValueAsDouble() > 0.1) {
-          overSpooled = true;
-        }
-      } else if(movingPower > 0 || climberAngleSensor.getVelocity().getValueAsDouble() < 0){
-        overSpooled = false;
-      }
-      if(overSpooled && movingPower < 0) {
-        climberMotor1.set(0);
-      } else {
-        climberMotor1.set(movingPower);
-      }
+    powerCheck();
+    SmartDashboard.putNumber("servo angle", climberServo.getAngle());
+    if(!RobotState.getInstance().climberIn && RobotState.getInstance().funnelDown){
+      runWheels(0.25);
     }
   }
 }

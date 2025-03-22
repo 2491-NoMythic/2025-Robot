@@ -29,6 +29,8 @@ public class RobotState {
   public boolean coralLineupRunning;
   public boolean coralAligned;
   public boolean elevatorZeroSet;
+  public boolean climberIn;
+  public boolean funnelDown;
 
   public RobotState(){
     //sets any values that aren't periodically updated by a subsystem to a value, so that they won't return null if called before they are updated
