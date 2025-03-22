@@ -86,7 +86,7 @@ public class Lights extends SubsystemBase {
   }
 
   /**
-   * sets a specific section of lights to a certain color. The sections to choose from are the ones in the LightsEnum. The sections lenghts are defined in Constnats
+   * sets a specific section of lights to a certain color. The sections to choose from are the ones in the LightsEnum. The sections lengths are defined in Constants
    * @param lightEnums the enum for the section of lights to set
    * @param R the Red value (0-255)
    * @param G the Green value (0-255)
@@ -140,7 +140,11 @@ public class Lights extends SubsystemBase {
         break;
     }
   }
-
+/**
+ * Sets the lights on the elevator to show the current height of the elevator
+ * by taking in the elevator height enum, and setting the lights to the corresponding height.
+ * @param ElevatorHeight the enum for the height the elevator is going to
+ */
   public void setElevatorLevel(ElevatorEnums ElevatorHeight) {
     setSystemLights(LightsEnums.ElevatorLeft1, 100, 0, 0);
     setSystemLights(LightsEnums.ElevatorLeft2, 100, 0, 0);
@@ -172,10 +176,10 @@ public class Lights extends SubsystemBase {
   /**
    * enter a section of lights that will be blinked on and off every half second
    * 
-   * @param lightEnum
-   * @param R
-   * @param G
-   * @param B
+   * @param lightEnum the section of lights to blink
+   * @param R red value (0-255)
+   * @param G green value (0-255)
+   * @param B blue value (0-255)
    */
   public void blinkLights(LightsEnums lightEnum, int R, int G, int B) {
     timer.start();
@@ -194,7 +198,10 @@ public class Lights extends SubsystemBase {
     timer.stop();
     timer.reset();
   }
-
+  /**
+  * updates the blinked lights every half second if blinkLights is true
+  *
+   */ 
   private void updateBlinkedLights() {
     if (blinkLights) {
       if (timer.get() < 0.5) {

@@ -208,7 +208,9 @@ public class DistanceSensors  extends SubsystemBase{
         return ReefOffsetEnums.UNKNOWN;
     }
   }
-
+  /**
+   * Updates robot state and smart dashboard with current sensor range, and if the sensors are triggered
+   */
   private void updateRobotState() {
   //post ranges for each sensor to SmartDashboard
     SmartDashboard.putNumber("SENSOR/RANGE/far left", farLeft.getRange());

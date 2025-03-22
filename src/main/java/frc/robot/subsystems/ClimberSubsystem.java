@@ -75,10 +75,17 @@ public class ClimberSubsystem extends SubsystemBase {
     moveWithPower = false;
     climberMotor1.setControl(new PositionVoltage(angle));
   }
+  /**
+   * Sets climber speed to zero
+   */
   public void stopClimber(){
     moveWithPower = false;
     climberMotor1.set(0);
   }
+  /**
+   * Takes in a double, sets moving power to that value
+   * @param power
+   */
   public void setClimberPower(double power) {
     moveWithPower = true;
     movingPower = power;

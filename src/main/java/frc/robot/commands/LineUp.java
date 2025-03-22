@@ -57,7 +57,7 @@ public class LineUp extends Command {
   public void execute() {
     SmartDashboard.putBoolean("LINEUP/notSensed", notSensed);
     SmartDashboard.putBoolean("LINEUP/movingLeft", movingLeft.getAsBoolean());
-  //update sensor readings with Robot STate (which is updated periodically by DistanceSensors.java)
+  //update sensor readings with Robot State (which is updated periodically by DistanceSensors.java)
     sFLtrig = RobotState.getInstance().farLeftSensorTriggered;
     sLtrig = RobotState.getInstance().middleLeftSensorTriggered;
     sRtrig = RobotState.getInstance().middleRightSensorTriggered;
@@ -123,7 +123,7 @@ public class LineUp extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println("command ended by condtions"+notSensed);
+    System.out.println("command ended by condtions"+notSensed+finished);
     drivetrain.stop();
     finished = false;
     notSensed = false;
