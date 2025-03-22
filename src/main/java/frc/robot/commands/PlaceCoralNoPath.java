@@ -3,7 +3,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.NamedCommands.DeliverCoral;
@@ -16,19 +15,27 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import java.util.function.Supplier;
 
 import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.ALGAE_INTAKE_SPEED;
-import static frc.robot.settings.Constants.DriveConstants.REEF_LINEUP_SPEED;
-import static frc.robot.settings.Constants.ElevatorConstants.HUMAN_PLAYER_STATION_CENTIMETERS;
-import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_HIGH_ACCLERATION;
-import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_VELOCITY;
-
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
-import frc.robot.subsystems.AlgaeEndeffectorSubsystem;
 
 
 public class PlaceCoralNoPath extends SequentialCommandGroup{
 
-    
+    /**
+     * This command drives forwards, raises the elevator, and drops coral on the reef.
+     * It's designed to work without odometry.
+     * @param elevator
+     * @param elevatorPose
+     * @param distanceSensors
+     * @param drivetrain
+     * @param xSupplier
+     * @param ySupplier
+     * @param rSupplier
+     * @param coralEndeffector
+     * @param leftPlace
+     * @param algaeEndeffectorSubsystem
+     * @param goForAlgae
+     */
     public PlaceCoralNoPath(
         ElevatorSubsystem elevator,
         Supplier<ElevatorEnums> elevatorPose,

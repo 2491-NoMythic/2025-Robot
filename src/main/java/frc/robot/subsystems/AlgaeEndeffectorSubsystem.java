@@ -4,27 +4,12 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.configs.TalonFXSConfiguration;
-import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.hardware.TalonFXS;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorArrangementValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.ClosedLoopConfig;
-import com.revrobotics.spark.config.SparkBaseConfig;
-import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.RobotContainer;
-import frc.robot.commands.AlgaeIntakeCommand;
 import frc.robot.helpers.MotorLogger;
 
 import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.*;
@@ -60,6 +45,13 @@ public class AlgaeEndeffectorSubsystem extends SubsystemBase {
     powerSpike = false;
   }
   /**
+   * Gets the motor object.
+   * @return the motor
+   */
+  public TalonFXS getMotor(){
+    return algaeEndeffectorMotor;
+  }
+  /**
    * Runs the AlgaeEndEffector at a speed from -1 to 1
    * @param speed 
    */
@@ -67,27 +59,23 @@ public class AlgaeEndeffectorSubsystem extends SubsystemBase {
     algaeEndeffectorMotor.set(speed);
   }
   /**
-   * Runs the AlgaeEndEffector at a speed from -1 to 1
+   * Runs the AlgaeEndEffector at a speed from -1 to 1, but uses a double supplier instead of a double.
    * @param speed the double supplier for the speed
    */
   public void runAlgaeEndDefector(DoubleSupplier speed){
     algaeEndeffectorMotor.set(speed.getAsDouble());
   }
   /**
-   * stops the algae end effector motor by setting speed to 0, with brake mode enabled
+   * stops the algae end effector motor by setting speed to 0, with brake mode enabled.
    */
   public void stopAlgaeEndDefectorHard(){
     algaeEndeffectorMotor.set(0);
   }
   /**
-   * stop the algae end effector motor be setting voltage to 0, letting it coast out
+   * Stop the algae end effector motor by setting voltage to 0, letting it coast out.
    */
   public void stopAlgaeEndDefectorCoast(){
     algaeEndeffectorMotor.setVoltage(0);
-  }
-
-  public TalonFXS getMotor(){
-    return algaeEndeffectorMotor;
   }
   /**
    * Updates hasAlgae to true or false based on if algaeEndeffectorMotor1 has a high output current for a period of time

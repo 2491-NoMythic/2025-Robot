@@ -4,7 +4,9 @@
 
 package frc.robot.settings;
 
-/** Add your docs here. */
+/** 
+ * Enums for selecting reef commands. 
+ */
 public enum CommandSelectorEnum {
     BackRightReefLeft,
     BackRightReefRight,

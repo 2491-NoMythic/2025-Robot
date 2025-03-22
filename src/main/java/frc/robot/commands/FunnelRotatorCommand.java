@@ -10,7 +10,8 @@ import frc.robot.subsystems.FunnelRotator;
 public class FunnelRotatorCommand extends Command {
   FunnelRotator rotator;
   /**
-   * creates a command that will drop the funnel back out of the way so that the cage can make it to the climber
+   * Creates a command that will drop the funnel so that the robot can climb. 
+   * This cannot be reversed.
    * @param rotator the funnel rotator subsystem
    * @param position
    */

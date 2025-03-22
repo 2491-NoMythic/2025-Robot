@@ -23,9 +23,11 @@ import java.util.List;
 public class Limelight {
 
   private static Limelight limelight;
-
+  @SuppressWarnings("resource")
   private static Field2d fieldB = new Field2d();
+  @SuppressWarnings("resource")
   private static Field2d fieldC = new Field2d();
+  @SuppressWarnings("resource")
   private static Field2d field3 = new Field2d();
 
   public static final AprilTagFieldLayout FIELD_LAYOUT;
@@ -93,8 +95,8 @@ public class Limelight {
         LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(APRILTAG_LIMELIGHTB_NAME);
     PoseEstimate poseC =
         LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(APRILTAG_LIMELIGHTC_NAME);
-    // we aren't using isTrustworthy here becuase as LL readings have gotten more reliable, we care
-    // less about tag distance
+    // We aren't using isTrustworthy here becuase as LL readings have gotten more reliable, 
+    // we care less about tag distance
     Boolean poseATrust = false;
     Boolean poseBTrust = false;
     Boolean poseCTrust = false;
@@ -120,8 +122,8 @@ public class Limelight {
     }
   }
   /**
-   * returns a new limelight pose that has the gyroscope rotation of pose1, with the FOMs used to
-   * calculate a new pose that proportionally averages the two given positions
+   * Returns a new limelight pose that has the gyroscope rotation of pose1, with the FOMs used to
+   * calculate a new pose that proportionally averages the two given positions.
    *
    * @param pose1
    * @param pose2
@@ -163,7 +165,7 @@ public class Limelight {
       return pose1;
   }
   /**
-   * calculates the distance to the closest tag that is seen by the limelight
+   * Calculates the distance to the closest tag that is seen by the limelight
    *
    * @param limelightName
    * @return
@@ -208,7 +210,7 @@ public class Limelight {
       }
     }
 
-
+    //TODO: Talk to Rowan and fix it
     Pose3d[] AprilTagPoses;
 
     for (int i = 0; i < 6; i++) {
@@ -362,6 +364,7 @@ public class Limelight {
    * @param odometryPose the robot's pose from the DriveTrain, unused right now
    * @return true if the pose is within the field bounds and the tag distance is less than 7
    */
+  @SuppressWarnings("unused")
   private boolean isTrustworthy(String limelightName, PoseEstimate estimate, Pose2d odometryPose) {
     Boolean trusted = (isValid(limelightName, estimate) && estimate.avgTagDist < 7);
 
@@ -380,7 +383,7 @@ public class Limelight {
     return trusted;
   }
 /**
- * 
+ * Checks if a given limelight is connected. 
  * @param limelightName
  * @return a boolean of wether or not the data from the limelight is accessible. If false, limelight may not be connected
  */

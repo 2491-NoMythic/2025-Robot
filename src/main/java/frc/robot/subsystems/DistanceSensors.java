@@ -5,11 +5,8 @@ import com.playingwithfusion.TimeOfFlight.RangingMode;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.helpers.MythicalMath;
 import frc.robot.settings.ReefOffsetEnums;
 import static frc.robot.settings.Constants.SensorConstants.*;
-
-import org.opencv.core.Mat;
 
 import frc.robot.settings.SensorNameEnums;
 public class DistanceSensors  extends SubsystemBase{
@@ -152,7 +149,9 @@ public class DistanceSensors  extends SubsystemBase{
     }
         return 0;
   }
-
+  /**
+   * Updates how far the robot is from the reef, based on the middle right sensor.
+   */
   private void updateForReefApproach() {
     if(middleRight.getRange() == 0) {
       loopsSensed = 0;

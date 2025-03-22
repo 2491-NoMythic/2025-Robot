@@ -5,19 +5,13 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
-import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.HardwareLimitSwitchConfigs;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.TorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.hardware.core.CoreTalonFX;
-import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.ForwardLimitTypeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
-import com.revrobotics.spark.SparkAbsoluteEncoder;
-
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.helpers.MotorLogger;
@@ -63,12 +57,15 @@ public class ClimberSubsystem extends SubsystemBase {
 
     motorLogger1 = new MotorLogger("/climber/motor1");
   }
-
+  /**
+   * Gets the postion of the climber in rotation.
+   * @return
+   */
   public double getClimberAngle() {
     return climberAngleSensor.getAbsolutePosition().getValueAsDouble();
   }
   /**
-   * takes a desired angle and moves climberMotor1 to it
+   * Takes a desired angle and moves climberMotor1 to it
    * @param angle the desired angle
    */
   public void setClimberAngle(double angle) {
@@ -94,6 +91,10 @@ public class ClimberSubsystem extends SubsystemBase {
   private void logMotors(){
     motorLogger1.log(climberMotor1);
   }
+  /**
+   * Sets the motor to a selected current for torque.
+   * @param current
+   */
   public void setMotorTorqueFOC(double current) {
     moveWithPower = false;
     climberMotor1.setControl(new TorqueCurrentFOC(current));

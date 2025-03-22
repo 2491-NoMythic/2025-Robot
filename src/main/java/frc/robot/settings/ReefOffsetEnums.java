@@ -4,7 +4,7 @@
 
 package frc.robot.settings;
 
-/** Add your docs here. */
+/** Enums for returning where the robot is relative to the reef side. */
 public enum ReefOffsetEnums {
     TOO_FAR_LEFT,
     ALIGNED_LEFT,

@@ -6,18 +6,13 @@ package frc.robot.commands;
 
 import java.util.Optional;
 import java.util.function.DoubleSupplier;
-import java.util.function.Supplier;
-
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.settings.Constants.DriveConstants;
 import frc.robot.settings.Constants.FieldConstants;
 import frc.robot.subsystems.RobotState;
-/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class LineUpBarge extends Command {
   boolean isRed;
   DrivetrainSubsystem driveTrain;
@@ -26,7 +21,12 @@ public class LineUpBarge extends Command {
   double speedX;
   double currentX;
   DoubleSupplier controllerYSupplier;
-  /** Creates a new LineUpBarge. */
+  /**
+   * Points the robot at the barge and drives towards it.
+   * Allows for control of side-to-side movement by the driver.
+   * @param driveTrain
+   * @param controllerYSupplier
+   */
   public LineUpBarge(DrivetrainSubsystem driveTrain, DoubleSupplier controllerYSupplier) {
     this.driveTrain = driveTrain;
     this.controllerYSupplier = ()->0;
@@ -65,11 +65,7 @@ public class LineUpBarge extends Command {
     if(speedX<-3) {
       speedX = -3;
     }
-    if (isRed) {
-      driveTrain.moveTowardsRotationTarget(speedX, 0);
-    } else {
-      driveTrain.moveTowardsRotationTarget(speedX, 0);
-    }
+    driveTrain.moveTowardsRotationTarget(speedX, 0);
   }
 
   // Called once the command ends or is interrupted.

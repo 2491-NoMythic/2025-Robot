@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
 public class MoveMeters extends Command {
-  /** Creates a new MoveMeters. */
   DrivetrainSubsystem m_drivetrain;
 
   double m_meters;
@@ -26,7 +25,14 @@ public class MoveMeters extends Command {
   double distanceX;
   double distanceY;
   Pose2d pose;
-
+  /**
+   * Moves the robot a certain number of meters.
+   * @param drivetrain
+   * @param meters
+   * @param forwardSpeed
+   * @param rightSpeed
+   * @param angleSpeed
+   */
   public MoveMeters(
       DrivetrainSubsystem drivetrain,
       double meters,

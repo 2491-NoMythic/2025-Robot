@@ -6,20 +6,14 @@ package frc.robot;
 
 import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.ALGAE_INTAKE_SPEED;
 import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.ALGAE_SHOOT_SPEED;
-import static frc.robot.settings.Constants.ClimberConstants.CLIMBER_CLIMBED_ANGLE;
-import static frc.robot.settings.Constants.ClimberConstants.CLIMBER_NOT_CLIMBED_ANGLE;
 import static frc.robot.settings.Constants.CoralEndeffectorConstants.CORAL_ENDEFFECTOR_SPEED;
 import static frc.robot.settings.Constants.DriveConstants.*;
 import static frc.robot.settings.Constants.ElevatorConstants.HUMAN_PLAYER_STATION_CENTIMETERS;
-import static frc.robot.settings.Constants.ElevatorConstants.METERS_FROM_POSE_TO_RAISE_ELEVATOR;
-import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_ACCLERATION;
 import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_HIGH_ACCLERATION;
 import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_HP_ACCLERATION;
 import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_HP_VELOCITY;
 import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_JERK;
 import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_VELOCITY;
-import static frc.robot.settings.Constants.Field.REEF_POSITION_THRESHOLD;
-import static frc.robot.settings.Constants.FunnelConstants.FUNNEL_INTAKE_SPEED;
 import static frc.robot.settings.Constants.PS4Driver.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -28,11 +22,7 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.FileVersionException;
-import com.playingwithfusion.TimeOfFlight;
-import com.playingwithfusion.jni.TimeOfFlightJNI;
-
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -46,7 +36,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -55,9 +44,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AutoAngleAtReef;
 import frc.robot.commands.ClimberCommand;
-import frc.robot.commands.DepositAlgae;
 import frc.robot.commands.DepositAlgaeSequential;
-import frc.robot.settings.Constants.AlgaeEndeffectorConstants;
 import frc.robot.settings.Constants.LightConstants;
 import frc.robot.settings.Constants.Vision;
 import frc.robot.settings.ControllerEnums;
@@ -73,14 +60,10 @@ import frc.robot.commands.FunClimbedLights;
 import frc.robot.commands.FunnelRotatorCommand;
 import frc.robot.commands.LineUp;
 import frc.robot.commands.LineUpBarge;
-import frc.robot.commands.LineupCoralInEndEffector;
-import frc.robot.commands.LineupCoralInFunnel;
 import frc.robot.commands.MoveMeters;
-import frc.robot.commands.PassCoralToEndEffector;
 import frc.robot.commands.PassCoralToEndEffectorSequential;
 import frc.robot.commands.PlaceCoralDuringLineupSequential;
 import frc.robot.commands.PlaceCoralNoPath;
-import frc.robot.commands.ResetClimber;
 import frc.robot.commands.ShootInBarge;
 import frc.robot.commands.WaitCommand;
 import frc.robot.commands.WaitUntil;
@@ -89,12 +72,8 @@ import frc.robot.commands.NamedCommands.CoralIntake;
 import frc.robot.commands.NamedCommands.DeliverCoral;
 import frc.robot.commands.NamedCommands.EjectCoral;
 import frc.robot.commands.autos.PlaceCoralNoOdometry;
-import frc.robot.settings.SensorNameEnums;
-import frc.robot.settings.CommandSelectorEnum;
 import frc.robot.settings.ElevatorEnums;
-import frc.robot.settings.LightsEnums;
 import frc.robot.settings.PlacementLocations;
-import frc.robot.settings.ReefSideEnum;
 import frc.robot.subsystems.AlgaeEndeffectorSubsystem;
 import frc.robot.subsystems.CoralEndeffectorSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -106,13 +85,10 @@ import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.RobotState;
 import java.io.IOException;
-import java.lang.ModuleLayer.Controller;
 import java.util.Map;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
-
-import javax.lang.model.element.ElementKind;
 
 import org.json.simple.parser.ParseException;
 
@@ -168,10 +144,10 @@ public class RobotContainer {
   AutoAngleAtReef autoAngleAtReef;
 //Suppliers
   BooleanSupplier AutoAngleAtReefSup;
-  private Command coralIntake;
+  //private Command coralIntake;
   private FunnelIntake funnelIntake;
   private FunnelRotator funnelRotator;
-  private DeliverCoral deliverCoral;
+  //private DeliverCoral deliverCoral;
   private ApproachReef approachReef;
 
   Alliance currentAlliance;
@@ -687,12 +663,10 @@ public class RobotContainer {
         new Trigger(ManualCoralIntake).whileTrue(new Command() {
           @Override
           public void execute() {
-            // TODO Auto-generated method stub
             funnelIntake.runFunnelSine();
           }
           @Override
           public void end(boolean interrupted) {
-              // TODO Auto-generated method stub
             funnelIntake.stopFunnel();
           }
         });
@@ -923,7 +897,6 @@ public class RobotContainer {
           ), 
           ()->selectCommand(()->RobotState.getInstance().deliveringLeft));
         } catch (FileVersionException | IOException | ParseException e) {
-          // TODO Auto-generated catch block
           e.printStackTrace();
           pathFindToReef = new InstantCommand(()->System.out.println("Error thrown while creating path!!"));
         }

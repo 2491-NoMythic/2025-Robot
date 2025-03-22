@@ -16,7 +16,12 @@ import frc.robot.subsystems.RobotState;
 public class PassCoralToEndEffector extends Command {
   CoralEndeffectorSubsystem coralEndEffector;
   FunnelIntake funnelIntake;
-  /** This command should be run when the coral is detected by the funnel, but not the coral endeffector, and the elevator is in the right place for the pass off. */
+  /**
+   * This command transfers the coral from the funnel to the endeffector.
+   * This should be run when the coral is detected by the funnel, but not the coral endeffector, and the elevator is in the right place for the pass off.
+   * @param coralEndEffector
+   * @param funnelIntake
+   */
   public PassCoralToEndEffector(CoralEndeffectorSubsystem coralEndEffector, FunnelIntake funnelIntake) {
     this.funnelIntake = funnelIntake;
     this.coralEndEffector = coralEndEffector;

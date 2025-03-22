@@ -10,11 +10,12 @@ import frc.robot.settings.Constants.FunnelConstants;
 import frc.robot.subsystems.FunnelIntake;
 import frc.robot.subsystems.RobotState;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class LineupCoralInFunnel extends SequentialCommandGroup {
-  /** Creates a new LineupCoralInFunnel. */
+  /**
+   * Makes sure the coral is lined up correctly in the endeffector.
+   * This has the funnel side of the controls.
+   * @param funnel
+   */
   public LineupCoralInFunnel(FunnelIntake funnel) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());

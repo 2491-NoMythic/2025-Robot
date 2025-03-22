@@ -9,11 +9,15 @@ import edu.wpi.first.wpilibj2.command.Command;
 import java.util.function.DoubleSupplier;
 
 public class WaitCommand extends Command {
-  /** Creates a new WaitCommand. */
+  
   DoubleSupplier m_waitTime;
 
   Timer m_timer;
-
+  /**
+   * Creates a timer that ends after a given amount of time.
+   * Used in place of Sleep because sleep pauses everything where this only pauses one command.
+   * @param waitTime
+   */
   public WaitCommand(DoubleSupplier waitTime) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_waitTime = waitTime;

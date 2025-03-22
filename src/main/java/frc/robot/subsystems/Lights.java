@@ -4,13 +4,9 @@
 // frc.robot.subsystems;import edu.wpi.first.wpilibj2.command.SubsystemBase;
 package frc.robot.subsystems;
 
-import com.fasterxml.jackson.databind.ser.BeanSerializer;
-
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.settings.ElevatorEnums;
 import frc.robot.settings.LightsEnums;
@@ -55,6 +51,7 @@ public class Lights extends SubsystemBase {
   }
 
   /**
+   * Sets the RGB value of a specific LED.
    * @param index the number (from 0 to max) of the LED to set
    * @param R
    * @param G
@@ -63,15 +60,29 @@ public class Lights extends SubsystemBase {
   public void setOneLightRGB(int index, int R, int G, int B) {
     LEDBuffer.setRGB(index, R, G, B);
   }
-
-  public void setCandleLights(int start, int end, int R, int G, int B) {
-    candle.setLEDs(R, G, B, 0, start, end - start);
-  }
-
+  /**
+   * Applies setOneLightRGB to a range of lights.
+   * @param start
+   * @param end
+   * @param R
+   * @param G
+   * @param B
+   */
   public void setLights(int start, int end, int R, int G, int B) {
     for (int i = start; i < end; i++) {
       setOneLightRGB(i, R, G, B);
     }
+  }
+  /**
+   * Sets the RGB value of a section of a CANdle-powered LED strip.
+   * @param start
+   * @param end
+   * @param R
+   * @param G
+   * @param B
+   */
+  public void setCandleLights(int start, int end, int R, int G, int B) {
+    candle.setLEDs(R, G, B, 0, start, end - start);
   }
 
   public void setAllLights(int R, int G, int B) {
@@ -191,7 +202,7 @@ public class Lights extends SubsystemBase {
   }
 
   /**
-   * stops blinking whatever lights are blinking
+   * Stops blinking whatever lights are blinking.
    */
   public void stopBlinkingLights() {
     blinkLights = false;
@@ -199,9 +210,8 @@ public class Lights extends SubsystemBase {
     timer.reset();
   }
   /**
-  * updates the blinked lights every half second if blinkLights is true
-  *
-   */ 
+  * Updates the blinked lights every half second if blinkLights is true.
+  */ 
   private void updateBlinkedLights() {
     if (blinkLights) {
       if (timer.get() < 0.5) {

@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.spark.SparkAnalogSensor;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
@@ -17,7 +16,6 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj.Preferences;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.helpers.MotorLogger;
 
@@ -58,13 +56,15 @@ public class CoralEndeffectorSubsystem extends SubsystemBase {
   
   }
   /**
-   * a method to set the speeds of both motors on the end effector. speeds are percentage of full power, from -1 to 1.
+   * A method to set the speeds of both motors on the end effector. speeds are percentage of full power, from -1 to 1.
    * @param speed the speed for motor1
    */
   public void set(double speed){
     coralEndeffectorMotor.set(speed);
-
   }
+  /**
+   * Stops the coral endeffector.
+   */
   public void stopCoralEndEffector(){
     coralEndeffectorMotor.set(0);
   }

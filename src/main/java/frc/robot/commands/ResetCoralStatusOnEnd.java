@@ -7,9 +7,11 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.RobotState;
 
-/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ResetCoralStatusOnEnd extends Command {
-  /** Creates a new ResetCoralStatusOnEnd. */
+  /**
+   * Sets the coral lineup robot state to false.
+   * Desgined to work in parallel race groups.
+   */
   public ResetCoralStatusOnEnd() {
     // Use addRequirements() here to declare subsystem dependencies.
   }

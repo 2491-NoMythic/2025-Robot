@@ -9,9 +9,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import java.util.function.BooleanSupplier;
 
 public class WaitUntil extends Command {
-  /** Creates a new WaitUntil. */
   BooleanSupplier condition;
-
+  /**
+   * Ends after a given boolean condition is met. 
+   * This is designed to work in command groups where something needs to wait for other stuff to finish.
+   * @param condition
+   */
   public WaitUntil(BooleanSupplier condition) {
     this.condition = condition;
     // Use addRequirements() here to declare subsystem dependencies.
