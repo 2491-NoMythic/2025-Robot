@@ -7,8 +7,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.HardwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
-import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
-import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.TorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -89,9 +87,7 @@ public class ClimberSubsystem extends SubsystemBase {
     pulleyMotorLogger = new MotorLogger("/climber/pulleymotor");
     wheelMotorLogger = new MotorLogger("/climber/wheelmotor");
   }
-  /**
-   * Sets climber speed to zero
-   */
+
   /**
    * Sets climber speed to zero
    */
@@ -114,9 +110,6 @@ public class ClimberSubsystem extends SubsystemBase {
    */
   public void setClimberPower(DoubleSupplier power) {
     setClimberPower(power.getAsDouble());
-  }
-  public double getClimberAngle() {
-    return climberAngleSensor.getAbsolutePosition().getValueAsDouble();
   }
   private void logMotors(){
     wheelMotorLogger.log(climberMotor1);
