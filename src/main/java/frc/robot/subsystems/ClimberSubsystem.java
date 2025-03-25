@@ -39,8 +39,8 @@ import java.util.function.DoubleSupplier;
 
 public class ClimberSubsystem extends SubsystemBase {
   TalonFX climberMotor1;
-  MotorLogger motorLogger1;
-  MotorLogger motorLogger2;
+  MotorLogger pulleyMotorLogger;
+  MotorLogger wheelMotorLogger;
   Servo climberServo;
   SparkMax climberWheels;
   SparkMaxConfig climberWheelsConfig;
@@ -79,7 +79,8 @@ public class ClimberSubsystem extends SubsystemBase {
         .withReverseLimitType(ReverseLimitTypeValue.NormallyClosed));
     }
 
-    motorLogger1 = new MotorLogger("/climber/motor1");
+    pulleyMotorLogger = new MotorLogger("/climber/pulleymotor");
+    wheelMotorLogger = new MotorLogger("/climber/wheelmotor");
   }
   /**
    * takes a desired angle and moves climberMotor1 to it
@@ -95,8 +96,8 @@ public class ClimberSubsystem extends SubsystemBase {
     climberMotor1.set(power.getAsDouble());
   }
   private void logMotors(){
-    motorLogger1.log(climberMotor1);
-    motorLogger2.log(climberWheels);
+    wheelMotorLogger.log(climberMotor1);
+    pulleyMotorLogger.log(climberWheels);
   }
   public void setMotorTorqueFOC(double current) {
     climberMotor1.setControl(new TorqueCurrentFOC(current));
