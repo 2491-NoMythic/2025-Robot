@@ -44,11 +44,11 @@ public class ClimberSubsystem extends SubsystemBase {
   Servo climberServo;
   SparkMax climberWheels;
   SparkMaxConfig climberWheelsConfig;
-  int loops = 0;
   CANcoder climberAngleSensor;
   boolean overSpooled;
   boolean moveWithPower;
   double movingPower;
+  int loops;
   /** Creates a new CimberSubsystem. */
   public ClimberSubsystem() {
     climberMotor1 = new TalonFX(CLIMBER_MOTOR_ID, CANIVORE_DRIVETRAIN);
