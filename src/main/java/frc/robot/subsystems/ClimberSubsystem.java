@@ -40,6 +40,7 @@ import java.util.function.DoubleSupplier;
 public class ClimberSubsystem extends SubsystemBase {
   TalonFX climberMotor1;
   MotorLogger motorLogger1;
+  MotorLogger motorLogger2;
   Servo climberServo;
   SparkMax climberWheels;
   SparkMaxConfig climberWheelsConfig;
@@ -95,6 +96,7 @@ public class ClimberSubsystem extends SubsystemBase {
   }
   private void logMotors(){
     motorLogger1.log(climberMotor1);
+    motorLogger2.log(climberWheels);
   }
   public void setMotorTorqueFOC(double current) {
     climberMotor1.setControl(new TorqueCurrentFOC(current));
