@@ -45,11 +45,16 @@ public class ClimberSubsystem extends SubsystemBase {
   SparkMax climberWheels;
   SparkMaxConfig climberWheelsConfig;
   int loops = 0;
+  CANcoder climberAngleSensor;
+  boolean overSpooled;
+  boolean moveWithPower;
+  double movingPower;
   /** Creates a new CimberSubsystem. */
   public ClimberSubsystem() {
     climberMotor1 = new TalonFX(CLIMBER_MOTOR_ID, CANIVORE_DRIVETRAIN);
     climberServo = new Servo(SERVO_CHANNEL);
     climberWheels = new SparkMax(CLIMBER_WHEELS_MOTOR_ID, MotorType.kBrushless);
+    climberAngleSensor = new CANcoder(CLIMBER_CANCODER_ID, CANIVORE_DRIVETRAIN);
     //TODO spend some time figuring out how to use the absolute encoder with the motor.
 
     climberWheelsConfig = new SparkMaxConfig();
@@ -67,6 +72,7 @@ public class ClimberSubsystem extends SubsystemBase {
       encoderConfig.MagnetSensor.MagnetOffset = PRAC_ENCODER_OFFSET;
     }
     encoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1;
+    climberAngleSensor.getConfigurator().apply(encoderConfig);
     if(Preferences.getBoolean("Elevator", false)) {
       climberMotor1.getConfigurator().apply(new HardwareLimitSwitchConfigs()
         .withForwardLimitRemoteTalonFX(new TalonFX(ELEVATOR_MOTOR_2_ID, CANIVORE_DRIVETRAIN))
@@ -88,12 +94,18 @@ public class ClimberSubsystem extends SubsystemBase {
    */
   public void stopClimber(){
     climberMotor1.set(0);
+    moveWithPower = false;
+    movingPower = 0;
   }
   public void setClimberPower(double power) {
-    climberMotor1.set(power);
+    moveWithPower = true;
+    movingPower = power;
   }
   public void setClimberPower(DoubleSupplier power) {
-    climberMotor1.set(power.getAsDouble());
+    setClimberPower(power.getAsDouble());
+  }
+  public double getClimberAngle() {
+    return climberAngleSensor.getAbsolutePosition().getValueAsDouble();
   }
   private void logMotors(){
     wheelMotorLogger.log(climberMotor1);
@@ -147,10 +159,28 @@ public class ClimberSubsystem extends SubsystemBase {
     if(Preferences.getBoolean("Motor Logging", false)){
       logMotors();
     }
+    SmartDashboard.putNumber("ClimberAngle", climberAngleSensor.getAbsolutePosition().getValueAsDouble());
     powerCheck();
     SmartDashboard.putNumber("servo angle", climberServo.getAngle());
     if(!RobotState.getInstance().climberIn && RobotState.getInstance().funnelDown){
       runWheels(0.25);
+    }
+    if(Math.abs(climberAngleSensor.getAbsolutePosition().getValueAsDouble() - CLIMBER_CLIMBED_ANGLE) < 2) {
+      RobotState.getInstance().climbed = true;
+    }
+    if(moveWithPower) {
+      if(movingPower < 0) {
+        if(climberAngleSensor.getVelocity().getValueAsDouble() > 0.1) {
+          overSpooled = true;
+        }
+      } else if(movingPower > 0 || climberAngleSensor.getVelocity().getValueAsDouble() < 0.1){
+        overSpooled = false;
+      }
+      if(overSpooled && movingPower < 0) {
+        climberMotor1.set(0);
+      } else {
+        climberMotor1.set(movingPower);
+      }
     }
   }
 }
