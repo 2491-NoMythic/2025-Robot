@@ -411,7 +411,7 @@ public final class Constants {
     public static final Pose2d ReefCBlue = new Pose2d(3.725, 2.817, Rotation2d.fromDegrees(60));
     public static final Pose2d ReefDBlue = new Pose2d(4.003, 2.656, Rotation2d.fromDegrees(60));
     public static final Pose2d ReefEBlue = new Pose2d(5.142, 2.758, Rotation2d.fromDegrees(120));
-    public static final Pose2d ReefFBlue = new Pose2d(5.443, 2.94, Rotation2d.fromDegrees(120));
+    public static final Pose2d ReefFBlue = new Pose2d(5.43, 2.96, Rotation2d.fromDegrees(120));
     public static final Pose2d ReefGBlue = new Pose2d(5.912, 3.999, Rotation2d.fromDegrees(180));
     public static final Pose2d ReefHBlue = new Pose2d(5.91, 4.32, Rotation2d.fromDegrees(180));
     public static final Pose2d ReefIBlue = new Pose2d(5.23, 5.246, Rotation2d.fromDegrees(-120));
@@ -560,7 +560,7 @@ public final class Constants {
     public static final double REEF_LEVEL_1_CENTIMETERS_AWAY_FROM_REEF = 50;
     public static final double REEF_LEVEL_2_CENTIMETERS_AWAY_FROM_REEF = 90.5;//84.1 for a 2x4 away from reef
     public static final double REEF_LEVEL_3_CENTIMETERS_AWAY_FROM_REEF = 130.2;
-    public static final double REEF_LEVEL_4_CENTIMETERS_AWAY_FROM_REEF = 197;//182.69;
+    public static final double REEF_LEVEL_4_CENTIMETERS_AWAY_FROM_REEF = 194;//182.69;
 
     public static final double MOTION_MAGIC_ELEVATOR_HIGH_VELOCITY = 300;
     public static final double MOTION_MAGIC_ELEVATOR_HIGH_ACCLERATION = 600;

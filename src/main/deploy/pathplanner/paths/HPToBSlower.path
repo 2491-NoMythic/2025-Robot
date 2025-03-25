@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 1.04325,
-        "y": 0.905
+        "y": 0.9829999999999995
       },
       "prevControl": null,
       "nextControl": {
         "x": 1.179750000000001,
-        "y": 3.245000000000001
+        "y": 3.3230000000000004
       },
       "isLocked": false,
       "linkedName": "humanPlayerProcessor"
