@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.HardwareLimitSwitchConfigs;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.TorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -14,6 +15,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.hardware.core.CoreTalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.ForwardLimitTypeValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.ReverseLimitTypeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
@@ -79,10 +81,13 @@ public class ClimberSubsystem extends SubsystemBase {
         .withForwardLimitEnable(true)
         .withForwardLimitAutosetPositionEnable(false)
         .withForwardLimitType(ForwardLimitTypeValue.NormallyClosed)
-        .withReverseLimitEnable(true)
+        .withReverseLimitEnable(false)
         .withReverseLimitAutosetPositionEnable(false)
         .withReverseLimitRemoteTalonFX(new TalonFX(ELEVATOR_MOTOR_2_ID, CANIVORE_DRIVETRAIN))
         .withReverseLimitType(ReverseLimitTypeValue.NormallyClosed));
+      climberMotor1.getConfigurator().apply(new MotorOutputConfigs()
+        .withNeutralMode(NeutralModeValue.Brake)
+      );
     }
 
     pulleyMotorLogger = new MotorLogger("/climber/pulleymotor");
@@ -170,10 +175,10 @@ public class ClimberSubsystem extends SubsystemBase {
     }
     if(moveWithPower) {
       if(movingPower < 0) {
-        if(climberAngleSensor.getVelocity().getValueAsDouble() > 0.1) {
+        if(climberAngleSensor.getPosition().getValueAsDouble() > 0.5728) {
           overSpooled = true;
         }
-      } else if(movingPower > 0 || climberAngleSensor.getVelocity().getValueAsDouble() < 0.1){
+      } else if(movingPower > 0 || climberAngleSensor.getVelocity().getValueAsDouble() < 0){
         overSpooled = false;
       }
       if(overSpooled && movingPower < 0) {

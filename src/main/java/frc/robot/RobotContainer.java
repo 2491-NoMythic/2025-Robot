@@ -214,6 +214,7 @@ public class RobotContainer {
   BooleanSupplier inEndgameSupplier;
   BooleanSupplier climberGroupForward;
   BooleanSupplier climberGroupReverse;
+  BooleanSupplier dropFunnel;
   BooleanSupplier algaeShooterSupOperator;
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -390,6 +391,7 @@ public class RobotContainer {
 
       climberGroupForward = buttonBoard::getclimbCommandButton;
       climberGroupReverse = buttonBoard::getClimberResetButton;
+      dropFunnel = buttonBoard::getClimbModeAuthorizer;
     }
     if (LimelightExists) {limelightInit();}
     if (distanceSensorsExist) {sensorInit();}   
@@ -567,14 +569,16 @@ public class RobotContainer {
       .onFalse(new InstantCommand(()->SmartDashboard.putBoolean("INTAKE/in intake zone", false)));
     }
     }
-
+    if(funnelRotatorExists){
+      new Trigger(dropFunnel).whileTrue(new InstantCommand(()-> funnelRotator.setFunnelRotator(0.2))).whileFalse(new InstantCommand(()-> funnelRotator.stopRotating()));
+    }
     if (algaeEndeffectorExists) {
       new Trigger(AlgaeIntakeSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector, ()->ALGAE_INTAKE_SPEED));
       new Trigger(()->AlgaeShooterSupDriver.getAsBoolean() || algaeShooterSupOperator.getAsBoolean()).whileTrue(new AlgaeIntakeCommand(algaeEndDefector, ()->ALGAE_SHOOT_SPEED));
     }
     if (climberExists){
-      new Trigger(climberGroupForward).whileTrue(new ClimberCommandGroup(climber, true)).onFalse(new InstantCommand(()-> climber.stopClimber(), climber)).onFalse(new InstantCommand(()-> climber.runWheels(0), climber));
-      new Trigger(climberGroupReverse).whileTrue(new ClimberCommandGroup(climber, false)).onFalse(new InstantCommand(()-> climber.stopClimber(), climber)).onFalse(new InstantCommand(()-> climber.runWheels(0), climber));
+      new Trigger(climberGroupForward).whileTrue(new ClimberCommandGroup(climber, false)).onFalse(new InstantCommand(()-> climber.stopClimber(), climber)).onFalse(new InstantCommand(()-> climber.runWheels(0), climber));
+      new Trigger(climberGroupReverse).whileTrue(new ClimberCommandGroup(climber, true)).onFalse(new InstantCommand(()-> climber.stopClimber(), climber)).onFalse(new InstantCommand(()-> climber.runWheels(0), climber));
     }
     if (funnelIntakeExists&&elevatorExists&&coralEndeffectorExists) {
       // if the coral is in the end effector, and the elevator is in place, pass the coral to the endeffector and line up the coral within it

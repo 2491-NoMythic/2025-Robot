@@ -583,14 +583,14 @@ public final class Constants {
     public static final double CLIMBER_CLIMBED_ANGLE = 100;
     public static final double CLIMBER_NOT_CLIMBED_ANGLE = 0;
 
-    public static final double CLIMBER_RACHET_TRUE = 0;
-    public static final double CLIMBER_RACHET_FALSE = -10;
+    public static final double CLIMBER_RACHET_TRUE = 138;
+    public static final double CLIMBER_RACHET_FALSE = 100;
 
-    public static final double CLIMBER_POWER_FORWARD = -0.1;
-    public static final double CLIMBER_POWER_REVERSE = 0.1;
+    public static final double CLIMBER_POWER_FORWARD = -1;
+    public static final double CLIMBER_POWER_REVERSE = 0.8;
 
-    public static final int CLIMBER_WHEELS_CURRENT_LIMIT = 2491;
-    public static final int CLIMBER_WHEELS_RPM_LIMIT = 2491;
+    public static final int CLIMBER_WHEELS_CURRENT_LIMIT = 30;
+    public static final int CLIMBER_WHEELS_RPM_LIMIT = 500;
 
 
     public static final TalonFXConfiguration ClimberMotorConfigComp = new TalonFXConfiguration()
