@@ -479,8 +479,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("TARGETINGPOSE/adjustedxspeedAlliance", xSpeed);
     //if the elevator is about to be up, limit the speed to 2 meters per second. Otherwise, limit speed to 3.5 meters per second
     if(DriverStation.isAutonomous()) {
-      xSpeed = MythicalMath.absoluteCap(xSpeed, 1.5);
-      ySpeed = MythicalMath.absoluteCap(ySpeed, 1.5);
+      xSpeed = MythicalMath.absoluteCap(xSpeed, 1.2);
+      ySpeed = MythicalMath.absoluteCap(ySpeed, 1.2);
     } else {
       xSpeed = MythicalMath.absoluteCap(xSpeed, 2);
       ySpeed = MythicalMath.absoluteCap(ySpeed, 2);

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.4807500000000005,
-        "y": 5.662999999999999
+        "x": 3.36375,
+        "y": 5.9945
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.7849915103403102,
-        "y": 5.500205901585802
+        "x": 3.66799151034031,
+        "y": 5.831705901585803
       },
       "isLocked": false,
       "linkedName": "ReefK"
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 5.0,
+    "maxVelocity": 3.0,
     "maxAcceleration": 3.9,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,

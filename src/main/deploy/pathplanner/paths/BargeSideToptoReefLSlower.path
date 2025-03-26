@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9376463834570734,
-        "y": 6.600906828978263
+        "x": 2.004183291787223,
+        "y": 6.7288818737162925
       },
       "isLocked": false,
       "linkedName": "BargeSideTopFeeder"
     },
     {
       "anchor": {
-        "x": 3.2760000000000002,
-        "y": 5.57525
+        "x": 3.1785,
+        "y": 5.7410000000000005
       },
       "prevControl": {
-        "x": 1.7625658396602595,
-        "y": 7.375168100336857
+        "x": 1.502413807939946,
+        "y": 7.1312807592135545
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 5.0,
+    "maxVelocity": 3.0,
     "maxAcceleration": 3.9,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -41,7 +41,7 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 1.5,
+    "velocity": 0.0,
     "rotation": -59.99999999999999
   },
   "reversed": false,

@@ -406,18 +406,19 @@ public final class Constants {
     public static final Pose2d ProcessorPoseBlue = new Pose2d(5.982, 0.531, Rotation2d.fromDegrees(-90));
     
     //poses that are an inch and a half from the edge of the reef
-    public static final Pose2d ReefABlue = new Pose2d(3.2, 4.098, Rotation2d.fromDegrees(0));
-    public static final Pose2d ReefBBlue = new Pose2d(3.2, 3.741, Rotation2d.fromDegrees(0));
-    public static final Pose2d ReefCBlue = new Pose2d(3.7887, 2.9072, Rotation2d.fromDegrees(60));
-    public static final Pose2d ReefDBlue = new Pose2d(4.0637, 2.7254, Rotation2d.fromDegrees(60));
-    public static final Pose2d ReefEBlue = new Pose2d(5.0963, 2.8290, Rotation2d.fromDegrees(120));
-    public static final Pose2d ReefFBlue = new Pose2d(5.396, 3.032, Rotation2d.fromDegrees(120));
-    public static final Pose2d ReefGBlue = new Pose2d(5.785, 3.95, Rotation2d.fromDegrees(180));
-    public static final Pose2d ReefHBlue = new Pose2d(5.7752, 4.2612, Rotation2d.fromDegrees(180));
-    public static final Pose2d ReefIBlue = new Pose2d(5.2231, 5.1051, Rotation2d.fromDegrees(-120));
-    public static final Pose2d ReefJBlue = new Pose2d(4.921, 5.304, Rotation2d.fromDegrees(-120));
-    public static final Pose2d ReefKBlue = new Pose2d(3.895, 5.198, Rotation2d.fromDegrees(-60));
-    public static final Pose2d ReefLBlue = new Pose2d(3.642, 5.018, Rotation2d.fromDegrees(-60));
+    public static final Pose2d ReefABlue = new Pose2d(3.062, 4.089, Rotation2d.fromDegrees(0));
+    public static final Pose2d ReefBBlue = new Pose2d(3.062, 3.727, Rotation2d.fromDegrees(0));
+    public static final Pose2d ReefCBlue = new Pose2d(3.725, 2.817, Rotation2d.fromDegrees(60));
+    public static final Pose2d ReefDBlue = new Pose2d(4.003, 2.656, Rotation2d.fromDegrees(60));
+    public static final Pose2d ReefEBlue = new Pose2d(5.142, 2.758, Rotation2d.fromDegrees(120));
+    public static final Pose2d ReefFBlue = new Pose2d(5.43, 2.96, Rotation2d.fromDegrees(120));
+    public static final Pose2d ReefGBlue = new Pose2d(5.912, 3.999, Rotation2d.fromDegrees(180));
+    public static final Pose2d ReefHBlue = new Pose2d(5.91, 4.32, Rotation2d.fromDegrees(180));
+    public static final Pose2d ReefIBlue = new Pose2d(5.23, 5.246, Rotation2d.fromDegrees(-120));
+    public static final Pose2d ReefJBlue = new Pose2d(4.96, 5.39, Rotation2d.fromDegrees(-120));
+    public static final Pose2d ReefKBlue = new Pose2d(3.81, 5.272, Rotation2d.fromDegrees(-60));
+    public static final Pose2d ReefLBlue = new Pose2d(3.537, 5.103, Rotation2d.fromDegrees(-60));
+
 
     // public static final Pose2d ReefARed = new Pose2d(14.49, 3.95, Rotation2d.fromDegrees(180));
     public static final Pose2d ReefARed = new Pose2d(14.49, 3.963, Rotation2d.fromDegrees(180));
@@ -448,7 +449,7 @@ public final class Constants {
     public static final String LIMELIGHT_SHUFFLEBOARD_TAB = "Vision";
 
     public static final double ALLOWABLE_POSE_DIFFERENCE = 0.5;
-    public static final double MAX_TAG_DISTANCE = 3.5;
+    public static final double MAX_TAG_DISTANCE = 3;
 
     public static final Translation2d FIELD_CORNER = new Translation2d(17.54, 8.02);
     public static final Translation2d FIELD_CORNER_FOR_INTAKE = new Translation2d(16.65, 7.5);
@@ -540,9 +541,9 @@ public final class Constants {
   public final class ElevatorConstants{
     public static final int ELEVATOR_MOTOR_1_ID = 9;
     public static final int ELEVATOR_MOTOR_2_ID = 10;
-    public static final double HUMAN_PLAYER_STATION_CENTIMETERS = 23.2;//19.1;//31.5;
+    public static final double HUMAN_PLAYER_STATION_CENTIMETERS = 22.5;//19.1;//31.5;
     public static final double PRAC_HEIGHT_AT_LIMIT_SWITCH = 20;
-    public static final double COMP_HEIGHT_AT_LOWER_LIMIT_SWITCH = 20;//before second limit switch was added (and for all of duluth): 16.828;
+    public static final double COMP_HEIGHT_AT_LOWER_LIMIT_SWITCH = 20.32;//before second limit switch was added (and for all of duluth): 16.828;
     public static final double COMP_HEIGHT_AT_UPPER_LIMIT_SWITCH = 201.5;
     public static final double PROCESSOR_HEIGHT_CENTIMETERS = 20;
     public static final double ELEVATOR_THRESHOLD = 1.5;
@@ -557,9 +558,9 @@ public final class Constants {
 
     //reef heights that are for when we are about a corals width from the reef
     public static final double REEF_LEVEL_1_CENTIMETERS_AWAY_FROM_REEF = 50;
-    public static final double REEF_LEVEL_2_CENTIMETERS_AWAY_FROM_REEF = 90;//84.1 for a 2x4 away from reef
-    public static final double REEF_LEVEL_3_CENTIMETERS_AWAY_FROM_REEF = 131;
-    public static final double REEF_LEVEL_4_CENTIMETERS_AWAY_FROM_REEF = 196.5;//182.69;
+    public static final double REEF_LEVEL_2_CENTIMETERS_AWAY_FROM_REEF = 90.5;//84.1 for a 2x4 away from reef
+    public static final double REEF_LEVEL_3_CENTIMETERS_AWAY_FROM_REEF = 130.2;
+    public static final double REEF_LEVEL_4_CENTIMETERS_AWAY_FROM_REEF = 194;//182.69;
 
     public static final double MOTION_MAGIC_ELEVATOR_HIGH_VELOCITY = 300;
     public static final double MOTION_MAGIC_ELEVATOR_HIGH_ACCLERATION = 600;

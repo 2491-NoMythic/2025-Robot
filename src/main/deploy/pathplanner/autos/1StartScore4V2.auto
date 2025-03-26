@@ -11,12 +11,6 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "BargeStartToJ"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "PlaceWithLineupRightL4"
@@ -31,7 +25,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "BargeSidePickupSlower"
+            "pathName": "BargeSidePickupFaster"
           }
         },
         {
@@ -160,7 +154,7 @@
       ]
     }
   },
-  "resetOdom": true,
+  "resetOdom": false,
   "folder": null,
   "choreoAuto": false
 }
