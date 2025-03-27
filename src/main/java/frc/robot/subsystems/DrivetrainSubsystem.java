@@ -482,8 +482,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
       xSpeed = MythicalMath.absoluteCap(xSpeed, 1.2);
       ySpeed = MythicalMath.absoluteCap(ySpeed, 1.2);
     } else {
-      xSpeed = MythicalMath.absoluteCap(xSpeed, 2);
-      ySpeed = MythicalMath.absoluteCap(ySpeed, 2);
+      xSpeed = MythicalMath.absoluteCap(xSpeed, 1.5);
+      ySpeed = MythicalMath.absoluteCap(ySpeed, 1.5);
     }
     SmartDashboard.putNumber("TARGETINGPOSE/yspeed", ySpeed);
     SmartDashboard.putNumber("TARGETINGPOSE/xspeed", xSpeed);

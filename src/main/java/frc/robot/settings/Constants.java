@@ -60,7 +60,7 @@ public final class Constants {
     public static final PIDController DRIVE_TO_POSE_Y_CONTROLLER = getTranslationPIDController();
     /** The bumper-to-bumper width of the robot. */
     public static PIDController getTranslationPIDController() {
-      PIDController transltionController = new PIDController(5, 0, 0);
+      PIDController transltionController = new PIDController(5.3, 0, 0);
       transltionController.setIZone(0.025);
       transltionController.setIntegratorRange(-0.25, 0.25); 
       return transltionController;
@@ -417,7 +417,7 @@ public final class Constants {
     public static final Pose2d ReefIBlue = new Pose2d(5.26, 5.23, Rotation2d.fromDegrees(-120));
     public static final Pose2d ReefJBlue = new Pose2d(4.95, 5.4, Rotation2d.fromDegrees(-120));
     public static final Pose2d ReefKBlue = new Pose2d(3.83, 5.3, Rotation2d.fromDegrees(-60));
-    public static final Pose2d ReefLBlue = new Pose2d(3.52, 5.1, Rotation2d.fromDegrees(-60));
+    public static final Pose2d ReefLBlue = new Pose2d(3.57, 5.12, Rotation2d.fromDegrees(-60));
 
 
     // public static final Pose2d ReefARed = new Pose2d(14.49, 3.95, Rotation2d.fromDegrees(180));
@@ -433,6 +433,7 @@ public final class Constants {
     public static final Pose2d ReefIRed = new Pose2d(12.26, 2.84, Rotation2d.fromDegrees(60));
     public static final Pose2d ReefJRed = new Pose2d(12.57, 2.66, Rotation2d.fromDegrees(60));
     public static final Pose2d ReefKRed = new Pose2d(13.67, 2.74, Rotation2d.fromDegrees(120));
+    // public static final Pose2d ReefKRed = new Pose2d(13.7, 2.75, Rotation2d.fromDegrees(120));
     public static final Pose2d ReefLRed = new Pose2d(13.98, 2.91, Rotation2d.fromDegrees(120));
     
     public static final double BARGE_POSITION_THRESHOLD = 0.02;
@@ -490,7 +491,7 @@ public final class Constants {
     public static final int ALGAE_ENDEFFECTOR_MOTOR_ID = 23;
     
     public static final int ALGAE_ENDEFFECTOR_CURRENT_LIMIT = 25;
-    public static final double ALGAE_INTAKE_SPEED = 0.7;
+    public static final double ALGAE_INTAKE_SPEED = 1;
     public static final double ALGAE_SHOOT_SPEED = -1;
 
     //2 volts ~= 1822 rpm
@@ -553,7 +554,7 @@ public final class Constants {
     public static final double REEF_LEVEL_1_CENTIMETERS_AGAINST_REEF = 50;
     public static final double REEF_LEVEL_2_CENTIMETERS_AGAINST_REEF = 85.51;//81.23;
     public static final double REEF_LEVEL_3_CENTIMETERS_AGAINST_REEF = 125.68;//122.6;
-    public static final double REEF_LEVEL_4_CENTIMETERS_AGAINST_REEF = 191.7;//188.7;//182.69;
+    public static final double REEF_LEVEL_4_CENTIMETERS_AGAINST_REEF = 190;//188.7;//182.69;
     public static final double BARGE_SHOOT_CENTIMETERS = 194.5;
 
     //reef heights that are for when we are about a corals width from the reef
