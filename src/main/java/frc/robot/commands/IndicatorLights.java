@@ -29,6 +29,10 @@ public class IndicatorLights extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if(RobotState.getInstance().climberIn){
+      lights.blinkLights(LightsEnums.All, 255, 255, 255);
+      return;
+    }
   //sets lights on the funnel to report on coral status in the robot, or indicate if we are lining up to the reef
     if(RobotState.getInstance().reefLineupRunning) {
       lights.setSystemLights(LightsEnums.Funnel, 100, 50, 50);
