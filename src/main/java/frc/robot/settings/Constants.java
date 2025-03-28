@@ -60,7 +60,7 @@ public final class Constants {
     public static final PIDController DRIVE_TO_POSE_Y_CONTROLLER = getTranslationPIDController();
     /** The bumper-to-bumper width of the robot. */
     public static PIDController getTranslationPIDController() {
-      PIDController transltionController = new PIDController(5.3, 0, 0);
+      PIDController transltionController = new PIDController(5, 0, 0);
       transltionController.setIZone(0.025);
       transltionController.setIntegratorRange(-0.25, 0.25); 
       return transltionController;
@@ -432,7 +432,7 @@ public final class Constants {
     public static final Pose2d ReefHRed = new Pose2d(11.63, 3.75, Rotation2d.fromDegrees(0));
     public static final Pose2d ReefIRed = new Pose2d(12.26, 2.84, Rotation2d.fromDegrees(60));
     public static final Pose2d ReefJRed = new Pose2d(12.57, 2.66, Rotation2d.fromDegrees(60));
-    public static final Pose2d ReefKRed = new Pose2d(13.67, 2.74, Rotation2d.fromDegrees(120));
+    public static final Pose2d ReefKRed = new Pose2d(13.708, 2.79, Rotation2d.fromDegrees(120));
     // public static final Pose2d ReefKRed = new Pose2d(13.7, 2.75, Rotation2d.fromDegrees(120));
     public static final Pose2d ReefLRed = new Pose2d(13.98, 2.91, Rotation2d.fromDegrees(120));
     
@@ -561,7 +561,7 @@ public final class Constants {
     public static final double REEF_LEVEL_1_CENTIMETERS_AWAY_FROM_REEF = 50;
     public static final double REEF_LEVEL_2_CENTIMETERS_AWAY_FROM_REEF = 93.5;//90.5;//84.1 for a 2x4 away from reef
     public static final double REEF_LEVEL_3_CENTIMETERS_AWAY_FROM_REEF = 132;//130.2;
-    public static final double REEF_LEVEL_4_CENTIMETERS_AWAY_FROM_REEF = 196.4;//194;//182.69;
+    public static final double REEF_LEVEL_4_CENTIMETERS_AWAY_FROM_REEF = 195;//194.28;//194;//182.69;
 
     public static final double MOTION_MAGIC_ELEVATOR_HIGH_VELOCITY = 300;
     public static final double MOTION_MAGIC_ELEVATOR_HIGH_ACCLERATION = 600;

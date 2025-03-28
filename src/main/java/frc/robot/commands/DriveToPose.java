@@ -175,9 +175,9 @@ public class DriveToPose extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // if(DriverStation.isAutonomous()) {
-    //   return false;
-    // }
+    if(DriverStation.isAutonomous()) {
+      return false;
+    }
     return cyclesGood>3&&drivetrain.isAtRotationTarget();
   }
 }
