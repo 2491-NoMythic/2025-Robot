@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.RobotState;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.settings.ElevatorEnums;
 import frc.robot.settings.LightsEnums;
@@ -15,6 +16,7 @@ import frc.robot.subsystems.Lights;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class IndicatorLights extends Command {
   Lights lights;
+  int loopsRan;
   /** Creates a new IndicatorLights. */
   public IndicatorLights(Lights lights) {
     this.lights = lights;
@@ -24,11 +26,22 @@ public class IndicatorLights extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    loopsRan = 0;
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+  if(DriverStation.isAutonomous()) {
+    return;
+  }
+  loopsRan++;
+  if(loopsRan < 10) {
+    return;
+  } else {
+    loopsRan = 0;
+  }
     if(RobotState.getInstance().climberIn){
       lights.blinkLights(LightsEnums.All, 255, 255, 255);
       return;
