@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.1505,
-        "y": 1.0317499999999995
+        "x": 1.16025,
+        "y": 0.9732499999999993
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.1547500000000017,
-        "y": 1.4314999999999982
+        "x": 2.1645000000000016,
+        "y": 1.372999999999998
       },
       "isLocked": false,
       "linkedName": "humanPlayerProcessor"
