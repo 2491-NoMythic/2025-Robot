@@ -8,6 +8,7 @@ import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.ALGAE_INTAK
 import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.ALGAE_SHOOT_SPEED;
 import static frc.robot.settings.Constants.ClimberConstants.CLIMBER_CLIMBED_ANGLE;
 import static frc.robot.settings.Constants.ClimberConstants.CLIMBER_NOT_CLIMBED_ANGLE;
+import static frc.robot.settings.Constants.ClimberConstants.CLIMBER_POWER_REVERSE;
 import static frc.robot.settings.Constants.CoralEndeffectorConstants.CORAL_ENDEFFECTOR_SPEED;
 import static frc.robot.settings.Constants.DriveConstants.*;
 import static frc.robot.settings.Constants.ElevatorConstants.HUMAN_PLAYER_STATION_CENTIMETERS;
@@ -578,8 +579,12 @@ public class RobotContainer {
       new Trigger(()->AlgaeShooterSupDriver.getAsBoolean() || algaeShooterSupOperator.getAsBoolean()).whileTrue(new AlgaeIntakeCommand(algaeEndDefector, ()->ALGAE_SHOOT_SPEED));
     }
     if (climberExists){
-      new Trigger(climberGroupForward).whileTrue(new ClimberCommandGroup(climber, false)).onFalse(new InstantCommand(()-> climber.stopClimber(), climber)).onFalse(new InstantCommand(()-> climber.runWheels(0), climber));
+      // new Trigger(climberGroupForward).whileTrue(new ClimberCommandGroup(climber, false)).onFalse(new InstantCommand(()-> climber.stopClimber(), climber)).onFalse(new InstantCommand(()-> climber.runWheels(0), climber));
       new Trigger(climberGroupReverse).whileTrue(new ClimberCommandGroup(climber, true)).onFalse(new InstantCommand(()-> climber.stopClimber(), climber)).onFalse(new InstantCommand(()-> climber.runWheels(0), climber));
+      new Trigger(climberGroupForward).onTrue(new InstantCommand(()->climber.runWheels(0), climber));
+      new Trigger(climberGroupForward).onTrue(new InstantCommand(()->climber.setServo(()->false), climber));
+      new Trigger(climberGroupForward).onTrue(new InstantCommand(() -> climber.setClimberPower(CLIMBER_POWER_REVERSE), climber));
+      new Trigger(climberGroupForward).onFalse(new InstantCommand(() -> climber.stopClimber(), climber));
     }
     if (funnelIntakeExists&&elevatorExists&&coralEndeffectorExists) {
       // if the coral is in the end effector, and the elevator is in place, pass the coral to the endeffector and line up the coral within it
