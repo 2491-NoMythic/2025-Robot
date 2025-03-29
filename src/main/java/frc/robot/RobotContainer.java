@@ -6,7 +6,8 @@ package frc.robot;
 
 import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.ALGAE_INTAKE_SPEED;
 import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.ALGAE_SHOOT_SPEED;
-
+import static frc.robot.settings.Constants.ClimberConstants.CLIMBER_CLIMBED_ANGLE;
+import static frc.robot.settings.Constants.ClimberConstants.CLIMBER_NOT_CLIMBED_ANGLE;
 import static frc.robot.settings.Constants.ClimberConstants.CLIMBER_POWER_REVERSE;
 import static frc.robot.settings.Constants.CoralEndeffectorConstants.CORAL_ENDEFFECTOR_SPEED;
 import static frc.robot.settings.Constants.DriveConstants.*;
