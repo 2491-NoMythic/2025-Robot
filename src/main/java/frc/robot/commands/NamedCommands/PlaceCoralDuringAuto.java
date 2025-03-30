@@ -34,7 +34,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class PlaceCoralDuringAuto extends SequentialCommandGroup {
   /** Creates a new PlaceCoralDuringLineupSequential. */
-  public PlaceCoralDuringAuto(AlgaeEndeffectorSubsystem algaeEndDefector, DrivetrainSubsystem driveTrain, ElevatorSubsystem elevator, CoralEndeffectorSubsystem coralEndDefector, Supplier<PlacementLocations> placementSupplier, Supplier<ElevatorEnums> heightSupplier) {
+  public PlaceCoralDuringAuto(AlgaeEndeffectorSubsystem algaeEndDefector, DrivetrainSubsystem driveTrain, ElevatorSubsystem elevator, CoralEndeffectorSubsystem coralEndDefector, Supplier<PlacementLocations> placementSupplier) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(

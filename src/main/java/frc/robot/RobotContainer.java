@@ -799,9 +799,9 @@ public class RobotContainer {
       // end effector, and more than 1 second has passed (s wer are not stlil
       // accelerating)
       placeWithLineupRightL4 = new PlaceCoralDuringAuto(algaeEndDefector, driveTrain, elevator,
-          coralEndDefector, () -> selectCommand(() -> false), () -> ElevatorEnums.Reef4);
+          coralEndDefector, () -> selectCommand(() -> false));
       placeWithLineupLeftL4 = new PlaceCoralDuringAuto(algaeEndDefector, driveTrain, elevator,
-          coralEndDefector, () -> selectCommand(() -> true), () -> ElevatorEnums.Reef4);
+          coralEndDefector, () -> selectCommand(() -> true));
       placeWithLineupRightL2 = new PlaceCoralDuringLineupSequential(algaeEndDefector, driveTrain, elevator,
           coralEndDefector, () -> selectCommand(() -> false), () -> ElevatorEnums.Reef2);
       placeWithLineupLeftL2 = new PlaceCoralDuringLineupSequential(algaeEndDefector, driveTrain, elevator,
@@ -809,8 +809,7 @@ public class RobotContainer {
       coralHandlingCommand = new ParallelRaceGroup(
           new SequentialCommandGroup(
               new CoralIntake(elevator, funnelIntake, coralEndDefector),
-              new PassCoralToEndEffectorSequential(coralEndDefector, funnelIntake),
-              new InstantCommand(() -> elevator.setElevatorPosition(ElevatorEnums.Reef2), elevator)),
+              new PassCoralToEndEffectorSequential(coralEndDefector, funnelIntake)),
           new WaitCommand(() -> 3));
       coralHandlingCommandL2 = new ParallelRaceGroup(
           new SequentialCommandGroup(
