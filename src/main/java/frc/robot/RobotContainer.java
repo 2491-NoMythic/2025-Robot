@@ -91,6 +91,7 @@ import frc.robot.subsystems.DistanceSensors;
 import frc.robot.commands.NamedCommands.CoralIntake;
 import frc.robot.commands.NamedCommands.DeliverCoral;
 import frc.robot.commands.NamedCommands.EjectCoral;
+import frc.robot.commands.NamedCommands.PlaceCoralDuringAuto;
 import frc.robot.commands.autos.PlaceCoralNoOdometry;
 import frc.robot.settings.SensorNameEnums;
 import frc.robot.settings.CommandSelectorEnum;
@@ -797,9 +798,9 @@ public class RobotContainer {
       // this command will raise the elevator after the coral has been lined up in the
       // end effector, and more than 1 second has passed (s wer are not stlil
       // accelerating)
-      placeWithLineupRightL4 = new PlaceCoralDuringLineupSequential(algaeEndDefector, driveTrain, elevator,
+      placeWithLineupRightL4 = new PlaceCoralDuringAuto(algaeEndDefector, driveTrain, elevator,
           coralEndDefector, () -> selectCommand(() -> false), () -> ElevatorEnums.Reef4);
-      placeWithLineupLeftL4 = new PlaceCoralDuringLineupSequential(algaeEndDefector, driveTrain, elevator,
+      placeWithLineupLeftL4 = new PlaceCoralDuringAuto(algaeEndDefector, driveTrain, elevator,
           coralEndDefector, () -> selectCommand(() -> true), () -> ElevatorEnums.Reef4);
       placeWithLineupRightL2 = new PlaceCoralDuringLineupSequential(algaeEndDefector, driveTrain, elevator,
           coralEndDefector, () -> selectCommand(() -> false), () -> ElevatorEnums.Reef2);
