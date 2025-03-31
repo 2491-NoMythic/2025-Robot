@@ -39,6 +39,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -1140,5 +1141,12 @@ public class RobotContainer {
 
   public void autonomousPeriodic() {
     logCurrentCommands();
+  }
+
+  public static Command setThreadPriority() {
+    return new SequentialCommandGroup(
+      new WaitCommand(()->20),
+      new InstantCommand(()->Threads.setCurrentThreadPriority(true, 10))
+    ).ignoringDisable(true);
   }
 }
