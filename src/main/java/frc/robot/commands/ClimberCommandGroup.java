@@ -28,7 +28,12 @@ public class ClimberCommandGroup extends SequentialCommandGroup {
     addCommands(
       new InstantCommand(()->climber.runWheels(()->isClimbing ? -1 : 0), climber),
       new InstantCommand(() -> climber.setServo( ()-> isClimbing), climber),
-      new WaitCommand(() -> 0.5),
+      new WaitCommand(() -> isClimbing ? 0.5 : 0),
       new InstantCommand(() -> climber.setClimberPower(()->isClimbing ? CLIMBER_POWER_FORWARD : CLIMBER_POWER_REVERSE), climber));
   }
+
+  // @Override
+  // public InterruptionBehavior getInterruptionBehavior() {
+  //   return InterruptionBehavior.kCancelIncoming;
+  // }
 }

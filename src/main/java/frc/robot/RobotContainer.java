@@ -609,6 +609,7 @@ public class RobotContainer {
       
       new Trigger(()->CoralPlaceTeleSupplier.getAsBoolean() && RobotState.getInstance().goForAlgae && !(RobotState.getInstance().deliveringCoralHeight==ElevatorEnums.Reef1)).whileTrue(
         new SequentialCommandGroup(
+          new InstantCommand(()->coralEndDefector.stopCoralEndEffector(), coralEndDefector),
           new InstantCommand(()->elevator.setElevatorPositionDynamicConfigs(HUMAN_PLAYER_STATION_CENTIMETERS+10, MOTION_MAGIC_ELEVATOR_HP_ACCLERATION, MOTION_MAGIC_ELEVATOR_HP_VELOCITY, MOTION_MAGIC_ELEVATOR_JERK), elevator),
           new InstantCommand(()->algaeEndDefector.runAlgaeEndDefector(ALGAE_INTAKE_SPEED), algaeEndDefector),
           new DriveToPose(()->selectCommand(()->RobotState.getInstance().deliveringLeft), driveTrain, ()->0),
@@ -679,7 +680,7 @@ public class RobotContainer {
     }
 
     if(coralEndeffectorExists){
-      new Trigger(ForceEjectCoral).whileTrue(new EjectCoral(coralEndDefector));
+      new Trigger(ForceEjectCoral).whileTrue(new DeliverCoral(coralEndDefector));
     }
 
     if(algaeEndeffectorExists && DrivetrainExists && elevatorExists) {
@@ -702,6 +703,7 @@ public class RobotContainer {
       }
       if (funnelRotatorExists) {
           new Trigger(()->funnelRotatorSupplier.getAsBoolean()).whileTrue(new FunnelRotatorCommand(funnelRotator));
+         new Trigger(()->funnelRotatorSupplier.getAsBoolean()).onTrue(new InstantCommand(()->funnelIntake.runFunnel(0), funnelIntake));
           new Trigger(()->funnelRotatorSupplier.getAsBoolean() && inEndgameSupplier.getAsBoolean()).whileTrue(new FunnelRotatorCommand(funnelRotator));
       }
   }

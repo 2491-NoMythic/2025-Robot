@@ -37,6 +37,7 @@ public class PlaceCoralDuringLineupSequential extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new InstantCommand(()->RobotState.getInstance().reefLineupRunning = true),
+      new InstantCommand(()->coralEndDefector.stopCoralEndEffector(), coralEndDefector),
       new InstantCommand(()->algaeEndDefector.runAlgaeEndDefector(() -> RobotState.getInstance().goForAlgae ? ALGAE_INTAKE_SPEED : -0.5), algaeEndDefector),
       new ParallelDeadlineGroup(
         new SequentialCommandGroup(
@@ -46,7 +47,7 @@ public class PlaceCoralDuringLineupSequential extends SequentialCommandGroup {
           new WaitUntil(()-> (DriverStation.isAutonomous() ? driveTrain.getPositionTargetingError() < 0.02 : driveTrain.getPositionTargetingError() < REEF_POSITION_THRESHOLD) && elevator.isElevatorAtPose()),
           new ParallelRaceGroup(
             new DeliverCoral(coralEndDefector),//drops coral
-            new WaitCommand(()-> DriverStation.isTeleop() ? 0.25 : 0.17))),
+            new WaitCommand(()-> DriverStation.isTeleop() ? 0.5 : 0.17))),
         new SequentialCommandGroup(
           new DriveToPose(placementSupplier, driveTrain, ()->0),
           new InstantCommand(()->driveTrain.drive(new ChassisSpeeds(0, 0, 0)))))

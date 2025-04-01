@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.68425,
-        "y": 2.279749999999999
+        "x": 5.238627049180328,
+        "y": 2.832223360655737
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.179958741109844,
-        "y": 2.160938620530846
+        "x": 4.734335790290173,
+        "y": 2.713411981186584
       },
       "isLocked": false,
-      "linkedName": "ReefF"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.04325,
-        "y": 0.9829999999999995
+        "x": 1.16025,
+        "y": 0.9732499999999993
       },
       "prevControl": {
-        "x": 2.406551021690982,
-        "y": 1.2995659145605192
+        "x": 2.4426099233961085,
+        "y": 1.5637748345334888
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 52.431407971172504
+    "rotation": 54.0
   },
   "reversed": false,
   "folder": null,
