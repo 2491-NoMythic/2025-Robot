@@ -607,7 +607,7 @@ public class RobotContainer {
             new InstantCommand(()->RobotState.getInstance().reefLineupRunning = false))
             ).onFalse(new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer))).onFalse(new InstantCommand(()->algaeEndDefector.stopAlgaeEndDefectorHard(), algaeEndDefector));
       
-      new Trigger(()->CoralPlaceTeleSupplier.getAsBoolean() && RobotState.getInstance().goForAlgae && !(RobotState.getInstance().deliveringCoralHeight==ElevatorEnums.Reef1)).whileTrue(
+      new Trigger(()->CoralPlaceTeleSupplier.getAsBoolean() && RobotState.getInstance().goForAlgae && !(RobotState.getInstance().deliveringCoralHeight==ElevatorEnums.Reef1) && !(RobotState.getInstance().deliveringCoralHeight==ElevatorEnums.Reef4)).whileTrue(
         new SequentialCommandGroup(
           new InstantCommand(()->coralEndDefector.stopCoralEndEffector(), coralEndDefector),
           new InstantCommand(()->elevator.setElevatorPositionDynamicConfigs(HUMAN_PLAYER_STATION_CENTIMETERS+10, MOTION_MAGIC_ELEVATOR_HP_ACCLERATION, MOTION_MAGIC_ELEVATOR_HP_VELOCITY, MOTION_MAGIC_ELEVATOR_JERK), elevator),
@@ -618,6 +618,32 @@ public class RobotContainer {
               new SequentialCommandGroup(
                   new ParallelRaceGroup(
                       new ElevatorCommand(elevator, ()->RobotState.getInstance().deliveringCoralHeight),//raises elevator to position)
+                      new WaitUntil(()->elevator.isElevatorAtPose())),
+                  new ParallelRaceGroup(
+                      new DeliverCoral(coralEndDefector),//drops coral
+                      new WaitCommand(()->0.75)))),
+          new InstantCommand(()->coralEndDefector.stopCoralEndEffector(), coralEndDefector),
+          new MoveMeters(driveTrain, -0.5, -0.8, 0, 0),
+          new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer), elevator), //sets elevator back to the bottom position
+          new InstantCommand(()->RobotState.getInstance().reefLineupRunning = false))
+      ).onFalse(new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer)));
+
+      new Trigger(()->CoralPlaceTeleSupplier.getAsBoolean() && RobotState.getInstance().goForAlgae && RobotState.getInstance().deliveringCoralHeight==ElevatorEnums.Reef4).whileTrue(
+        new SequentialCommandGroup(
+          new InstantCommand(()->coralEndDefector.stopCoralEndEffector(), coralEndDefector),
+          new InstantCommand(()->elevator.setElevatorPositionDynamicConfigs(HUMAN_PLAYER_STATION_CENTIMETERS+10, MOTION_MAGIC_ELEVATOR_HP_ACCLERATION, MOTION_MAGIC_ELEVATOR_HP_VELOCITY, MOTION_MAGIC_ELEVATOR_JERK), elevator),
+          new InstantCommand(()->algaeEndDefector.runAlgaeEndDefector(ALGAE_INTAKE_SPEED), algaeEndDefector),
+          new DriveToPose(()->selectCommand(()->RobotState.getInstance().deliveringLeft), driveTrain, ()->0),
+          new ParallelRaceGroup(
+              new AlgaeIntakeCommand(algaeEndDefector, () -> RobotState.getInstance().goForAlgae ? ALGAE_INTAKE_SPEED : -0.5),
+              new SequentialCommandGroup(
+                  new SequentialCommandGroup(
+                      new InstantCommand(()->elevator.setElevatorPositionWithAlgae(ElevatorEnums.Reef3), elevator),//raises elevator to position)
+                      new WaitUntil(()->elevator.isElevatorAtPose()),
+                      new MoveMeters(driveTrain, 0.1, -0.5, 0, 0),
+                      new InstantCommand(()->elevator.setElevatorPositionWithAlgae(ElevatorEnums.Reef4), elevator),
+                      new InstantCommand(()->driveTrain.drive(new ChassisSpeeds(0.5, 0, 0)), driveTrain),
+                      new WaitCommand(()->0.5),
                       new WaitUntil(()->elevator.isElevatorAtPose())),
                   new ParallelRaceGroup(
                       new DeliverCoral(coralEndDefector),//drops coral

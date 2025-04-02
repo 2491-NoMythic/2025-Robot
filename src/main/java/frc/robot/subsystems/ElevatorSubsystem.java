@@ -170,6 +170,9 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void setElevatorPosition(Supplier<ElevatorEnums> heightSupplier) {
     setElevatorPosition(heightSupplier.get());
   }
+  public void setElevatorPositionWithAlgae(Supplier<ElevatorEnums> heightSupplier) {
+    setElevatorPositionWithAlgae(heightSupplier.get());
+  }
   /**
    * sets the height of the elvator using constants associated with different values of ElevatorEnums
    * @param height
