@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.3942500000000002,
-        "y": 7.2425
+        "x": 1.3306352459016395,
+        "y": 7.243698770491803
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9838841114593546,
-        "y": 6.763646217978589
+        "x": 1.920269357360994,
+        "y": 6.764844988470392
       },
       "isLocked": false,
       "linkedName": "BargeSideTopFeeder"
