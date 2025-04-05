@@ -1,0 +1,61 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MiddleStartToG"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PlaceWithLineupWithAlgaeL4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ReefGToBarge"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoBargeShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BargeToReefI"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PlaceWithLineupWithAlgaeL3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ReefIToBarge"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoBargeShoot"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
