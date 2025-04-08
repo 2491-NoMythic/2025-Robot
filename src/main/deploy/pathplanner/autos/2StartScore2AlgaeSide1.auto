@@ -5,15 +5,9 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "MiddleStartToG"
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "PlaceWithLineupWithAlgaeL4"
+            "name": "PlaceWithLineupWithAlgaeL3"
           }
         },
         {
@@ -50,6 +44,12 @@
           "type": "named",
           "data": {
             "name": "AutoBargeShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MoveBack"
           }
         }
       ]
