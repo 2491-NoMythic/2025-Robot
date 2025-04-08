@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.4145491803278687,
-        "y": 7.207735655737704
+        "x": 1.3306352459016395,
+        "y": 7.243698770491803
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.06121721311475392,
-        "y": 6.355409836065572
+        "x": -0.022696721311475265,
+        "y": 6.3913729508196715
       },
       "isLocked": false,
       "linkedName": "BargeSideTopFeeder"
     },
     {
       "anchor": {
-        "x": 3.4807500000000005,
-        "y": 5.662999999999999
+        "x": 3.36375,
+        "y": 5.9945
       },
       "prevControl": {
-        "x": 3.0399993831764327,
-        "y": 6.06739651767522
+        "x": 2.9229993831764323,
+        "y": 6.398896517675221
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 5.0,
+    "maxVelocity": 3.0,
     "maxAcceleration": 3.9,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,

@@ -11,12 +11,6 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "BargeStartToJ"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "PlaceWithLineupRightL4"
@@ -113,11 +107,54 @@
           "data": {
             "name": "ElevatorReset"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ReefLtoBargeSideTopFeederSlower"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForIntake"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "BargeSideTopToReefASlower"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeAlignAndRaiseCoral"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PlaceWithLineupLeftL4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ElevatorReset"
+          }
         }
       ]
     }
   },
-  "resetOdom": true,
+  "resetOdom": false,
   "folder": null,
   "choreoAuto": false
 }

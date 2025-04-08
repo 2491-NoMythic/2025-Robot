@@ -7,6 +7,7 @@ package frc.robot.commands.NamedCommands;
 import static frc.robot.settings.Constants.CoralEndeffectorConstants.CORAL_ENDEFFECTOR_SPEED;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.settings.ElevatorEnums;
 import frc.robot.subsystems.CoralEndeffectorSubsystem;
 
 public class DeliverCoral extends Command {
@@ -31,7 +32,11 @@ public class DeliverCoral extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    coralEndeffector.runCoralEndEffector(CORAL_ENDEFFECTOR_SPEED);
+    if(RobotState.getInstance().deliveringCoralHeight == ElevatorEnums.Reef2 || RobotState.getInstance().deliveringCoralHeight == ElevatorEnums.Reef3) {
+      coralEndeffector.runCoralEndEffector(CORAL_ENDEFFECTOR_SPEED/1.4);
+    } else {
+      coralEndeffector.runCoralEndEffector(CORAL_ENDEFFECTOR_SPEED);
+    }
   }
 
   // Called once the command ends or is interrupted.

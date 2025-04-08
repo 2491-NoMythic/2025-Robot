@@ -19,9 +19,9 @@ public class ButtonBoard extends GenericHID implements Sendable{
         leftReefLineupButton(8),
         rightReefLineupButton(9),
         goForAlgaeButton(10),
-        climbCommandButton(11),
+        climbCommandButton(13),
         climbModeAuthorizer(12),
-        climberResetButton(13),
+        climberResetButton(11),
         forceElevatorButton(14);
 
         public final int value;

@@ -19,16 +19,21 @@ import frc.robot.commands.WaitCommand;
 public class ClimberCommandGroup extends SequentialCommandGroup {
   /** Creates a new ClimberCommandGroup. */
   ClimberSubsystem climber;
-  boolean isClimbing;
-  public ClimberCommandGroup( ClimberSubsystem climber, boolean isClimbing) {
+  boolean isRaisingClimber;
+  public ClimberCommandGroup( ClimberSubsystem climber, boolean isRaisingClimber) {
     this.climber = climber;
-    this.isClimbing = isClimbing;
+    this.isRaisingClimber = isRaisingClimber;
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new InstantCommand(()->climber.runWheels(()-> isClimbing ? 1 : 0), climber),
-      new InstantCommand(() -> climber.setServo( ()-> isClimbing), climber),
-      new WaitCommand(() -> 0.5),
-      new InstantCommand(() -> climber.setClimberPower(()->isClimbing ? CLIMBER_POWER_FORWARD : CLIMBER_POWER_REVERSE), climber));
+      new InstantCommand(()->climber.runWheels(()->isRaisingClimber ? -1 : 0), climber),
+      new InstantCommand(() -> climber.setServo( ()-> isRaisingClimber), climber),
+      new WaitCommand(() -> isRaisingClimber ? 0.5 : 0),
+      new InstantCommand(() -> climber.setClimberPower(()->isRaisingClimber ? CLIMBER_POWER_FORWARD : CLIMBER_POWER_REVERSE), climber));
   }
+
+  // @Override
+  // public InterruptionBehavior getInterruptionBehavior() {
+  //   return InterruptionBehavior.kCancelIncoming;
+  // }
 }

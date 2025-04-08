@@ -32,6 +32,7 @@ import static frc.robot.settings.Constants.ElevatorConstants.*;
 
 import java.util.function.Supplier;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -189,7 +190,11 @@ public class ElevatorSubsystem extends SubsystemBase {
         }
         break;
       case Reef4:
-        setElevatorPositionDynamicConfigs(REEF_LEVEL_4_CENTIMETERS_AWAY_FROM_REEF, MOTION_MAGIC_ELEVATOR_HIGH_ACCLERATION, MOTION_MAGIC_ELEVATOR_HIGH_VELOCITY, MOTION_MAGIC_ELEVATOR_JERK);
+        if(DriverStation.isAutonomous()) {
+          setElevatorPositionDynamicConfigs(REEF_LEVEL_4_CENTIMETERS_AWAY_FROM_REEF, MOTION_MAGIC_ELEVATOR_HP_ACCLERATION, MOTION_MAGIC_ELEVATOR_HP_VELOCITY, MOTION_MAGIC_ELEVATOR_JERK);
+        } else {
+          setElevatorPositionDynamicConfigs(REEF_LEVEL_4_CENTIMETERS_AWAY_FROM_REEF, MOTION_MAGIC_ELEVATOR_HIGH_ACCLERATION, MOTION_MAGIC_ELEVATOR_HIGH_VELOCITY, MOTION_MAGIC_ELEVATOR_JERK);
+        }
         if(isElevatorAtPose()){
           RobotState.getInstance().elevatorIsHigh = true;
         }
@@ -226,7 +231,7 @@ public class ElevatorSubsystem extends SubsystemBase {
    // TODO: may need speedup
   public void setElevatorPositionWithAlgae(ElevatorEnums height){
     final double algaeAcceleration = MOTION_MAGIC_ELEVATOR_HIGH_ACCLERATION-200;
-    final double algaeVelocity = MOTION_MAGIC_ELEVATOR_HIGH_VELOCITY;
+    final double algaeVelocity = MOTION_MAGIC_ELEVATOR_HIGH_VELOCITY-200;
     switch(height){
       case Reef1:
       setElevatorPositionDynamicConfigs(REEF_LEVEL_1_CENTIMETERS_AGAINST_REEF, algaeAcceleration, algaeVelocity, 0);

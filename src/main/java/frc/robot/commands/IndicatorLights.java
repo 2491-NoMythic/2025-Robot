@@ -5,13 +5,15 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.RobotState;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.settings.LightsEnums;
 import frc.robot.subsystems.Lights;
 
 public class IndicatorLights extends Command {
   Lights lights;
-  /**
+  int loopsRan;
+   /**
    * Adjusts the lights in a wide variety of ways to provide a visual status indicator on the robot. 
    * Includes sections for reef lineup, coral delivery level, and whether or not we are going to collect algae.
    * @param lights
@@ -24,11 +26,26 @@ public class IndicatorLights extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    loopsRan = 0;
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+  if(DriverStation.isAutonomous()) {
+    return;
+  }
+  loopsRan++;
+  if(loopsRan < 10) {
+    return;
+  } else {
+    loopsRan = 0;
+  }
+    if(RobotState.getInstance().climberIn){
+      lights.blinkLights(LightsEnums.All, 255, 255, 255);
+      return;
+    }
   //sets lights on the funnel to report on coral status in the robot, or indicate if we are lining up to the reef
     if(RobotState.getInstance().reefLineupRunning) {
       lights.setSystemLights(LightsEnums.Funnel, 100, 50, 50);

@@ -41,6 +41,7 @@ public class PassCoralToEndEffectorSequential extends SequentialCommandGroup {
           new ParallelRaceGroup(
             new WaitCommand(()->2),
             new WaitUntil(()->RobotState.getInstance().coralEndeffSensorTrig)),
+          new InstantCommand(()->System.out.println("stopped end effector by sequnce")),
           new InstantCommand(()->coralEndEffector.stopCoralEndEffector(), coralEndEffector),
           new InstantCommand(()->RobotState.getInstance().coralAligned = true),
           new InstantCommand(()->RobotState.getInstance().coralLineupRunning = false)

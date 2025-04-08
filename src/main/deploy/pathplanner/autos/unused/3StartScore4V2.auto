@@ -7,13 +7,50 @@
         {
           "type": "named",
           "data": {
+            "name": "DriveForwardHalfSec"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "RaiseElevator"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PlaceWithLineupLeftL4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ElevatorReset"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "BargeStartToJ"
+            "pathName": "reefFToHPFaster"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "HPToDSlower"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeAlignAndRaiseCoral"
+                }
+              }
+            ]
           }
         },
         {
@@ -31,13 +68,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "BargeSidePickupFaster"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "WaitForIntake"
+            "pathName": "reefDToHPSlower"
           }
         },
         {
@@ -47,7 +78,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "BargeSideTopToReefKSlower"
+                  "pathName": "HPToCSlower"
                 }
               },
               {
@@ -74,13 +105,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "ReefKtoBargeSideTopFeederSlower"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "WaitForIntake"
+            "pathName": "reefCToHPSlower"
           }
         },
         {
@@ -90,13 +115,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "BargeSideToptoReefLSlower"
+                  "pathName": "HPToBSlower"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "IntakeAlignAndRaiseCoral"
+                  "name": "IntakeAlignAndRaiseCoralL2"
                 }
               }
             ]
@@ -105,19 +130,13 @@
         {
           "type": "named",
           "data": {
-            "name": "PlaceWithLineupRightL4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ElevatorReset"
+            "name": "PlaceWithLineupRightL2"
           }
         }
       ]
     }
   },
-  "resetOdom": true,
+  "resetOdom": false,
   "folder": null,
   "choreoAuto": false
 }

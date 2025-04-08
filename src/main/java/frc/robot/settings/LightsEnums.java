@@ -16,5 +16,6 @@ public enum LightsEnums {
     ElevatorRight5,
     ElevatorRightAlgaeIndicator,
     Funnel,
-    Drivetrain
+    Drivetrain,
+    All
 }

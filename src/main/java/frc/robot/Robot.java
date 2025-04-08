@@ -76,6 +76,7 @@ public class Robot extends LoggedRobot {
     // be added.
     m_robotContainer = new RobotContainer();
     m_robotContainer.robotInit();
+    RobotContainer.setThreadPriority().schedule();
   }
 
   /**

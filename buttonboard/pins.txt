@@ -1,3 +1,8 @@
+Black to ground for led
+Yellow to ground for switch
+Red gets resistor then to pin for led
+Blue to pin for switch
+
 --LED--
 L1 = 6
 L2 = 2
@@ -9,6 +14,9 @@ Right = 45
 Climb up = 8
 Climb Reset = 9
 ForceElevator = 12
+Algae eject = 43
+Coral eject = 41
+
 --Button--
 L1 = 7
 L2 = 30

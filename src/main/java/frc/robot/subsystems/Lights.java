@@ -149,6 +149,10 @@ public class Lights extends SubsystemBase {
       case Drivetrain:
         setCandleLights(LightConstants.DRIVETRAIN_LIGHTS_START, LightConstants.DRIVETRAIN_LIGHTS_END, R, G, B);
         break;
+      case All:
+        setLights(LightConstants.TOTAL_LIGHTS_RIO_STRIP_START, LightConstants.TOTAL_LIGHTS_RIO_STRIP_START, R, G, B);
+        setCandleLights(LightConstants.TOTAL_LIGHTS_CANDLE_STRIP_START, LightConstants.TOTAL_LIGHTS_CANDLE_STRIP_END, R, G, B);
+        break;
     }
   }
 /**
