@@ -51,6 +51,8 @@ public class Limelight {
     SmartDashboard.putData("Vision/Right/pose", fieldC);
     SmartDashboard.putData("Vision/Extra/pose", field3);
 
+
+
     // logs active selected path
     PathPlannerLogging.setLogActivePathCallback(
         (activePath) -> {
@@ -130,8 +132,16 @@ public class Limelight {
    * @return
    */
   public PoseEstimate mergedPose(List<String> limelightNames) {
+
+    
+
+
     PoseEstimate pose1 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightNames.get(0));;
     PoseEstimate pose2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightNames.get(1));;
+
+    Logger.recordOutput("mergedPose/pose1", pose1.pose);
+    Logger.recordOutput("mergedPose/pose2", pose2.pose);
+
     double LL1FOM = getLLFOM(limelightNames.get(0));
     double LL2FOM = getLLFOM(limelightNames.get(1));
     double confidenceSource1 = 1 / Math.pow(LL1FOM, 2);
@@ -196,6 +206,7 @@ public class Limelight {
           LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(APRILTAG_LIMELIGHTC_NAME).pose;
         fieldC.setRobotPose(poseC);
         Logger.recordOutput("RightPose", poseC);
+        
       }
     }
     

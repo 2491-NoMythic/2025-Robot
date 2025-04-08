@@ -40,6 +40,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -85,6 +86,7 @@ import frc.robot.commands.PassCoralToEndEffectorSequential;
 import frc.robot.commands.PlaceCoralDuringLineupSequential;
 import frc.robot.commands.PlaceCoralNoPath;
 import frc.robot.commands.ResetClimber;
+import frc.robot.commands.ScoreWhileCollectingAlgae;
 import frc.robot.commands.ShootInBarge;
 import frc.robot.commands.WaitCommand;
 import frc.robot.commands.WaitUntil;
@@ -613,24 +615,7 @@ public class RobotContainer {
             ).onFalse(new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer))).onFalse(new InstantCommand(()->algaeEndDefector.stopAlgaeEndDefectorHard(), algaeEndDefector));
       
       new Trigger(()->CoralPlaceTeleSupplier.getAsBoolean() && RobotState.getInstance().goForAlgae && !(RobotState.getInstance().deliveringCoralHeight==ElevatorEnums.Reef1)).whileTrue(
-        new SequentialCommandGroup(
-          new InstantCommand(()->coralEndDefector.stopCoralEndEffector(), coralEndDefector),
-          new InstantCommand(()->elevator.setElevatorPositionDynamicConfigs(HUMAN_PLAYER_STATION_CENTIMETERS+10, MOTION_MAGIC_ELEVATOR_HP_ACCLERATION, MOTION_MAGIC_ELEVATOR_HP_VELOCITY, MOTION_MAGIC_ELEVATOR_JERK), elevator),
-          new InstantCommand(()->algaeEndDefector.runAlgaeEndDefector(ALGAE_INTAKE_SPEED), algaeEndDefector),
-          new DriveToPose(()->selectCommand(()->RobotState.getInstance().deliveringLeft), driveTrain, ()->0),
-          new ParallelRaceGroup(
-              new AlgaeIntakeCommand(algaeEndDefector, () -> RobotState.getInstance().goForAlgae ? ALGAE_INTAKE_SPEED : -0.5),
-              new SequentialCommandGroup(
-                  new ParallelRaceGroup(
-                      new ElevatorCommand(elevator, ()->RobotState.getInstance().deliveringCoralHeight),//raises elevator to position)
-                      new WaitUntil(()->elevator.isElevatorAtPose())),
-                  new ParallelRaceGroup(
-                      new DeliverCoral(coralEndDefector),//drops coral
-                      new WaitCommand(()->0.75)))),
-          new InstantCommand(()->coralEndDefector.stopCoralEndEffector(), coralEndDefector),
-          new MoveMeters(driveTrain, -0.5, -0.8, 0, 0),
-          new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer), elevator), //sets elevator back to the bottom position
-          new InstantCommand(()->RobotState.getInstance().reefLineupRunning = false))
+        new ScoreWhileCollectingAlgae(coralEndDefector, algaeEndDefector, driveTrain, elevator, ()->selectCommand(()->RobotState.getInstance().deliveringLeft), ()->RobotState.getInstance().deliveringCoralHeight)
       ).onFalse(new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer)));
 
       new Trigger(()->CoralPlaceTeleSupplier.getAsBoolean() && RobotState.getInstance().deliveringCoralHeight==ElevatorEnums.Reef1).whileTrue(
@@ -793,6 +778,8 @@ public class RobotContainer {
     Command coralHandlingCommand;
     Command coralHandlingCommandL2;
     Command autoBargeShoot;
+    Command placeWithLineupWithAlgaeL4;
+    Command placeWithLineupWithAlgaeL3;
     Command placeWithLineupRightL4;
     Command placeWithLineupRightL2;
     Command placeWithLineupLeftL4;
@@ -822,6 +809,8 @@ public class RobotContainer {
               new PassCoralToEndEffectorSequential(coralEndDefector, funnelIntake),
               new InstantCommand(() -> elevator.setElevatorPosition(ElevatorEnums.Reef2), elevator)),
           new WaitCommand(() -> 3));
+      placeWithLineupWithAlgaeL4 = new ScoreWhileCollectingAlgae(coralEndDefector, algaeEndDefector, driveTrain, elevator, ()->selectCommand(()->true), ()->ElevatorEnums.Reef4);
+      placeWithLineupWithAlgaeL3 = new ScoreWhileCollectingAlgae(coralEndDefector, algaeEndDefector, driveTrain, elevator, ()->selectCommand(()->true), ()->ElevatorEnums.Reef3);
       deliverCoralLeft1NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef1, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true,algaeEndDefector, ()-> false);
       deliverCoralLeft2NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef2, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true,algaeEndDefector, ()-> false);
       deliverCoralLeft3NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef3, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true,algaeEndDefector, ()-> false);
@@ -838,7 +827,13 @@ public class RobotContainer {
       deliverCoralRight2NamedCommandWithAlgae = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef2, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->false,algaeEndDefector, ()->true);
       deliverCoralRight3NamedCommandWithAlgae = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef3, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->false,algaeEndDefector, ()->true);
       deliverCoralRight4NamedCommandWithAlgae = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef4, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->false,algaeEndDefector, ()->true);
-      autoBargeShoot = new ShootInBarge(driveTrain, elevator, algaeEndDefector, ()->0);
+      autoBargeShoot = new SequentialCommandGroup(
+        new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.Barge), elevator),
+        new WaitUntil(()->elevator.isElevatorAtPose()),
+        new InstantCommand(()->algaeEndDefector.runAlgaeEndDefector(ALGAE_SHOOT_SPEED), algaeEndDefector),
+        new WaitCommand(()->0.24),
+        new InstantCommand(()->algaeEndDefector.runAlgaeEndDefector(0), algaeEndDefector),
+        new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer), elevator));
     } else {
       coralHandlingCommandL2 = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
       coralHandlingCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
@@ -862,6 +857,8 @@ public class RobotContainer {
       placeWithLineupLeftL4 = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
       placeWithLineupRightL2 = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
       placeWithLineupLeftL2 = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
+      placeWithLineupWithAlgaeL3 = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
+      placeWithLineupWithAlgaeL4 = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
       autoBargeShoot = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
     }
 
@@ -930,6 +927,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("PlaceWithLineupLeftL4", placeWithLineupLeftL4);
     NamedCommands.registerCommand("PlaceWithLineupRightL2", placeWithLineupRightL2);
     NamedCommands.registerCommand("PlaceWithLineupLeftL2", placeWithLineupLeftL2);
+    NamedCommands.registerCommand("PlaceWithLineupWithAlgaeL3", placeWithLineupWithAlgaeL3);
+    NamedCommands.registerCommand("PlaceWithLineupWithAlgaeL4", placeWithLineupWithAlgaeL4);
     NamedCommands.registerCommand("DriveForwardHalfSec", driveForwardForHalfSec);
     NamedCommands.registerCommand("WaitForIntake",
         new ParallelRaceGroup(
@@ -1145,5 +1144,12 @@ public class RobotContainer {
 
   public void autonomousPeriodic() {
     logCurrentCommands();
+  }
+
+  public static Command setThreadPriority() {
+    return new SequentialCommandGroup(
+      new WaitCommand(()->20),
+      new InstantCommand(()->Threads.setCurrentThreadPriority(true, 10))
+    ).ignoringDisable(true);
   }
 }
