@@ -62,7 +62,6 @@ import frc.robot.commands.L1ScoringCommandGroup;
 import frc.robot.commands.ElevatorReset;
 import frc.robot.commands.ElevatorTestCommand;
 import frc.robot.commands.FunClimbedLights;
-import frc.robot.commands.FunnelRotatorCommand;
 import frc.robot.commands.LineUp;
 import frc.robot.commands.LineUpBarge;
 import frc.robot.commands.MoveMeters;
@@ -85,7 +84,6 @@ import frc.robot.subsystems.CoralEndeffectorSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelIntake;
-import frc.robot.subsystems.FunnelRotator;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.Limelight;
@@ -122,7 +120,6 @@ public class RobotContainer {
   private boolean climberExists;
   private boolean elevatorExists;
   private boolean funnelIntakeExists;
-  private boolean funnelRotatorExists;
   private boolean DrivetrainExists;
   private boolean distanceSensorsExist;
   private boolean lightsExist;
@@ -152,8 +149,7 @@ public class RobotContainer {
   BooleanSupplier AutoAngleAtReefSup;
   //private Command coralIntake;
   private FunnelIntake funnelIntake;
-  private FunnelRotator funnelRotator;
-  //private DeliverCoral deliverCoral;
+  private DeliverCoral deliverCoral;
   private ApproachReef approachReef;
 
   Alliance currentAlliance;
@@ -189,11 +185,9 @@ public class RobotContainer {
   BooleanSupplier goForAlgaeTrue;
   BooleanSupplier goForAlgaeFalse;
   BooleanSupplier CoralIntakeSup;
-  BooleanSupplier funnelRotatorSupplier;
   BooleanSupplier inEndgameSupplier;
   BooleanSupplier climberGroupForward;
   BooleanSupplier climberGroupReverse;
-  BooleanSupplier dropFunnel;
   BooleanSupplier algaeShooterSupOperator;
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -212,7 +206,6 @@ public class RobotContainer {
     Preferences.initBoolean("CoralEndDefector", false);
     Preferences.initBoolean("AlgaeEndDefector", false);
     Preferences.initBoolean("FunnelIntake", true);
-    Preferences.initBoolean("FunnelRotator", false);
     Preferences.initBoolean("Climber", false);
     Preferences.initBoolean("DrivetrainExists", false);
     Preferences.initBoolean("AntiTipActive", true);
@@ -230,7 +223,6 @@ public class RobotContainer {
     climberExists = Preferences.getBoolean("Climber", true);
     elevatorExists = Preferences.getBoolean("Elevator", true);
     funnelIntakeExists = Preferences.getBoolean("FunnelIntake", true);
-    funnelRotatorExists = Preferences.getBoolean("FunnelRotator", true);
     DrivetrainExists = Preferences.getBoolean("DrivetrainExists", true);
     distanceSensorsExist = Preferences.getBoolean("DistanceSensorsExist", true);
     lightsExist = Preferences.getBoolean("Lights Exist", true);
@@ -268,7 +260,6 @@ public class RobotContainer {
       AlgaeIntakeSup = ()-> driverControllerXbox.getPOV() == 180;
       PlaceCoralNoPathSup = driverControllerXbox::getYButton;
       CoralIntakeSup = driverControllerXbox::getRightStickButton;
-      funnelRotatorSupplier = driverControllerXbox::getLeftStickButton;
       AlgaeShooterSupDriver = ()->driverControllerXbox.getPOV() == 270;
       ManualCoralIntake = ()->false;
       
@@ -299,7 +290,6 @@ public class RobotContainer {
       AlgaeIntakeSup = driverControllerPS4::getCrossButton;
       AlgaeShooterSupDriver =  ()-> driverControllerPS4.getPOV() == 180;
       CoralIntakeSup = driverControllerPS4::getSquareButton;
-      funnelRotatorSupplier = driverControllerPS4::getShareButton;
     } 
     if (OCTEnum == ControllerEnums.XboxController) {
       operatorControllerXbox = new XboxController(OPERATOR_CONTROLLER_ID);
@@ -368,9 +358,8 @@ public class RobotContainer {
       ForceEjectCoral = buttonBoard::getForceEjectCoralButton;
       algaeShooterSupOperator = buttonBoard::getForceEjectAlgaeButton;
 
-      climberGroupForward = buttonBoard::getclimbCommandButton;
+      climberGroupForward = buttonBoard::getClimbModeAuthorizer;
       climberGroupReverse = buttonBoard::getClimberResetButton;
-      dropFunnel = buttonBoard::getClimbModeAuthorizer;
     }
     if (LimelightExists) {limelightInit();}
     if (distanceSensorsExist) {sensorInit();}   
@@ -385,10 +374,7 @@ public class RobotContainer {
     if (algaeEndeffectorExists) {algaeEndDefectorInst();}
     if (climberExists) {climberInst();}
     if (elevatorExists) {elevatorInst();}
-    if (funnelIntakeExists) {funnelIntakeInst();}
-    if (funnelRotatorExists) {funnelRotatorInst();
-                              inEndgameSupplier = ()->endgameTimer();}
-    
+    if (funnelIntakeExists) {funnelIntakeInst();}    
     configureBindings(); // Configure the trigger bindings
     autoInit();
   }
@@ -474,10 +460,6 @@ public class RobotContainer {
   private void funnelIntakeInst() {
     funnelIntake = new FunnelIntake();
   }
-
-  private void funnelRotatorInst() {
-    funnelRotator = new FunnelRotator();
-  }
   /**
    * Use this method to define your trigger->command mappings. Triggers can be
    * created via the
@@ -547,9 +529,6 @@ public class RobotContainer {
       .onTrue(new InstantCommand(()->SmartDashboard.putBoolean("INTAKE/in intake zone", true)))
       .onFalse(new InstantCommand(()->SmartDashboard.putBoolean("INTAKE/in intake zone", false)));
     }
-    }
-    if(funnelRotatorExists){
-      new Trigger(dropFunnel).whileTrue(new InstantCommand(()-> funnelRotator.setFunnelRotator(0.2))).whileFalse(new InstantCommand(()-> funnelRotator.stopRotating()));
     }
     if (algaeEndeffectorExists) {
       new Trigger(AlgaeIntakeSup).whileTrue(new AlgaeIntakeCommand(algaeEndDefector, ()->ALGAE_INTAKE_SPEED));
@@ -692,11 +671,6 @@ public class RobotContainer {
             funnelIntake.stopFunnel();
           }
         });
-      }
-      if (funnelRotatorExists) {
-          new Trigger(()->funnelRotatorSupplier.getAsBoolean()).whileTrue(new FunnelRotatorCommand(funnelRotator));
-         new Trigger(()->funnelRotatorSupplier.getAsBoolean()).onTrue(new InstantCommand(()->funnelIntake.runFunnel(0), funnelIntake));
-          new Trigger(()->funnelRotatorSupplier.getAsBoolean() && inEndgameSupplier.getAsBoolean()).whileTrue(new FunnelRotatorCommand(funnelRotator));
       }
   }
 
@@ -1063,11 +1037,6 @@ public class RobotContainer {
     if(climberExists) {
       if(climber.getCurrentCommand() != null) {
         SmartDashboard.putString("CURRENT COMMANDS/climber", climber.getCurrentCommand().toString());
-      }
-    }
-    if(funnelRotatorExists) {
-      if(funnelRotator.getCurrentCommand() != null) {
-        SmartDashboard.putString("CURRENT COMMANDS/funnel rotator", funnelRotator.getCurrentCommand().toString());
       }
     }
   }
