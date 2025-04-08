@@ -65,8 +65,8 @@ heightButtons = [
     StrangeButton(3, board.D28, board.D4),
     StrangeButton(4, board.D32, board.D17),
 ]
-ejectCButton = StrangeButton(5, board.D39)
-ejectAButton = StrangeButton(6, board.D38)
+ejectCButton = StrangeButton(5, board.D39, board.D41)
+ejectAButton = StrangeButton(6, board.D38, board.D43)
 sideButtons = [
     StrangeButton(7, board.D36, board.D47),
     StrangeButton(8, board.D35, board.D45)
