@@ -525,7 +525,6 @@ public final class Constants {
     // public static final String COMP_BOT = "CompBot";
     // public static final String CORAL_END_EFFECTOR = "Use Limelight";
     // public static final String ALGAE_END_EFFECTOR = "Driver Controller Type";
-    // public static final String FUNNEL_ROTATOR = "Operator Controller Type";
     // public static final String FUNNEL_INTAKE = "Elevator";
     // public static final String DISTANCE_SENSORS = "CoralEndDefector";
     // public static final String LIGHTS = "AlgaeEndDefector";
@@ -627,7 +626,6 @@ public final class Constants {
   public final class FunnelConstants{
     public static final int FUNNEL_SLANT_MOTOR_ID = 21;
     public static final int FUNNEL_STRAIGHT_MOTOR_ID = 22;
-    public static final int FUNNEL_ROTATOR_MOTOR_ID = 24;
 
     public static final double FUNNEL_SLANT_MOTOR_KP = 0.000031;
     public static final double FUNNEL_SLANT_MOTOR_KI = 0;
@@ -648,18 +646,6 @@ public final class Constants {
     public static final double FUNNEL_STRAIGHT_MOTOR_KI_PRACTICE = 0;
     public static final double FUNNEL_STRAIGHT_MOTOR_KD_PRACTICE = 0;
     public static final double FUNNEL_STRAIGHT_MOTOR_KFF_PRACTICE = 0.000116;
-
-    public static final double FUNNEL_ROTATOR_KP = 2491;
-    public static final double FUNNEL_ROTATOR_KI = 2491;
-    public static final double FUNNEL_ROTATOR_KD = 2491;
-    public static final double FUNNEL_ROTATOR_KFF = 2491;
-
-    public static final double FUNNEL_ROTATOR_DOWN_POSITION = 2491;
-
-    public static final double FUNNEL_ROTATOR_KP_PRACTICE = 2491;
-    public static final double FUNNEL_ROTATOR_KI_PRACTICE = 2491;
-    public static final double FUNNEL_ROTATOR_KD_PRACTICE = 2491;
-    public static final double FUNNEL_ROTATOR_KFF_PRACTICE = 2491;
 
     public static final double FUNNEL_INTAKE_SPEED = 1500;
     /** this is the speed that the funnel motors should run at when they should be slow enough to stop the coral where it is the moent the sensor is triggered */
