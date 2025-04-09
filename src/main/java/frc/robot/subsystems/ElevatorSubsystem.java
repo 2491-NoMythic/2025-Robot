@@ -170,6 +170,9 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void setElevatorPosition(Supplier<ElevatorEnums> heightSupplier) {
     setElevatorPosition(heightSupplier.get());
   }
+  public void setElevatorPositionWithAlgae(Supplier<ElevatorEnums> heightSupplier) {
+    setElevatorPositionWithAlgae(heightSupplier.get());
+  }
   /**
    * sets the height of the elvator using constants associated with different values of ElevatorEnums
    * @param height
@@ -232,8 +235,8 @@ public class ElevatorSubsystem extends SubsystemBase {
    //works: 100 cm/s/s 200 cm/s 
    // TODO: may need speedup
   public void setElevatorPositionWithAlgae(ElevatorEnums height){
-    final double algaeAcceleration = MOTION_MAGIC_ELEVATOR_HIGH_ACCLERATION-200;
-    final double algaeVelocity = MOTION_MAGIC_ELEVATOR_HIGH_VELOCITY-200;
+    final double algaeAcceleration = MOTION_MAGIC_ELEVATOR_HIGH_ACCLERATION;
+    final double algaeVelocity = MOTION_MAGIC_ELEVATOR_HIGH_VELOCITY-50;//150;
     switch(height){
       case Reef1:
       setElevatorPositionDynamicConfigs(REEF_LEVEL_1_CENTIMETERS_AGAINST_REEF, algaeAcceleration, algaeVelocity, 0);
@@ -245,10 +248,14 @@ public class ElevatorSubsystem extends SubsystemBase {
         }
         break;
       case Reef3:
-      setElevatorPositionDynamicConfigs(REEF_LEVEL_3_CENTIMETERS_AGAINST_REEF, algaeAcceleration, algaeVelocity, 0);
-        if(isElevatorAtPose()){
-          RobotState.getInstance().elevatorIsHigh = true;
-        }
+        setElevatorPositionDynamicConfigs(REEF_LEVEL_3_CENTIMETERS_AGAINST_REEF, algaeAcceleration, algaeVelocity, 0);
+      
+      if(isElevatorAtPose()){
+        RobotState.getInstance().elevatorIsHigh = true;
+      }
+      break;
+      case Reef3Algae:
+        setElevatorPositionDynamicConfigs(REEF_LEVEL_3_ALGAE_CENTIMETERS_AGAINST_REEF, algaeAcceleration, algaeVelocity, 0);
         break;
       case Reef4:
         setElevatorPositionDynamicConfigs(REEF_LEVEL_4_CENTIMETERS_AGAINST_REEF, algaeAcceleration, algaeVelocity, 0);

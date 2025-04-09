@@ -7,6 +7,7 @@ public enum ElevatorEnums {
     Reef1,
     Reef2,
     Reef3,
+    Reef3Algae,
     Reef4,
     Barge
 }
