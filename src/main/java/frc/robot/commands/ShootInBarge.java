@@ -4,16 +4,12 @@
 
 package frc.robot.commands;
 
-import static frc.robot.settings.Constants.ElevatorConstants.HUMAN_PLAYER_STATION_CENTIMETERS;
 import static frc.robot.settings.Constants.ElevatorConstants.METERS_FROM_POSE_TO_RAISE_ELEVATOR;
-import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_HIGH_ACCLERATION;
-import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_HIGH_VELOCITY;
 import static frc.robot.settings.Constants.Field.BARGE_POSITION_THRESHOLD;
 
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -22,17 +18,19 @@ import frc.robot.settings.PlacementLocations;
 import frc.robot.subsystems.AlgaeEndeffectorSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
-
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ShootInBarge extends SequentialCommandGroup {
-  /** Creates a new ShootInBarge. */
   DrivetrainSubsystem drivetrainSubsystem;
   ElevatorSubsystem elevatorSubsystem;
   AlgaeEndeffectorSubsystem algaeSubsystem;
   DoubleSupplier controllerSidwaysSupplier;
-
+  /**
+   * This command checks that the robot is lined up with the barge, adjusts the elevator, and shoots the algae into the barge.
+   * It also resets the elevator to the Human Player Station position.
+   * @param drivetrainSubsystem
+   * @param elevatorSubsystem
+   * @param algaeSubsystem
+   * @param controllerSupplier
+   */
   public ShootInBarge(DrivetrainSubsystem drivetrainSubsystem, ElevatorSubsystem elevatorSubsystem,
       AlgaeEndeffectorSubsystem algaeSubsystem, DoubleSupplier controllerSupplier) {
     this.drivetrainSubsystem = drivetrainSubsystem;

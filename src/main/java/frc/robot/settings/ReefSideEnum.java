@@ -5,9 +5,10 @@
 package frc.robot.settings;
 
 /** 
- * an enum that represents the different sides of the reef. They are named as if they were viewed from the alliance wall, with front 
+ * An enum that represents the different sides of the reef. They are named as if they were viewed from the alliance wall, with front 
  * being the sides closest to the alliance wall, and back being the sides further from the alliance wall.
- * none is for when you are not within the threshold (as declared in drivetrainsubsystem) that marks you as close enough to a reef side to begin lineup*/
+ * None is for when the robot is not within the threshold (as declared in drivetrainsubsystem) that marks it as close enough to a reef side to begin lineup
+ */
 public enum ReefSideEnum {
     bargeFar,
     middleFar,

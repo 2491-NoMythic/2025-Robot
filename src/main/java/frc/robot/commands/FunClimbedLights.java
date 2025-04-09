@@ -9,11 +9,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.settings.Constants.LightConstants;
 import frc.robot.subsystems.Lights;
 
-/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class FunClimbedLights extends Command {
   Timer timer;
   Lights lights;
-  /** Creates a new FunClimbedLights. */
+  /**
+   * Turns the lights purple and provides a rippling pattern.
+   * @param lights
+   */
   public FunClimbedLights(Lights lights) {
     this.lights = lights;
     addRequirements(lights);

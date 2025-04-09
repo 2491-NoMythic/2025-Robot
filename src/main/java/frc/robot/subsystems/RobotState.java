@@ -1,10 +1,7 @@
 package frc.robot.subsystems;
 
-import javax.print.attribute.standard.MediaSize.Other;
 import frc.robot.settings.ReefOffsetEnums;
 import frc.robot.settings.ReefSideEnum;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import frc.robot.settings.ElevatorEnums;
 
 public class RobotState {

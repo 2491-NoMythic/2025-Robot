@@ -1,12 +1,7 @@
 package frc.robot.commands;
 
-import static frc.robot.settings.Constants.DriveConstants.AUTO_AIM_ROBOT_kD;
-import static frc.robot.settings.Constants.DriveConstants.AUTO_AIM_ROBOT_kI;
-import static frc.robot.settings.Constants.DriveConstants.AUTO_AIM_ROBOT_kP;
 import static frc.robot.settings.Constants.DriveConstants.ROBOT_ANGLE_TOLERANCE;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -20,7 +15,11 @@ public class RotateRobot extends Command {
   double differenceAngle;
   double turningSpeed;
 
-
+  /**
+   * Rotates the robot to a given angle measured in degrees. 
+   * @param drivetrain
+   * @param desiredRobotAngle
+   */
   public RotateRobot(DrivetrainSubsystem drivetrain, DoubleSupplier desiredRobotAngle) {
     m_drivetrain = drivetrain;
     this.desiredRobotAngleSupplier = desiredRobotAngle;

@@ -1,5 +1,7 @@
 package frc.robot.settings;
-
+/**
+ * Enums for elevator height selection.
+ */
 public enum ElevatorEnums {
     HumanPlayer,
     AlgaeInProcessor,

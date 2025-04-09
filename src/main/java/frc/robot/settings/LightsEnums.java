@@ -1,5 +1,7 @@
 package frc.robot.settings;
-
+/**
+ * Enums for selecting light patterns.
+ */
 public enum LightsEnums {
     ElevatorLeft1,
     ElevatorLeft2,

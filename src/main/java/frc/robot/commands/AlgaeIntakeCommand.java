@@ -4,21 +4,21 @@
 
 package frc.robot.commands;
 
-import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.ALGAE_INTAKE_SPEED;
-
-import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.AlgaeEndeffectorSubsystem;
 import frc.robot.subsystems.RobotState;
 
-/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class AlgaeIntakeCommand extends Command {
   AlgaeEndeffectorSubsystem algaeEndeffector;
   DoubleSupplier shootSpeed;
   boolean algaeDetected;
-  /** Creates a new AlgaeIntakeCommand. */
+  /**
+   * Runs the algae endeffector to intake algae. It should hard-stop when the algae is in. 
+   * @param algaeEndeffector
+   * @param shootSpeed
+   */
   public AlgaeIntakeCommand(AlgaeEndeffectorSubsystem algaeEndeffector, DoubleSupplier shootSpeed) {
     this.algaeEndeffector = algaeEndeffector;
     this.shootSpeed = shootSpeed;

@@ -30,7 +30,6 @@ import static frc.robot.settings.Constants.Field.*;
 import static frc.robot.settings.Constants.Vision.APRILTAG_LIMELIGHTA_NAME;
 import static frc.robot.settings.Constants.Vision.APRILTAG_LIMELIGHTB_NAME;
 import static frc.robot.settings.Constants.Vision.APRILTAG_LIMELIGHTC_NAME;
-import static frc.robot.settings.Constants.Vision.FIELD_CORNER;
 import static frc.robot.settings.Constants.Vision.FIELD_CORNER_FOR_INTAKE;
 
 import java.util.Arrays;
@@ -40,7 +39,6 @@ import java.util.function.DoubleSupplier;
 // import java.util.logging.Logger;
 import org.littletonrobotics.junction.Logger;
 
-import com.ctre.phoenix6.controls.MotionMagicVelocityDutyCycle;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
@@ -63,12 +61,10 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
-import frc.robot.Robot;
 import frc.robot.LimelightHelpers.PoseEstimate;
 import frc.robot.helpers.MotorLogger;
 import frc.robot.helpers.MythicalMath;
 import frc.robot.settings.Constants.DriveConstants;
-import frc.robot.settings.Constants;
 import frc.robot.settings.ReefSideEnum;
 
 public class DrivetrainSubsystem extends SubsystemBase {
@@ -154,6 +150,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
             Rotation2d.fromRotations(Preferences.getDouble("BR offset", 0)),
             CANIVORE_DRIVETRAIN);
 
+    @SuppressWarnings("unused")
     DataLog log = DataLogManager.getLog();
     motorLoggers =
         new MotorLogger[] {

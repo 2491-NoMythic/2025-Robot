@@ -14,23 +14,25 @@ import frc.robot.subsystems.CoralEndeffectorSubsystem;
 import frc.robot.subsystems.FunnelIntake;
 import frc.robot.subsystems.RobotState;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class PassCoralToEndEffectorSequential extends SequentialCommandGroup {
-  /** Creates a new PassCoralToEndEffectorSequential. */
+  /**
+   * This command transfers the coral from the funnel to the endeffector.
+   * It works like PassCoralToEndEffector, but it uses a bunch of instant commands and sensors to make things work automatically. 
+   * @param coralEndEffector
+   * @param funnelIntake
+   */
   public PassCoralToEndEffectorSequential(CoralEndeffectorSubsystem coralEndEffector, FunnelIntake funnelIntake) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
       final double endEffectorAdjustingSpeed = CoralEndeffectorConstants.CORAL_ENDEFFECTOR_ADJUSTING_INTAKE_SPEED;
-      final double funelAdjustingSpeed = CoralEndeffectorConstants.CORAL_ENDEFFECTOR_ADJUSTING_INTAKE_SPEED;
+      final double funnelAdjustingSpeed = CoralEndeffectorConstants.CORAL_ENDEFFECTOR_ADJUSTING_INTAKE_SPEED;
     addCommands(
       new ParallelRaceGroup(
         new ResetCoralStatusOnEnd(),
         new SequentialCommandGroup(
           new InstantCommand(()->RobotState.getInstance().coralLineupRunning = true),
           new InstantCommand(()->coralEndEffector.runCoralEndEffector(CORAL_ENDEFFECTOR_SPEED), coralEndEffector),
-          new InstantCommand(()->funnelIntake.runFunnel(funelAdjustingSpeed), funnelIntake),
+          new InstantCommand(()->funnelIntake.runFunnel(funnelAdjustingSpeed), funnelIntake),
           new InstantCommand(()->System.out.println("reached checkpoint 1")),
           // new WaitCommand(()->0.3),
           new WaitUntil(()->!(RobotState.getInstance().coralEndeffSensorTrig)),

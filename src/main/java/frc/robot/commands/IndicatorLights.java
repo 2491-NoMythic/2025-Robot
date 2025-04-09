@@ -7,17 +7,17 @@ package frc.robot.commands;
 import frc.robot.subsystems.RobotState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.settings.ElevatorEnums;
 import frc.robot.settings.LightsEnums;
-import frc.robot.settings.Constants.LightConstants;
-import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.Lights;
 
-/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class IndicatorLights extends Command {
   Lights lights;
   int loopsRan;
-  /** Creates a new IndicatorLights. */
+   /**
+   * Adjusts the lights in a wide variety of ways to provide a visual status indicator on the robot. 
+   * Includes sections for reef lineup, coral delivery level, and whether or not we are going to collect algae.
+   * @param lights
+   */
   public IndicatorLights(Lights lights) {
     this.lights = lights;
     addRequirements(lights);
@@ -91,7 +91,7 @@ public class IndicatorLights extends Command {
     // }
   }
 
-  // Called once the command ends or is interrupted.
+  // Called once the command ends or is interrupted. Turns lights off
   @Override
   public void end(boolean interrupted) {
     lights.lightsOut();

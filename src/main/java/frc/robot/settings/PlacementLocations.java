@@ -4,7 +4,9 @@
 
 package frc.robot.settings;
 
-/** Add your docs here. */
+/**
+ * Enums for each reef placement location, plus the barge and processor.
+ */
 public enum PlacementLocations {
     ReefA,
     ReefB,

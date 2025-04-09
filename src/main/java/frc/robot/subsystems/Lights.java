@@ -4,13 +4,9 @@
 // frc.robot.subsystems;import edu.wpi.first.wpilibj2.command.SubsystemBase;
 package frc.robot.subsystems;
 
-import com.fasterxml.jackson.databind.ser.BeanSerializer;
-
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.settings.ElevatorEnums;
 import frc.robot.settings.LightsEnums;
@@ -55,6 +51,7 @@ public class Lights extends SubsystemBase {
   }
 
   /**
+   * Sets the RGB value of a specific LED.
    * @param index the number (from 0 to max) of the LED to set
    * @param R
    * @param G
@@ -63,15 +60,29 @@ public class Lights extends SubsystemBase {
   public void setOneLightRGB(int index, int R, int G, int B) {
     LEDBuffer.setRGB(index, R, G, B);
   }
-
-  public void setCandleLights(int start, int end, int R, int G, int B) {
-    candle.setLEDs(R, G, B, 0, start, end - start);
-  }
-
+  /**
+   * Applies setOneLightRGB to a range of lights.
+   * @param start
+   * @param end
+   * @param R
+   * @param G
+   * @param B
+   */
   public void setLights(int start, int end, int R, int G, int B) {
     for (int i = start; i < end; i++) {
       setOneLightRGB(i, R, G, B);
     }
+  }
+  /**
+   * Sets the RGB value of a section of a CANdle-powered LED strip.
+   * @param start
+   * @param end
+   * @param R
+   * @param G
+   * @param B
+   */
+  public void setCandleLights(int start, int end, int R, int G, int B) {
+    candle.setLEDs(R, G, B, 0, start, end - start);
   }
 
   public void setAllLights(int R, int G, int B) {
@@ -86,7 +97,7 @@ public class Lights extends SubsystemBase {
   }
 
   /**
-   * sets a specific section of lights to a certain color. The sections to choose from are the ones in the LightsEnum. The sections lenghts are defined in Constnats
+   * sets a specific section of lights to a certain color. The sections to choose from are the ones in the LightsEnum. The sections lengths are defined in Constants
    * @param lightEnums the enum for the section of lights to set
    * @param R the Red value (0-255)
    * @param G the Green value (0-255)
@@ -144,7 +155,11 @@ public class Lights extends SubsystemBase {
         break;
     }
   }
-
+/**
+ * Sets the lights on the elevator to show the current height of the elevator
+ * by taking in the elevator height enum, and setting the lights to the corresponding height.
+ * @param ElevatorHeight the enum for the height the elevator is going to
+ */
   public void setElevatorLevel(ElevatorEnums ElevatorHeight) {
     setSystemLights(LightsEnums.ElevatorLeft1, 100, 0, 0);
     setSystemLights(LightsEnums.ElevatorLeft2, 100, 0, 0);
@@ -176,10 +191,10 @@ public class Lights extends SubsystemBase {
   /**
    * enter a section of lights that will be blinked on and off every half second
    * 
-   * @param lightEnum
-   * @param R
-   * @param G
-   * @param B
+   * @param lightEnum the section of lights to blink
+   * @param R red value (0-255)
+   * @param G green value (0-255)
+   * @param B blue value (0-255)
    */
   public void blinkLights(LightsEnums lightEnum, int R, int G, int B) {
     timer.start();
@@ -191,14 +206,16 @@ public class Lights extends SubsystemBase {
   }
 
   /**
-   * stops blinking whatever lights are blinking
+   * Stops blinking whatever lights are blinking.
    */
   public void stopBlinkingLights() {
     blinkLights = false;
     timer.stop();
     timer.reset();
   }
-
+  /**
+  * Updates the blinked lights every half second if blinkLights is true.
+  */ 
   private void updateBlinkedLights() {
     if (blinkLights) {
       if (timer.get() < 0.5) {

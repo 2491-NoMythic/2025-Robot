@@ -4,8 +4,6 @@
 
 package frc.robot.settings;
 
-import static frc.robot.settings.Constants.DriveConstants.DRIVE_TO_POSE_Y_CONTROLLER;
-
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;

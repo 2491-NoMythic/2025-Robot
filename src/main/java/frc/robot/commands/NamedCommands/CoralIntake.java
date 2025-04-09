@@ -5,26 +5,26 @@
 package frc.robot.commands.NamedCommands;
 
 import static frc.robot.settings.Constants.CoralEndeffectorConstants.CORAL_ENDEFFECTOR_SPEED;
-import static frc.robot.settings.Constants.ElevatorConstants.HUMAN_PLAYER_STATION_CENTIMETERS;
 import static frc.robot.settings.Constants.FunnelConstants.FUNNEL_INTAKE_SPEED;
 
 import frc.robot.subsystems.RobotState;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.commands.ElevatorCommand;
 import frc.robot.settings.ElevatorEnums;
 import frc.robot.subsystems.CoralEndeffectorSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelIntake;
 
-/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class CoralIntake extends Command {
   /** Creates a new CoralIntake. */
   ElevatorSubsystem elevatorSubsystem;
   FunnelIntake funnelIntake;  
   CoralEndeffectorSubsystem coralIntake;
-  
+  /**
+   * Sets the elevator position to the Human Player station, then runs the coral endeffector and funnel until the distance sensor detects the coral.
+   * @param elevatorSubsystem
+   * @param funnelIntake
+   * @param coralIntake
+   */
   public CoralIntake(ElevatorSubsystem elevatorSubsystem, FunnelIntake funnelIntake, CoralEndeffectorSubsystem coralIntake) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(elevatorSubsystem, funnelIntake, coralIntake);

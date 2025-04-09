@@ -33,7 +33,7 @@ public class AutoAngleAtReef extends Command {
   double desiredRobotAngle;
 
   /**
-   * a command to automatically aim the robot at the reef if a limelight can see
+   * A command to automatically aim the robot at the reef if a limelight can see
    * an april tag.
    * 
    * @param drivetrain           the swerve drive subsystem

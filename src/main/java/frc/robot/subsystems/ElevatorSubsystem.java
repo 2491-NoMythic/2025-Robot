@@ -19,7 +19,6 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.ForwardLimitTypeValue;
-import com.ctre.phoenix6.signals.ForwardLimitValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.ReverseLimitTypeValue;
@@ -28,8 +27,6 @@ import com.ctre.phoenix6.signals.ReverseLimitValue;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.helpers.MotorLogger;
 import frc.robot.settings.ElevatorEnums;
-import frc.robot.subsystems.RobotState;
-
 import static frc.robot.settings.Constants.DriveConstants.CANIVORE_DRIVETRAIN;
 import static frc.robot.settings.Constants.ElevatorConstants.*;
 
@@ -43,6 +40,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   private TalonFX elevatorMotor1;
   private TalonFX elevatorMotor2;
   private TalonFXConfiguration eleMotorConfig;
+  @SuppressWarnings("unused")
   private double zeroPoint;
   MotorLogger motorLogger1;
   MotorLogger motorLogger2;

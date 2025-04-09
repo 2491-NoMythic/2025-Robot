@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.controls.VelocityDutyCycle;
-import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.spark.SparkAnalogSensor;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
@@ -21,11 +19,8 @@ import static frc.robot.settings.Constants.FunnelConstants.*;
 
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.motorcontrol.MotorController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.helpers.MotorLogger;
-import frc.robot.settings.Constants;
 
 public class FunnelIntake extends SubsystemBase {
   /** Creates a new Funnelintake. */
@@ -117,6 +112,9 @@ public class FunnelIntake extends SubsystemBase {
     funnelStraightMotor.getClosedLoopController().setReference(Math.abs(Math.sin(timer.get()) * FUNNEL_INTAKE_SPEED) + 1600.0, ControlType.kVelocity); 
     funnelSlantMotor.getClosedLoopController().setReference(Math.abs(Math.sin(timer.get() + 0.5)*(1.3/3) * FUNNEL_INTAKE_SPEED) + 1600.0, ControlType.kVelocity); 
    }
+  /**
+   * Stops the funnel and the timer.
+   */
   public void stopFunnel() {
     funnelSlantMotor.set(0);
     funnelStraightMotor.set(0);

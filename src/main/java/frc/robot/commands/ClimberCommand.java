@@ -11,7 +11,10 @@ public class ClimberCommand extends Command {
  ClimberSubsystem climber;
  double position;
  final double currentForClimbing = 200;
-  /** Creates a new ClimberCommand. */
+  /**
+   * Runs the climber at a set power. 
+   * @param climber
+  */
   public ClimberCommand(ClimberSubsystem climber) {
     this.climber = climber;
     addRequirements(climber);
