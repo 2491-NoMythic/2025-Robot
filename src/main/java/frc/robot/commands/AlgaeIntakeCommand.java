@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.AlgaeEndeffectorSubsystem;
 import frc.robot.subsystems.RobotState;
@@ -14,6 +15,7 @@ public class AlgaeIntakeCommand extends Command {
   AlgaeEndeffectorSubsystem algaeEndeffector;
   DoubleSupplier shootSpeed;
   boolean algaeDetected;
+  Timer timer;
   /**
    * Runs the algae endeffector to intake algae. It should hard-stop when the algae is in. 
    * @param algaeEndeffector
@@ -22,6 +24,7 @@ public class AlgaeIntakeCommand extends Command {
   public AlgaeIntakeCommand(AlgaeEndeffectorSubsystem algaeEndeffector, DoubleSupplier shootSpeed) {
     this.algaeEndeffector = algaeEndeffector;
     this.shootSpeed = shootSpeed;
+    timer = new Timer();
     addRequirements(algaeEndeffector);
     // Use addRequirements() here to declare subsystem dependencies.
 
@@ -31,6 +34,7 @@ public class AlgaeIntakeCommand extends Command {
   @Override
   public void initialize() {
     algaeDetected = false;
+    timer.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -43,7 +47,12 @@ public class AlgaeIntakeCommand extends Command {
     if (RobotState.getInstance().hasAlgae && shootSpeed.getAsDouble() >= 0) {
       algaeEndeffector.stopAlgaeEndDefectorHard();
     } else {
+      if(timer.get() > 0.5){
       algaeEndeffector.runAlgaeEndDefector(shootSpeed.getAsDouble());
+      }
+      else{
+        algaeEndeffector.runAlgaeEndDefector(shootSpeed.getAsDouble());
+      }
     }
   }
 
@@ -55,6 +64,8 @@ public class AlgaeIntakeCommand extends Command {
     } else {
       algaeEndeffector.stopAlgaeEndDefectorCoast();
     }
+    timer.stop();
+    timer.reset();
   }
   // Returns true when the command should end.
   @Override

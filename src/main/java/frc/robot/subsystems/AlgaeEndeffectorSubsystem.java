@@ -86,7 +86,7 @@ public class AlgaeEndeffectorSubsystem extends SubsystemBase {
     //if we are at 80%+ percent of the current limit, assume it's becuse we have an algae
     if(algaeEndeffectorMotor.getSupplyCurrent().getValueAsDouble()>17 && Math.abs(algaeEndeffectorMotor.getVelocity().getValueAsDouble()) < 100){ 
       loops++;
-      if(loops > 2){
+      if(loops > 25){
         RobotState.getInstance().hasAlgae = true;
       }
     }else{

@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.settings.ElevatorEnums;
 import frc.robot.settings.PlacementLocations;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.RobotState;
@@ -168,7 +169,7 @@ public class DriveToPose extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    if(RobotState.getInstance().goForAlgae) {
+    if(RobotState.getInstance().goForAlgae && !(RobotState.getInstance().deliveringCoralHeight == ElevatorEnums.Reef4 || RobotState.getInstance().deliveringCoralHeight == ElevatorEnums.Reef3)) {
       drivetrain.drive(new ChassisSpeeds(0.7, 0, 0));
     } else {
       drivetrain.pointWheelsInward();
