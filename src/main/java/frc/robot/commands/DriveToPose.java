@@ -44,7 +44,8 @@ public class DriveToPose extends Command {
   @Override
   public void initialize() {
     cyclesGood = 0;
-    boolean redAlliance = DriverStation.getAlliance().get() == Alliance.Red;
+    // boolean redAlliance = DriverStation.getAlliance().get() == Alliance.Red;
+    boolean redAlliance = drivetrain.getPose().getX() > 8.775;
     switch (targetSpot.get()) {
       case ReefA:
         if(redAlliance) {
