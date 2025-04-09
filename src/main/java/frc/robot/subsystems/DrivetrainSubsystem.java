@@ -367,16 +367,16 @@ public class DrivetrainSubsystem extends SubsystemBase {
     ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0.11, 0, 0);
     switch(L1Position.get()) {
       case FarLeft:
-        chassisSpeeds.vyMetersPerSecond = 0.3;
+        chassisSpeeds.vyMetersPerSecond = 0.35;
         break;
       case MiddleLeft:
-        chassisSpeeds.vyMetersPerSecond = 0.15;
+        chassisSpeeds.vyMetersPerSecond = 0.18;
         break;
       case MiddleRight:
-        chassisSpeeds.vyMetersPerSecond = -0.15;
+        chassisSpeeds.vyMetersPerSecond = -0.18;
         break;
       case FarRight:
-        chassisSpeeds.vyMetersPerSecond = -0.3;
+        chassisSpeeds.vyMetersPerSecond = -0.35;
         break;
     }
     drive(chassisSpeeds);

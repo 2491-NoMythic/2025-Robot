@@ -54,7 +54,7 @@ public class L1ScoringCommandGroup extends SequentialCommandGroup {
           new WaitUntil(()->elevator.isElevatorAtPose()),
           new InstantCommand(()->driveTrain.driveForL1Scoring(()->RobotState.getInstance().L1selectedPosition)),
           new WaitCommand(0.7),
-          new InstantCommand(()->driveTrain.stop()),
+          new InstantCommand(()->driveTrain.pointWheelsInward()),
           new InstantCommand(()->coralEndDefector.runCoralEndEffector(900)),
           new WaitCommand(0.5),
           new InstantCommand(()->elevator.setElevatorPositionDynamicConfigs(REEF_LEVEL_1_CENTIMETERS_AGAINST_REEF+30, 800, 300, 0), elevator),
