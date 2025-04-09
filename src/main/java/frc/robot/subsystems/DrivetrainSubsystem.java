@@ -35,6 +35,7 @@ import static frc.robot.settings.Constants.Vision.FIELD_CORNER_FOR_INTAKE;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 // import java.util.logging.Logger;
 import org.littletonrobotics.junction.Logger;
@@ -65,6 +66,8 @@ import frc.robot.LimelightHelpers.PoseEstimate;
 import frc.robot.helpers.MotorLogger;
 import frc.robot.helpers.MythicalMath;
 import frc.robot.settings.Constants.DriveConstants;
+import frc.robot.settings.Constants;
+import frc.robot.settings.L1Enums;
 import frc.robot.settings.ReefSideEnum;
 
 public class DrivetrainSubsystem extends SubsystemBase {
@@ -354,6 +357,29 @@ public class DrivetrainSubsystem extends SubsystemBase {
     } else {
       setModuleStates(desiredStates);
     }
+  }
+
+   /**
+   * A function that uses the drive method to drive the robot at specific speeds before scoring in L1. It uses the supplier to determine the sidewyas velocity to travel at. 
+   * @param L1Position the selected L1 placement, Far right, Middle right, Middle Left, or far left
+   */
+  public void driveForL1Scoring(Supplier<L1Enums> L1Position) {
+    ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0.11, 0, 0);
+    switch(L1Position.get()) {
+      case FarLeft:
+        chassisSpeeds.vyMetersPerSecond = 0.3;
+        break;
+      case MiddleLeft:
+        chassisSpeeds.vyMetersPerSecond = 0.15;
+        break;
+      case MiddleRight:
+        chassisSpeeds.vyMetersPerSecond = -0.15;
+        break;
+      case FarRight:
+        chassisSpeeds.vyMetersPerSecond = -0.3;
+        break;
+    }
+    drive(chassisSpeeds);
   }
   /**
    * Stops the robot. 

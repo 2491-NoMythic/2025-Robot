@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import frc.robot.settings.ReefOffsetEnums;
 import frc.robot.settings.ReefSideEnum;
 import frc.robot.settings.ElevatorEnums;
+import frc.robot.settings.L1Enums;
 
 public class RobotState {
   private static RobotState instance;
@@ -31,10 +32,13 @@ public class RobotState {
   public boolean elevatorZeroSet;
   public boolean climberIn;
   public boolean funnelDown;
+  public boolean L1Mode;
+  public L1Enums L1selectedPosition;
 
   public RobotState(){
     //sets any values that aren't periodically updated by a subsystem to a value, so that they won't return null if called before they are updated
     deliveringCoralHeight = ElevatorEnums.Reef1;
+    L1selectedPosition = L1Enums.FarLeft;
     elevatorZeroSet = false;
   }
 

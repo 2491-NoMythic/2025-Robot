@@ -78,6 +78,8 @@ import frc.robot.commands.NamedCommands.CoralIntake;
 import frc.robot.commands.NamedCommands.DeliverCoral;
 import frc.robot.commands.autos.PlaceCoralNoOdometry;
 import frc.robot.settings.ElevatorEnums;
+import frc.robot.settings.L1Enums;
+import frc.robot.settings.LightsEnums;
 import frc.robot.settings.PlacementLocations;
 import frc.robot.subsystems.AlgaeEndeffectorSubsystem;
 import frc.robot.subsystems.CoralEndeffectorSubsystem;
@@ -189,6 +191,7 @@ public class RobotContainer {
   BooleanSupplier climberGroupForward;
   BooleanSupplier climberGroupReverse;
   BooleanSupplier algaeShooterSupOperator;
+  BooleanSupplier L1Mode;
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
@@ -314,6 +317,7 @@ public class RobotContainer {
       ForceElevatorDown = ()->false;//operatorControllerXbox.getLeftY() > 0.5;
       climberGroupForward = ()-> operatorControllerXbox.getLeftStickButton();
       climberGroupReverse = ()-> operatorControllerXbox.getRightStickButton();
+      L1Mode = ()-> false;
     } else if (OCTEnum == ControllerEnums.PS4Controller){
       //Controller IDs
       operatorControllerPS4 = new PS4Controller(OPERATOR_CONTROLLER_ID);
@@ -338,6 +342,7 @@ public class RobotContainer {
       //climberResetSupplier = operatorControllerPS4::getL3Button;
       climberGroupForward = ()-> operatorControllerPS4.getL3Button();
       climberGroupReverse = ()-> operatorControllerPS4.getR3Button();
+      L1Mode = ()->false;
     } else if (OCTEnum == ControllerEnums.ButtonBoard){
       buttonBoard = new ButtonBoard(OPERATOR_CONTROLLER_ID);
       //These are not sorted based on manual or automatic, but rather location on the physical board. 
@@ -360,6 +365,7 @@ public class RobotContainer {
 
       climberGroupForward = buttonBoard::getclimbCommandButton;
       climberGroupReverse = buttonBoard::getClimbModeAuthorizer;
+      L1Mode = buttonBoard::getL1ModeButton;
     }
     if (LimelightExists) {limelightInit();}
     if (distanceSensorsExist) {sensorInit();}   
@@ -476,11 +482,16 @@ public class RobotContainer {
    */
   private void configureBindings() {
 //all the triggers that change RobotState
-    new Trigger(ReefHeight1Supplier).whileTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef1));
-    new Trigger(ReefHeight2Supplier).whileTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef2));
-    new Trigger(ReefHeight3Supplier).whileTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef3));
-    new Trigger(ReefHeight4Supplier).whileTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef4));
-    new Trigger(BargeHeightSupplier).whileTrue(new InstantCommand(()-> RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Barge));
+    new Trigger(L1Mode).onTrue(new InstantCommand(()->RobotState.getInstance().L1Mode = !RobotState.getInstance().L1Mode));
+    new Trigger(()->RobotState.getInstance().L1Mode).whileTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef1)).onFalse(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef4));
+    new Trigger(()->ReefHeight2Supplier.getAsBoolean() && !RobotState.getInstance().L1Mode).whileTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef2));
+    new Trigger(()->ReefHeight3Supplier.getAsBoolean() && !RobotState.getInstance().L1Mode).whileTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef3));
+    new Trigger(()->ReefHeight4Supplier.getAsBoolean() && !RobotState.getInstance().L1Mode).whileTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef4));
+    new Trigger(()->BargeHeightSupplier.getAsBoolean() && !RobotState.getInstance().L1Mode).whileTrue(new InstantCommand(()-> RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Barge));
+    new Trigger(()->ReefHeight1Supplier.getAsBoolean() && RobotState.getInstance().L1Mode).whileTrue(new InstantCommand(()->RobotState.getInstance().L1selectedPosition = L1Enums.FarRight));
+    new Trigger(()->ReefHeight2Supplier.getAsBoolean() && RobotState.getInstance().L1Mode).whileTrue(new InstantCommand(()->RobotState.getInstance().L1selectedPosition = L1Enums.MiddleRight));
+    new Trigger(()->ReefHeight3Supplier.getAsBoolean() && RobotState.getInstance().L1Mode).whileTrue(new InstantCommand(()->RobotState.getInstance().L1selectedPosition = L1Enums.MiddleLeft));
+    new Trigger(()->ReefHeight4Supplier.getAsBoolean() && RobotState.getInstance().L1Mode).whileTrue(new InstantCommand(()->RobotState.getInstance().L1selectedPosition = L1Enums.FarLeft));
     new Trigger(OpLeftReefLineupSup).whileTrue(new InstantCommand(()->RobotState.getInstance().deliveringLeft = true));
     new Trigger(OpRightReefLineupSup).whileTrue(new InstantCommand(()->RobotState.getInstance().deliveringLeft = false));
     if(OCTEnum == ControllerEnums.ButtonBoard) {
@@ -1086,6 +1097,8 @@ public class RobotContainer {
     SmartDashboard.putBoolean("TESTING/coralsensortrig", RobotState.getInstance().coralEndeffSensorTrig);
     SmartDashboard.putBoolean("TESTING/intakesensortrig", RobotState.getInstance().funnelSensorTrig);
     SmartDashboard.putBoolean("TESTING/goingForAlgae", RobotState.getInstance().goForAlgae);
+    SmartDashboard.putBoolean("TESTING/isL1Mode", RobotState.getInstance().L1Mode);
+    SmartDashboard.putString("TESTING/L1SelectedPosition", RobotState.getInstance().L1selectedPosition.toString());
 
     currentAlliance = DriverStation.getAlliance().get();
     SmartDashboard.putString(
