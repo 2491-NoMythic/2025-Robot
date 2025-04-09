@@ -40,13 +40,13 @@ import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 public class ClimberSubsystem extends SubsystemBase {
+  CANcoder climberAngleSensor;
   TalonFX climberMotor1;
   MotorLogger pulleyMotorLogger;
   MotorLogger wheelMotorLogger;
   Servo climberServo;
   SparkMax climberWheels;
   SparkMaxConfig climberWheelsConfig;
-  CANcoder climberAngleSensor;
   boolean overSpooled;
   boolean moveWithPower;
   double movingPower;
