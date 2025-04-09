@@ -811,8 +811,14 @@ public class RobotContainer {
               new PassCoralToEndEffectorSequential(coralEndDefector, funnelIntake),
               new InstantCommand(() -> elevator.setElevatorPosition(ElevatorEnums.Reef2), elevator)),
           new WaitCommand(() -> 3));
-      placeWithLineupWithAlgaeL4 = new ScoreWhileCollectingAlgae(coralEndDefector, algaeEndDefector, driveTrain, elevator, ()->selectCommand(()->true), ()->ElevatorEnums.Reef4);
-      placeWithLineupWithAlgaeL3 = new ScoreWhileCollectingAlgae(coralEndDefector, algaeEndDefector, driveTrain, elevator, ()->selectCommand(()->true), ()->ElevatorEnums.Reef3);
+      placeWithLineupWithAlgaeL4 = new SequentialCommandGroup(
+        new ScoreWhileCollectingAlgae(coralEndDefector, algaeEndDefector, driveTrain, elevator, ()->selectCommand(()->true), ()->ElevatorEnums.Reef4),
+        new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer))
+      );
+      placeWithLineupWithAlgaeL3 = new SequentialCommandGroup(
+        new ScoreWhileCollectingAlgae(coralEndDefector, algaeEndDefector, driveTrain, elevator, ()->selectCommand(()->true), ()->ElevatorEnums.Reef3),
+        new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer))
+      );
       deliverCoralLeft1NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef1, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true,algaeEndDefector, ()-> false);
       deliverCoralLeft2NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef2, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true,algaeEndDefector, ()-> false);
       deliverCoralLeft3NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef3, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true,algaeEndDefector, ()-> false);
