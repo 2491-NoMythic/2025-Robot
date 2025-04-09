@@ -410,8 +410,8 @@ public final class Constants {
     public static final Pose2d ReefBBlue = new Pose2d(3.08, 3.72, Rotation2d.fromDegrees(0));
     public static final Pose2d ReefCBlue = new Pose2d(3.73, 2.82, Rotation2d.fromDegrees(60));
     public static final Pose2d ReefDBlue = new Pose2d(4.03, 2.66, Rotation2d.fromDegrees(60));
-    public static final Pose2d ReefEBlue = new Pose2d(5.17, 2.77, Rotation2d.fromDegrees(120));
-    public static final Pose2d ReefFBlue = new Pose2d(5.46, 2.95, Rotation2d.fromDegrees(120));
+    public static final Pose2d ReefEBlue = new Pose2d(5.18, 2.77, Rotation2d.fromDegrees(120));
+    public static final Pose2d ReefFBlue = new Pose2d(5.44, 2.95, Rotation2d.fromDegrees(120));
     public static final Pose2d ReefGBlue = new Pose2d(5.92, 3.96, Rotation2d.fromDegrees(180));
     public static final Pose2d ReefHBlue = new Pose2d(5.91, 4.3, Rotation2d.fromDegrees(180));
     public static final Pose2d ReefIBlue = new Pose2d(5.26, 5.23, Rotation2d.fromDegrees(-120));
@@ -423,11 +423,11 @@ public final class Constants {
     // public static final Pose2d ReefARed = new Pose2d(14.49, 3.95, Rotation2d.fromDegrees(180));
     public static final Pose2d ReefARed = new Pose2d(14.48, 3.99, Rotation2d.fromDegrees(180));
     // public static final Pose2d ReefBRed = new Pose2d(14.48, 4.28, Rotation2d.fromDegrees(180));
-    public static final Pose2d ReefBRed = new Pose2d(14.47, 4.35, Rotation2d.fromDegrees(180));
-    public static final Pose2d ReefCRed = new Pose2d(13.851, 5.205, Rotation2d.fromDegrees(-120));
+    public static final Pose2d ReefBRed = new Pose2d(14.49, 4.29, Rotation2d.fromDegrees(180));
+    public static final Pose2d ReefCRed = new Pose2d(13.8, 5.24, Rotation2d.fromDegrees(-120));
     public static final Pose2d ReefDRed = new Pose2d(13.55, 5.4, Rotation2d.fromDegrees(-120));
     public static final Pose2d ReefERed = new Pose2d(12.44, 5.31, Rotation2d.fromDegrees(-60));
-    public static final Pose2d ReefFRed = new Pose2d(12.13, 5.14, Rotation2d.fromDegrees(-60));
+    public static final Pose2d ReefFRed = new Pose2d(12.09, 5.09, Rotation2d.fromDegrees(-60));
     public static final Pose2d ReefGRed = new Pose2d(11.63, 4.13, Rotation2d.fromDegrees(0));
     public static final Pose2d ReefHRed = new Pose2d(11.63, 3.75, Rotation2d.fromDegrees(0));
     public static final Pose2d ReefIRed = new Pose2d(12.27, 2.835, Rotation2d.fromDegrees(60));
@@ -525,7 +525,6 @@ public final class Constants {
     // public static final String COMP_BOT = "CompBot";
     // public static final String CORAL_END_EFFECTOR = "Use Limelight";
     // public static final String ALGAE_END_EFFECTOR = "Driver Controller Type";
-    // public static final String FUNNEL_ROTATOR = "Operator Controller Type";
     // public static final String FUNNEL_INTAKE = "Elevator";
     // public static final String DISTANCE_SENSORS = "CoralEndDefector";
     // public static final String LIGHTS = "AlgaeEndDefector";
@@ -560,7 +559,7 @@ public final class Constants {
 
     //reef heights that are for when we are about a corals width from the reef
     public static final double REEF_LEVEL_1_CENTIMETERS_AWAY_FROM_REEF = 50;
-    public static final double REEF_LEVEL_2_CENTIMETERS_AWAY_FROM_REEF = 93.5;//90.5;//84.1 for a 2x4 away from reef
+    public static final double REEF_LEVEL_2_CENTIMETERS_AWAY_FROM_REEF = 94.5;//93.5 from 10k//90.5;//84.1 for a 2x4 away from reef
     public static final double REEF_LEVEL_3_CENTIMETERS_AWAY_FROM_REEF = 133;//130.2;
     public static final double REEF_LEVEL_4_CENTIMETERS_AWAY_FROM_REEF = 195;//194.28;//194;//182.69;
 
@@ -628,7 +627,6 @@ public final class Constants {
   public final class FunnelConstants{
     public static final int FUNNEL_SLANT_MOTOR_ID = 21;
     public static final int FUNNEL_STRAIGHT_MOTOR_ID = 22;
-    public static final int FUNNEL_ROTATOR_MOTOR_ID = 24;
 
     public static final double FUNNEL_SLANT_MOTOR_KP = 0.000031;
     public static final double FUNNEL_SLANT_MOTOR_KI = 0;
@@ -649,18 +647,6 @@ public final class Constants {
     public static final double FUNNEL_STRAIGHT_MOTOR_KI_PRACTICE = 0;
     public static final double FUNNEL_STRAIGHT_MOTOR_KD_PRACTICE = 0;
     public static final double FUNNEL_STRAIGHT_MOTOR_KFF_PRACTICE = 0.000116;
-
-    public static final double FUNNEL_ROTATOR_KP = 2491;
-    public static final double FUNNEL_ROTATOR_KI = 2491;
-    public static final double FUNNEL_ROTATOR_KD = 2491;
-    public static final double FUNNEL_ROTATOR_KFF = 2491;
-
-    public static final double FUNNEL_ROTATOR_DOWN_POSITION = 2491;
-
-    public static final double FUNNEL_ROTATOR_KP_PRACTICE = 2491;
-    public static final double FUNNEL_ROTATOR_KI_PRACTICE = 2491;
-    public static final double FUNNEL_ROTATOR_KD_PRACTICE = 2491;
-    public static final double FUNNEL_ROTATOR_KFF_PRACTICE = 2491;
 
     public static final double FUNNEL_INTAKE_SPEED = 1500;
     /** this is the speed that the funnel motors should run at when they should be slow enough to stop the coral where it is the moent the sensor is triggered */
