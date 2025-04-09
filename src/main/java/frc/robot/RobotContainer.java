@@ -21,6 +21,7 @@ import static frc.robot.settings.Constants.PS4Driver.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathPlannerPath;
@@ -1085,6 +1086,7 @@ public class RobotContainer {
     if(lightsExist) {
       lights.setAllLights(0, 0, 0);
     }
+    PathfindingCommand.warmupCommand().schedule();
   }
   public void robotPeriodic() {
     if(elevatorExists) {
