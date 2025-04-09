@@ -421,9 +421,9 @@ public final class Constants {
 
 
     // public static final Pose2d ReefARed = new Pose2d(14.49, 3.95, Rotation2d.fromDegrees(180));
-    public static final Pose2d ReefARed = new Pose2d(14.48, 3.95, Rotation2d.fromDegrees(180));
+    public static final Pose2d ReefARed = new Pose2d(14.48, 3.99, Rotation2d.fromDegrees(180));
     // public static final Pose2d ReefBRed = new Pose2d(14.48, 4.28, Rotation2d.fromDegrees(180));
-    public static final Pose2d ReefBRed = new Pose2d(14.49, 4.29, Rotation2d.fromDegrees(180));
+    public static final Pose2d ReefBRed = new Pose2d(14.47, 4.35, Rotation2d.fromDegrees(180));
     public static final Pose2d ReefCRed = new Pose2d(13.851, 5.205, Rotation2d.fromDegrees(-120));
     public static final Pose2d ReefDRed = new Pose2d(13.55, 5.4, Rotation2d.fromDegrees(-120));
     public static final Pose2d ReefERed = new Pose2d(12.44, 5.31, Rotation2d.fromDegrees(-60));
@@ -554,7 +554,8 @@ public final class Constants {
     public static final double REEF_LEVEL_1_CENTIMETERS_AGAINST_REEF = 50;
     public static final double REEF_LEVEL_2_CENTIMETERS_AGAINST_REEF = 85.51;//81.23;
     public static final double REEF_LEVEL_3_CENTIMETERS_AGAINST_REEF = 125.68;//122.6;
-    public static final double REEF_LEVEL_4_CENTIMETERS_AGAINST_REEF = 190;//188.7;//182.69;
+    public static final double REEF_LEVEL_3_ALGAE_CENTIMETERS_AGAINST_REEF = 110.68;//122.6;
+    public static final double REEF_LEVEL_4_CENTIMETERS_AGAINST_REEF = 189.2;//188.7;//182.69;
     public static final double BARGE_SHOOT_CENTIMETERS = 194.5;
 
     //reef heights that are for when we are about a corals width from the reef
