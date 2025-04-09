@@ -6,31 +6,43 @@ package frc.robot;
 
 import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.ALGAE_INTAKE_SPEED;
 import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.ALGAE_SHOOT_SPEED;
-import static frc.robot.settings.Constants.ClimberConstants.CLIMBER_CLIMBED_ANGLE;
-import static frc.robot.settings.Constants.ClimberConstants.CLIMBER_NOT_CLIMBED_ANGLE;
 import static frc.robot.settings.Constants.ClimberConstants.CLIMBER_POWER_REVERSE;
 import static frc.robot.settings.Constants.CoralEndeffectorConstants.CORAL_ENDEFFECTOR_SPEED;
-import static frc.robot.settings.Constants.DriveConstants.*;
+import static frc.robot.settings.Constants.DriveConstants.DEFAULT_PATH_CONSTRAINTS;
+import static frc.robot.settings.Constants.DriveConstants.REEF_LINEUP_SPEED;
+import static frc.robot.settings.Constants.DriveConstants.k_THETA_D;
+import static frc.robot.settings.Constants.DriveConstants.k_THETA_I;
+import static frc.robot.settings.Constants.DriveConstants.k_THETA_P;
+import static frc.robot.settings.Constants.DriveConstants.k_XY_D;
+import static frc.robot.settings.Constants.DriveConstants.k_XY_I;
+import static frc.robot.settings.Constants.DriveConstants.k_XY_P;
 import static frc.robot.settings.Constants.ElevatorConstants.HUMAN_PLAYER_STATION_CENTIMETERS;
-import static frc.robot.settings.Constants.ElevatorConstants.METERS_FROM_POSE_TO_RAISE_ELEVATOR;
-import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_ACCLERATION;
 import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_HIGH_ACCLERATION;
-import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_HP_ACCLERATION;
-import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_HP_VELOCITY;
 import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_JERK;
 import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_VELOCITY;
-import static frc.robot.settings.Constants.Field.REEF_POSITION_THRESHOLD;
-import static frc.robot.settings.Constants.FunnelConstants.FUNNEL_INTAKE_SPEED;
-import static frc.robot.settings.Constants.PS4Driver.*;
+import static frc.robot.settings.Constants.PS4Driver.DEADBAND_NORMAL;
+import static frc.robot.settings.Constants.PS4Driver.DRIVE_CONTROLLER_ID;
+import static frc.robot.settings.Constants.PS4Driver.OPERATOR_CONTROLLER_ID;
+import static frc.robot.settings.Constants.PS4Driver.PS4_Z_AXIS;
+import static frc.robot.settings.Constants.PS4Driver.XBOX_Z_AXIS;
+import static frc.robot.settings.Constants.PS4Driver.X_AXIS;
+import static frc.robot.settings.Constants.PS4Driver.Y_AXIS;
+
+import java.io.IOException;
+import java.util.Map;
+import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
+
+import org.json.simple.parser.ParseException;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.FollowPathCommand;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.FileVersionException;
-import com.playingwithfusion.TimeOfFlight;
-import com.playingwithfusion.jni.TimeOfFlightJNI;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -48,79 +60,54 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.AutoAngleAtReef;
-import frc.robot.commands.ClimberCommand;
-import frc.robot.commands.ClimberCommandGroup;
-import frc.robot.commands.DepositAlgae;
-import frc.robot.commands.DepositAlgaeSequential;
-import frc.robot.settings.Constants.AlgaeEndeffectorConstants;
-import frc.robot.settings.Constants.LightConstants;
-import frc.robot.settings.Constants.Vision;
-import frc.robot.settings.ControllerEnums;
-import frc.robot.commands.AlgaeEndeffectorCommand;
-import frc.robot.commands.ApproachReef;
 import frc.robot.commands.AlgaeIntakeCommand;
+import frc.robot.commands.ApproachReef;
+import frc.robot.commands.AutoAngleAtReef;
+import frc.robot.commands.ClimberCommandGroup;
+import frc.robot.commands.DepositAlgaeSequential;
 import frc.robot.commands.Drive;
 import frc.robot.commands.DriveToPose;
-import frc.robot.commands.IndicatorLights;
-import frc.robot.commands.L1ScoringCommandGroup;
-import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.ElevatorReset;
 import frc.robot.commands.ElevatorTestCommand;
 import frc.robot.commands.FunClimbedLights;
 import frc.robot.commands.FunnelRotatorCommand;
+import frc.robot.commands.IndicatorLights;
+import frc.robot.commands.L1ScoringCommandGroup;
 import frc.robot.commands.LineUp;
 import frc.robot.commands.LineUpBarge;
-import frc.robot.commands.LineupCoralInEndEffector;
-import frc.robot.commands.LineupCoralInFunnel;
 import frc.robot.commands.MoveMeters;
-import frc.robot.commands.PassCoralToEndEffector;
 import frc.robot.commands.PassCoralToEndEffectorSequential;
 import frc.robot.commands.PlaceCoralDuringLineupSequential;
 import frc.robot.commands.PlaceCoralNoPath;
-import frc.robot.commands.ResetClimber;
 import frc.robot.commands.ScoreWhileCollectingAlgae;
 import frc.robot.commands.ShootInBarge;
 import frc.robot.commands.WaitCommand;
 import frc.robot.commands.WaitUntil;
-import frc.robot.subsystems.DistanceSensors;
 import frc.robot.commands.NamedCommands.CoralIntake;
 import frc.robot.commands.NamedCommands.DeliverCoral;
-import frc.robot.commands.NamedCommands.EjectCoral;
 import frc.robot.commands.autos.PlaceCoralNoOdometry;
-import frc.robot.settings.SensorNameEnums;
-import frc.robot.settings.CommandSelectorEnum;
+import frc.robot.settings.Constants.LightConstants;
+import frc.robot.settings.Constants.Vision;
+import frc.robot.settings.ControllerEnums;
 import frc.robot.settings.ElevatorEnums;
-import frc.robot.settings.LightsEnums;
 import frc.robot.settings.PlacementLocations;
-import frc.robot.settings.ReefSideEnum;
 import frc.robot.subsystems.AlgaeEndeffectorSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CoralEndeffectorSubsystem;
+import frc.robot.subsystems.DistanceSensors;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelIntake;
 import frc.robot.subsystems.FunnelRotator;
-import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.RobotState;
-import java.io.IOException;
-import java.lang.ModuleLayer.Controller;
-import java.util.Map;
-import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
-import java.util.function.Supplier;
-
-import javax.lang.model.element.ElementKind;
-
-import org.json.simple.parser.ParseException;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -1098,6 +1085,7 @@ public class RobotContainer {
     if(lightsExist) {
       lights.setAllLights(0, 0, 0);
     }
+    FollowPathCommand.warmupCommand().schedule();
   }
   public void robotPeriodic() {
     if(elevatorExists) {
@@ -1131,6 +1119,13 @@ public class RobotContainer {
       }else{
         lights.setCandleLights(LightConstants.TOTAL_LIGHTS_CANDLE_STRIP_START, LightConstants.DRIVETRAIN_LIGHTS_END, 200, 0, 0);  
       }
+      if(RobotState.getInstance().warmedUp){
+        lights.setCandleLights(LightConstants.LEFT_ELEVATOR_LIGHTS_ALGAE_START, LightConstants.LEFT_ELEVATOR_LIGHTS_5_END, 200, 50, 200);
+        lights.setCandleLights(LightConstants.RIGHT_ELEVATOR_LIGHTS_5_START, LightConstants.RIGHT_ELEVATOR_LIGHTS_ALGAE_END, 200, 50, 200);
+      }else{
+        lights.setCandleLights(LightConstants.LEFT_ELEVATOR_LIGHTS_ALGAE_START, LightConstants.LEFT_ELEVATOR_LIGHTS_5_END, 200, 200, 0);
+        lights.setCandleLights(LightConstants.RIGHT_ELEVATOR_LIGHTS_5_START, LightConstants.RIGHT_ELEVATOR_LIGHTS_ALGAE_END, 200, 200, 0);
+      }
       logCurrentCommands();
     }
   }
@@ -1149,7 +1144,10 @@ public class RobotContainer {
   public static Command setThreadPriority() {
     return new SequentialCommandGroup(
       new WaitCommand(()->20),
-      new InstantCommand(()->Threads.setCurrentThreadPriority(true, 10))
-    ).ignoringDisable(true);
+      new InstantCommand(()->{
+        Threads.setCurrentThreadPriority(true, 10);
+        RobotState.getInstance().warmedUp = true;
+      })
+      ).ignoringDisable(true);
   }
 }
