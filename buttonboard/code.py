@@ -46,16 +46,28 @@ class ButtonArray:
                 js.update_button((i.button, False))
 
 class SingleButton:
-    def __init__(self, button):
+    def __init__(self, button, tog = False):
         self.button = button
-
+        self.tog = tog
+        self.prev = False
+        self.value = False
+        
     def update(self):
-        if self.button.get():
+        if self.tog == True:
+            temp = self.button.get()
+            if temp == True and self.prev == False:
+                self.value = not self.value
+            self.prev = temp
+        else:
+            self.value = self.button.get()
+
+        if self.value:
             self.button.set(True)
             js.update_button((self.button.button, True))
         else:
             self.button.set(False)
             js.update_button((self.button.button, False))
+
 
 js = Joystick()
 heightButtons = [
@@ -74,7 +86,7 @@ sideButtons = [
 algaeButton = StrangeButton(9, board.D40, invert=False)
 climbButton = StrangeButton(10, board.D33, board.D8)
 climbAuth = StrangeButton(11, board.D37)
-climbDown = StrangeButton(12, board.D34, board.D9)
+L1Mode = StrangeButton(12, board.D34, board.D9)
 forceElevator = StrangeButton(13, board.D11, board.D12)
 buttons = [
     ButtonArray(heightButtons),
@@ -84,7 +96,7 @@ buttons = [
     SingleButton(algaeButton),
     SingleButton(climbButton),
     SingleButton(climbAuth),
-    SingleButton(climbDown),
+    SingleButton(L1Mode, True),
     SingleButton(forceElevator),
 ]
 
