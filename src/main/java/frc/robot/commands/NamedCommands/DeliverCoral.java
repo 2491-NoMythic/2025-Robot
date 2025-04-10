@@ -32,7 +32,7 @@ public class DeliverCoral extends Command {
   @Override
   public void execute() {
     if(RobotState.getInstance().deliveringCoralHeight == ElevatorEnums.Reef2 || RobotState.getInstance().deliveringCoralHeight == ElevatorEnums.Reef3) {
-      coralEndeffector.runCoralEndEffector(CORAL_ENDEFFECTOR_SPEED/1.4);
+      coralEndeffector.runCoralEndEffector(CORAL_ENDEFFECTOR_SPEED/1.2);
     } else {
       coralEndeffector.runCoralEndEffector(CORAL_ENDEFFECTOR_SPEED);
     }

@@ -128,7 +128,7 @@ public final class Constants {
      * <Motor free speed RPM> / 60 * <Drive reduction> * <Wheel diameter meters> * pi
      */
     public static final double MAX_VELOCITY_METERS_PER_SECOND =
-        6380.0 / 60.0 * DRIVETRAIN_DRIVE_REDUCTION * DRIVETRAIN_WHEEL_DIAMETER * Math.PI;
+        8000.0 / 60.0 * DRIVETRAIN_DRIVE_REDUCTION * DRIVETRAIN_WHEEL_DIAMETER * Math.PI;
     /** The drive motor sensor value at a 100% duty cycle output in a straight line. */
     public static final double MAX_VELOCITY_RPS_EMPIRICAL = 15.697;
     /**
@@ -410,10 +410,10 @@ public final class Constants {
     public static final Pose2d ReefBBlue = new Pose2d(3.08, 3.72, Rotation2d.fromDegrees(0));
     public static final Pose2d ReefCBlue = new Pose2d(3.73, 2.82, Rotation2d.fromDegrees(60));
     public static final Pose2d ReefDBlue = new Pose2d(4.03, 2.66, Rotation2d.fromDegrees(60));
-    public static final Pose2d ReefEBlue = new Pose2d(5.18, 2.77, Rotation2d.fromDegrees(120));
+    public static final Pose2d ReefEBlue = new Pose2d(5.169, 2.771, Rotation2d.fromDegrees(120));
     public static final Pose2d ReefFBlue = new Pose2d(5.44, 2.95, Rotation2d.fromDegrees(120));
     public static final Pose2d ReefGBlue = new Pose2d(5.92, 3.96, Rotation2d.fromDegrees(180));
-    public static final Pose2d ReefHBlue = new Pose2d(5.91, 4.3, Rotation2d.fromDegrees(180));
+    public static final Pose2d ReefHBlue = new Pose2d(5.926, 4.4, Rotation2d.fromDegrees(180));
     public static final Pose2d ReefIBlue = new Pose2d(5.26, 5.23, Rotation2d.fromDegrees(-120));
     public static final Pose2d ReefJBlue = new Pose2d(4.95, 5.4, Rotation2d.fromDegrees(-120));
     public static final Pose2d ReefKBlue = new Pose2d(3.83, 5.3, Rotation2d.fromDegrees(-60));
@@ -559,14 +559,14 @@ public final class Constants {
 
     //reef heights that are for when we are about a corals width from the reef
     public static final double REEF_LEVEL_1_CENTIMETERS_AWAY_FROM_REEF = 48;
-    public static final double REEF_LEVEL_2_CENTIMETERS_AWAY_FROM_REEF = 94.5;//93.5 from 10k//90.5;//84.1 for a 2x4 away from reef
-    public static final double REEF_LEVEL_3_CENTIMETERS_AWAY_FROM_REEF = 133;//130.2;
+    public static final double REEF_LEVEL_2_CENTIMETERS_AWAY_FROM_REEF = 92.5;//93.5 from 10k//90.5;//84.1 for a 2x4 away from reef
+    public static final double REEF_LEVEL_3_CENTIMETERS_AWAY_FROM_REEF = 132;//130.2;
     public static final double REEF_LEVEL_4_CENTIMETERS_AWAY_FROM_REEF = 195;//194.28;//194;//182.69;
 
     public static final double MOTION_MAGIC_ELEVATOR_HIGH_VELOCITY = 300;
-    public static final double MOTION_MAGIC_ELEVATOR_HIGH_ACCLERATION = 600;
+    public static final double MOTION_MAGIC_ELEVATOR_HIGH_ACCLERATION = 500;
     public static final double MOTION_MAGIC_ELEVATOR_HP_VELOCITY = 320;
-    public static final double MOTION_MAGIC_ELEVATOR_HP_ACCLERATION = 400;
+    public static final double MOTION_MAGIC_ELEVATOR_HP_ACCLERATION = 600;
     public static final double MOTION_MAGIC_ELEVATOR_VELOCITY = 300;
     public static final double MOTION_MAGIC_ELEVATOR_ACCLERATION = 840;
     public static final double MOTION_MAGIC_ELEVATOR_JERK = 9200;

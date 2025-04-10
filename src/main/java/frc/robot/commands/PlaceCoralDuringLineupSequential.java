@@ -37,6 +37,7 @@ public class PlaceCoralDuringLineupSequential extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new InstantCommand(()->RobotState.getInstance().reefLineupRunning = true),
+      new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = heightSupplier.get()),
       new InstantCommand(()->coralEndDefector.stopCoralEndEffector(), coralEndDefector),
       new InstantCommand(()->algaeEndDefector.runAlgaeEndDefector(() -> RobotState.getInstance().goForAlgae ? ALGAE_INTAKE_SPEED : -0.5), algaeEndDefector),
       new ParallelDeadlineGroup(
