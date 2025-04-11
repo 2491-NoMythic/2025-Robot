@@ -386,8 +386,8 @@ public class RobotContainer {
       ForceEjectCoral = buttonBoard::getForceEjectCoralButton;
       algaeShooterSupOperator = buttonBoard::getForceEjectAlgaeButton;
 
-      climberGroupForward = buttonBoard::getclimbCommandButton;
-      climberGroupReverse = buttonBoard::getClimbModeAuthorizer;
+      climberGroupForward = buttonBoard::getStartClimbingButton;
+      climberGroupReverse = buttonBoard::getClimberDeployButton;
       L1Mode = buttonBoard::getL1ModeButton;
     }
     if (LimelightExists) {limelightInit();}
@@ -505,7 +505,7 @@ public class RobotContainer {
    */
   private void configureBindings() {
 //all the triggers that change RobotState
-    new Trigger(L1Mode).onTrue(new InstantCommand(()->RobotState.getInstance().L1Mode = !RobotState.getInstance().L1Mode));
+    new Trigger(L1Mode).onTrue(new InstantCommand(()->RobotState.getInstance().L1Mode = true)).onFalse(new InstantCommand(()->RobotState.getInstance().L1Mode = false));
     new Trigger(()->RobotState.getInstance().L1Mode).whileTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef1)).onFalse(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef4));
     new Trigger(()->ReefHeight2Supplier.getAsBoolean() && !RobotState.getInstance().L1Mode).whileTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef2));
     new Trigger(()->ReefHeight3Supplier.getAsBoolean() && !RobotState.getInstance().L1Mode).whileTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef3));

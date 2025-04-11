@@ -11,11 +11,9 @@ L4 = 4
 barge = 17
 Left = 47
 Right = 45
-Climb up = 8
-Climb Reset = 9
+L1 Mode = 8
+Start Climbing = 9
 ForceElevator = 12
-Algae eject = 43
-Coral eject = 41
 
 --Button--
 L1 = 7
@@ -28,7 +26,7 @@ Coral eject = 39
 Left = 36
 Right = 35
 Algae toggle =40
-Climb up = 33
-Climber Mode = 37
-Climb Reset = 34
+L1 Mode = 33
+Climber Deploy = 37
+Start Climbing = 34
 ForceElevator = 11
