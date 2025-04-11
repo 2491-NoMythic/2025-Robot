@@ -550,15 +550,15 @@ public final class Constants {
     public static final double METERS_FROM_POSE_TO_RAISE_ELEVATOR = 2.5;
     
     //reef heights that are for when we are against the reef
-    public static final double REEF_LEVEL_1_CENTIMETERS_AGAINST_REEF = 48;
-    public static final double REEF_LEVEL_2_CENTIMETERS_AGAINST_REEF = 85.51;//81.23;
-    public static final double REEF_LEVEL_3_CENTIMETERS_AGAINST_REEF = 125.68;//122.6;
+    public static final double REEF_LEVEL_1_CENTIMETERS_AGAINST_REEF = 55;
+    public static final double REEF_LEVEL_2_CENTIMETERS_AGAINST_REEF = 86;//81.23;
+    public static final double REEF_LEVEL_3_CENTIMETERS_AGAINST_REEF = 126.2;//122.6;
     public static final double REEF_LEVEL_3_ALGAE_CENTIMETERS_AGAINST_REEF = 110.68;//122.6;
-    public static final double REEF_LEVEL_4_CENTIMETERS_AGAINST_REEF = 189.2;//188.7;//182.69;
+    public static final double REEF_LEVEL_4_CENTIMETERS_AGAINST_REEF = 189.1;//188.7;//182.69;
     public static final double BARGE_SHOOT_CENTIMETERS = 194.5;
 
     //reef heights that are for when we are about a corals width from the reef
-    public static final double REEF_LEVEL_1_CENTIMETERS_AWAY_FROM_REEF = 48;
+    public static final double REEF_LEVEL_1_CENTIMETERS_AWAY_FROM_REEF = 55;
     public static final double REEF_LEVEL_2_CENTIMETERS_AWAY_FROM_REEF = 92.5;//93.5 from 10k//90.5;//84.1 for a 2x4 away from reef
     public static final double REEF_LEVEL_3_CENTIMETERS_AWAY_FROM_REEF = 132;//130.2;
     public static final double REEF_LEVEL_4_CENTIMETERS_AWAY_FROM_REEF = 195;//194.28;//194;//182.69;
