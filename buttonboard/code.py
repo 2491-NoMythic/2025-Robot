@@ -84,9 +84,9 @@ sideButtons = [
     StrangeButton(8, board.D35, board.D45)
 ]
 algaeButton = StrangeButton(9, board.D40, invert=False)
-climbButton = StrangeButton(10, board.D33, board.D8)
-climbAuth = StrangeButton(11, board.D37)
-L1Mode = StrangeButton(12, board.D34, board.D9)
+L1Mode = StrangeButton(10, board.D33, board.D8)
+climberDeploy = StrangeButton(11, board.D37)
+startClimbing = StrangeButton(12, board.D34, board.D9)
 forceElevator = StrangeButton(13, board.D11, board.D12)
 buttons = [
     ButtonArray(heightButtons),
@@ -94,9 +94,9 @@ buttons = [
     SingleButton(ejectAButton),
     ButtonArray(sideButtons),
     SingleButton(algaeButton),
-    SingleButton(climbButton),
-    SingleButton(climbAuth),
     SingleButton(L1Mode, True),
+    SingleButton(climberDeploy),
+    SingleButton(startClimbing),
     SingleButton(forceElevator),
 ]
 
