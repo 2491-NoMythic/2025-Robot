@@ -59,15 +59,15 @@ public class MoveMeters extends Command {
       switch(frc.robot.subsystems.RobotState.getInstance().L1selectedPosition) {
         case FarLeft:
           chassisSpeeds.vyMetersPerSecond = 0.4;
-          m_meters = 0.155;//0.19;
+          m_meters = 0.19;//0.19;
           break;
         case MiddleLeft:
           chassisSpeeds.vyMetersPerSecond = 0.2;
-          m_meters = 0.065;//0.1;
+          m_meters = 0.12;//0.1;
           break;
         case MiddleRight:
           chassisSpeeds.vyMetersPerSecond = -0.2;
-          m_meters = 0.1;
+          m_meters = 0.12;
           break;
         case FarRight:
           chassisSpeeds.vyMetersPerSecond = -0.4;
