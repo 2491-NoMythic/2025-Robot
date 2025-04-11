@@ -25,6 +25,7 @@ import static frc.robot.settings.Constants.PS4Driver.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathPlannerPath;
@@ -639,7 +640,7 @@ public class RobotContainer {
           new SequentialCommandGroup(
             new L1ScoringCommandGroup(algaeEndDefector, driveTrain, elevator, coralEndDefector, ()->selectCommand(()->RobotState.getInstance().deliveringLeft)),
             new InstantCommand(()->coralEndDefector.stopCoralEndEffector()),
-            new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer), elevator), //sets elevator back to the bottom position
+            // new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer), elevator), //sets elevator back to the bottom position
             new InstantCommand(()->RobotState.getInstance().reefLineupRunning = false))
           ).onFalse(new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer)));
     } else if(DrivetrainExists&&distanceSensorsExist) {
@@ -1111,6 +1112,7 @@ public class RobotContainer {
     if(lightsExist) {
       lights.setAllLights(0, 0, 0);
     }
+    PathfindingCommand.warmupCommand().schedule();
   }
   public void robotPeriodic() {
     if(elevatorExists) {
