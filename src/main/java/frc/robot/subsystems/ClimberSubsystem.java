@@ -177,6 +177,7 @@ public class ClimberSubsystem extends SubsystemBase {
       if(movingPower < 0) {
         if(climberAngleSensor.getPosition().getValueAsDouble() > 0.5728) {
           overSpooled = true;
+          RobotState.getInstance().climberRaised = true;
         }
       } else if(movingPower > 0 || climberAngleSensor.getVelocity().getValueAsDouble() < 0){
         overSpooled = false;
@@ -185,6 +186,9 @@ public class ClimberSubsystem extends SubsystemBase {
         climberMotor1.set(0);
       } else {
         climberMotor1.set(movingPower);
+        if(movingPower > 0) {
+          RobotState.getInstance().climberRaised = false;
+        }
       }
     }
   }
