@@ -640,7 +640,9 @@ public class RobotContainer {
           new SequentialCommandGroup(
             new L1ScoringCommandGroup(algaeEndDefector, driveTrain, elevator, coralEndDefector, ()->selectCommand(()->RobotState.getInstance().deliveringLeft)),
             new InstantCommand(()->coralEndDefector.stopCoralEndEffector()),
-            new MoveMeters(driveTrain, -0.3, -0.8, 0, 0),
+            new InstantCommand(()->driveTrain.drive(new ChassisSpeeds(-0.8, 0, 0)), driveTrain),
+            new WaitCommand(()->0.5),
+            new InstantCommand(()->driveTrain.stop()),
             // new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer), elevator), //sets elevator back to the bottom position
             new InstantCommand(()->RobotState.getInstance().reefLineupRunning = false))
           ).onFalse(new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer)));
