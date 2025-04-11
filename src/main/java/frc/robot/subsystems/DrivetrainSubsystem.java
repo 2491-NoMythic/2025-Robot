@@ -364,7 +364,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @param L1Position the selected L1 placement, Far right, Middle right, Middle Left, or far left
    */
   public void driveForL1Scoring(Supplier<L1Enums> L1Position) {
-    ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0.11, 0, 0);
+    ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0.16, 0, 0);
     switch(L1Position.get()) {
       case FarLeft:
         chassisSpeeds.vyMetersPerSecond = 0.35;
