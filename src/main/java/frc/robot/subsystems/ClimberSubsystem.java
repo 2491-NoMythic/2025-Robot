@@ -186,9 +186,6 @@ public class ClimberSubsystem extends SubsystemBase {
         climberMotor1.set(0);
       } else {
         climberMotor1.set(movingPower);
-        if(movingPower > 0) {
-          RobotState.getInstance().climberRaised = false;
-        }
       }
     }
   }

@@ -565,8 +565,8 @@ public final class Constants {
 
     public static final double MOTION_MAGIC_ELEVATOR_HIGH_VELOCITY = 300;
     public static final double MOTION_MAGIC_ELEVATOR_HIGH_ACCLERATION = 500;
-    public static final double MOTION_MAGIC_ELEVATOR_HP_VELOCITY = 320;
-    public static final double MOTION_MAGIC_ELEVATOR_HP_ACCLERATION = 600;
+    public static final double MOTION_MAGIC_ELEVATOR_HP_VELOCITY = 300;
+    public static final double MOTION_MAGIC_ELEVATOR_HP_ACCLERATION = 800;
     public static final double MOTION_MAGIC_ELEVATOR_VELOCITY = 300;
     public static final double MOTION_MAGIC_ELEVATOR_ACCLERATION = 840;
     public static final double MOTION_MAGIC_ELEVATOR_JERK = 9200;
