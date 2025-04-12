@@ -8,6 +8,7 @@ import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.HardwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.TorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -185,7 +186,11 @@ public class ClimberSubsystem extends SubsystemBase {
       if(overSpooled && movingPower < 0) {
         climberMotor1.set(0);
       } else {
-        climberMotor1.set(movingPower);
+        if(movingPower > 0 && climberAngleSensor.getPosition().getValueAsDouble() < 0.214) {
+           climberMotor1.set(0);
+         } else {
+          climberMotor1.set(movingPower);
+      }
       }
     }
   }
