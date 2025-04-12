@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -43,10 +44,33 @@ public class MoveMeters extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    distance = 0;
     pose = m_drivetrain.getPose();
     startX = pose.getX();
     startY = pose.getY();
+    distance = 0;
+    if(frc.robot.subsystems.RobotState.getInstance().L1Mode) {
+      ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0.11, 0, 0);
+      switch(frc.robot.subsystems.RobotState.getInstance().L1selectedPosition) {
+        case FarLeft:
+          chassisSpeeds.vyMetersPerSecond = 0.4;
+          m_meters = 0.19;//0.19;
+          break;
+        case MiddleLeft:
+          chassisSpeeds.vyMetersPerSecond = 0.2;
+          m_meters = 0.12;//0.1;
+          break;
+        case MiddleRight:
+          chassisSpeeds.vyMetersPerSecond = -0.2;
+          m_meters = 0.12;
+          break;
+        case FarRight:
+          chassisSpeeds.vyMetersPerSecond = -0.4;
+          m_meters = 0.19;
+          break;
+      }
+      m_drivetrain.moveTowardsRotationTarget(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond);
+      return;
+    }
     m_drivetrain.drive(new ChassisSpeeds(m_forwardSpeed, m_rightSpeed, m_angleSpeed));
   }
 

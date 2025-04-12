@@ -421,9 +421,9 @@ public final class Constants {
 
 
     // public static final Pose2d ReefARed = new Pose2d(14.49, 3.95, Rotation2d.fromDegrees(180));
-    public static final Pose2d ReefARed = new Pose2d(14.48, 3.99, Rotation2d.fromDegrees(180));
+    public static final Pose2d ReefARed = new Pose2d(14.484, 4.03, Rotation2d.fromDegrees(180));
     // public static final Pose2d ReefBRed = new Pose2d(14.48, 4.28, Rotation2d.fromDegrees(180));
-    public static final Pose2d ReefBRed = new Pose2d(14.49, 4.29, Rotation2d.fromDegrees(180));
+    public static final Pose2d ReefBRed = new Pose2d(14.47, 4.332, Rotation2d.fromDegrees(180));
     public static final Pose2d ReefCRed = new Pose2d(13.8, 5.24, Rotation2d.fromDegrees(-120));
     public static final Pose2d ReefDRed = new Pose2d(13.55, 5.4, Rotation2d.fromDegrees(-120));
     public static final Pose2d ReefERed = new Pose2d(12.44, 5.31, Rotation2d.fromDegrees(-60));
@@ -550,23 +550,23 @@ public final class Constants {
     public static final double METERS_FROM_POSE_TO_RAISE_ELEVATOR = 2.5;
     
     //reef heights that are for when we are against the reef
-    public static final double REEF_LEVEL_1_CENTIMETERS_AGAINST_REEF = 48;
-    public static final double REEF_LEVEL_2_CENTIMETERS_AGAINST_REEF = 85.51;//81.23;
-    public static final double REEF_LEVEL_3_CENTIMETERS_AGAINST_REEF = 125.68;//122.6;
+    public static final double REEF_LEVEL_1_CENTIMETERS_AGAINST_REEF = 55;
+    public static final double REEF_LEVEL_2_CENTIMETERS_AGAINST_REEF = 86;//81.23;
+    public static final double REEF_LEVEL_3_CENTIMETERS_AGAINST_REEF = 126.2;//122.6;
     public static final double REEF_LEVEL_3_ALGAE_CENTIMETERS_AGAINST_REEF = 110.68;//122.6;
-    public static final double REEF_LEVEL_4_CENTIMETERS_AGAINST_REEF = 189.2;//188.7;//182.69;
+    public static final double REEF_LEVEL_4_CENTIMETERS_AGAINST_REEF = 189.1;//188.7;//182.69;
     public static final double BARGE_SHOOT_CENTIMETERS = 194.5;
 
     //reef heights that are for when we are about a corals width from the reef
-    public static final double REEF_LEVEL_1_CENTIMETERS_AWAY_FROM_REEF = 48;
+    public static final double REEF_LEVEL_1_CENTIMETERS_AWAY_FROM_REEF = 55;
     public static final double REEF_LEVEL_2_CENTIMETERS_AWAY_FROM_REEF = 92.5;//93.5 from 10k//90.5;//84.1 for a 2x4 away from reef
     public static final double REEF_LEVEL_3_CENTIMETERS_AWAY_FROM_REEF = 132;//130.2;
     public static final double REEF_LEVEL_4_CENTIMETERS_AWAY_FROM_REEF = 195;//194.28;//194;//182.69;
 
     public static final double MOTION_MAGIC_ELEVATOR_HIGH_VELOCITY = 300;
     public static final double MOTION_MAGIC_ELEVATOR_HIGH_ACCLERATION = 500;
-    public static final double MOTION_MAGIC_ELEVATOR_HP_VELOCITY = 320;
-    public static final double MOTION_MAGIC_ELEVATOR_HP_ACCLERATION = 600;
+    public static final double MOTION_MAGIC_ELEVATOR_HP_VELOCITY = 300;
+    public static final double MOTION_MAGIC_ELEVATOR_HP_ACCLERATION = 800;
     public static final double MOTION_MAGIC_ELEVATOR_VELOCITY = 300;
     public static final double MOTION_MAGIC_ELEVATOR_ACCLERATION = 840;
     public static final double MOTION_MAGIC_ELEVATOR_JERK = 9200;
@@ -584,6 +584,7 @@ public final class Constants {
     public static final double CLIMBER_CLIMBED_ANGLE = 100;
     public static final double CLIMBER_NOT_CLIMBED_ANGLE = 0;
 
+    public static final double CLIMBER_STRAIGHT_UP_ROTATIONS = 0.5278;
     public static final double CLIMBER_RACHET_TRUE = 138;
     public static final double CLIMBER_RACHET_FALSE = 100;
 
