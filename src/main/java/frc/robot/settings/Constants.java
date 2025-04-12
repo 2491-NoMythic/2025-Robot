@@ -584,6 +584,7 @@ public final class Constants {
     public static final double CLIMBER_CLIMBED_ANGLE = 100;
     public static final double CLIMBER_NOT_CLIMBED_ANGLE = 0;
 
+    public static final double CLIMBER_STRAIGHT_UP_ROTATIONS = 0.5278;
     public static final double CLIMBER_RACHET_TRUE = 138;
     public static final double CLIMBER_RACHET_FALSE = 100;
 
