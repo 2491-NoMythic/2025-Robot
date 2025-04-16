@@ -65,7 +65,11 @@ public class LineUpBarge extends Command {
     if(speedX<-3) {
       speedX = -3;
     }
-    driveTrain.moveTowardsRotationTarget(speedX, 0);
+    if (isRed) {
+      driveTrain.moveTowardsRotationTargetFieldRelative(speedX, 0);
+    } else {
+      driveTrain.moveTowardsRotationTargetFieldRelative(speedX, 0);
+    }
   }
 
   // Called once the command ends or is interrupted.

@@ -74,7 +74,7 @@ public class MoveMeters extends Command {
           m_meters = 0.19;
           break;
       }
-      m_drivetrain.moveTowardsRotationTarget(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond);
+      m_drivetrain.moveTowardsRotationTargetRobotRelative(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond);
       return;
     }
     m_drivetrain.drive(new ChassisSpeeds(m_forwardSpeed, m_rightSpeed, m_angleSpeed));
