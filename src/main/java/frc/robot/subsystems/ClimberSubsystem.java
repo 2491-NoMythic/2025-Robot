@@ -186,11 +186,11 @@ public class ClimberSubsystem extends SubsystemBase {
       if(overSpooled && movingPower < 0) {
         climberMotor1.set(0);
       } else {
-        if(movingPower > 0 && climberAngleSensor.getPosition().getValueAsDouble() < 0.214) {
-           climberMotor1.set(0);
-         } else {
+        // if(movingPower > 0 && climberAngleSensor.getPosition().getValueAsDouble() < 0.214) {
+        //    climberMotor1.set(0);
+        //  } else {
           climberMotor1.set(movingPower);
-      }
+      // }
       }
     }
   }
