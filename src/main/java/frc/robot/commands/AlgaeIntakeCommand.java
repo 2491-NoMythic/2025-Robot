@@ -20,6 +20,7 @@ public class AlgaeIntakeCommand extends Command {
   DoubleSupplier shootSpeed;
   boolean algaeDetected;
   Timer timer;
+  boolean hasAlgaeInternal;
   /** Creates a new AlgaeIntakeCommand. */
   public AlgaeIntakeCommand(AlgaeEndeffectorSubsystem algaeEndeffector, DoubleSupplier shootSpeed) {
     this.algaeEndeffector = algaeEndeffector;
@@ -34,6 +35,7 @@ public class AlgaeIntakeCommand extends Command {
   @Override
   public void initialize() {
     algaeDetected = false;
+    hasAlgaeInternal = false;
     timer.start();
   }
 
@@ -43,16 +45,13 @@ public class AlgaeIntakeCommand extends Command {
     // This command is meant to be used with a parallel race group. 
     // if we returned true from isFinished we would cancel the rest of the commands.
     // so instead handle finishing internally.
-
-    if (RobotState.getInstance().hasAlgae && shootSpeed.getAsDouble() >= 0) {
+    if (hasAlgaeInternal && shootSpeed.getAsDouble() >= 0) {
       algaeEndeffector.stopAlgaeEndDefectorHard();
     } else {
-      if(timer.get() > 0.5){
       algaeEndeffector.runAlgaeEndDefector(shootSpeed.getAsDouble());
-      }
-      else{
-        algaeEndeffector.runAlgaeEndDefector(shootSpeed.getAsDouble());
-      }
+    }
+    if(RobotState.getInstance().hasAlgae) {
+      hasAlgaeInternal = true;
     }
   }
 
@@ -66,6 +65,7 @@ public class AlgaeIntakeCommand extends Command {
     }
     timer.stop();
     timer.reset();
+    hasAlgaeInternal = false;
   }
   // Returns true when the command should end.
   @Override

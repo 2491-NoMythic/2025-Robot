@@ -236,7 +236,7 @@ public class ElevatorSubsystem extends SubsystemBase {
    // TODO: may need speedup
   public void setElevatorPositionWithAlgae(ElevatorEnums height){
     final double algaeAcceleration = MOTION_MAGIC_ELEVATOR_HIGH_ACCLERATION;
-    final double algaeVelocity = MOTION_MAGIC_ELEVATOR_HIGH_VELOCITY-100;//150;
+    final double algaeVelocity = MOTION_MAGIC_ELEVATOR_HIGH_VELOCITY-200;//150;
     switch(height){
       case Reef1:
       setElevatorPositionDynamicConfigs(REEF_LEVEL_1_CENTIMETERS_AGAINST_REEF, algaeAcceleration, algaeVelocity, 0);
