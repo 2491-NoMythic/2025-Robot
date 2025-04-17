@@ -549,27 +549,27 @@ public class RobotContainer {
       new Trigger(()->AlgaeShooterSupDriver.getAsBoolean() || algaeShooterSupOperator.getAsBoolean()).whileTrue(new AlgaeIntakeCommand(algaeEndDefector, ()->ALGAE_SHOOT_SPEED));
     }
     if (climberExists){
-      final double minSpeed = 0.2;
+      final double minSpeed = 0.18;
       final double maxSpeed = 0.8;
       final double deltaSpeed = maxSpeed-minSpeed;
-      final double triggerAngle = 0.25;
-      final double stopAcceleratingAngle = 0.23;
+      final double triggerAngle = 0.24;
+      final double stopAcceleratingAngle = 0.22;
       final double acceleratingRange = triggerAngle - stopAcceleratingAngle;
       // new Trigger(climberGroupForward).whileTrue(new ClimberCommandGroup(climber, false)).onFalse(new InstantCommand(()-> climber.stopClimber(), climber)).onFalse(new InstantCommand(()-> climber.runWheels(0), climber));
       new Trigger(climberGroupReverse).whileTrue(new ClimberCommandGroup(climber, true)).onFalse(new InstantCommand(()-> climber.stopClimber(), climber)).onFalse(new InstantCommand(()-> climber.runWheels(0), climber));
       new Trigger(()->climberGroupForward.getAsBoolean() && RobotState.getInstance().climberRaised).onTrue(new InstantCommand(()->climber.runWheels(0), climber));
       new Trigger(()->climberGroupForward.getAsBoolean() && RobotState.getInstance().climberRaised).onTrue(new InstantCommand(()->climber.setServo(()->false), climber));
-      // new Trigger(()->climberGroupForward.getAsBoolean() && RobotState.getInstance().climberRaised).onTrue(new SequentialCommandGroup(
-      //   new InstantCommand(() -> climber.setClimberPower(maxSpeed), climber),
-      //   new WaitUntil(()->climber.getClimberAngle() <= CLIMBER_STRAIGHT_UP_ROTATIONS - 0.125),
-      //   new InstantCommand(() -> climber.setClimberPower(minSpeed), climber),
-      //   new WaitUntil(()->climber.getClimberAngle() <= triggerAngle),
-      //   new RunCommand(() -> climber.setClimberPower(minSpeed + deltaSpeed *((triggerAngle - climber.getClimberAngle())/acceleratingRange)), climber)
-      //     .until(() ->climber.getClimberAngle() <= stopAcceleratingAngle),
-      //     //this run command is to slowly ramp up the climber speed so that we can climber smothly and faster
-      //   new InstantCommand(() -> climber.setClimberPower(maxSpeed), climber)
-      //   ));
-        new Trigger(()->climberGroupForward.getAsBoolean() && RobotState.getInstance().climberRaised).onTrue(new InstantCommand(() -> climber.setClimberPower(maxSpeed), climber));
+      new Trigger(()->climberGroupForward.getAsBoolean() && RobotState.getInstance().climberRaised).onTrue(new SequentialCommandGroup(
+        new InstantCommand(() -> climber.setClimberPower(maxSpeed), climber),
+        new WaitUntil(()->climber.getClimberAngle() <= CLIMBER_STRAIGHT_UP_ROTATIONS - 0.125),
+        new InstantCommand(() -> climber.setClimberPower(minSpeed), climber),
+        new WaitUntil(()->climber.getClimberAngle() <= triggerAngle),
+        new RunCommand(() -> climber.setClimberPower(minSpeed + deltaSpeed *((triggerAngle - climber.getClimberAngle())/acceleratingRange)), climber)
+          .until(() ->climber.getClimberAngle() <= stopAcceleratingAngle),
+          //this run command is to slowly ramp up the climber speed so that we can climber smothly and faster
+        new InstantCommand(() -> climber.setClimberPower(maxSpeed), climber)
+        ));
+        // new Trigger(()->climberGroupForward.getAsBoolean() && RobotState.getInstance().climberRaised).onTrue(new InstantCommand(() -> climber.setClimberPower(maxSpeed), climber));
       new Trigger(climberGroupForward).onFalse(new InstantCommand(() -> climber.stopClimber(), climber));
     }
     if (funnelIntakeExists&&elevatorExists&&coralEndeffectorExists) {
