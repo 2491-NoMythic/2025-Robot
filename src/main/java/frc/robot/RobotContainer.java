@@ -629,7 +629,7 @@ public class RobotContainer {
           new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer), elevator), //sets elevator back to the bottom position
           new InstantCommand(()->RobotState.getInstance().reefLineupRunning = false))
       ).onFalse(new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer)));
-
+      SmartDashboard.putNumber("TUNING/driveBackTimeAlgaePickup", 0.4);
       new Trigger(()->CoralPlaceTeleSupplier.getAsBoolean() && RobotState.getInstance().goForAlgae && (RobotState.getInstance().deliveringCoralHeight==ElevatorEnums.Reef4 || RobotState.getInstance().deliveringCoralHeight == ElevatorEnums.Reef3)).whileTrue(
         new SequentialCommandGroup(
           new InstantCommand(()->coralEndDefector.stopCoralEndEffector(), coralEndDefector),
@@ -644,6 +644,8 @@ public class RobotContainer {
                       new WaitCommand(()->0.25),
                       new InstantCommand(()->elevator.setElevatorPositionWithAlgae(ElevatorEnums.Reef3Algae), elevator),//raises elevator to position)
                       new WaitUntil(()->elevator.isElevatorAtPose()),
+                      // new InstantCommand(()->driveTrain.drive(new ChassisSpeeds(-0.5, 0, 0))),
+                      // new WaitCommand(()->SmartDashboard.getNumber("TUNING/driveBackTimeAlgaePickup", 0.5)),
                       new DriveToPose(()->selectCommand(()->RobotState.getInstance().deliveringLeft), driveTrain, ()->0),
                       new InstantCommand(()->elevator.setElevatorPosition(RobotState.getInstance().deliveringCoralHeight), elevator),
                       new WaitUntil(()->elevator.isElevatorAtPose())),
