@@ -817,6 +817,7 @@ public class RobotContainer {
     Command autoBargeShoot;
     Command placeWithLineupWithAlgaeL4;
     Command placeWithLineupWithAlgaeL3;
+    Command collectAlgaeL3;
     Command placeWithLineupRightL4;
     Command placeWithLineupRightL2;
     Command placeWithLineupLeftL4;
@@ -852,6 +853,10 @@ public class RobotContainer {
       );
       placeWithLineupWithAlgaeL3 = new SequentialCommandGroup(
         new ScoreWhileCollectingAlgae(coralEndDefector, algaeEndDefector, driveTrain, elevator, ()->selectCommand(()->true), ()->ElevatorEnums.Reef3),
+        new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer))
+      );
+      collectAlgaeL3 = new SequentialCommandGroup(
+        new ScoreWhileCollectingAlgae(coralEndDefector, algaeEndDefector, driveTrain, elevator, ()->selectCommand(()->true), ()->ElevatorEnums.Reef3Algae),
         new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer))
       );
       deliverCoralLeft1NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef1, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true,algaeEndDefector, ()-> false);
@@ -897,6 +902,7 @@ public class RobotContainer {
       deliverCoralRight3NamedCommandWithAlgae = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
       deliverCoralRight4NamedCommandWithAlgae = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
       placeWithLineupRightL4 = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
+      collectAlgaeL3 = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
       placeWithLineupLeftL4 = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
       placeWithLineupRightL2 = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
       placeWithLineupLeftL2 = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
@@ -980,6 +986,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("PlaceWithLineupRightL2", placeWithLineupRightL2);
     NamedCommands.registerCommand("PlaceWithLineupLeftL2", placeWithLineupLeftL2);
     NamedCommands.registerCommand("PlaceWithLineupWithAlgaeL3", placeWithLineupWithAlgaeL3);
+    NamedCommands.registerCommand("CollectAlgaeL3", collectAlgaeL3);
     NamedCommands.registerCommand("PlaceWithLineupWithAlgaeL4", placeWithLineupWithAlgaeL4);
     NamedCommands.registerCommand("DriveForwardHalfSec", driveForwardForHalfSec);
     NamedCommands.registerCommand("AlgaeEndEffectorRelease", algaeEndEffectorRelease);

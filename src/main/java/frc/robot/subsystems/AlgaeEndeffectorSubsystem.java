@@ -77,7 +77,7 @@ public class AlgaeEndeffectorSubsystem extends SubsystemBase {
    * stops the algae end effector motor by setting speed to 0, with brake mode enabled
    */
   public void stopAlgaeEndDefectorHard(){
-    algaeEndeffectorMotor.set(0.01);
+    algaeEndeffectorMotor.set(0.04);
   }
   /**
    * stop the algae end effector motor be setting voltage to 0, letting it coast out
