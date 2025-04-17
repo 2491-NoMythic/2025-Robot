@@ -412,7 +412,7 @@ public final class Constants {
     public static final Pose2d ReefFBlue = new Pose2d(5.418, 2.917, Rotation2d.fromDegrees(120));
     public static final Pose2d ReefGBlue = new Pose2d(5.913, 3.956, Rotation2d.fromDegrees(180));
     public static final Pose2d ReefHBlue = new Pose2d(5.907, 4.306, Rotation2d.fromDegrees(180));
-    public static final Pose2d ReefIBlue = new Pose2d(5.280, 5.211, Rotation2d.fromDegrees(-120));
+    public static final Pose2d ReefIBlue = new Pose2d(5.267, 5.219, Rotation2d.fromDegrees(-120));
     public static final Pose2d ReefJBlue = new Pose2d(4.993, 5.380, Rotation2d.fromDegrees(-120));
     public static final Pose2d ReefKBlue = new Pose2d(3.838, 5.296, Rotation2d.fromDegrees(-60));
     public static final Pose2d ReefLBlue = new Pose2d(3.56, 5.126, Rotation2d.fromDegrees(-60));
@@ -545,7 +545,7 @@ public final class Constants {
     public static final double COMP_HEIGHT_AT_UPPER_LIMIT_SWITCH = 201.5;
     public static final double PROCESSOR_HEIGHT_CENTIMETERS = 20;
     public static final double ELEVATOR_THRESHOLD = 1.5;
-    public static final double METERS_FROM_POSE_TO_RAISE_ELEVATOR = 2.5;
+    public static final double METERS_FROM_POSE_TO_RAISE_ELEVATOR = 1.5;
     
     //reef heights that are for when we are against the reef
     public static final double REEF_LEVEL_1_CENTIMETERS_AGAINST_REEF = 54.85;
@@ -558,7 +558,7 @@ public final class Constants {
     //reef heights that are for when we are about a corals width from the reef
     public static final double REEF_LEVEL_1_CENTIMETERS_AWAY_FROM_REEF = 54.85;
     public static final double REEF_LEVEL_2_CENTIMETERS_AWAY_FROM_REEF = 92.2;//93.5 from 10k//90.5;//84.1 for a 2x4 away from reef
-    public static final double REEF_LEVEL_3_CENTIMETERS_AWAY_FROM_REEF = 131;//132;//130.2;
+    public static final double REEF_LEVEL_3_CENTIMETERS_AWAY_FROM_REEF = 133.7;//132;//130.2;
     public static final double REEF_LEVEL_4_CENTIMETERS_AWAY_FROM_REEF = 194;//194.28;//194;//182.69;
 
     public static final double MOTION_MAGIC_ELEVATOR_HIGH_VELOCITY = 300;
