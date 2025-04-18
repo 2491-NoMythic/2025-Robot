@@ -127,8 +127,8 @@ public final class Constants {
      * The formula for calculating the theoretical maximum velocity is:
      * <Motor free speed RPM> / 60 * <Drive reduction> * <Wheel diameter meters> * pi
      */
-    public static final double MAX_VELOCITY_METERS_PER_SECOND =
-        8000.0 / 60.0 * DRIVETRAIN_DRIVE_REDUCTION * DRIVETRAIN_WHEEL_DIAMETER * Math.PI;
+    public static final double MAX_VELOCITY_METERS_PER_SECOND = 
+       8000.0 / 60.0 * DRIVETRAIN_DRIVE_REDUCTION * DRIVETRAIN_WHEEL_DIAMETER * Math.PI;
     /** The drive motor sensor value at a 100% duty cycle output in a straight line. */
     public static final double MAX_VELOCITY_RPS_EMPIRICAL = 15.697;
     /**
@@ -426,7 +426,7 @@ public final class Constants {
     public static final Pose2d ReefBRed = new Pose2d(14.477, 4.289, Rotation2d.fromDegrees(180));
     public static final Pose2d ReefCRed = new Pose2d(13.835, 5.227, Rotation2d.fromDegrees(-120));
     public static final Pose2d ReefDRed = new Pose2d(13.533, 5.389, Rotation2d.fromDegrees(-120));
-    public static final Pose2d ReefERed = new Pose2d(12.390, 5.290, Rotation2d.fromDegrees(-60));
+    public static final Pose2d ReefERed = new Pose2d(12.390+0.017, 5.290+0.01, Rotation2d.fromDegrees(-60));
     public static final Pose2d ReefFRed = new Pose2d(12.106, 5.106, Rotation2d.fromDegrees(-60));
     public static final Pose2d ReefGRed = new Pose2d(11.630, 4.078, Rotation2d.fromDegrees(0));
     public static final Pose2d ReefHRed = new Pose2d(11.645, 3.746, Rotation2d.fromDegrees(0));
@@ -553,7 +553,7 @@ public final class Constants {
     public static final double REEF_LEVEL_1_CENTIMETERS_AGAINST_REEF = 54.85;
     public static final double REEF_LEVEL_2_CENTIMETERS_AGAINST_REEF = 85.7;//81.23;
     public static final double REEF_LEVEL_3_CENTIMETERS_AGAINST_REEF = 125.6;//126.2;//122.6;
-    public static final double REEF_LEVEL_3_ALGAE_CENTIMETERS_AGAINST_REEF = 110.68;//122.6;
+    public static final double REEF_LEVEL_3_ALGAE_CENTIMETERS_AGAINST_REEF = 105;//122.6;
     public static final double REEF_LEVEL_4_CENTIMETERS_AGAINST_REEF = 189.1;//188.7;//182.69;
     public static final double BARGE_SHOOT_CENTIMETERS = 194.5;
 
