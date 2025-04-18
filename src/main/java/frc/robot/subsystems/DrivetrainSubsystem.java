@@ -24,6 +24,7 @@ import static frc.robot.settings.Constants.DriveConstants.FL_STEER_MOTOR_ID;
 import static frc.robot.settings.Constants.DriveConstants.FR_DRIVE_MOTOR_ID;
 import static frc.robot.settings.Constants.DriveConstants.FR_STEER_ENCODER_ID;
 import static frc.robot.settings.Constants.DriveConstants.FR_STEER_MOTOR_ID;
+import static frc.robot.settings.Constants.DriveConstants.MAX_VELOCITY_METERS_PER_SECOND;
 import static frc.robot.settings.Constants.DriveConstants.ROBOT_ANGLE_TOLERANCE;
 import static frc.robot.settings.Constants.ElevatorConstants.METERS_FROM_POSE_TO_RAISE_ELEVATOR;
 import static frc.robot.settings.Constants.Field.*;
@@ -300,7 +301,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   
   public void setModuleStates(SwerveModuleState[] desiredStates) {
     SwerveDriveKinematics.desaturateWheelSpeeds(
-        desiredStates, DriveConstants.MAX_VELOCITY_METERS_PER_SECOND);
+        desiredStates, MAX_VELOCITY_METERS_PER_SECOND);
     for (int i = 0; i < 4; i++) {
       setModule(i, desiredStates[i]);
     }
@@ -512,8 +513,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("TARGETINGPOSE/adjustedxspeedAlliance", xSpeed);
     //if the elevator is about to be up, limit the speed to 2 meters per second. Otherwise, limit speed to 3.5 meters per second
     if(DriverStation.isAutonomous()) {
-      xSpeed = MythicalMath.absoluteCap(xSpeed, 1.2);
-      ySpeed = MythicalMath.absoluteCap(ySpeed, 1.2);
+      xSpeed = MythicalMath.absoluteCap(xSpeed, 1.75);
+      ySpeed = MythicalMath.absoluteCap(ySpeed, 1.75);
     } else {
       xSpeed = MythicalMath.absoluteCap(xSpeed, 1.5);
       ySpeed = MythicalMath.absoluteCap(ySpeed, 1.5);

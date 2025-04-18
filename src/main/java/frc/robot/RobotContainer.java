@@ -606,7 +606,6 @@ public class RobotContainer {
           new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer), elevator), //sets elevator back to the bottom position
           new InstantCommand(()->RobotState.getInstance().reefLineupRunning = false))
       ).onFalse(new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer)));
-      SmartDashboard.putNumber("TUNING/driveBackTimeAlgaePickup", 0.4);
       new Trigger(()->CoralPlaceTeleSupplier.getAsBoolean() && RobotState.getInstance().goForAlgae && (RobotState.getInstance().deliveringCoralHeight==ElevatorEnums.Reef4 || RobotState.getInstance().deliveringCoralHeight == ElevatorEnums.Reef3)).whileTrue(
         new SequentialCommandGroup(
           new InstantCommand(()->coralEndDefector.stopCoralEndEffector(), coralEndDefector),
@@ -621,8 +620,8 @@ public class RobotContainer {
                       new WaitCommand(()->0.25),
                       new InstantCommand(()->elevator.setElevatorPositionWithAlgae(ElevatorEnums.Reef3Algae), elevator),//raises elevator to position)
                       new WaitUntil(()->elevator.isElevatorAtPose()),
-                      // new InstantCommand(()->driveTrain.drive(new ChassisSpeeds(-0.5, 0, 0))),
-                      // new WaitCommand(()->SmartDashboard.getNumber("TUNING/driveBackTimeAlgaePickup", 0.5)),
+                      new InstantCommand(()->driveTrain.drive(new ChassisSpeeds(-0.5, 0, 0))),
+                      new WaitCommand(()->0.4),
                       new DriveToPose(()->selectCommand(()->RobotState.getInstance().deliveringLeft), driveTrain, ()->0),
                       new InstantCommand(()->elevator.setElevatorPosition(RobotState.getInstance().deliveringCoralHeight), elevator),
                       new WaitUntil(()->elevator.isElevatorAtPose())),
@@ -815,14 +814,14 @@ public class RobotContainer {
       coralHandlingCommand = new ParallelRaceGroup(
           new SequentialCommandGroup(
               new CoralIntake(elevator, funnelIntake, coralEndDefector),
-              new PassCoralToEndEffectorSequential(coralEndDefector, funnelIntake),
-              new InstantCommand(() -> elevator.setElevatorPosition(ElevatorEnums.Reef2), elevator)),
+              new PassCoralToEndEffectorSequential(coralEndDefector, funnelIntake)),
+              // new InstantCommand(() -> elevator.setElevatorPosition(ElevatorEnums.Reef2), elevator)),
           new WaitCommand(() -> 3));
       coralHandlingCommandL2 = new ParallelRaceGroup(
           new SequentialCommandGroup(
               new CoralIntake(elevator, funnelIntake, coralEndDefector),
-              new PassCoralToEndEffectorSequential(coralEndDefector, funnelIntake),
-              new InstantCommand(() -> elevator.setElevatorPosition(ElevatorEnums.Reef2), elevator)),
+              new PassCoralToEndEffectorSequential(coralEndDefector, funnelIntake)),
+              // new InstantCommand(() -> elevator.setElevatorPosition(ElevatorEnums.Reef2), elevator)),
           new WaitCommand(() -> 3));
       placeWithLineupWithAlgaeL4 = new SequentialCommandGroup(
         new ScoreWhileCollectingAlgae(coralEndDefector, algaeEndDefector, driveTrain, elevator, ()->selectCommand(()->true), ()->ElevatorEnums.Reef4),
@@ -898,7 +897,7 @@ public class RobotContainer {
     }
 
     if(elevatorExists) {
-      raiseElevatorNamedCommand = new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.Reef2), elevator);
+      raiseElevatorNamedCommand = new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer), elevator);
       elevatorResetNamedCommand = new SequentialCommandGroup(
         new InstantCommand(()->elevator.setElevatorPositionDynamicConfigs(HUMAN_PLAYER_STATION_CENTIMETERS, MOTION_MAGIC_ELEVATOR_HIGH_ACCLERATION, MOTION_MAGIC_ELEVATOR_VELOCITY, MOTION_MAGIC_ELEVATOR_JERK), elevator),
         new WaitCommand(()->0.2));
@@ -971,7 +970,7 @@ public class RobotContainer {
         new ParallelRaceGroup(
             new ParallelCommandGroup(
               new InstantCommand(() -> funnelIntake.runFunnelSine(), funnelIntake),
-              new WaitUntilCommand(0.75)),
+              new WaitUntilCommand(0.1)),
             new WaitUntilCommand(() -> RobotState.getInstance().isCoralSeen())));
   }
 
