@@ -201,9 +201,9 @@ public class Lights extends SubsystemBase {
 
   private void updateBlinkedLights() {
     if (blinkLights) {
-      if (timer.get() < 0.5) {
+      if (timer.get() < 0.1) {
         setSystemLights(lightsToBlink, blinkedRed, blinkedGreen, blinkedBlue);
-      } else if (timer.get() < 1) {
+      } else if (timer.get() < 0.2) {
         setSystemLights(lightsToBlink, 0, 0, 0);
       } else {
         timer.reset();

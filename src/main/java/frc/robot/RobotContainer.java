@@ -59,6 +59,7 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AutoAngleAtReef;
+import frc.robot.commands.ClimbedLights;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.ClimberCommandGroup;
 import frc.robot.commands.DepositAlgae;
@@ -92,6 +93,7 @@ import frc.robot.commands.ScoreWhileCollectingAlgae;
 import frc.robot.commands.ShootInBarge;
 import frc.robot.commands.WaitCommand;
 import frc.robot.commands.WaitUntil;
+import frc.robot.commands.blinkWhiteLights;
 import frc.robot.subsystems.DistanceSensors;
 import frc.robot.commands.NamedCommands.CoralIntake;
 import frc.robot.commands.NamedCommands.DeliverCoral;
@@ -700,7 +702,8 @@ public class RobotContainer {
     }
 
     if(lightsExist) {
-      new Trigger(()->RobotState.getInstance().climbed).whileTrue(new FunClimbedLights(lights));
+      new Trigger(()->RobotState.getInstance().climbed).whileTrue(new ClimbedLights(lights));
+      new Trigger(()->RobotState.getInstance().coralAligned).whileTrue(new blinkWhiteLights(lights));
     }
 
     if(elevatorExists){
