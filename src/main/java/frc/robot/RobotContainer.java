@@ -25,6 +25,7 @@ import static frc.robot.settings.Constants.PS4Driver.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathPlannerPath;
@@ -553,7 +554,6 @@ public class RobotContainer {
         return true;
       };
     };
-  
     InstantCommand zeroGyroscope = new InstantCommand(driveTrain::zeroGyroscope) {
       public boolean runsWhenDisabled() {
         return true;
@@ -785,10 +785,15 @@ public class RobotContainer {
     Command placeWithLineupLeftL4;
     Command placeWithLineupLeftL2;
     Command driveForwardForHalfSec;
+    Command collectAlgae;
     if(elevatorExists&&funnelIntakeExists&&coralEndeffectorExists&&algaeEndeffectorExists) {
       // this command will raise the elevator after the coral has been lined up in the
       // end effector, and more than 1 second has passed (s wer are not stlil
       // accelerating)
+      collectAlgae = new ParallelCommandGroup(
+        new AlgaeIntakeCommand(algaeEndDefector, AlgaeDriveSup),
+        new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.Reef3), elevator)
+        );
       placeWithLineupRightL4 = new PlaceCoralDuringLineupSequential(algaeEndDefector, driveTrain, elevator,
           coralEndDefector, () -> selectCommand(() -> false), () -> ElevatorEnums.Reef4);
       placeWithLineupLeftL4 = new PlaceCoralDuringLineupSequential(algaeEndDefector, driveTrain, elevator,
@@ -835,6 +840,7 @@ public class RobotContainer {
         new InstantCommand(()->algaeEndDefector.runAlgaeEndDefector(0), algaeEndDefector),
         new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer), elevator));
     } else {
+      collectAlgae = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
       coralHandlingCommandL2 = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
       coralHandlingCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
       deliverCoralLeft1NamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
@@ -898,7 +904,7 @@ public class RobotContainer {
       lineUpCoralNamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist (attempted lineUpCoralInEndeffector)"));
     }
 
-  
+    NamedCommands.registerCommand("CollectAlgae", collectAlgae);
     NamedCommands.registerCommand("LineUpCoralInEndeffector", lineUpCoralNamedCommand);
     NamedCommands.registerCommand("CoralIntake", coralIntakeNamedCommand);
     NamedCommands.registerCommand("DeliverCoralLeft1", deliverCoralLeft1NamedCommand);

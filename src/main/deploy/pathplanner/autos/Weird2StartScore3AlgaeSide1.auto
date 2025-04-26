@@ -1,0 +1,97 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "WeirdMiddleStartToG"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CollectAlgae"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "WeirdReefGToBarge"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoBargeShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "WeirdBargeToReefI"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CollectAlgae"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ReefIToBarge"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoBargeShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BargeToReefE"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CollectAlgae"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ReefEToBarge"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoBargeShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MoveBack"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": null
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
