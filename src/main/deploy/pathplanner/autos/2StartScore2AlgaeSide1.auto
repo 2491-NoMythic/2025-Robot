@@ -7,6 +7,12 @@
         {
           "type": "named",
           "data": {
+            "name": "AlgaeEndEffectorRelease"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "PlaceWithLineupWithAlgaeL3"
           }
         },
@@ -31,7 +37,7 @@
         {
           "type": "named",
           "data": {
-            "name": "PlaceWithLineupWithAlgaeL3"
+            "name": "CollectAlgaeL3"
           }
         },
         {

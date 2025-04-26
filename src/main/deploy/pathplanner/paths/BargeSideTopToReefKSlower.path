@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.4106099793295668,
-        "y": 6.483955630850474
+        "x": 2.262,
+        "y": 6.881749999999999
       },
       "isLocked": false,
       "linkedName": "BargeSideTopFeeder"
@@ -20,8 +20,8 @@
         "y": 5.9945
       },
       "prevControl": {
-        "x": 2.9949847877879043,
-        "y": 6.249926856074843
+        "x": 2.93475,
+        "y": 6.6575
       },
       "nextControl": null,
       "isLocked": false,
@@ -41,7 +41,7 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0.0,
+    "velocity": 1.5,
     "rotation": -59.99999999999999
   },
   "reversed": false,

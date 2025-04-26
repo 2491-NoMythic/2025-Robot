@@ -61,10 +61,10 @@ public class Drive extends Command {
       drivetrain.drive(
           new ChassisSpeeds(
               translationXSupplier.getAsDouble()
-                  * DriveConstants.MAX_VELOCITY_METERS_PER_SECOND
+                  * (DriveConstants.MAX_VELOCITY_METERS_PER_SECOND)
                   * invert,
               translationYSupplier.getAsDouble()
-                  * DriveConstants.MAX_VELOCITY_METERS_PER_SECOND
+                  * (DriveConstants.MAX_VELOCITY_METERS_PER_SECOND)
                   * invert,
               rotationSupplier.getAsDouble()
                   * DriveConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND));
@@ -72,10 +72,10 @@ public class Drive extends Command {
       drivetrain.drive(
           ChassisSpeeds.fromFieldRelativeSpeeds(
               translationXSupplier.getAsDouble()
-                  * DriveConstants.MAX_VELOCITY_METERS_PER_SECOND
+                  * (DriveConstants.MAX_VELOCITY_METERS_PER_SECOND)
                   * invert,
               translationYSupplier.getAsDouble()
-                  * DriveConstants.MAX_VELOCITY_METERS_PER_SECOND
+                  * (DriveConstants.MAX_VELOCITY_METERS_PER_SECOND)
                   * invert,
               rotationSupplier.getAsDouble()
                   * DriveConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,

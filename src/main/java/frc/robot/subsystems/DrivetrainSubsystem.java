@@ -24,6 +24,7 @@ import static frc.robot.settings.Constants.DriveConstants.FL_STEER_MOTOR_ID;
 import static frc.robot.settings.Constants.DriveConstants.FR_DRIVE_MOTOR_ID;
 import static frc.robot.settings.Constants.DriveConstants.FR_STEER_ENCODER_ID;
 import static frc.robot.settings.Constants.DriveConstants.FR_STEER_MOTOR_ID;
+import static frc.robot.settings.Constants.DriveConstants.MAX_VELOCITY_METERS_PER_SECOND;
 import static frc.robot.settings.Constants.DriveConstants.ROBOT_ANGLE_TOLERANCE;
 import static frc.robot.settings.Constants.ElevatorConstants.METERS_FROM_POSE_TO_RAISE_ELEVATOR;
 import static frc.robot.settings.Constants.Field.*;
@@ -302,7 +303,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   
   public void setModuleStates(SwerveModuleState[] desiredStates) {
     SwerveDriveKinematics.desaturateWheelSpeeds(
-        desiredStates, DriveConstants.MAX_VELOCITY_METERS_PER_SECOND);
+        desiredStates, MAX_VELOCITY_METERS_PER_SECOND);
     for (int i = 0; i < 4; i++) {
       setModule(i, desiredStates[i]);
     }
@@ -476,11 +477,21 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @param vx the field relative speed, in meters per second, for the drivetrain to move
    * @param vy the field relative speed, in meters per second, for the drivetrain to move
    */
-  public void moveTowardsRotationTarget(double vx, double vy) {
+  public void moveTowardsRotationTargetFieldRelative(double vx, double vy) {
     drive(ChassisSpeeds.fromFieldRelativeSpeeds(new ChassisSpeeds(vx, vy, rotationSpeedController.calculate(getPose().getRotation().getDegrees())), getAllianceSpecificRotation()));
   }
+  /** Applies power to the motors to rotate the robot to the angle set by 
+   * {@link #setRotationTarget(double) setRotationTarget} <p>
+   * positive x is away from robot forward
+   * positive y is robot left
+   * @param vx the field relative speed, in meters per second, for the drivetrain to move
+   * @param vy the field relative speed, in meters per second, for the drivetrain to move
+   */
+  public void moveTowardsRotationTargetRobotRelative(double vx, double vy) {
+    drive(new ChassisSpeeds(vx, vy, rotationSpeedController.calculate(getPose().getRotation().getDegrees())));
+  }
   /**
-   * moves toward a position and rotation using {@link #moveTowardsRotationTarget(double, double)}. The position is set as if 0 degrees is away from
+   * moves toward a position and rotation using {@link #moveTowardsRotationTargetFieldRelative(double, double)}. The position is set as if 0 degrees is away from
    * the Blue alliance Wall, positive x is towards red alliance, and positive Y is to the left of the blue drivers
    * @param pose
    */
@@ -504,8 +515,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("TARGETINGPOSE/adjustedxspeedAlliance", xSpeed);
     //if the elevator is about to be up, limit the speed to 2 meters per second. Otherwise, limit speed to 3.5 meters per second
     if(DriverStation.isAutonomous()) {
-      xSpeed = MythicalMath.absoluteCap(xSpeed, 1.2);
-      ySpeed = MythicalMath.absoluteCap(ySpeed, 1.2);
+      xSpeed = MythicalMath.absoluteCap(xSpeed, 1.75);
+      ySpeed = MythicalMath.absoluteCap(ySpeed, 1.75);
     } else {
       xSpeed = MythicalMath.absoluteCap(xSpeed, 1.5);
       ySpeed = MythicalMath.absoluteCap(ySpeed, 1.5);
@@ -513,7 +524,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("TARGETINGPOSE/yspeed", ySpeed);
     SmartDashboard.putNumber("TARGETINGPOSE/xspeed", xSpeed);
     //drive!
-    moveTowardsRotationTarget(xSpeed, ySpeed);
+    moveTowardsRotationTargetFieldRelative(xSpeed, ySpeed);
   }
   /**
    * moves toward a position and rotation using the BARGE_POSE in constnats for red or blue alliance.
@@ -543,7 +554,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("TARGETINGPOSE/yspeed", ySpeed);
     SmartDashboard.putNumber("TARGETINGPOSE/xspeed", xSpeed);
     //drive!
-    moveTowardsRotationTarget(xSpeed, ySpeed);
+    moveTowardsRotationTargetFieldRelative(xSpeed, ySpeed);
   }
   /**
    * gets the total distance from the targeted pose and the robot's pose, by finding the hypotenuse of x error and y error <p>

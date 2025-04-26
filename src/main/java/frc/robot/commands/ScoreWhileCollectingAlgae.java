@@ -38,6 +38,7 @@ public class ScoreWhileCollectingAlgae extends SequentialCommandGroup {
       new InstantCommand(()->RobotState.getInstance().goForAlgae = true),
       new InstantCommand(()->coralEndDefector.stopCoralEndEffector(), coralEndDefector),
       new InstantCommand(()->elevator.setElevatorPositionDynamicConfigs(HUMAN_PLAYER_STATION_CENTIMETERS+10, MOTION_MAGIC_ELEVATOR_HP_ACCLERATION, MOTION_MAGIC_ELEVATOR_HP_VELOCITY, MOTION_MAGIC_ELEVATOR_JERK), elevator),
+      new InstantCommand(()->algaeEndDefector.runAlgaeEndDefector(ALGAE_INTAKE_SPEED), algaeEndDefector),
       new DriveToPose(placementLocationSupplier, driveTrain, ()->0),
       new InstantCommand(()->driveTrain.drive(new ChassisSpeeds(0.7, 0, 0))),
       new ParallelRaceGroup(
