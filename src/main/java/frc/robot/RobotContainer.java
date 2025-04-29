@@ -18,6 +18,9 @@ import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVAT
 import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_HP_VELOCITY;
 import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_JERK;
 import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_VELOCITY;
+import static frc.robot.settings.Constants.ElevatorConstants.REEF_LEVEL_3_ALGAE_CENTIMETERS_AGAINST_REEF;
+import static frc.robot.settings.Constants.Field.REEF_POSITION_THRESHOLD;
+import static frc.robot.settings.Constants.FunnelConstants.FUNNEL_INTAKE_SPEED;
 import static frc.robot.settings.Constants.PS4Driver.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -598,19 +601,21 @@ public class RobotContainer {
           new InstantCommand(()->coralEndDefector.stopCoralEndEffector(), coralEndDefector),
           new InstantCommand(()->elevator.setElevatorPositionDynamicConfigs(HUMAN_PLAYER_STATION_CENTIMETERS+10, MOTION_MAGIC_ELEVATOR_HP_ACCLERATION, MOTION_MAGIC_ELEVATOR_HP_VELOCITY, MOTION_MAGIC_ELEVATOR_JERK), elevator),
           new InstantCommand(()->algaeEndDefector.runAlgaeEndDefector(ALGAE_INTAKE_SPEED), algaeEndDefector),
-          new DriveToPose(()->selectCommand(()->RobotState.getInstance().deliveringLeft), driveTrain, ()->0),
+          new ParallelCommandGroup(
+            new DriveToPose(()->selectCommand(()->RobotState.getInstance().deliveringLeft), driveTrain, ()->0),
+            new SequentialCommandGroup(
+              new InstantCommand(()->elevator.setElevatorPosition(()->getAlgaeHeight())),
+              new WaitUntil(()->elevator.isElevatorAtPose()))),
           new InstantCommand(()-> driveTrain.drive(new ChassisSpeeds(0.7, 0, 0))),
           new ParallelRaceGroup(
               new AlgaeIntakeCommand(algaeEndDefector, () -> RobotState.getInstance().goForAlgae ? ALGAE_INTAKE_SPEED : -0.5),
               new SequentialCommandGroup(
                   new SequentialCommandGroup(
                       new WaitCommand(()->0.25),
-                      new InstantCommand(()->elevator.setElevatorPositionWithAlgae(ElevatorEnums.Reef3Algae), elevator),//raises elevator to position)
-                      new WaitUntil(()->elevator.isElevatorAtPose()),
                       new InstantCommand(()->driveTrain.drive(new ChassisSpeeds(-0.5, 0, 0))),
                       new WaitCommand(()->0.4),
-                      new DriveToPose(()->selectCommand(()->RobotState.getInstance().deliveringLeft), driveTrain, ()->0),
                       new InstantCommand(()->elevator.setElevatorPosition(RobotState.getInstance().deliveringCoralHeight), elevator),
+                      new DriveToPose(()->selectCommand(()->RobotState.getInstance().deliveringLeft), driveTrain, ()->0),
                       new WaitUntil(()->elevator.isElevatorAtPose())),
                   new ParallelRaceGroup(
                       new DeliverCoral(coralEndDefector),//drops coral
@@ -1023,6 +1028,24 @@ public class RobotContainer {
           e.printStackTrace();
           pathFindToReef = new InstantCommand(()->System.out.println("Error thrown while creating path!!"));
         }
+  }
+  public static double getAlgaeHeight(){
+    switch (RobotState.getInstance().closestReefSide) {
+      case middleFar:
+      case bargeClose:
+      case processorClose:
+
+      return 75;
+
+      case middleClose:
+      case processorFar:
+      case bargeFar:
+
+      return 98;
+    
+      default:
+        return 90;
+    }
   }
   public static PlacementLocations selectCommand(BooleanSupplier LeftSupplier) {
     switch(RobotState.getInstance().closestReefSide){
