@@ -1,0 +1,49 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "PlaceWithLineupWithAlgaeL4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "StealReefGToBarge"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoBargeShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CrossToSteal"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ReturnFromStealAlgae"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoBargeShoot"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

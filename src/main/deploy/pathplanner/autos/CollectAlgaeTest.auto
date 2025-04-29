@@ -1,0 +1,31 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Move Forward"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CollectAlgae"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Move Back"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
