@@ -27,16 +27,11 @@ public class DepositAlgaeSequential extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ParallelDeadlineGroup(
         new SequentialCommandGroup(
           new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.AlgaeInProcessor)),
           new WaitUntil(()->elevator.isElevatorAtPose() && drivetrain.getPositionTargetingError() < 0.05),
           new InstantCommand(()->algaeEndEffector.runAlgaeEndDefector(-0.5)),
-          new WaitCommand(0.6),
-          new InstantCommand(()->algaeEndEffector.runAlgaeEndDefector(0.1))
-          ), 
-        new DriveToPose(()->PlacementLocations.Processor, drivetrain, ()->0)),
-      new DriveTimeCommand(1, 0, 0, 1, drivetrain)
-    );
+          new DriveTimeCommand(0.067, 0, 0, 1, drivetrain),
+          new DriveTimeCommand(-0.05, 0, 0, 1, drivetrain)));
   }
 }
