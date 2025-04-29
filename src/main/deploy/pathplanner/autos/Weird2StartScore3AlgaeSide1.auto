@@ -7,19 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "WeirdMiddleStartToG"
+            "pathName": "MiddleStartToG"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "CollectAlgae"
+            "name": "PlaceWithLineupWithAlgaeL4"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "WeirdReefGToBarge"
+            "pathName": "OptimizedReefGToBarge"
           }
         },
         {
@@ -80,12 +80,6 @@
           "type": "path",
           "data": {
             "pathName": "MoveBack"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": null
           }
         }
       ]

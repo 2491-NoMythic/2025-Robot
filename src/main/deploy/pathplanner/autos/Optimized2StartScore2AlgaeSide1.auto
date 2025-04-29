@@ -5,15 +5,15 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "PlaceWithLineupWithAlgaeL3"
+            "pathName": "MiddleStartToG"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "RaiseElevator"
+            "name": "PlaceWithLineupWithAlgaeL4"
           }
         },
         {
@@ -50,36 +50,6 @@
           "type": "named",
           "data": {
             "name": "AutoBargeShoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "BargeToReefE"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "PlaceWithLineupWithAlgaeL3"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "ReefEToBarge"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoBargeShoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "MoveBack"
           }
         }
       ]
