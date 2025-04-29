@@ -86,6 +86,6 @@
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "OptimizedAutos",
   "choreoAuto": false
 }

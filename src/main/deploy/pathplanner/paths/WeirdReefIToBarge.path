@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.404508196721311,
-        "y": 1.9091700819672122
+        "x": 5.155,
+        "y": 5.098
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.502386744506254,
-        "y": 1.1380524678583583
+        "x": 6.2439718591076465,
+        "y": 4.664622741678338
       },
       "isLocked": false,
-      "linkedName": "ReefD"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.16025,
-        "y": 0.9732499999999993
+        "x": 7.1566598360655735,
+        "y": 5.493
       },
       "prevControl": {
-        "x": 2.2021113667615007,
-        "y": 1.4175456452553643
+        "x": 6.437570726235281,
+        "y": 5.37653416750506
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "humanPlayerProcessor"
+      "linkedName": "Barge"
     }
   ],
   "rotationTargets": [],
@@ -41,14 +41,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0.25,
-    "rotation": 54.0
+    "velocity": 0,
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Optimized Paths",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 59.99999999999999
+    "rotation": -119.99999999999999
   },
   "useDefaultConstraints": true
 }

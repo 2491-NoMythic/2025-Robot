@@ -13,13 +13,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "processorStartToF"
+            "pathName": "MiddleStartToG"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "PlaceWithLineupRightL4"
+            "name": "PlaceWithLineupLeft"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SpitCoral"
           }
         },
         {
@@ -31,13 +37,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "reefFToHPSlower"
+            "pathName": "OptimizedGtoHP"
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "WaitForIntake"
+            "waitTime": 0.75
           }
         },
         {
@@ -47,7 +53,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "HPToDSlower"
+                  "pathName": "OptimizedBargeSideTopToReefKFaster"
                 }
               },
               {
@@ -62,7 +68,13 @@
         {
           "type": "named",
           "data": {
-            "name": "PlaceWithLineupRightL4"
+            "name": "PlaceWithLineupRight"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SpitCoral"
           }
         },
         {
@@ -74,13 +86,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "OptimizedreefDToHPSlower"
+            "pathName": "ReefKtoBargeSideTopFeederFaster"
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "WaitForIntake"
+            "waitTime": 0.75
           }
         },
         {
@@ -90,7 +102,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "OptimizedHPToCSlower"
+                  "pathName": "BargeSideToptoReefLFaster"
                 }
               },
               {
@@ -105,7 +117,13 @@
         {
           "type": "named",
           "data": {
-            "name": "PlaceWithLineupLeftL4"
+            "name": "PlaceWithLineupLeft"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SpitCoral"
           }
         },
         {

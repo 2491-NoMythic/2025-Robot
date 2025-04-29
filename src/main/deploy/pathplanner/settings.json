@@ -5,11 +5,13 @@
   "pathFolders": [
     "Blue Paths",
     "InitialPaths",
+    "Optimized Paths",
     "Red Paths",
     "ReefSideLineup"
   ],
   "autoFolders": [
-    "New Folder"
+    "New Folder",
+    "OptimizedAutos"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.9,

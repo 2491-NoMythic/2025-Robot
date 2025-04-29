@@ -43,7 +43,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "ReefIToBarge"
+            "pathName": "WeirdReefIToBarge"
           }
         },
         {
@@ -55,7 +55,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "BargeToReefE"
+            "pathName": "WeirdBargeToReefE"
           }
         },
         {
@@ -67,7 +67,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "ReefEToBarge"
+            "pathName": "WeirdReefEToBarge"
           }
         },
         {
@@ -92,6 +92,6 @@
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "OptimizedAutos",
   "choreoAuto": false
 }
