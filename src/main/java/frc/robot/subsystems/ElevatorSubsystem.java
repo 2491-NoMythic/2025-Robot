@@ -33,6 +33,7 @@ import frc.robot.subsystems.RobotState;
 import static frc.robot.settings.Constants.DriveConstants.CANIVORE_DRIVETRAIN;
 import static frc.robot.settings.Constants.ElevatorConstants.*;
 
+import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -160,6 +161,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     MotionMagicVoltage request = new MotionMagicVoltage(targetHeight);
 
     elevatorMotor1.setControl(request);
+  }
+  public void setElevatorPosition(DoubleSupplier height){
+    setElevatorPosition(height.getAsDouble());
   }
   public void setElevatorPositionDynamicConfigs(double height, double acceleration, double velocity, double jerk) {
     double targetHeight = calculateRotations(height);
