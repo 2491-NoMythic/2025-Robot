@@ -20,6 +20,7 @@ import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVAT
 import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_HP_VELOCITY;
 import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_JERK;
 import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_VELOCITY;
+import static frc.robot.settings.Constants.ElevatorConstants.REEF_LEVEL_3_ALGAE_CENTIMETERS_AGAINST_REEF;
 import static frc.robot.settings.Constants.Field.REEF_POSITION_THRESHOLD;
 import static frc.robot.settings.Constants.FunnelConstants.FUNNEL_INTAKE_SPEED;
 import static frc.robot.settings.Constants.PS4Driver.*;
@@ -704,7 +705,7 @@ public class RobotContainer {
     }
 
     if(elevatorExists){
-      new Trigger(ForceElevator).onTrue(new InstantCommand(()-> elevator.setElevatorPosition(RobotState.getInstance().deliveringCoralHeight), elevator)).onFalse(new InstantCommand(()-> elevator.setElevatorPosition(ElevatorEnums.HumanPlayer), elevator));
+      new Trigger(ForceElevator).onTrue(new InstantCommand(()-> elevator.setElevatorPosition(REEF_LEVEL_3_ALGAE_CENTIMETERS_AGAINST_REEF-7), elevator)).onFalse(new InstantCommand(()-> elevator.setElevatorPosition(ElevatorEnums.HumanPlayer), elevator));
       new Trigger(ForceElevatorUp).whileTrue(new InstantCommand(()-> elevator.setVoltage(5), elevator)).onFalse(new InstantCommand(()-> elevator.setVoltage(0), elevator));
       new Trigger(ForceElevatorDown).whileTrue(new InstantCommand(()-> elevator.setVoltage(-1.2), elevator)).onFalse(new InstantCommand(()-> elevator.setVoltage(0), elevator));
       // new Trigger(()->elevator.limitSwitchTrig()).onTrue(new ElevatorReset(elevator));
