@@ -33,6 +33,7 @@ import frc.robot.subsystems.RobotState;
 import static frc.robot.settings.Constants.DriveConstants.CANIVORE_DRIVETRAIN;
 import static frc.robot.settings.Constants.ElevatorConstants.*;
 
+import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -161,6 +162,9 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     elevatorMotor1.setControl(request);
   }
+  public void setElevatorPosition(DoubleSupplier height){
+    setElevatorPosition(height.getAsDouble());
+  }
   public void setElevatorPositionDynamicConfigs(double height, double acceleration, double velocity, double jerk) {
     double targetHeight = calculateRotations(height);
     elevatorTarget = height;
@@ -236,7 +240,7 @@ public class ElevatorSubsystem extends SubsystemBase {
    // TODO: may need speedup
   public void setElevatorPositionWithAlgae(ElevatorEnums height){
     final double algaeAcceleration = MOTION_MAGIC_ELEVATOR_HIGH_ACCLERATION;
-    final double algaeVelocity = MOTION_MAGIC_ELEVATOR_HIGH_VELOCITY-200;//150;
+    final double algaeVelocity = MOTION_MAGIC_ELEVATOR_HIGH_VELOCITY-150;
     switch(height){
       case Reef1:
       setElevatorPositionDynamicConfigs(REEF_LEVEL_1_CENTIMETERS_AGAINST_REEF, algaeAcceleration, algaeVelocity, 0);
