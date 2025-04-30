@@ -11,12 +11,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "CollectAlgae"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Move Back"

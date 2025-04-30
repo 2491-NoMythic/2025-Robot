@@ -23,6 +23,7 @@ import static frc.robot.settings.Constants.Field.REEF_POSITION_THRESHOLD;
 import static frc.robot.settings.Constants.FunnelConstants.FUNNEL_INTAKE_SPEED;
 import static frc.robot.settings.Constants.PS4Driver.*;
 
+import com.google.flatbuffers.Constants;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathfindingCommand;
@@ -790,10 +791,15 @@ public class RobotContainer {
       // this command will raise the elevator after the coral has been lined up in the
       // end effector, and more than 1 second has passed (s wer are not stlil
       // accelerating)
-      collectAlgae = new ParallelCommandGroup(
-        new AlgaeIntakeCommand(algaeEndDefector, AlgaeDriveSup),
-        new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.Reef3), elevator)
-        );
+      collectAlgae = new SequentialCommandGroup(
+        new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.Reef3)),
+        new ParallelRaceGroup(
+          new AlgaeIntakeCommand(algaeEndDefector, ()->ALGAE_INTAKE_SPEED),
+          new WaitCommand(()->5)
+        ),
+        new  InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer))
+      );
+      
       placeWithLineupRightL4 = new PlaceCoralDuringLineupSequential(algaeEndDefector, driveTrain, elevator,
           coralEndDefector, () -> selectCommand(() -> false), () -> ElevatorEnums.Reef4);
       placeWithLineupLeftL4 = new PlaceCoralDuringLineupSequential(algaeEndDefector, driveTrain, elevator,
