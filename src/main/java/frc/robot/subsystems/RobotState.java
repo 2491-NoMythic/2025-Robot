@@ -2,6 +2,13 @@ package frc.robot.subsystems;
 
 import frc.robot.settings.ReefOffsetEnums;
 import frc.robot.settings.ReefSideEnum;
+import java.util.Optional;
+
+import javax.print.attribute.standard.MediaSize.Other;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import frc.robot.settings.ElevatorEnums;
 import frc.robot.settings.L1Enums;
 
@@ -41,6 +48,15 @@ public class RobotState {
     deliveringCoralHeight = ElevatorEnums.Reef1;
     L1selectedPosition = L1Enums.FarLeft;
     elevatorZeroSet = false;
+  }
+
+  public static boolean IsAlliance(Alliance alliance) {
+    Optional<Alliance> Current = DriverStation.getAlliance();
+    if (Current.isPresent()) {
+      return Current.get() == alliance;
+    } else {
+      return false;
+    }
   }
 
   public static RobotState getInstance() {
