@@ -6,12 +6,13 @@ package frc.robot.commands;
 
 import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.ALGAE_SHOOT_SPEED;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.settings.ElevatorEnums;
-import frc.robot.settings.PlacementLocations;
 import frc.robot.subsystems.AlgaeEndeffectorSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -25,16 +26,11 @@ public class DepositAlgaeSequential extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ParallelDeadlineGroup(
         new SequentialCommandGroup(
           new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.AlgaeInProcessor)),
           new WaitUntil(()->elevator.isElevatorAtPose() && drivetrain.getPositionTargetingError() < 0.05),
           new InstantCommand(()->algaeEndEffector.runAlgaeEndDefector(-0.5)),
-          new WaitCommand(0.6),
-          new InstantCommand(()->algaeEndEffector.runAlgaeEndDefector(0.1))
-          ), 
-        new DriveToPose(()->PlacementLocations.Processor, drivetrain, ()->0)),
-      new DriveTimeCommand(1, 0, 0, 1, drivetrain)
-    );
+          new DriveTimeCommand(-0.35, 0, 0, .66, drivetrain),
+          new DriveTimeCommand(0.4, 0, 0, 1, drivetrain)));
   }
 }
