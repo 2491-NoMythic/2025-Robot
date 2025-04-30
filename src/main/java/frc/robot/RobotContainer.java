@@ -793,10 +793,7 @@ public class RobotContainer {
       // accelerating)
       collectAlgae = new SequentialCommandGroup(
         new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.Reef3)),
-        new ParallelRaceGroup(
-          new AlgaeIntakeCommand(algaeEndDefector, ()->ALGAE_INTAKE_SPEED),
-          new WaitCommand(()->5)
-        ),
+        new AlgaeIntakeCommand(algaeEndDefector,()->ALGAE_INTAKE_SPEED).withTimeout(5),
         new  InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer))
       );
       
