@@ -871,6 +871,10 @@ public class RobotContainer {
         new InstantCommand(()->elevator.setElevatorPosition(REEF_LEVEL_3_ALGAE_HEIGHT))
       );
       collectAlgaeL3 = new SequentialCommandGroup(
+        new InstantCommand(()->driveTrain.drive(new ChassisSpeeds(1.5, 0, 0))),
+        new InstantCommand(()->algaeEndDefector.runAlgaeEndDefector(ALGAE_SHOOT_SPEED), algaeEndDefector),
+        new WaitCommand(()->0.25),
+        new InstantCommand(()->algaeEndDefector.stopAlgaeEndDefectorHard(), algaeEndDefector),
         new ScoreWhileCollectingAlgae(coralEndDefector, algaeEndDefector, driveTrain, elevator, ()->selectCommand(()->true), ()->ElevatorEnums.Reef3Algae),
         new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer))
       );
