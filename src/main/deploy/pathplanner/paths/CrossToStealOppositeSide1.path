@@ -8,24 +8,40 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.472750000000001,
-        "y": 5.897
+        "x": 8.5995,
+        "y": 5.67275
       },
       "isLocked": false,
       "linkedName": "Barge"
     },
     {
       "anchor": {
-        "x": 9.88985655737705,
-        "y": 5.577407786885245
+        "x": 9.8085,
+        "y": 5.5
       },
       "prevControl": {
-        "x": 9.266495901639344,
-        "y": 5.529456967213114
+        "x": 9.797506130975629,
+        "y": 5.749758152707524
+      },
+      "nextControl": {
+        "x": 9.841307777506533,
+        "y": 4.754674593056778
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 9.949795081967213,
+        "y": 2.220850409836065
+      },
+      "prevControl": {
+        "x": 9.754795081967213,
+        "y": 2.4841004098360666
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "CrossToStealHalfway"
+      "linkedName": "CrossToStealHalfwayOppositeSide"
     }
   ],
   "rotationTargets": [
@@ -53,7 +69,7 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 2.0,
+    "velocity": 1.0,
     "rotation": 0.0
   },
   "reversed": false,

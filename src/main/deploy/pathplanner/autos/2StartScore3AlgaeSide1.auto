@@ -17,12 +17,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "AutoBargeShoot"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -48,12 +42,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "AutoBargeShoot"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -76,12 +64,6 @@
           "type": "path",
           "data": {
             "pathName": "ReefEToBarge"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoBargeShoot"
           }
         },
         {
