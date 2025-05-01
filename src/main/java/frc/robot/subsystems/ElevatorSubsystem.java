@@ -141,6 +141,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     double rotationsFromGround = theDistance;
     zeroPoint = elevatorMotor1.getPosition().getValueAsDouble() - rotationsFromGround;   
   }
+  public double getHeightCentimeters() {
+    return elevatorMotor1.getPosition().getValueAsDouble();
+  }
   /**
    * sets the voltage of the elevator motor. It takes about 2 volts to move the elevator slowly up, and higher than 4 is dangerously fast
    * it takes about 1 volt to move the elevator slowly down, and lower than -2 is dangerously fast
@@ -257,7 +260,7 @@ public class ElevatorSubsystem extends SubsystemBase {
       }
       break;
       case Reef3Algae:
-        setElevatorPositionDynamicConfigs(REEF_LEVEL_3_ALGAE_CENTIMETERS_AGAINST_REEF, algaeAcceleration, algaeVelocity, 0);
+        setElevatorPositionDynamicConfigs(REEF_LEVEL_3_ALGAE_HEIGHT, algaeAcceleration, algaeVelocity, 0);
         break;
       case Reef4:
         setElevatorPositionDynamicConfigs(REEF_LEVEL_4_CENTIMETERS_AGAINST_REEF, algaeAcceleration, algaeVelocity, 0);

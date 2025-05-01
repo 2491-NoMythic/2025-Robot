@@ -1,0 +1,66 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.546500000000001,
+        "y": 5.06825
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.827971311475409,
+        "y": 5.9130635245901635
+      },
+      "isLocked": false,
+      "linkedName": "Barge"
+    },
+    {
+      "anchor": {
+        "x": 9.88985655737705,
+        "y": 5.577407786885245
+      },
+      "prevControl": {
+        "x": 9.266495901639344,
+        "y": 5.529456967213114
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "CrossToStealHalfway"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.3454157782516006,
+      "rotationDegrees": -0.9484090663294503
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "CollectAlgae",
+      "waypointRelativePos": 0.6987593052109184,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 2.0,
+    "rotation": -1.8217099874424303
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": false
+}

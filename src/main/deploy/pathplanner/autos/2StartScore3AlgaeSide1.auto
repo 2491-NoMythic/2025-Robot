@@ -1,0 +1,99 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "PlaceWithLineupWithAlgaeL3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ReefGToBarge"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoBargeShoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "CollectAlgae"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "BargeToReefIFor3Algae"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ReefIToBarge"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoBargeShoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "CollectAlgae"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "BargeToReefE"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ReefEToBarge"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoBargeShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MoveBack"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
