@@ -12,6 +12,7 @@ import static frc.robot.settings.Constants.ClimberConstants.CLIMBER_POWER_REVERS
 import static frc.robot.settings.Constants.ClimberConstants.CLIMBER_STRAIGHT_UP_ROTATIONS;
 import static frc.robot.settings.Constants.CoralEndeffectorConstants.CORAL_ENDEFFECTOR_SPEED;
 import static frc.robot.settings.Constants.DriveConstants.*;
+import static frc.robot.settings.Constants.ElevatorConstants.BARGE_SHOOT_CENTIMETERS;
 import static frc.robot.settings.Constants.ElevatorConstants.HUMAN_PLAYER_STATION_CENTIMETERS;
 import static frc.robot.settings.Constants.ElevatorConstants.METERS_FROM_POSE_TO_RAISE_ELEVATOR;
 import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_ACCLERATION;
@@ -20,7 +21,8 @@ import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVAT
 import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_HP_VELOCITY;
 import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_JERK;
 import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_VELOCITY;
-import static frc.robot.settings.Constants.ElevatorConstants.REEF_LEVEL_3_ALGAE_CENTIMETERS_AGAINST_REEF;
+import static frc.robot.settings.Constants.ElevatorConstants.REEF_LEVEL_2_ALGAE_HEIGHT;
+import static frc.robot.settings.Constants.ElevatorConstants.REEF_LEVEL_3_ALGAE_HEIGHT;
 import static frc.robot.settings.Constants.Field.REEF_POSITION_THRESHOLD;
 import static frc.robot.settings.Constants.FunnelConstants.FUNNEL_INTAKE_SPEED;
 import static frc.robot.settings.Constants.PS4Driver.*;
@@ -561,7 +563,7 @@ public class RobotContainer {
     SmartDashboard.putData(new InstantCommand(driveTrain::forceUpdateOdometryWithVision));
     if(coralEndeffectorExists&&funnelIntakeExists&&elevatorExists) {
       Command coralIntake = new CoralIntake(elevator, funnelIntake, coralEndDefector);
-      new Trigger(()-> (CoralIntakeSup.getAsBoolean() || driveTrain.drivetrainInIntakeZones()) && (!RobotState.getInstance().isCoralSeen()) && !DriverStation.isAutonomous()).whileTrue(coralIntake);
+      new Trigger(()-> (CoralIntakeSup.getAsBoolean() || driveTrain.drivetrainInIntakeZones()) && (!RobotState.getInstance().isCoralSeen()) && !DriverStation.isAutonomous() && !RobotState.getInstance().coralLineupRunning && !RobotState.getInstance().coralAligned).whileTrue(coralIntake);
     } else {
       new Trigger(()->(CoralIntakeSup.getAsBoolean()||driveTrain.drivetrainInIntakeZones())&&!RobotState.getInstance().isCoralSeen())
       .onTrue(new InstantCommand(()->SmartDashboard.putBoolean("INTAKE/in intake zone", true)))
@@ -583,16 +585,17 @@ public class RobotContainer {
       new Trigger(climberGroupReverse).whileTrue(new ClimberCommandGroup(climber, true)).onFalse(new InstantCommand(()-> climber.stopClimber(), climber)).onFalse(new InstantCommand(()-> climber.runWheels(0), climber));
       new Trigger(()->climberGroupForward.getAsBoolean() && RobotState.getInstance().climberRaised).onTrue(new InstantCommand(()->climber.runWheels(0), climber));
       new Trigger(()->climberGroupForward.getAsBoolean() && RobotState.getInstance().climberRaised).onTrue(new InstantCommand(()->climber.setServo(()->false), climber));
-      new Trigger(()->climberGroupForward.getAsBoolean() && RobotState.getInstance().climberRaised).onTrue(new SequentialCommandGroup(
-        new InstantCommand(() -> climber.setClimberPower(maxSpeed), climber),
-        new WaitUntil(()->climber.getClimberAngle() <= CLIMBER_STRAIGHT_UP_ROTATIONS - 0.125),
-        new InstantCommand(() -> climber.setClimberPower(minSpeed), climber),
-        new WaitUntil(()->climber.getClimberAngle() <= triggerAngle),
-        new RunCommand(() -> climber.setClimberPower(minSpeed + deltaSpeed *((triggerAngle - climber.getClimberAngle())/acceleratingRange)), climber)
-          .until(() ->climber.getClimberAngle() <= stopAcceleratingAngle),
-          //this run command is to slowly ramp up the climber speed so that we can climber smothly and faster
-        new InstantCommand(() -> climber.setClimberPower(maxSpeed), climber)
-        ));
+      new Trigger(()->climberGroupForward.getAsBoolean() && RobotState.getInstance().climberRaised).onTrue(new InstantCommand(()->climber.setClimberPower(maxSpeed), climber));
+      // new Trigger(()->climberGroupForward.getAsBoolean() && RobotState.getInstance().climberRaised).onTrue(new SequentialCommandGroup(
+      //   new InstantCommand(() -> climber.setClimberPower(maxSpeed), climber),
+      //   new WaitUntil(()->climber.getClimberAngle() <= CLIMBER_STRAIGHT_UP_ROTATIONS - 0.125),
+      //   new InstantCommand(() -> climber.setClimberPower(minSpeed), climber),
+      //   new WaitUntil(()->climber.getClimberAngle() <= triggerAngle),
+      //   new RunCommand(() -> climber.setClimberPower(minSpeed + deltaSpeed *((triggerAngle - climber.getClimberAngle())/acceleratingRange)), climber)
+      //     .until(() ->climber.getClimberAngle() <= stopAcceleratingAngle),
+      //     //this run command is to slowly ramp up the climber speed so that we can climber smothly and faster
+      //   new InstantCommand(() -> climber.setClimberPower(maxSpeed), climber)
+      //   ));
         // new Trigger(()->climberGroupForward.getAsBoolean() && RobotState.getInstance().climberRaised).onTrue(new InstantCommand(() -> climber.setClimberPower(maxSpeed), climber));
       new Trigger(climberGroupForward).onFalse(new InstantCommand(() -> climber.stopClimber(), climber));
     }
@@ -603,12 +606,12 @@ public class RobotContainer {
         elevator.isElevatorAtPose() &&
         elevator.isElevatorAtIntakeHeight() &&
         !RobotState.getInstance().coralLineupRunning &&
+        !RobotState.getInstance().coralAligned &&
         DriverStation.isTeleop())
           .onTrue(new PassCoralToEndEffectorSequential(coralEndDefector, funnelIntake)).onFalse(new InstantCommand(()->RobotState.getInstance().coralLineupRunning = false));
       //if no coral alignment code is running, and no coral is detected by sensors, assume that the coral is out of our robot, and set coralAligned to false
       new Trigger(()->
         !RobotState.getInstance().coralLineupRunning &&
-        !RobotState.getInstance().funnelSensorTrig &&
         !RobotState.getInstance().coralEndeffSensorTrig &&
         DriverStation.isTeleop())
           .onTrue(new InstantCommand(()->RobotState.getInstance().coralAligned = false));
@@ -828,10 +831,20 @@ public class RobotContainer {
     Command placeWithLineupLeftL4;
     Command placeWithLineupLeftL2;
     Command driveForwardForHalfSec;
+    Command collectAlgae;
+      
+    
     if(elevatorExists&&funnelIntakeExists&&coralEndeffectorExists&&algaeEndeffectorExists) {
       // this command will raise the elevator after the coral has been lined up in the
       // end effector, and more than 1 second has passed (s wer are not stlil
       // accelerating)
+      collectAlgae = new SequentialCommandGroup(
+        new InstantCommand(()->elevator.setElevatorPosition(REEF_LEVEL_3_ALGAE_HEIGHT)),
+        new InstantCommand(()->algaeEndDefector.runAlgaeEndDefector(ALGAE_INTAKE_SPEED)),
+        new WaitCommand(()->0.7),
+        new WaitUntil(()->RobotState.getInstance().hasAlgae),
+        new InstantCommand(()->algaeEndDefector.stopAlgaeEndDefectorHard())
+      );
       placeWithLineupRightL4 = new PlaceCoralDuringLineupSequential(algaeEndDefector, driveTrain, elevator,
           coralEndDefector, () -> selectCommand(() -> false), () -> ElevatorEnums.Reef4);
       placeWithLineupLeftL4 = new PlaceCoralDuringLineupSequential(algaeEndDefector, driveTrain, elevator,
@@ -854,11 +867,11 @@ public class RobotContainer {
           new WaitCommand(() -> 3));
       placeWithLineupWithAlgaeL4 = new SequentialCommandGroup(
         new ScoreWhileCollectingAlgae(coralEndDefector, algaeEndDefector, driveTrain, elevator, ()->selectCommand(()->true), ()->ElevatorEnums.Reef4),
-        new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer))
+        new InstantCommand(()->elevator.setElevatorPosition(REEF_LEVEL_3_ALGAE_HEIGHT))
       );
       placeWithLineupWithAlgaeL3 = new SequentialCommandGroup(
         new ScoreWhileCollectingAlgae(coralEndDefector, algaeEndDefector, driveTrain, elevator, ()->selectCommand(()->true), ()->ElevatorEnums.Reef3),
-        new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer))
+        new InstantCommand(()->elevator.setElevatorPosition(REEF_LEVEL_3_ALGAE_HEIGHT))
       );
       collectAlgaeL3 = new SequentialCommandGroup(
         new ScoreWhileCollectingAlgae(coralEndDefector, algaeEndDefector, driveTrain, elevator, ()->selectCommand(()->true), ()->ElevatorEnums.Reef3Algae),
@@ -882,12 +895,14 @@ public class RobotContainer {
       deliverCoralRight4NamedCommandWithAlgae = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef4, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->false,algaeEndDefector, ()->true);
       autoBargeShoot = new SequentialCommandGroup(
         new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.Barge), elevator),
-        new WaitUntil(()->elevator.isElevatorAtPose()),
+        new WaitUntil(()->elevator.getHeightCentimeters() > 180),
         new InstantCommand(()->algaeEndDefector.runAlgaeEndDefector(ALGAE_SHOOT_SPEED), algaeEndDefector),
-        new WaitCommand(()->0.24),
+        new WaitCommand(()->0.09),
+        new InstantCommand(()->RobotState.getInstance().hasAlgae = false),
         new InstantCommand(()->algaeEndDefector.runAlgaeEndDefector(0), algaeEndDefector),
-        new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer), elevator));
+        new InstantCommand(()->elevator.setElevatorPosition(REEF_LEVEL_3_ALGAE_HEIGHT), elevator));
     } else {
+      collectAlgae = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
       coralHandlingCommandL2 = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
       coralHandlingCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
       deliverCoralLeft1NamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
@@ -961,7 +976,7 @@ public class RobotContainer {
       lineUpCoralNamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist (attempted lineUpCoralInEndeffector)"));
     }
 
-  
+    NamedCommands.registerCommand("CollectAlgae", collectAlgae);
     NamedCommands.registerCommand("LineUpCoralInEndeffector", lineUpCoralNamedCommand);
     NamedCommands.registerCommand("CoralIntake", coralIntakeNamedCommand);
     NamedCommands.registerCommand("DeliverCoralLeft1", deliverCoralLeft1NamedCommand);
@@ -1040,13 +1055,13 @@ public class RobotContainer {
       case bargeClose:
       case processorClose:
 
-      return 75;
+      return REEF_LEVEL_2_ALGAE_HEIGHT;
 
       case middleClose:
       case processorFar:
       case bargeFar:
 
-      return 98;
+      return REEF_LEVEL_3_ALGAE_HEIGHT;
     
       default:
         return 90;
@@ -1120,6 +1135,11 @@ public class RobotContainer {
       funnelIntake.stopFunnel();
     }
 
+  }
+  private void logRobotState() {
+    SmartDashboard.putBoolean("ROBOTSTATE/hasAlgae", RobotState.getInstance().hasAlgae);
+    SmartDashboard.putBoolean("ROBOTSTATE/coralAligned", RobotState.getInstance().coralAligned);
+    SmartDashboard.putBoolean("ROBOTSTATE/coralLineupRunning", RobotState.getInstance().coralAligned);
   }
   private void logCurrentCommands() {
     if(DrivetrainExists) {

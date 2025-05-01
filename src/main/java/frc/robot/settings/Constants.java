@@ -484,7 +484,7 @@ public final class Constants {
     
     public static final double CORAL_ENDEFFECTOR_SPEED = 1900;
       /** this is the speed that the EndEffector motors should run at when they should be slow enough to stop the coral where it is the moment the sensor is triggered */
-      public static final double CORAL_ENDEFFECTOR_ADJUSTING_INTAKE_SPEED = 1000;
+      public static final double CORAL_ENDEFFECTOR_ADJUSTING_INTAKE_SPEED = 800;
   }
 
   public final class AlgaeEndeffectorConstants{
@@ -553,7 +553,8 @@ public final class Constants {
     public static final double REEF_LEVEL_1_CENTIMETERS_AGAINST_REEF = 54.85;
     public static final double REEF_LEVEL_2_CENTIMETERS_AGAINST_REEF = 85.7;//81.23;
     public static final double REEF_LEVEL_3_CENTIMETERS_AGAINST_REEF = 125.6;//126.2;//122.6;
-    public static final double REEF_LEVEL_3_ALGAE_CENTIMETERS_AGAINST_REEF = 105;//122.6;
+    public static final double REEF_LEVEL_3_ALGAE_HEIGHT = 98;//122.6;
+    public static final double REEF_LEVEL_2_ALGAE_HEIGHT = 55;//122.6;
     public static final double REEF_LEVEL_4_CENTIMETERS_AGAINST_REEF = 189.1;//188.7;//182.69;
     public static final double BARGE_SHOOT_CENTIMETERS = 194.5;
 
