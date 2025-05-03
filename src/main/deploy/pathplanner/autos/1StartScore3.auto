@@ -13,6 +13,12 @@
         {
           "type": "named",
           "data": {
+            "name": "BreakAlgaeTapeWhileDriving"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "PlaceWithLineupLeftL4"
           }
         },
@@ -23,58 +29,22 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "BargeSidePickupFaster"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "WaitForIntake"
-          }
-        },
-        {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "BargeSideTopToReefKSlower"
+                  "pathName": "BargeSidePickupFaster"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "IntakeAlignAndRaiseCoral"
+                  "name": "TurnOnIntake"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "PlaceWithLineupLeftL4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ElevatorReset"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "ReefKtoBargeSideTopFeederSlower"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "WaitForIntake"
           }
         },
         {
@@ -100,6 +70,56 @@
           "type": "named",
           "data": {
             "name": "PlaceWithLineupRightL4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ElevatorReset"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "ReefLtoBargeSideTopFeederSlower"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "TurnOnIntake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "BargeSideTopToReefKSlower"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeAlignAndRaiseCoral"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PlaceWithLineupWithAlgaeL4"
           }
         },
         {

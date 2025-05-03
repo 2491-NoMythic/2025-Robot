@@ -8,28 +8,47 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.476637907311342,
-        "y": 3.88700231673341
+        "x": 6.99075,
+        "y": 3.3912499999999994
       },
       "isLocked": false,
       "linkedName": "Barge"
     },
     {
       "anchor": {
-        "x": 5.214651639344262,
-        "y": 2.904149590163935
+        "x": 5.0992500000000005,
+        "y": 2.8939999999999997
       },
       "prevControl": {
-        "x": 6.185655737704917,
-        "y": 1.969108606557378
+        "x": 6.38625,
+        "y": 1.9189999999999996
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "reefFAlgae"
     }
   ],
-  "rotationTargets": [],
-  "constraintZones": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.3832669322709159,
+      "rotationDegrees": 158.112340334088
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.6099290780141848,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 2.0,
+        "maxAcceleration": 2.5,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
