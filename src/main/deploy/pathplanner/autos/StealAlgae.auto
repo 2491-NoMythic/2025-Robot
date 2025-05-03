@@ -7,6 +7,12 @@
         {
           "type": "named",
           "data": {
+            "name": "BreakAlgaeTapeWhileDriving"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "PlaceWithLineupWithAlgaeL4"
           }
         },

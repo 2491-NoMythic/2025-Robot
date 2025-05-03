@@ -243,7 +243,7 @@ public class ElevatorSubsystem extends SubsystemBase {
    // TODO: may need speedup
   public void setElevatorPositionWithAlgae(ElevatorEnums height){
     final double algaeAcceleration = MOTION_MAGIC_ELEVATOR_HIGH_ACCLERATION;
-    final double algaeVelocity = MOTION_MAGIC_ELEVATOR_HIGH_VELOCITY-150;
+    final double algaeVelocity = MOTION_MAGIC_ELEVATOR_HIGH_VELOCITY;
     switch(height){
       case Reef1:
       setElevatorPositionDynamicConfigs(REEF_LEVEL_1_CENTIMETERS_AGAINST_REEF, algaeAcceleration, algaeVelocity, 0);
@@ -265,7 +265,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         setElevatorPositionDynamicConfigs(REEF_LEVEL_3_ALGAE_HEIGHT, algaeAcceleration, algaeVelocity, 0);
         break;
       case Reef4:
-        setElevatorPositionDynamicConfigs(REEF_LEVEL_4_CENTIMETERS_AGAINST_REEF, algaeAcceleration, algaeVelocity, 0);
+        setElevatorPositionDynamicConfigs(REEF_LEVEL_4_CENTIMETERS_AGAINST_REEF, MOTION_MAGIC_ELEVATOR_HIGH_ACCLERATION, MOTION_MAGIC_ELEVATOR_HIGH_VELOCITY, 0);
         if(isElevatorAtPose()){
           RobotState.getInstance().elevatorIsHigh = true;
         }

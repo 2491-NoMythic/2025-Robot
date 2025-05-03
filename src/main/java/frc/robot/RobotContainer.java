@@ -221,7 +221,6 @@ public class RobotContainer {
   BooleanSupplier climberGroupReverse;
   BooleanSupplier algaeShooterSupOperator;
   BooleanSupplier L1Mode;
-
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
   /**
@@ -832,6 +831,8 @@ public class RobotContainer {
     Command placeWithLineupLeftL2;
     Command driveForwardForHalfSec;
     Command collectAlgae;
+    Command breakAlgaeTapeWhileDriving;
+    Command turnOnIntake;
       
     
     if(elevatorExists&&funnelIntakeExists&&coralEndeffectorExists&&algaeEndeffectorExists) {
@@ -881,6 +882,12 @@ public class RobotContainer {
         new ScoreWhileCollectingAlgae(coralEndDefector, algaeEndDefector, driveTrain, elevator, ()->selectCommand(()->true), ()->ElevatorEnums.Reef3Algae),
         new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.HumanPlayer))
       );
+      breakAlgaeTapeWhileDriving = new SequentialCommandGroup(
+        new InstantCommand(()->driveTrain.drive(new ChassisSpeeds(2, 0, 0))),
+        new InstantCommand(()->algaeEndDefector.runAlgaeEndDefector(ALGAE_SHOOT_SPEED), algaeEndDefector),
+        new WaitCommand(()->0.15),
+        new InstantCommand(()->algaeEndDefector.stopAlgaeEndDefectorHard(), algaeEndDefector),
+        new InstantCommand(()->RobotState.getInstance().algaeTapeBroken = true));
       deliverCoralLeft1NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef1, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true,algaeEndDefector, ()-> false);
       deliverCoralLeft2NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef2, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true,algaeEndDefector, ()-> false);
       deliverCoralLeft3NamedCommand = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef3, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->true,algaeEndDefector, ()-> false);
@@ -898,6 +905,7 @@ public class RobotContainer {
       deliverCoralRight3NamedCommandWithAlgae = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef3, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->false,algaeEndDefector, ()->true);
       deliverCoralRight4NamedCommandWithAlgae = new PlaceCoralNoPath(elevator, ()->ElevatorEnums.Reef4, distanceSensors, driveTrain, ()->0, ()->0, ()->0, coralEndDefector, ()->false,algaeEndDefector, ()->true);
       autoBargeShoot = new SequentialCommandGroup(
+        new InstantCommand(()->System.out.println("barge shot group started")),
         new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.Barge), elevator),
         new WaitUntil(()->elevator.getHeightCentimeters() > 180),
         new InstantCommand(()->algaeEndDefector.runAlgaeEndDefector(ALGAE_SHOOT_SPEED), algaeEndDefector),
@@ -933,6 +941,7 @@ public class RobotContainer {
       placeWithLineupWithAlgaeL3 = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
       placeWithLineupWithAlgaeL4 = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
       autoBargeShoot = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
+      breakAlgaeTapeWhileDriving = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
     }
 
     if(DrivetrainExists) {
@@ -957,7 +966,8 @@ public class RobotContainer {
       algaeEndEffectorRelease = new SequentialCommandGroup(
         new InstantCommand(()->algaeEndDefector.runAlgaeEndDefector(ALGAE_SHOOT_SPEED), algaeEndDefector),
         new WaitCommand(()->0.25),
-        new InstantCommand(()->algaeEndDefector.stopAlgaeEndDefectorHard(), algaeEndDefector)
+        new InstantCommand(()->algaeEndDefector.stopAlgaeEndDefectorHard(), algaeEndDefector),
+        new InstantCommand(()->RobotState.getInstance().algaeTapeBroken = true)
       );
     } else {
       algaeEndEffectorRelease = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
@@ -975,12 +985,17 @@ public class RobotContainer {
         new CoralIntake(elevator, funnelIntake, coralEndDefector),
         new PassCoralToEndEffectorSequential(coralEndDefector, funnelIntake));
       lineUpCoralNamedCommand = new PassCoralToEndEffectorSequential(coralEndDefector, funnelIntake);
+      turnOnIntake = new SequentialCommandGroup(
+        new InstantCommand(()->funnelIntake.runFunnelSine()),
+        new InstantCommand(()->coralEndDefector.runCoralEndEffector(CORAL_ENDEFFECTOR_SPEED))
+      );
     } else {
       coralIntakeNamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist"));
       lineUpCoralNamedCommand = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist (attempted lineUpCoralInEndeffector)"));
+      turnOnIntake = new InstantCommand(()->System.out.println("attempted to create named command but subsytem did not exist (attempted lineUpCoralInEndeffector)"));
     }
-
     NamedCommands.registerCommand("CollectAlgae", collectAlgae);
+    NamedCommands.registerCommand("TurnOnIntake", turnOnIntake);
     NamedCommands.registerCommand("LineUpCoralInEndeffector", lineUpCoralNamedCommand);
     NamedCommands.registerCommand("CoralIntake", coralIntakeNamedCommand);
     NamedCommands.registerCommand("DeliverCoralLeft1", deliverCoralLeft1NamedCommand);
@@ -1014,6 +1029,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("PlaceWithLineupWithAlgaeL4", placeWithLineupWithAlgaeL4);
     NamedCommands.registerCommand("DriveForwardHalfSec", driveForwardForHalfSec);
     NamedCommands.registerCommand("AlgaeEndEffectorRelease", algaeEndEffectorRelease);
+    NamedCommands.registerCommand("BreakAlgaeTapeWhileDriving", breakAlgaeTapeWhileDriving);
     NamedCommands.registerCommand("WaitForIntake",
         new ParallelRaceGroup(
             new ParallelCommandGroup(
@@ -1122,11 +1138,15 @@ public class RobotContainer {
     }
   }
   public void teleopInit() {
-    new SequentialCommandGroup(
+    new ParallelRaceGroup(
+      new WaitUntil(()->RobotState.getInstance().algaeTapeBroken),
+      new SequentialCommandGroup(
+        new WaitCommand(()->0.1),
         new InstantCommand(()->algaeEndDefector.runAlgaeEndDefector(ALGAE_SHOOT_SPEED), algaeEndDefector),
         new WaitCommand(()->0.25),
         new InstantCommand(()->algaeEndDefector.stopAlgaeEndDefectorHard(), algaeEndDefector)
-      ).schedule();
+      )
+    ).schedule();
     resetStatus();
   }
   private void resetStatus() {

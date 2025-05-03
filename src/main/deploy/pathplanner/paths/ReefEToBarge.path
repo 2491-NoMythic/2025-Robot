@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.262602459016393,
-        "y": 2.84421106557377
+        "x": 5.0992500000000005,
+        "y": 2.8939999999999997
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.171749999999999,
-        "y": 2.35775
+        "x": 6.008397540983607,
+        "y": 2.4075389344262295
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "reefFAlgae"
     },
     {
       "anchor": {
@@ -20,8 +20,8 @@
         "y": 4.931749999999999
       },
       "prevControl": {
-        "x": 6.474000000000001,
-        "y": 3.7714999999999996
+        "x": 7.7025,
+        "y": 3.7909999999999995
       },
       "nextControl": null,
       "isLocked": false,
@@ -50,14 +50,7 @@
     }
   ],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "AutoBargeShoot",
-      "waypointRelativePos": 0.7423167848699613,
-      "endWaypointRelativePos": null,
-      "command": null
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.9,
