@@ -125,6 +125,12 @@
         {
           "type": "named",
           "data": {
+            "name": "Backup1Meter"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "ElevatorReset"
           }
         }
