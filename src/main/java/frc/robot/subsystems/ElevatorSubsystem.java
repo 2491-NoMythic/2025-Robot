@@ -33,6 +33,7 @@ import frc.robot.subsystems.RobotState;
 import static frc.robot.settings.Constants.DriveConstants.CANIVORE_DRIVETRAIN;
 import static frc.robot.settings.Constants.ElevatorConstants.*;
 
+import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -142,6 +143,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     double rotationsFromGround = theDistance;
     zeroPoint = elevatorMotor1.getPosition().getValueAsDouble() - rotationsFromGround;   
   }
+  public double getHeightCentimeters() {
+    return elevatorMotor1.getPosition().getValueAsDouble();
+  }
   /**
    * sets the voltage of the elevator motor. It takes about 2 volts to move the elevator slowly up, and higher than 4 is dangerously fast
    * it takes about 1 volt to move the elevator slowly down, and lower than -2 is dangerously fast
@@ -160,6 +164,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     MotionMagicVoltage request = new MotionMagicVoltage(targetHeight);
 
     elevatorMotor1.setControl(request);
+  }
+  public void setElevatorPosition(DoubleSupplier height){
+    setElevatorPosition(height.getAsDouble());
   }
   public void setElevatorPositionDynamicConfigs(double height, double acceleration, double velocity, double jerk) {
     double targetHeight = calculateRotations(height);
@@ -236,7 +243,7 @@ public class ElevatorSubsystem extends SubsystemBase {
    // TODO: may need speedup
   public void setElevatorPositionWithAlgae(ElevatorEnums height){
     final double algaeAcceleration = MOTION_MAGIC_ELEVATOR_HIGH_ACCLERATION;
-    final double algaeVelocity = MOTION_MAGIC_ELEVATOR_HIGH_VELOCITY-200;//150;
+    final double algaeVelocity = MOTION_MAGIC_ELEVATOR_HIGH_VELOCITY;
     switch(height){
       case Reef1:
       setElevatorPositionDynamicConfigs(REEF_LEVEL_1_CENTIMETERS_AGAINST_REEF, algaeAcceleration, algaeVelocity, 0);
@@ -255,10 +262,10 @@ public class ElevatorSubsystem extends SubsystemBase {
       }
       break;
       case Reef3Algae:
-        setElevatorPositionDynamicConfigs(REEF_LEVEL_3_ALGAE_CENTIMETERS_AGAINST_REEF, algaeAcceleration, algaeVelocity, 0);
+        setElevatorPositionDynamicConfigs(REEF_LEVEL_3_ALGAE_HEIGHT, algaeAcceleration, algaeVelocity, 0);
         break;
       case Reef4:
-        setElevatorPositionDynamicConfigs(REEF_LEVEL_4_CENTIMETERS_AGAINST_REEF, algaeAcceleration, algaeVelocity, 0);
+        setElevatorPositionDynamicConfigs(REEF_LEVEL_4_CENTIMETERS_AGAINST_REEF, MOTION_MAGIC_ELEVATOR_HIGH_ACCLERATION, MOTION_MAGIC_ELEVATOR_HIGH_VELOCITY, 0);
         if(isElevatorAtPose()){
           RobotState.getInstance().elevatorIsHigh = true;
         }

@@ -1,8 +1,12 @@
 package frc.robot.subsystems;
 
+import java.util.Optional;
+
 import javax.print.attribute.standard.MediaSize.Other;
 import frc.robot.settings.ReefOffsetEnums;
 import frc.robot.settings.ReefSideEnum;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.settings.ElevatorEnums;
@@ -38,12 +42,22 @@ public class RobotState {
   public boolean L1Mode;
   public L1Enums L1selectedPosition;
   public boolean climberRaised;
+  public boolean algaeTapeBroken;
 
   public RobotState(){
     //sets any values that aren't periodically updated by a subsystem to a value, so that they won't return null if called before they are updated
     deliveringCoralHeight = ElevatorEnums.Reef1;
     L1selectedPosition = L1Enums.FarLeft;
     elevatorZeroSet = false;
+  }
+
+  public static boolean IsAlliance(Alliance alliance) {
+    Optional<Alliance> Current = DriverStation.getAlliance();
+    if (Current.isPresent()) {
+      return Current.get() == alliance;
+    } else {
+      return false;
+    }
   }
 
   public static RobotState getInstance() {

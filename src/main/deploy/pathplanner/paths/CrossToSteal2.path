@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.5855,
-        "y": 4.931749999999999
+        "x": 9.88985655737705,
+        "y": 5.577407786885245
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.429500000000001,
-        "y": 5.77025
+        "x": 11.040676229508197,
+        "y": 5.6013831967213115
       },
       "isLocked": false,
-      "linkedName": "shootAlgaeBeforeBackup"
+      "linkedName": "CrossToStealHalfway"
     },
     {
       "anchor": {
-        "x": 5.391749999999999,
-        "y": 6.17
+        "x": 12.43125,
+        "y": 5.193801229508197
       },
       "prevControl": {
-        "x": 5.646033852511325,
-        "y": 6.169867239396143
+        "x": 12.407274590163933,
+        "y": 5.762897540983607
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,21 +34,21 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
-    "maxAcceleration": 2.0,
+    "maxAcceleration": 3.9,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 0.0
+    "velocity": 0.0,
+    "rotation": -57.91100000000001
   },
   "reversed": false,
-  "folder": "Algae Paths",
+  "folder": null,
   "idealStartingState": {
-    "velocity": 1.5,
-    "rotation": 29.604450746004932
+    "velocity": 2.0,
+    "rotation": 0.0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

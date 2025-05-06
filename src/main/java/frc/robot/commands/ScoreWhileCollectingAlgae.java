@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.ALGAE_INTAKE_SPEED;
+import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.ALGAE_SHOOT_SPEED;
 import static frc.robot.settings.Constants.ElevatorConstants.HUMAN_PLAYER_STATION_CENTIMETERS;
 import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_HP_ACCLERATION;
 import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_HP_VELOCITY;
@@ -13,10 +14,13 @@ import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVAT
 import java.util.function.Supplier;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.RobotContainer;
 import frc.robot.commands.NamedCommands.DeliverCoral;
 import frc.robot.settings.ElevatorEnums;
 import frc.robot.settings.PlacementLocations;
@@ -39,17 +43,22 @@ public class ScoreWhileCollectingAlgae extends SequentialCommandGroup {
       new InstantCommand(()->coralEndDefector.stopCoralEndEffector(), coralEndDefector),
       new InstantCommand(()->elevator.setElevatorPositionDynamicConfigs(HUMAN_PLAYER_STATION_CENTIMETERS+10, MOTION_MAGIC_ELEVATOR_HP_ACCLERATION, MOTION_MAGIC_ELEVATOR_HP_VELOCITY, MOTION_MAGIC_ELEVATOR_JERK), elevator),
       new InstantCommand(()->algaeEndDefector.runAlgaeEndDefector(ALGAE_INTAKE_SPEED), algaeEndDefector),
-      new DriveToPose(placementLocationSupplier, driveTrain, ()->0),
+      new ParallelCommandGroup(
+        new DriveToPose(()->RobotContainer.selectCommand(()->true), driveTrain, ()->0),
+        new SequentialCommandGroup(
+          new InstantCommand(()->elevator.setElevatorPosition(()->RobotContainer.getAlgaeHeight())),
+          new WaitUntil(()->elevator.isElevatorAtPose()))),
       new InstantCommand(()->driveTrain.drive(new ChassisSpeeds(0.7, 0, 0))),
       new ParallelRaceGroup(
-          new AlgaeIntakeCommand(algaeEndDefector, () -> RobotState.getInstance().goForAlgae ? ALGAE_INTAKE_SPEED : -0.5),
-          new SequentialCommandGroup(
-              new ParallelRaceGroup(
-                  new ElevatorCommand(elevator, heightSupplier),//raises elevator to position)
-                  new WaitUntil(()->elevator.isElevatorAtPose())),
-              new ParallelRaceGroup(
-                  new DeliverCoral(coralEndDefector),//drops coral
-                  new WaitCommand(()->0.5)))),
+        new AlgaeIntakeCommand(algaeEndDefector, () -> RobotState.getInstance().goForAlgae ? ALGAE_INTAKE_SPEED : -0.5),
+        new SequentialCommandGroup(
+            new WaitCommand(()->0.25),
+            new ParallelRaceGroup(
+                new ElevatorCommand(elevator, heightSupplier),//raises elevator to position)
+                new WaitUntil(()->elevator.isElevatorAtPose())),
+            new ParallelRaceGroup(
+                new DeliverCoral(coralEndDefector),//drops coral
+                new WaitCommand(()->0.5)))),
       new InstantCommand(()->coralEndDefector.stopCoralEndEffector(), coralEndDefector)
     );
   }
