@@ -221,6 +221,7 @@ public class RobotContainer {
   BooleanSupplier climberGroupReverse;
   BooleanSupplier algaeShooterSupOperator;
   BooleanSupplier L1Mode;
+  boolean isClimberRunning = false;
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
   /**
@@ -571,8 +572,9 @@ public class RobotContainer {
       new Trigger(climberGroupReverse).whileTrue(new ClimberCommandGroup(climber, true)).onFalse(new InstantCommand(()-> climber.stopClimber(), climber)).onFalse(new InstantCommand(()-> climber.runWheels(0), climber));
       new Trigger(()->climberGroupForward.getAsBoolean() && RobotState.getInstance().climberRaised).onTrue(new InstantCommand(()->climber.runWheels(0), climber));
       new Trigger(()->climberGroupForward.getAsBoolean() && RobotState.getInstance().climberRaised).onTrue(new InstantCommand(()->climber.setServo(()->false), climber));
-      new Trigger(()->climberGroupForward.getAsBoolean() && RobotState.getInstance().climberRaised && DriverStation.getMatchTime() < 4).onTrue(new InstantCommand(()->climber.setClimberPower(maxSpeed), climber));
+      new Trigger(()->climberGroupForward.getAsBoolean() && RobotState.getInstance().climberRaised && DriverStation.getMatchTime() < 4 && !isClimberRunning).onTrue(new InstantCommand(()->climber.setClimberPower(maxSpeed), climber));
       new Trigger(()->climberGroupForward.getAsBoolean() && RobotState.getInstance().climberRaised && !(DriverStation.getMatchTime() < 4)).onTrue(new SequentialCommandGroup(
+        new InstantCommand(()-> isClimberRunning = true),
         new InstantCommand(() -> climber.setClimberPower(maxSpeed), climber),
         new WaitUntil(()->climber.getClimberAngle() <= CLIMBER_STRAIGHT_UP_ROTATIONS - 0.125),
         new InstantCommand(() -> climber.setClimberPower(minSpeed), climber),
@@ -581,7 +583,7 @@ public class RobotContainer {
           .until(() ->climber.getClimberAngle() <= stopAcceleratingAngle),
           //this run command is to slowly ramp up the climber speed so that we can climber smothly and faster
         new InstantCommand(() -> climber.setClimberPower(maxSpeed), climber)
-        ));
+        )).onFalse(new InstantCommand(()-> isClimberRunning = false));
         // new Trigger(()->climberGroupForward.getAsBoolean() && RobotState.getInstance().climberRaised).onTrue(new InstantCommand(() -> climber.setClimberPower(maxSpeed), climber));
       new Trigger(climberGroupForward).onFalse(new InstantCommand(() -> climber.stopClimber(), climber));
     }
@@ -696,17 +698,12 @@ public class RobotContainer {
       new Trigger(()->RobotState.getInstance().climbed).whileTrue(new FunClimbedLights(lights));
       new Trigger(()->RobotState.getInstance().coralAligned).onTrue(new SequentialCommandGroup(
         new InstantCommand(()->lights.setAllLights(150, 150, 150)),
-        new WaitCommand(()->0.1),
+        new WaitCommand(()->0.25),
         new InstantCommand(()->lights.setAllLights(0, 0, 0)),
-        new WaitCommand(()->0.1),
+        new WaitCommand(()->0.25),
         new InstantCommand(()->lights.setAllLights(150, 150, 150)),
-        new WaitCommand(()->0.1),
-        new InstantCommand(()->lights.setAllLights(0, 0, 0)),
-        new WaitCommand(()->0.1),
-        new InstantCommand(()->lights.setAllLights(150, 150, 150)),
-        new WaitCommand(()->0.1),
-        new InstantCommand(()->lights.setAllLights(0, 0, 0)),
-        new WaitCommand(()->0.1)
+        new WaitCommand(()->0.25),
+        new InstantCommand(()->lights.setAllLights(0, 0, 0))
       ));
     }
 
