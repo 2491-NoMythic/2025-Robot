@@ -507,21 +507,8 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-//all the triggers that change RobotState
-    new Trigger(L1Mode).onTrue(new InstantCommand(()->RobotState.getInstance().L1Mode = true)).onFalse(new InstantCommand(()->RobotState.getInstance().L1Mode = false));
-    new Trigger(()->RobotState.getInstance().L1Mode).whileTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef1)).onFalse(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef4));
-    new Trigger(()->ReefHeight2Supplier.getAsBoolean() && !RobotState.getInstance().L1Mode).whileTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef2));
-    new Trigger(()->ReefHeight3Supplier.getAsBoolean() && !RobotState.getInstance().L1Mode).whileTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef3));
-    new Trigger(()->ReefHeight4Supplier.getAsBoolean() && !RobotState.getInstance().L1Mode).whileTrue(new InstantCommand(()->RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Reef4));
-    new Trigger(()->BargeHeightSupplier.getAsBoolean() && !RobotState.getInstance().L1Mode).whileTrue(new InstantCommand(()-> RobotState.getInstance().deliveringCoralHeight = ElevatorEnums.Barge));
-    new Trigger(()->ReefHeight1Supplier.getAsBoolean() && RobotState.getInstance().L1Mode).whileTrue(new InstantCommand(()->RobotState.getInstance().L1selectedPosition = L1Enums.FarRight));
-    new Trigger(()->ReefHeight2Supplier.getAsBoolean() && RobotState.getInstance().L1Mode).whileTrue(new InstantCommand(()->RobotState.getInstance().L1selectedPosition = L1Enums.MiddleRight));
-    new Trigger(()->ReefHeight3Supplier.getAsBoolean() && RobotState.getInstance().L1Mode).whileTrue(new InstantCommand(()->RobotState.getInstance().L1selectedPosition = L1Enums.MiddleLeft));
-    new Trigger(()->ReefHeight4Supplier.getAsBoolean() && RobotState.getInstance().L1Mode).whileTrue(new InstantCommand(()->RobotState.getInstance().L1selectedPosition = L1Enums.FarLeft));
-    new Trigger(OpLeftReefLineupSup).whileTrue(new InstantCommand(()->RobotState.getInstance().deliveringLeft = true));
-    new Trigger(OpRightReefLineupSup).whileTrue(new InstantCommand(()->RobotState.getInstance().deliveringLeft = false));
     if(OCTEnum == ControllerEnums.ButtonBoard) {
-      new Trigger(goForAlgaeTrue).whileTrue(new InstantCommand(()->RobotState.getInstance().goForAlgae = true)).onFalse(new InstantCommand(()->RobotState.getInstance().goForAlgae = false));
+      //Handled in updatePlacementState
     } else {
       new Trigger(goForAlgaeTrue).onTrue(new InstantCommand(()->RobotState.getInstance().goForAlgae = !RobotState.getInstance().goForAlgae));
     }
@@ -734,7 +721,40 @@ public class RobotContainer {
         });
       }
   }
-
+  private void updatePlacementState(){
+    RobotState state = RobotState.getInstance();
+    state.L1Mode = L1Mode.getAsBoolean();
+    if (state.L1Mode){
+      state.deliveringCoralHeight = ElevatorEnums.Reef1;
+      if (ReefHeight1Supplier.getAsBoolean()){
+        state.L1selectedPosition = L1Enums.FarRight;
+      } else if (ReefHeight2Supplier.getAsBoolean()){
+        state.L1selectedPosition = L1Enums.MiddleRight;
+      } else if (ReefHeight3Supplier.getAsBoolean()){
+        state.L1selectedPosition = L1Enums.MiddleLeft;
+      } else if (ReefHeight4Supplier.getAsBoolean()){
+        state.L1selectedPosition = L1Enums.FarLeft;
+      }
+    } else{
+      if (ReefHeight2Supplier.getAsBoolean()){
+        state.deliveringCoralHeight = ElevatorEnums.Reef2;
+      } else if (ReefHeight3Supplier.getAsBoolean()){
+        state.deliveringCoralHeight = ElevatorEnums.Reef3;
+      } else if (ReefHeight4Supplier.getAsBoolean()){
+        state.deliveringCoralHeight = ElevatorEnums.Reef4;
+      } else if (BargeHeightSupplier.getAsBoolean()){
+        state.deliveringCoralHeight = ElevatorEnums.Barge;
+      }   
+    }
+    if (OpLeftReefLineupSup.getAsBoolean()){
+      state.deliveringLeft = true;
+    } else if (OpRightReefLineupSup.getAsBoolean()){
+      state.deliveringLeft = false;
+    }
+    if (OCTEnum == ControllerEnums.ButtonBoard){
+      state.goForAlgae = goForAlgaeTrue.getAsBoolean();
+    }
+  }
     /*
      * bindings:
      * PS4: zero the gyroscope
@@ -1162,6 +1182,7 @@ public class RobotContainer {
     PathfindingCommand.warmupCommand().schedule();
   }
   public void robotPeriodic() {
+    updatePlacementState();
     if(elevatorExists) {
       SmartDashboard.putBoolean("TESTING/elevator lined up", elevator.isElevatorAtIntakeHeight());
       SmartDashboard.putBoolean("TESTING/coralLineupRunnning", RobotState.getInstance().coralLineupRunning);
