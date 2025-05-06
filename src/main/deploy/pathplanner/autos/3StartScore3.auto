@@ -29,15 +29,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": "reefFToHPSlower"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "WaitForIntake"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "reefFToHPSlower"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "TurnOnIntake"
+                }
+              }
+            ]
           }
         },
         {
@@ -72,15 +79,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": "reefDToHPSlower"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "WaitForIntake"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "reefDToHPSlower"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "TurnOnIntake"
+                }
+              }
+            ]
           }
         },
         {
@@ -106,6 +120,12 @@
           "type": "named",
           "data": {
             "name": "PlaceWithLineupLeftL4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Backup1Meter"
           }
         },
         {
