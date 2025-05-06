@@ -1201,7 +1201,7 @@ public class RobotContainer {
     }
 
   }
-  private void logRobotState() {
+  private void publishRobotState() {
     SmartDashboard.putBoolean("ROBOTSTATE/hasAlgae", RobotState.getInstance().hasAlgae);
     SmartDashboard.putBoolean("ROBOTSTATE/coralAligned", RobotState.getInstance().coralAligned);
     SmartDashboard.putBoolean("ROBOTSTATE/coralLineupRunning", RobotState.getInstance().coralAligned);
@@ -1270,6 +1270,7 @@ public class RobotContainer {
   }
   public void robotPeriodic() {
     updatePlacementState();
+    publishRobotState();
     if(elevatorExists) {
       SmartDashboard.putBoolean("TESTING/elevator lined up", elevator.isElevatorAtIntakeHeight());
       SmartDashboard.putBoolean("TESTING/coralLineupRunnning", RobotState.getInstance().coralLineupRunning);
