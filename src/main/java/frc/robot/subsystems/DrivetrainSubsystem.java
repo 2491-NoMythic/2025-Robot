@@ -470,6 +470,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public void setRotationTarget(double desiredAngle) {
     rotationSpeedController.setSetpoint(desiredAngle);
   }
+  public void setRotationTarget(DoubleSupplier desiredAngle) {
+    setRotationTarget(desiredAngle.getAsDouble());
+  }
   /** Applies power to the motors to rotate the robot to the angle set by 
    * {@link #setRotationTarget(double) setRotationTarget} <p>
    * positive x is away from your alliance wall <p>

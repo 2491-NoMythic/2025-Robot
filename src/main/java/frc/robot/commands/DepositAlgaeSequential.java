@@ -6,10 +6,14 @@ package frc.robot.commands;
 
 import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.ALGAE_SHOOT_SPEED;
 
+import java.time.Instant;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.settings.ElevatorEnums;
@@ -26,11 +30,18 @@ public class DepositAlgaeSequential extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
+    new ParallelCommandGroup (
         new SequentialCommandGroup(
           new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.AlgaeInProcessor)),
-          new WaitUntil(()->elevator.isElevatorAtPose() && drivetrain.getPositionTargetingError() < 0.05),
-          new InstantCommand(()->algaeEndEffector.runAlgaeEndDefector(-0.5)),
-          new DriveTimeCommand(-0.83, 0, 0, .33, drivetrain),
-          new DriveTimeCommand(0.4, 0, 0, 1, drivetrain)));
+          new WaitUntil(()->elevator.isElevatorAtPose() && drivetrain.getPositionTargetingError() < 0.05)
+        ),
+        new SequentialCommandGroup(
+          new InstantCommand(()->drivetrain.setRotationTarget(()-> (DriverStation.getAlliance().get() == Alliance.Blue) ? -90 : 90)),
+          new RunCommand(()->drivetrain.moveTowardsRotationTargetRobotRelative(0, 0), drivetrain).until(drivetrain::isAtRotationTarget)
+        )),
+    new InstantCommand(()->algaeEndEffector.runAlgaeEndDefector(-0.5)),
+    new DriveTimeCommand(-0.83, 0, 0, .33, drivetrain),
+    new DriveTimeCommand(0.4, 0, 0, 1, drivetrain)
+    );
   }
 }
