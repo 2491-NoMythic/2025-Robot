@@ -583,9 +583,9 @@ public class RobotContainer {
           .until(() ->climber.getClimberAngle() <= stopAcceleratingAngle),
           //this run command is to slowly ramp up the climber speed so that we can climber smothly and faster
         new InstantCommand(() -> climber.setClimberPower(maxSpeed), climber)
-        )).onFalse(new InstantCommand(()-> isClimberRunning = false));
+        ));
         // new Trigger(()->climberGroupForward.getAsBoolean() && RobotState.getInstance().climberRaised).onTrue(new InstantCommand(() -> climber.setClimberPower(maxSpeed), climber));
-      new Trigger(climberGroupForward).onFalse(new InstantCommand(() -> climber.stopClimber(), climber));
+      new Trigger(climberGroupForward).onFalse(new InstantCommand(() -> climber.stopClimber(), climber)).onFalse(new InstantCommand(()-> isClimberRunning = false));
     }
     if (funnelIntakeExists&&elevatorExists&&coralEndeffectorExists) {
       // if the coral is in the end effector, and the elevator is in place, pass the coral to the endeffector and line up the coral within it
@@ -697,13 +697,9 @@ public class RobotContainer {
     if(lightsExist) {
       new Trigger(()->RobotState.getInstance().climbed).whileTrue(new FunClimbedLights(lights));
       new Trigger(()->RobotState.getInstance().coralAligned).onTrue(new SequentialCommandGroup(
-        new InstantCommand(()->lights.setAllLights(150, 150, 150)),
+        new InstantCommand(()->lights.setAllLights(250, 250, 250), lights),
         new WaitCommand(()->0.25),
-        new InstantCommand(()->lights.setAllLights(0, 0, 0)),
-        new WaitCommand(()->0.25),
-        new InstantCommand(()->lights.setAllLights(150, 150, 150)),
-        new WaitCommand(()->0.25),
-        new InstantCommand(()->lights.setAllLights(0, 0, 0))
+        new InstantCommand(()->lights.setAllLights(0, 0, 0), lights)
       ));
     }
 
