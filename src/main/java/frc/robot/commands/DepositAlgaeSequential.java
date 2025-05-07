@@ -37,7 +37,8 @@ public class DepositAlgaeSequential extends SequentialCommandGroup {
         ),
         new SequentialCommandGroup(
           new InstantCommand(()->drivetrain.setRotationTarget(()-> (DriverStation.getAlliance().get() == Alliance.Blue) ? -90 : 90)),
-          new RunCommand(()->drivetrain.moveTowardsRotationTargetRobotRelative(0, 0), drivetrain).until(drivetrain::isAtRotationTarget)
+          new WaitCommand(0.1),
+          new RunCommand(()->drivetrain.moveTowardsRotationTargetRobotRelative(0, 0), drivetrain).until(drivetrain::atProcessorAngle)
         )),
     new InstantCommand(()->algaeEndEffector.runAlgaeEndDefector(-0.5)),
     new DriveTimeCommand(-0.83, 0, 0, .33, drivetrain),

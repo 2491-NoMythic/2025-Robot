@@ -702,7 +702,7 @@ public class RobotContainer {
     }
 
     if(elevatorExists && algaeEndeffectorExists){
-      new Trigger(AlgaeDepositSup).whileTrue(new DepositAlgaeSequential(elevator, algaeEndDefector, driveTrain));
+      new Trigger(AlgaeDepositSup).whileTrue(new DepositAlgaeSequential(elevator, algaeEndDefector, driveTrain)).onFalse(new InstantCommand(()->algaeEndDefector.stopAlgaeEndDefectorCoast(), algaeEndDefector));
     }
 
     if(lightsExist) {

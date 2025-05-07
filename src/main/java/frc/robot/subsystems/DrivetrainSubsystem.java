@@ -581,6 +581,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public boolean isAtRotationTarget() {
     return rotationSpeedController.atSetpoint();
   }
+  public boolean atProcessorAngle() {
+    return Math.abs(rotationSpeedController.getError()) < 3;
+  }
   public boolean drivetrainInIntakeZones() {
     boolean inIntakeZone = false;
     double intakeZoneLength = 3;//lenth along the y axis of the "intake zone" (which we make up)
