@@ -221,6 +221,7 @@ public class RobotContainer {
   BooleanSupplier climberGroupReverse;
   BooleanSupplier algaeShooterSupOperator;
   BooleanSupplier L1Mode;
+  boolean isClimberRunning = false;
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
   /**
@@ -571,8 +572,9 @@ public class RobotContainer {
       new Trigger(climberGroupReverse).whileTrue(new ClimberCommandGroup(climber, true)).onFalse(new InstantCommand(()-> climber.stopClimber(), climber)).onFalse(new InstantCommand(()-> climber.runWheels(0), climber));
       new Trigger(()->climberGroupForward.getAsBoolean() && RobotState.getInstance().climberRaised).onTrue(new InstantCommand(()->climber.runWheels(0), climber));
       new Trigger(()->climberGroupForward.getAsBoolean() && RobotState.getInstance().climberRaised).onTrue(new InstantCommand(()->climber.setServo(()->false), climber));
-      new Trigger(()->climberGroupForward.getAsBoolean() && RobotState.getInstance().climberRaised && DriverStation.getMatchTime() < 4).onTrue(new InstantCommand(()->climber.setClimberPower(maxSpeed), climber));
+      new Trigger(()->climberGroupForward.getAsBoolean() && RobotState.getInstance().climberRaised && DriverStation.getMatchTime() < 4 && !isClimberRunning).onTrue(new InstantCommand(()->climber.setClimberPower(maxSpeed), climber));
       new Trigger(()->climberGroupForward.getAsBoolean() && RobotState.getInstance().climberRaised && !(DriverStation.getMatchTime() < 4)).onTrue(new SequentialCommandGroup(
+        new InstantCommand(()-> isClimberRunning = true),
         new InstantCommand(() -> climber.setClimberPower(maxSpeed), climber),
         new WaitUntil(()->climber.getClimberAngle() <= CLIMBER_STRAIGHT_UP_ROTATIONS - 0.125),
         new InstantCommand(() -> climber.setClimberPower(minSpeed), climber),
@@ -583,7 +585,7 @@ public class RobotContainer {
         new InstantCommand(() -> climber.setClimberPower(maxSpeed), climber)
         ));
         // new Trigger(()->climberGroupForward.getAsBoolean() && RobotState.getInstance().climberRaised).onTrue(new InstantCommand(() -> climber.setClimberPower(maxSpeed), climber));
-      new Trigger(climberGroupForward).onFalse(new InstantCommand(() -> climber.stopClimber(), climber));
+      new Trigger(climberGroupForward).onFalse(new InstantCommand(() -> climber.stopClimber(), climber)).onFalse(new InstantCommand(()-> isClimberRunning = false));
     }
     if (funnelIntakeExists&&elevatorExists&&coralEndeffectorExists) {
       // if the coral is in the end effector, and the elevator is in place, pass the coral to the endeffector and line up the coral within it
@@ -695,18 +697,9 @@ public class RobotContainer {
     if(lightsExist) {
       new Trigger(()->RobotState.getInstance().climbed).whileTrue(new FunClimbedLights(lights));
       new Trigger(()->RobotState.getInstance().coralAligned).onTrue(new SequentialCommandGroup(
-        new InstantCommand(()->lights.setAllLights(150, 150, 150)),
-        new WaitCommand(()->0.1),
-        new InstantCommand(()->lights.setAllLights(0, 0, 0)),
-        new WaitCommand(()->0.1),
-        new InstantCommand(()->lights.setAllLights(150, 150, 150)),
-        new WaitCommand(()->0.1),
-        new InstantCommand(()->lights.setAllLights(0, 0, 0)),
-        new WaitCommand(()->0.1),
-        new InstantCommand(()->lights.setAllLights(150, 150, 150)),
-        new WaitCommand(()->0.1),
-        new InstantCommand(()->lights.setAllLights(0, 0, 0)),
-        new WaitCommand(()->0.1)
+        new InstantCommand(()->lights.setAllLights(250, 250, 250), lights),
+        new WaitCommand(()->0.25),
+        new InstantCommand(()->lights.setAllLights(0, 0, 0), lights)
       ));
     }
 
@@ -1201,7 +1194,7 @@ public class RobotContainer {
     }
 
   }
-  private void logRobotState() {
+  private void publishRobotState() {
     SmartDashboard.putBoolean("ROBOTSTATE/hasAlgae", RobotState.getInstance().hasAlgae);
     SmartDashboard.putBoolean("ROBOTSTATE/coralAligned", RobotState.getInstance().coralAligned);
     SmartDashboard.putBoolean("ROBOTSTATE/coralLineupRunning", RobotState.getInstance().coralAligned);
@@ -1270,6 +1263,7 @@ public class RobotContainer {
   }
   public void robotPeriodic() {
     updatePlacementState();
+    publishRobotState();
     if(elevatorExists) {
       SmartDashboard.putBoolean("TESTING/elevator lined up", elevator.isElevatorAtIntakeHeight());
       SmartDashboard.putBoolean("TESTING/coralLineupRunnning", RobotState.getInstance().coralLineupRunning);
