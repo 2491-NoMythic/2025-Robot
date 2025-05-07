@@ -6,13 +6,13 @@ package frc.robot;
 
 import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.ALGAE_INTAKE_SPEED;
 import static frc.robot.settings.Constants.AlgaeEndeffectorConstants.ALGAE_SHOOT_SPEED;
-import static frc.robot.settings.Constants.ClimberConstants.CLIMBER_POWER_REVERSE;
 import static frc.robot.settings.Constants.ClimberConstants.CLIMBER_STRAIGHT_UP_ROTATIONS;
 import static frc.robot.settings.Constants.CoralEndeffectorConstants.CORAL_ENDEFFECTOR_SPEED;
 import static frc.robot.settings.Constants.DriveConstants.*;
-import static frc.robot.settings.Constants.ElevatorConstants.BARGE_SHOOT_CENTIMETERS;
 import static frc.robot.settings.Constants.ElevatorConstants.HUMAN_PLAYER_STATION_CENTIMETERS;
 import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_HIGH_ACCLERATION;
+import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_HP_ACCLERATION;
+import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_HP_VELOCITY;
 import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_JERK;
 import static frc.robot.settings.Constants.ElevatorConstants.MOTION_MAGIC_ELEVATOR_VELOCITY;
 import static frc.robot.settings.Constants.ElevatorConstants.REEF_LEVEL_2_ALGAE_HEIGHT;

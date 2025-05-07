@@ -4,11 +4,8 @@ import frc.robot.settings.ReefOffsetEnums;
 import frc.robot.settings.ReefSideEnum;
 import java.util.Optional;
 
-import javax.print.attribute.standard.MediaSize.Other;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import frc.robot.settings.ElevatorEnums;
 import frc.robot.settings.L1Enums;
 

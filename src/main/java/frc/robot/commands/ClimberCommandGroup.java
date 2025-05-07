@@ -7,17 +7,15 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.ClimberSubsystem;
-import static frc.robot.settings.Constants.ClimberConstants.CLIMBER_CLIMBED_ANGLE;
 import static frc.robot.settings.Constants.ClimberConstants.CLIMBER_POWER_FORWARD;
 import static frc.robot.settings.Constants.ClimberConstants.CLIMBER_POWER_REVERSE;
 
-import frc.robot.commands.WaitCommand;
-
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ClimberCommandGroup extends SequentialCommandGroup {
-  /** Creates a new ClimberCommandGroup. */
+/**
+ * Creates a new ClimberCommandGroup to run the climber.
+ * @param climber ClimberSubsystem
+ * @param isRaisingClimber checks whether or not the climber is going up
+ */
   ClimberSubsystem climber;
   boolean isRaisingClimber;
   public ClimberCommandGroup( ClimberSubsystem climber, boolean isRaisingClimber) {

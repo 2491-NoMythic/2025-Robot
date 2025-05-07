@@ -12,8 +12,6 @@ import static frc.robot.settings.Constants.ElevatorConstants.BARGE_SHOOT_CENTIME
 
 import java.util.function.BooleanSupplier;
 
-import com.ctre.phoenix6.signals.NeutralModeValue;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.settings.ElevatorEnums;
