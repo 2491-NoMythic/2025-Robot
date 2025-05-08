@@ -62,6 +62,7 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AutoAngleAtReef;
+import frc.robot.commands.ClimbedLights;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.ClimberCommandGroup;
 import frc.robot.commands.DepositAlgae;
@@ -695,12 +696,12 @@ public class RobotContainer {
     }
 
     if(lightsExist) {
-      new Trigger(()->RobotState.getInstance().climbed).whileTrue(new FunClimbedLights(lights));
       new Trigger(()->RobotState.getInstance().coralAligned).onTrue(new SequentialCommandGroup(
         new InstantCommand(()->lights.setAllLights(250, 250, 250), lights),
         new WaitCommand(()->0.25),
         new InstantCommand(()->lights.setAllLights(0, 0, 0), lights)
       ));
+      new Trigger(()->RobotState.getInstance().climbed).whileTrue(new ClimbedLights(lights));
     }
 
     if(elevatorExists){
@@ -885,7 +886,7 @@ public class RobotContainer {
                     new WaitCommand(()->0.25),
                     new InstantCommand(()->driveTrain.drive(new ChassisSpeeds(-0.5, 0, 0))),
                     new WaitCommand(()->0.4),
-                    new InstantCommand(()->elevator.setElevatorPosition(RobotState.getInstance().deliveringCoralHeight), elevator),
+                    new InstantCommand(()->elevator.setElevatorPosition(ElevatorEnums.Reef4), elevator),
                     new DriveToPose(()->selectCommand(()->true), driveTrain, ()->0),
                     new WaitUntil(()->elevator.isElevatorAtPose())),
                 new ParallelRaceGroup(
