@@ -29,7 +29,7 @@ public class PassCoralToEndEffectorSequential extends SequentialCommandGroup {
         new ResetCoralStatusOnEnd(),
         new SequentialCommandGroup(
           new InstantCommand(()->RobotState.getInstance().coralLineupRunning = true),
-          new InstantCommand(()->coralEndEffector.runCoralEndEffector(CORAL_ENDEFFECTOR_SPEED-900), coralEndEffector),
+          new InstantCommand(()->coralEndEffector.runCoralEndEffector(CORAL_ENDEFFECTOR_SPEED-100), coralEndEffector),
           new InstantCommand(()->funnelIntake.runFunnel(funelAdjustingSpeed), funnelIntake),
           new InstantCommand(()->System.out.println("reached checkpoint 1")),
           // new WaitCommand(()->0.3),
