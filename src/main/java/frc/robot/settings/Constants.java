@@ -406,7 +406,7 @@ public final class Constants {
     public static final Pose2d ProcessorPoseBlue = new Pose2d(6.05, 1.37, Rotation2d.fromDegrees(-90));
     
     //poses that are an inch and a half from the edge of the reef
-    public static final Pose2d ReefABlue = new Pose2d(3.063, 4.068, Rotation2d.fromDegrees(0));
+    public static final Pose2d ReefABlue = new Pose2d(3.063, 4.095, Rotation2d.fromDegrees(0));
     public static final Pose2d ReefBBlue = new Pose2d(3.086, 3.725, Rotation2d.fromDegrees(0));
     public static final Pose2d ReefCBlue = new Pose2d(3.717, 2.821, Rotation2d.fromDegrees(60));
     public static final Pose2d ReefDBlue = new Pose2d(4.033, 2.657, Rotation2d.fromDegrees(60));
