@@ -171,9 +171,6 @@ public class ClimberSubsystem extends SubsystemBase {
     if(!RobotState.getInstance().climberIn && RobotState.getInstance().funnelDown){
       runWheels(0.25);
     }
-    if(Math.abs(climberAngleSensor.getAbsolutePosition().getValueAsDouble() - CLIMBER_CLIMBED_ANGLE) < 2) {
-      RobotState.getInstance().climbed = true;
-    }
     if(moveWithPower) {
       if(movingPower < 0) {
         if(climberAngleSensor.getPosition().getValueAsDouble() > 0.5728) {
@@ -188,7 +185,9 @@ public class ClimberSubsystem extends SubsystemBase {
       } else {
         if(movingPower > 0 && climberAngleSensor.getPosition().getValueAsDouble() < 0.185) {
            climberMotor1.set(0);
-         } else {
+           RobotState.getInstance().climbed = true;
+          } else {
+           RobotState.getInstance().climbed = false;
           climberMotor1.set(movingPower);
       }
       }

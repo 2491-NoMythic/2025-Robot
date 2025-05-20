@@ -50,7 +50,7 @@ public class ScoreWhileCollectingAlgae extends SequentialCommandGroup {
           new WaitUntil(()->elevator.isElevatorAtPose()))),
       new InstantCommand(()->driveTrain.drive(new ChassisSpeeds(0.7, 0, 0))),
       new ParallelRaceGroup(
-        new AlgaeIntakeCommand(algaeEndDefector, () -> RobotState.getInstance().goForAlgae ? ALGAE_INTAKE_SPEED : -0.5),
+        new AlgaeIntakeCommand(algaeEndDefector, ()-> ALGAE_INTAKE_SPEED),
         new SequentialCommandGroup(
             new WaitCommand(()->0.25),
             new ParallelRaceGroup(
