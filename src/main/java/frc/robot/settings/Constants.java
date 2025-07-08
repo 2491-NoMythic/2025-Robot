@@ -577,7 +577,7 @@ public final class Constants {
     public static final int CLIMBER_MOTOR_ID = 11;
     public static final int CLIMBER_CANCODER_ID = 5;
     public static final int CLIMBER_WHEELS_MOTOR_ID = 26;
-    public static final int SERVO_CHANNEL = 0;
+    public static final int SERVO_CHANNEL = 1;
 
     public static final double COMP_ENCODER_OFFSET = -0.824951;
     public static final double PRAC_ENCODER_OFFSET = 0;
