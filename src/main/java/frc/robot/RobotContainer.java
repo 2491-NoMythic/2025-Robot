@@ -223,6 +223,25 @@ public class RobotContainer {
   BooleanSupplier algaeShooterSupOperator;
   BooleanSupplier L1Mode;
   boolean isClimberRunning = false;
+  // ---- Drive speed mode chooser ----
+private final SendableChooser<String> driveSpeedMode = new SendableChooser<>();
+private static final String kDriveSpeedChooserKey = "Drive/Speed Mode";
+private static final String kTurnScaleKey         = "Drive/TurnScale";
+
+// Preset linear speed scales (X/Y)
+private final Map<String, Double> speedScales = Map.of(
+  "Full",   1.0,
+  "Normal", 0.75,
+  "Slow",   0.50,
+  "Turtle", 0.30
+);
+
+// Helper to read the current scale
+private double getSpeedScale() {
+  return speedScales.getOrDefault(driveSpeedMode.getSelected(), 0.75);
+}
+
+  
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
   /**
@@ -261,6 +280,7 @@ public class RobotContainer {
     lightsExist = Preferences.getBoolean("Lights Exist", true);
     LimelightExists = Preferences.getBoolean("Limelight Exists", true);
     useMotorLogger = Preferences.getBoolean("Motor Logging", true);
+    
 
     DataLogManager.start(); // Start logging
     DriverStation.startDataLog(DataLogManager.getLog()); // Joystick Data logging
@@ -396,7 +416,17 @@ public class RobotContainer {
       climberGroupForward = buttonBoard::getStartClimbingButton;
       climberGroupReverse = buttonBoard::getClimberDeployButton;
       L1Mode = buttonBoard::getL1ModeButton;
+          // ---- Speed mode dropdown & turn knob (CONSTRUCTOR) ----
+      driveSpeedMode.setDefaultOption("Normal", "Normal");
+      driveSpeedMode.addOption("Full", "Full");
+      driveSpeedMode.addOption("Slow", "Slow");
+      driveSpeedMode.addOption("Turtle", "Turtle");
+      SmartDashboard.putData(kDriveSpeedChooserKey, driveSpeedMode);
+
+      SmartDashboard.putNumber(kTurnScaleKey, 0.60); // knob for rotation scaling
+
     }
+    
     if (LimelightExists) {limelightInit();}
     if (distanceSensorsExist) {sensorInit();}   
     if (DrivetrainExists) {
@@ -415,15 +445,28 @@ public class RobotContainer {
     autoInit();
   }
   private void driveTrainInst() {
-    driveTrain = new DrivetrainSubsystem();
+      // ---- Speed scaling suppliers (DRIVETRAIN DEFAULT COMMAND) ----
+    final DoubleSupplier ScaledForward  = () ->
+        ControllerForwardAxisSupplier.getAsDouble() * getSpeedScale();
 
+    final DoubleSupplier ScaledSideways = () ->
+        ControllerSidewaysAxisSupplier.getAsDouble() * getSpeedScale();
+
+    final DoubleSupplier ScaledTurn     = () ->
+        ControllerZAxisSupplier.getAsDouble() *
+        SmartDashboard.getNumber(kTurnScaleKey, 0.60);
+
+    // Use scaled suppliers in the Drive command
     defaultDriveCommand = new Drive(
         driveTrain,
-        () -> false,
-        ControllerForwardAxisSupplier,
-        ControllerSidewaysAxisSupplier,
-        ControllerZAxisSupplier);
+        () -> false,          // keep if your Drive ctor expects it
+        ScaledForward,
+        ScaledSideways,
+        ScaledTurn);
+
     driveTrain.setDefaultCommand(defaultDriveCommand);
+
+
     
     if(distanceSensorsExist) {
       approachReef = new ApproachReef(
