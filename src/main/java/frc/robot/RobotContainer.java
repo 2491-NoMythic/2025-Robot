@@ -416,17 +416,16 @@ private double getSpeedScale() {
       climberGroupForward = buttonBoard::getStartClimbingButton;
       climberGroupReverse = buttonBoard::getClimberDeployButton;
       L1Mode = buttonBoard::getL1ModeButton;
-          // ---- Speed mode dropdown & turn knob (CONSTRUCTOR) ----
-      driveSpeedMode.setDefaultOption("Normal", "Normal");
-      driveSpeedMode.addOption("Full", "Full");
-      driveSpeedMode.addOption("Slow", "Slow");
-      driveSpeedMode.addOption("Turtle", "Turtle");
-      SmartDashboard.putData(kDriveSpeedChooserKey, driveSpeedMode);
-
-      SmartDashboard.putNumber(kTurnScaleKey, 0.60); // knob for rotation scaling
-
     }
-    
+        // ---- Speed mode dropdown & turn knob (CONSTRUCTOR) ----
+    driveSpeedMode.setDefaultOption("Normal", "Normal");
+    driveSpeedMode.addOption("Full", "Full");
+    driveSpeedMode.addOption("Slow", "Slow");
+    driveSpeedMode.addOption("Turtle", "Turtle");
+    SmartDashboard.putData(kDriveSpeedChooserKey, driveSpeedMode);
+
+    SmartDashboard.putNumber(kTurnScaleKey, 0.60); // rotation scaling knob
+
     if (LimelightExists) {limelightInit();}
     if (distanceSensorsExist) {sensorInit();}   
     if (DrivetrainExists) {
@@ -445,43 +444,46 @@ private double getSpeedScale() {
     autoInit();
   }
   private void driveTrainInst() {
+      // Create drivetrain
+      driveTrain = new DrivetrainSubsystem();
+
       // ---- Speed scaling suppliers (DRIVETRAIN DEFAULT COMMAND) ----
-    final DoubleSupplier ScaledForward  = () ->
-        ControllerForwardAxisSupplier.getAsDouble() * getSpeedScale();
+      final DoubleSupplier ScaledForward  = () ->
+          ControllerForwardAxisSupplier.getAsDouble() * getSpeedScale();
 
-    final DoubleSupplier ScaledSideways = () ->
-        ControllerSidewaysAxisSupplier.getAsDouble() * getSpeedScale();
+      final DoubleSupplier ScaledSideways = () ->
+          ControllerSidewaysAxisSupplier.getAsDouble() * getSpeedScale();
 
-    final DoubleSupplier ScaledTurn     = () ->
-        ControllerZAxisSupplier.getAsDouble() *
-        SmartDashboard.getNumber(kTurnScaleKey, 0.60);
+      final DoubleSupplier ScaledTurn     = () ->
+          ControllerZAxisSupplier.getAsDouble() *
+          SmartDashboard.getNumber(kTurnScaleKey, 0.60);
 
-    // Use scaled suppliers in the Drive command
-    defaultDriveCommand = new Drive(
-        driveTrain,
-        () -> false,          // keep if your Drive ctor expects it
-        ScaledForward,
-        ScaledSideways,
-        ScaledTurn);
+      // Use scaled suppliers in the Drive command
+      defaultDriveCommand = new Drive(
+          driveTrain,
+          () -> false,          // keep if your Drive ctor expects it
+          ScaledForward,
+          ScaledSideways,
+          ScaledTurn);
 
-    driveTrain.setDefaultCommand(defaultDriveCommand);
+      driveTrain.setDefaultCommand(defaultDriveCommand);
 
+      // (keep your existing approach/auto-angle setup)
+      if (distanceSensorsExist) {
+        approachReef = new ApproachReef(
+            distanceSensors,
+            driveTrain,
+            ControllerForwardAxisSupplier,
+            ControllerSidewaysAxisSupplier,
+            ControllerZAxisSupplier);
+      }
 
-    
-    if(distanceSensorsExist) {
-      approachReef = new ApproachReef(
-      distanceSensors,
-      driveTrain,
-      ControllerForwardAxisSupplier,
-      ControllerSidewaysAxisSupplier,
-      ControllerZAxisSupplier);
-    }
-    autoAngleAtReef = new AutoAngleAtReef(
-      driveTrain, 
-      ControllerZAxisSupplier,
-      ControllerForwardAxisSupplier,
-      ControllerSidewaysAxisSupplier);
-  }
+      autoAngleAtReef = new AutoAngleAtReef(
+          driveTrain, 
+          ControllerZAxisSupplier,
+          ControllerForwardAxisSupplier,
+          ControllerSidewaysAxisSupplier);
+   }
 
   private void autoInit() {
     registerNamedCommands();
@@ -1393,3 +1395,4 @@ private double getSpeedScale() {
     ).ignoringDisable(true);
   }
 }
+
