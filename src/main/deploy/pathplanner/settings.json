@@ -3,9 +3,10 @@
   "robotLength": 0.871,
   "holonomicMode": true,
   "pathFolders": [
+    "Algae Paths",
     "Blue Paths",
     "InitialPaths",
-    "Algae Paths",
+    "ETC",
     "Red Paths",
     "ReefSideLineup"
   ],
