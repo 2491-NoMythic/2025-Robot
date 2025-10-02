@@ -4,12 +4,7 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.PowerDistribution;
-import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import java.io.File;
-import java.util.prefs.Preferences;
 
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -17,6 +12,11 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+
+import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -38,7 +38,9 @@ public class Robot extends LoggedRobot {
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our
     // autonomous chooser on the dashboard.
-    Logger.recordMetadata("ProjectName", "MyProject"); // Set a metadata value
+     Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
+     //records metadata
+
     
     if (isReal()) {
       // the following indented code is from ChatGPT, and checks if a USB stick is pluged in. If it
@@ -64,7 +66,7 @@ public class Robot extends LoggedRobot {
       String logPath =
           LogFileUtil
               .findReplayLog(); // Pull the replay log from AdvantageScope (or prompt the user)
-      Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
+      //Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
       Logger.setReplaySource(new WPILOGReader(logPath)); // Read replay log
       Logger.addDataReceiver(
           new WPILOGWriter(

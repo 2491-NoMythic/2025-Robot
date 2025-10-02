@@ -262,7 +262,7 @@ public class RobotContainer {
     LimelightExists = Preferences.getBoolean("Limelight Exists", true);
     useMotorLogger = Preferences.getBoolean("Motor Logging", true);
 
-    DataLogManager.start(); // Start logging
+    // DataLogManager.start(); // Start logging
     DriverStation.startDataLog(DataLogManager.getLog()); // Joystick Data logging
     /*
      * the following code uses the Xbox Controller Preference to determine our
