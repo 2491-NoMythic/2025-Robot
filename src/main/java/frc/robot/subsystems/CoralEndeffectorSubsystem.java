@@ -14,6 +14,9 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+
+import LogInputs.CoralEndEffectorInputsAutoLogged;
+
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj.Preferences;
@@ -23,10 +26,13 @@ import frc.robot.helpers.MotorLogger;
 
 import static frc.robot.settings.Constants.CoralEndeffectorConstants.*;
 
+import org.littletonrobotics.junction.Logger;
+
 public class CoralEndeffectorSubsystem extends SubsystemBase {
   SparkMax coralEndeffectorMotor;
   SparkBaseConfig coralConfig;
   SparkAnalogSensor coralEndeffSensor;
+  CoralEndEffectorInputsAutoLogged inputs;
   MotorLogger motorLogger;
 
   /** Creates a new CoralEndDefectorSubsystem. */
@@ -82,7 +88,9 @@ public class CoralEndeffectorSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    RobotState.getInstance().coralEndeffSensorTrig = coralEndeffSensor.getVoltage() < 2;
+    inputs.coralEndEffectorSensor = coralEndeffSensor.getVoltage();
+    Logger.processInputs("CoralEndEffector", inputs);
+    RobotState.getInstance().coralEndeffSensorTrig = inputs.coralEndEffectorSensor < 2;
     if(Preferences.getBoolean("Motor Logging", false)){
     logMotors();
     }
