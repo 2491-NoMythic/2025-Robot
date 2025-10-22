@@ -15,7 +15,8 @@ import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
-import LogInputs.CoralEndEffectorInputsAutoLogged;
+import frc.robot.LogInputs.CoralEndEffectorInputsAutoLogged;
+import frc.robot.LogOutputs.CoralEndEffectorOutputs;
 
 import com.revrobotics.spark.config.SparkMaxConfig;
 
@@ -33,6 +34,7 @@ public class CoralEndeffectorSubsystem extends SubsystemBase {
   SparkBaseConfig coralConfig;
   SparkAnalogSensor coralEndeffSensor;
   CoralEndEffectorInputsAutoLogged inputs;
+  CoralEndEffectorOutputs outputs;
   MotorLogger motorLogger;
 
   /** Creates a new CoralEndDefectorSubsystem. */
@@ -61,7 +63,8 @@ public class CoralEndeffectorSubsystem extends SubsystemBase {
     coralEndeffSensor = coralEndeffectorMotor.getAnalog();
     motorLogger = new MotorLogger("/coralEndEffector/motor");
 
-  
+    inputs = new CoralEndEffectorInputsAutoLogged();
+    outputs = new CoralEndEffectorOutputs();
   }
   /**
    * a method to set the speeds of both motors on the end effector. speeds are percentage of full power, from -1 to 1.
@@ -69,10 +72,11 @@ public class CoralEndeffectorSubsystem extends SubsystemBase {
    */
   public void set(double speed){
     coralEndeffectorMotor.set(speed);
-
+    outputs.targetRPS = 100;
   }
   public void stopCoralEndEffector(){
     coralEndeffectorMotor.set(0);
+    outputs.targetRPS = 0;
   }
 
   /**
@@ -81,6 +85,7 @@ public class CoralEndeffectorSubsystem extends SubsystemBase {
    */
   public void runCoralEndEffector(double RPM) {
     coralEndeffectorMotor.getClosedLoopController().setReference(RPM, ControlType.kVelocity);
+    outputs.targetRPS = RPM/60;
   }
   private void logMotors(){
     motorLogger.log(coralEndeffectorMotor);
@@ -89,10 +94,13 @@ public class CoralEndeffectorSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     inputs.coralEndEffectorSensor = coralEndeffSensor.getVoltage();
+    inputs.motor.log(coralEndeffectorMotor);
     Logger.processInputs("CoralEndEffector", inputs);
     RobotState.getInstance().coralEndeffSensorTrig = inputs.coralEndEffectorSensor < 2;
     if(Preferences.getBoolean("Motor Logging", false)){
     logMotors();
-    }
+    Logger.recordOutput("CoralEndEffectorSensor", inputs.coralEndEffectorSensor * 2);
+  }
+  outputs.log();
   }
 }
