@@ -5,14 +5,17 @@ import static frc.robot.settings.Constants.Vision.*;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
 import frc.robot.LimelightHelpers.PoseEstimate;
+import frc.robot.LogInputs.LimelightInputs;
 import frc.robot.helpers.MythicalMath;
 import frc.robot.settings.LimelightDetectorData;
 import java.io.IOException;
@@ -20,13 +23,17 @@ import org.littletonrobotics.junction.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Limelight {
+public class Limelight extends SubsystemBase{
 
   private static Limelight limelight;
 
   private static Field2d fieldB = new Field2d();
   private static Field2d fieldC = new Field2d();
   private static Field2d field3 = new Field2d();
+
+  private LimelightInputs limelightA = new LimelightInputs(APRILTAG_LIMELIGHTA_NAME);
+  private LimelightInputs limelightB = new LimelightInputs(APRILTAG_LIMELIGHTB_NAME);
+  private LimelightInputs limelightC = new LimelightInputs(APRILTAG_LIMELIGHTC_NAME);
 
   public static final AprilTagFieldLayout FIELD_LAYOUT;
 
@@ -88,37 +95,34 @@ public class Limelight {
    * @return A valid and trustworthy pose. Null if no valid pose. Poses are prioritized by lowest
    *     tagDistance.
    */
-  public PoseEstimate getTrustedPose() {
-    PoseEstimate poseA =
-        LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(APRILTAG_LIMELIGHTA_NAME);
-    PoseEstimate poseB =
-        LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(APRILTAG_LIMELIGHTB_NAME);
-    PoseEstimate poseC =
-        LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(APRILTAG_LIMELIGHTC_NAME);
+  public Pair<Pose2d, LimelightInputs> getTrustedPose() {
+    Pose2d poseA = limelightA.megaTag2Pose2d;
+    Pose2d poseB = limelightB.megaTag2Pose2d;
+    Pose2d poseC = limelightC.megaTag2Pose2d;
     // we aren't using isTrustworthy here becuase as LL readings have gotten more reliable, we care
     // less about tag distance
     Boolean poseATrust = false;
     Boolean poseBTrust = false;
     Boolean poseCTrust = false;
-    if(poseA != null && isConnected(APRILTAG_LIMELIGHTA_NAME)&&getClosestTagDist(APRILTAG_LIMELIGHTA_NAME)<MAX_TAG_DISTANCE) {poseATrust = isValid(APRILTAG_LIMELIGHTA_NAME, poseA);}
-    if(poseB != null && isConnected(APRILTAG_LIMELIGHTB_NAME)&&getClosestTagDist(APRILTAG_LIMELIGHTA_NAME)<MAX_TAG_DISTANCE) {poseBTrust = isValid(APRILTAG_LIMELIGHTB_NAME, poseB);}
-    if(poseC != null && isConnected(APRILTAG_LIMELIGHTC_NAME)&&getClosestTagDist(APRILTAG_LIMELIGHTA_NAME)<MAX_TAG_DISTANCE) {poseCTrust = isValid(APRILTAG_LIMELIGHTC_NAME, poseC);}
+    if(poseA != null && limelightA.isConnected && limelightA.getClosestTagDist()<MAX_TAG_DISTANCE) {poseATrust = isValid(limelightA);}
+    if(poseB != null && limelightB.isConnected && limelightB.getClosestTagDist()<MAX_TAG_DISTANCE) {poseBTrust = isValid(limelightB);}
+    if(poseC != null && limelightC.isConnected && limelightC.getClosestTagDist()<MAX_TAG_DISTANCE) {poseCTrust = isValid(limelightC);}
     // if the limelight positions will be merged, let SmartDashboard know!
     boolean mergingPoses = false;
     if (poseATrust && poseBTrust || poseBTrust && poseCTrust || poseATrust && poseCTrust) {
       mergingPoses = true;
     }
     SmartDashboard.putBoolean("LL poses merged", mergingPoses);
-    List<String> limelightNames = new ArrayList<>();
-    if(poseATrust) {limelightNames.add(APRILTAG_LIMELIGHTA_NAME); }
-    if(poseBTrust) {limelightNames.add(APRILTAG_LIMELIGHTB_NAME); }
-    if(poseCTrust) {limelightNames.add(APRILTAG_LIMELIGHTC_NAME); }
+    List<LimelightInputs> limelightNames = new ArrayList<>();
+    if(poseATrust) {limelightNames.add(limelightA); }
+    if(poseBTrust) {limelightNames.add(limelightB); }
+    if(poseCTrust) {limelightNames.add(limelightC); }
     if(limelightNames.size() == 0) {
       return null;
     }else if(limelightNames.size() == 1) {
-      return LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightNames.get(0));
+      return new Pair<>(limelightNames.get(0).megaTag2Pose2d, limelightNames.get(0));
     } else {
-      return mergedPose(limelightNames);
+      return new Pair<>(mergedPose(limelightNames), limelightNames.get(0));
     }
   }
   /**
@@ -131,43 +135,40 @@ public class Limelight {
    * @param LL2FOM
    * @return
    */
-  public PoseEstimate mergedPose(List<String> limelightNames) {
+  public Pose2d mergedPose(List<LimelightInputs> limelightNames) {
 
-    
+    Pose2d pose1 = limelightNames.get(0).megaTag2Pose2d;
+    Pose2d pose2 = limelightNames.get(1).megaTag2Pose2d;
 
-
-    PoseEstimate pose1 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightNames.get(0));;
-    PoseEstimate pose2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightNames.get(1));;
-
-    Logger.recordOutput("mergedPose/pose1", pose1.pose);
-    Logger.recordOutput("mergedPose/pose2", pose2.pose);
+    Logger.recordOutput("mergedPose/pose1", pose1);
+    Logger.recordOutput("mergedPose/pose2", pose2);
 
     double LL1FOM = getLLFOM(limelightNames.get(0));
     double LL2FOM = getLLFOM(limelightNames.get(1));
     double confidenceSource1 = 1 / Math.pow(LL1FOM, 2);
     double confidenceSource2 = 1 / Math.pow(LL2FOM, 2);
-    Pose2d scaledPose1 = MythicalMath.multiplyOnlyPos(pose1.pose, confidenceSource1);
-    Pose2d scaledPose2 = MythicalMath.multiplyOnlyPos(pose2.pose, confidenceSource2);
+    Pose2d scaledPose1 = MythicalMath.multiplyOnlyPos(pose1, confidenceSource1);
+    Pose2d scaledPose2 = MythicalMath.multiplyOnlyPos(pose2, confidenceSource2);
 
     if(limelightNames.size() == 2) {
       Pose2d newPose =
         MythicalMath.divideOnlyPos(
           (MythicalMath.addOnlyPosTogether(scaledPose1, scaledPose2)),
           (confidenceSource1 + confidenceSource2));
-          pose1.pose = newPose;
+          pose1 = newPose;
     }
       
       if(limelightNames.size() == 3) {
-        PoseEstimate pose3 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightNames.get(2));
+        Pose2d pose3 = limelightNames.get(2).megaTag2Pose2d;
         double LL3FOM = getLLFOM(limelightNames.get(2));
         double confidenceSource3 = 1 / Math.pow(LL3FOM, 2);
-        Pose2d scaledPose3 = MythicalMath.multiplyOnlyPos(pose3.pose, confidenceSource3);
+        Pose2d scaledPose3 = MythicalMath.multiplyOnlyPos(pose3, confidenceSource3);
         Pose2d newPose =
             MythicalMath.divideOnlyPos(
                 MythicalMath.addOnlyPosTogether(
                   MythicalMath.addOnlyPosTogether(scaledPose1, scaledPose2), scaledPose3),
                 (confidenceSource1 + confidenceSource2 + confidenceSource3));
-        pose1.pose = newPose;
+        pose1 = newPose;
       }
 
       return pose1;
@@ -259,7 +260,7 @@ public class Limelight {
    * @param limelightName
    * @return
    */
-  public double getLLFOM(String limelightName) // larger fom is BAD, and is less trustworthy.
+  public double getLLFOM(LimelightInputs limelightInputs) // larger fom is BAD, and is less trustworthy.
       {
     // the value we place on each variable in the FOM. Higher value means it will get weighted more
     // in the final FOM
@@ -274,7 +275,7 @@ public class Limelight {
     // numTagsContributer is better when smaller, and is based off of how many april tags the
     // Limelight identifies
     double numTagsContributer;
-    double tagCount = limelight.getLLTagCount(limelightName);
+    double tagCount = limelightInputs.tagCount;
     if (tagCount <= 0) {
       numTagsContributer = 0;
     } else {
@@ -283,15 +284,15 @@ public class Limelight {
     // tx and ty contributers are based off where on the limelights screen the april tag is. Closer
     // to the center means the contributer will bea smaller number, which is better.
     double centeredTxContributer =
-        Math.abs((limelight.getAprilValues(limelightName).tx))
+        Math.abs(limelightInputs.tx)
             / 29.8; // tx gets up to 29.8, the closer to 0 tx is, the closer to the center it is.
     double centeredTyContributer =
-        Math.abs((limelight.getAprilValues(limelightName).ty))
+        Math.abs(limelightInputs.ty)
             / 20.5; // ty gets up to 20.5 for LL2's and down. LL3's go to 24.85. The closer to 0 ty
     // is, the closer to the center it is.
     // the distance contributer gets smaller when the distance is closer, and is based off of how
     // far away the closest tag is
-    double distanceContributer = (limelight.getClosestTagDist(limelightName) / 5);
+    double distanceContributer = (limelightInputs.getClosestTagDist() / 5);
 
     // calculates the final FOM by taking the contributors and multiplying them by their values,
     // adding them all together and then dividing by the sum of the values.
@@ -304,7 +305,7 @@ public class Limelight {
             + tagCountValue
             + xyValue
             + xyValue;
-    Logger.recordOutput("Vision/LLFOM" + limelightName, LLFOM);
+    Logger.recordOutput("Vision/LLFOM/" + limelightInputs.name, LLFOM);
     return LLFOM;
   }
 
@@ -330,65 +331,38 @@ public class Limelight {
     return LimelightHelpers.getBotPoseEstimate_wpiBlue(cameraname).tagCount;
   }
 
-  private boolean isValid(String limelightName, PoseEstimate estimate) {
+  private boolean isValid(LimelightInputs limelight) {
     Boolean valid = false;
-    if(estimate == null) {
+    if(limelight.megaTag2Pose2d == null) {
       return false;
     }
-    valid = (estimate.pose.getX() < FIELD_CORNER.getX()
-          && estimate.pose.getX() > 0.0
-          && estimate.pose.getY() < FIELD_CORNER.getY()
-          && estimate.pose.getY() > 0.0);
+    valid = (limelight.megaTag2Pose2d.getX() < FIELD_CORNER.getX()
+          && limelight.megaTag2Pose2d.getX() > 0.0
+          && limelight.megaTag2Pose2d.getY() < FIELD_CORNER.getY()
+          && limelight.megaTag2Pose2d.getY() > 0.0);
 
-    if (limelightName.equalsIgnoreCase(APRILTAG_LIMELIGHTB_NAME)) {
+    if (limelight.name.equalsIgnoreCase(APRILTAG_LIMELIGHTA_NAME)) {
       SmartDashboard.putBoolean("Vision/Left/valid", valid);
       SmartDashboard.putNumber("Vision/Left/Stats/valid", (valid ? 1 : 0));
-      SmartDashboard.putNumber("Vision/Left/Stats/avgTagDist", estimate.avgTagDist);
-      SmartDashboard.putNumber("Vision/Left/Stats/tagCount", estimate.tagCount);
-      SmartDashboard.putNumber("Vision/Left/Stats/latency", estimate.latency);
-    } else if (limelightName.equalsIgnoreCase(APRILTAG_LIMELIGHTC_NAME)) {
+      SmartDashboard.putNumber("Vision/Left/Stats/avgTagDist", limelight.avgTagDistance);
+      SmartDashboard.putNumber("Vision/Left/Stats/tagCount", limelight.tagCount);
+      SmartDashboard.putNumber("Vision/Left/Stats/latency", limelight.latency);
+    } else if (limelight.name.equalsIgnoreCase(APRILTAG_LIMELIGHTB_NAME)) {
       SmartDashboard.putBoolean("Vision/Right/valid", valid);
       SmartDashboard.putNumber("Vision/Right/Stats/valid", (valid ? 1 : 0));
-      SmartDashboard.putNumber("Vision/Right/Stats/avgTagDist", estimate.avgTagDist);
-      SmartDashboard.putNumber("Vision/Right/Stats/tagCount", estimate.tagCount);
-      SmartDashboard.putNumber("Vision/Right/Stats/latency", estimate.latency);
-    } else if (limelightName.equalsIgnoreCase(APRILTAG_LIMELIGHTA_NAME)) {
+      SmartDashboard.putNumber("Vision/Right/Stats/avgTagDist", limelight.avgTagDistance);
+      SmartDashboard.putNumber("Vision/Right/Stats/tagCount", limelight.tagCount);
+      SmartDashboard.putNumber("Vision/Right/Stats/latency", limelight.latency);
+    } else if (limelight.name.equalsIgnoreCase(APRILTAG_LIMELIGHTC_NAME)) {
       SmartDashboard.putBoolean("Vision/Extra/valid", valid);
       SmartDashboard.putNumber("Vision/Extra/Stats/valid", (valid ? 1 : 0));
-      SmartDashboard.putNumber("Vision/Extra/Stats/avgTagDist", estimate.avgTagDist);
-      SmartDashboard.putNumber("Vision/Extra/Stats/tagCount", estimate.tagCount);
-      SmartDashboard.putNumber("Vision/Extra/Stats/latency", estimate.latency);
+      SmartDashboard.putNumber("Vision/Extra/Stats/avgTagDist", limelight.avgTagDistance);
+      SmartDashboard.putNumber("Vision/Extra/Stats/tagCount", limelight.tagCount);
+      SmartDashboard.putNumber("Vision/Extra/Stats/latency", limelight.latency);
     } else {
       System.err.println("Limelight name is invalid. (limelight.isValid)");
     }
     return valid;
-  }
-  /**
-   * checks if the robotPose returned by the limelight is within the field and stable. It does this
-   * by running isValid() with the limelight, and checking if the limelight's pose either contains
-   * 2+ tags or is closer then MAX_TAG_DISTANCE (from constants) from the tag.
-   *
-   * @param limelightName the name of the requested limelight, as seen on NetworkTables
-   * @param estimate the poseEstimate from that limelight
-   * @param odometryPose the robot's pose from the DriveTrain, unused right now
-   * @return true if the pose is within the field bounds and the tag distance is less than 7
-   */
-  private boolean isTrustworthy(String limelightName, PoseEstimate estimate, Pose2d odometryPose) {
-    Boolean trusted = (isValid(limelightName, estimate) && estimate.avgTagDist < 7);
-
-    if (limelightName.equalsIgnoreCase(APRILTAG_LIMELIGHTB_NAME)) {
-      SmartDashboard.putBoolean("Vision/Left/trusted", trusted);
-      SmartDashboard.putNumber("Vision/Left/Stats/trusted", (trusted ? 1 : 0));
-    } else if (limelightName.equalsIgnoreCase(APRILTAG_LIMELIGHTC_NAME)) {
-      SmartDashboard.putBoolean("Vision/Right/trusted", trusted);
-      SmartDashboard.putNumber("Vision/Right/Stats/trusted", (trusted ? 1 : 0));
-    } else if(limelightName.equalsIgnoreCase(APRILTAG_LIMELIGHTA_NAME)) {
-      SmartDashboard.putBoolean("Vision/Extra/trusted", trusted);
-      SmartDashboard.putNumber("Vision/Extra/Stats/trusted", (trusted ? 1 : 0));
-    } else {
-      System.err.println("Limelight name is invalid. (limelight.isTrustworthy)");
-    }
-    return trusted;
   }
 /**
  * 
@@ -400,6 +374,16 @@ public class Limelight {
     double tx = limelightTable.getEntry("tx").getDouble(Double.NaN);
     boolean connected = !Double.isNaN(tx);
     return connected;
+  }
+
+  @Override
+  public void periodic() {
+      limelightA.updateInputs();
+      limelightB.updateInputs();
+      limelightC.updateInputs();
+      Logger.processInputs("Limelights/Left", limelightA);
+      Logger.processInputs("Limelights/Right", limelightB);
+      Logger.processInputs("Limelights/Extra", limelightC);
   }
 
 }

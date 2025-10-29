@@ -548,7 +548,6 @@ public class RobotContainer {
   
     SmartDashboard.putData("set offsets", setOffsets);
     SmartDashboard.putData("zeroGyroscope", zeroGyroscope);
-    SmartDashboard.putData(new InstantCommand(driveTrain::forceUpdateOdometryWithVision));
     if(coralEndeffectorExists&&funnelIntakeExists&&elevatorExists) {
       Command coralIntake = new CoralIntake(elevator, funnelIntake, coralEndDefector);
       new Trigger(()-> (CoralIntakeSup.getAsBoolean() || driveTrain.drivetrainInIntakeZones()) && (!RobotState.getInstance().isCoralSeen()) && !DriverStation.isAutonomous() && !RobotState.getInstance().coralLineupRunning && !RobotState.getInstance().coralAligned).whileTrue(coralIntake);

@@ -46,6 +46,7 @@ import com.ctre.phoenix6.controls.MotionMagicVelocityDutyCycle;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
+import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -66,6 +67,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
 import frc.robot.Robot;
+import frc.robot.LogInputs.LimelightInputs;
 import frc.robot.LimelightHelpers.PoseEstimate;
 import frc.robot.helpers.MotorLogger;
 import frc.robot.helpers.MythicalMath;
@@ -433,37 +435,24 @@ public class DrivetrainSubsystem extends SubsystemBase {
         0,
         0);
 
-    PoseEstimate estimate = limelight.getTrustedPose();
+    Pair<Pose2d, LimelightInputs> estimate = limelight.getTrustedPose();
     if (estimate != null) {
       boolean doRejectUpdate = false;
       if (Math.abs(pigeon.getAngularVelocityZWorld().getValueAsDouble()) > 720) {
         doRejectUpdate = true;
       }
-      if (estimate.tagCount == 0) {
+      if (estimate.getSecond().tagCount == 0) {
         doRejectUpdate = true;
       }
       if (!doRejectUpdate) {
-        odometer.addVisionMeasurement(estimate.pose, estimate.timestampSeconds);
+        odometer.addVisionMeasurement(estimate.getFirst(), estimate.getSecond().timeStampSeconds);
         RobotState.getInstance().LimelightsUpdated = true;
       } else {
         RobotState.getInstance().LimelightsUpdated = false;
       }
   }
 }
-  /**
-   * Set the odometry using the current apriltag estimate, disregarding the pose trustworthyness.
-   *
-   * <p>You only need to run this once for it to take effect.
-   */
-  public void forceUpdateOdometryWithVision() {
-    PoseEstimate estimate = limelight.getTrustedPose();
-    if (estimate != null) {
-      resetOdometry(estimate.pose);
-    } else {
-      System.err.println(
-          "No valid limelight estimate to reset from. (Drivetrain.forceUpdateOdometryWithVision)");
-    }
-  }
+
   /** Prepares to rotate the robot to a specific angle. Angle 0 is ALWAYS facing away from blue alliance wall
    * @param desiredAngle the angle to rotate the robot to (in degrees relative to the field)
    */
@@ -667,11 +656,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     updateOdometry();
     // sets the robot orientation for each of the limelights, which is required for the
     if (Preferences.getBoolean("Use Limelight", false)) {
-      if (SmartDashboard.getBoolean("Vision/force use limelight", false)) {
-        forceUpdateOdometryWithVision();
-      } else {
         updateOdometryWithVision();
-      }
     } else {
       RobotState.getInstance().LimelightsUpdated = false;
     }
