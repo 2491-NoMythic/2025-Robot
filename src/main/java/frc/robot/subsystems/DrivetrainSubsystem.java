@@ -649,6 +649,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   //This is the things the subsystem does periodically. 
   @Override
   public void periodic() {
+    limelight.periodic();
     updateInputs();
     SmartDashboard.putNumber("pose2d X", getPose().getX());
     SmartDashboard.putNumber("pose2d Y", getPose().getY());

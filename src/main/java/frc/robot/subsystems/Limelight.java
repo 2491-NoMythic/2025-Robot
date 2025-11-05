@@ -23,7 +23,7 @@ import org.littletonrobotics.junction.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Limelight extends SubsystemBase{
+public class Limelight {
 
   private static Limelight limelight;
 
@@ -376,7 +376,6 @@ public class Limelight extends SubsystemBase{
     return connected;
   }
 
-  @Override
   public void periodic() {
       limelightA.updateInputs();
       limelightB.updateInputs();
