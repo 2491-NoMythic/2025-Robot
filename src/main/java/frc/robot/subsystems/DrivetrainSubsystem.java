@@ -67,6 +67,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
 import frc.robot.Robot;
+import frc.robot.LogInputs.DrivetrainInputsAutoLogged;
 import frc.robot.LogInputs.LimelightInputs;
 import frc.robot.LimelightHelpers.PoseEstimate;
 import frc.robot.helpers.MotorLogger;
@@ -100,12 +101,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private final SwerveDrivePoseEstimator odometer;
   private final Field2d m_field = new Field2d();
 
+  DrivetrainInputsAutoLogged inputs;
   Limelight limelight;
   MotorLogger[] motorLoggers;
   PIDController speedController;
   PIDController rotationSpeedController;
 
   public DrivetrainSubsystem() {
+    inputs = new DrivetrainInputsAutoLogged();
     rotationSpeedController = new PIDController(AUTO_AIM_ROBOT_kP, AUTO_AIM_ROBOT_kI, AUTO_AIM_ROBOT_kD);
     rotationSpeedController.setTolerance(ROBOT_ANGLE_TOLERANCE);
     rotationSpeedController.enableContinuousInput(-180, 180);
@@ -168,6 +171,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
           new MotorLogger("/drivetrain/motorBR"),
         };
     // configures the odometer
+    updateInputs();
     odometer =
         new SwerveDrivePoseEstimator(
             kinematics, getGyroscopeRotation(), getModulePositions(), DRIVE_ODOMETRY_ORIGIN);
@@ -186,7 +190,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 	 * @return
 	 */
 	public Rotation2d getGyroscopeRotation() {
-		return pigeon.getRotation2d();
+		return inputs.gyroScopeRotation;
 	}
   /**
    * gets the angle of odometer reading, but adds 180 degrees if we are on red alliance. this is useful for whne using ChassisSpeeds.fromFieldRelativeSpeeds(ChassisSpeeds, getAllianceSpecificRotation())
@@ -201,13 +205,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @return the pitch, returned as a double
    */
   public double getPigeonPitch(){
-    double pitch = pigeon.getPitch().getValueAsDouble();
-    return pitch;
+    return inputs.pitch;
   }
 
   public double getPigeonRoll(){
-    double roll = pigeon.getRoll().getValueAsDouble();
-    return roll;
+    return inputs.roll;
   }
   
   /**
@@ -238,18 +240,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
 	 * @return the positions of the swerve modules
 	 */
   public SwerveModulePosition[] getModulePositions() {
-    SwerveModulePosition[] positions = new SwerveModulePosition[4];
-    for (int i = 0; i < 4; i++) positions[i] = modules[i].getPosition();
-    return positions;
+    return inputs.swerveModulePositions;
   }
 	/**
 	 * Returns the swerve module states (a mxiture of speed and angle)
 	 * @return the speeds and angles of the swerve modules
 	 */
   public SwerveModuleState[] getModuleStates() {
-    SwerveModuleState[] states = new SwerveModuleState[4];
-    for (int i = 0; i < 4; i++) states[i] = modules[i].getState();
-    return states;
+    return inputs.swerveModuleStates;
   }
   /**
    * Gets the speed of the robot
@@ -332,19 +330,19 @@ public class DrivetrainSubsystem extends SubsystemBase {
    */
   public void drive(ChassisSpeeds chassisSpeeds) {
     if (Preferences.getBoolean("AntiTipActive", false)) {
-      if (pigeon.getRoll().getValueAsDouble() > 3) {
+      if (inputs.roll > 3) {
         chassisSpeeds.vxMetersPerSecond = chassisSpeeds.vxMetersPerSecond
-            + (pigeon.getRoll().getValueAsDouble()/10);
-      } else if (pigeon.getRoll().getValueAsDouble() < -3) {
+            + (inputs.roll/10);
+      } else if (inputs.roll < -3) {
         chassisSpeeds.vxMetersPerSecond = chassisSpeeds.vxMetersPerSecond
-            + (-pigeon.getRoll().getValueAsDouble()/10);
+            + (-inputs.roll/10);
       }
-      if (pigeon.getPitch().getValueAsDouble() > 3) {
+      if (inputs.pitch > 3) {
         chassisSpeeds.vyMetersPerSecond = chassisSpeeds.vyMetersPerSecond
-            + (pigeon.getPitch().getValueAsDouble()/10);
-      } else if (pigeon.getPitch().getValueAsDouble() < -3) {
+            + (inputs.pitch/10);
+      } else if (inputs.pitch < -3) {
         chassisSpeeds.vyMetersPerSecond = chassisSpeeds.vyMetersPerSecond
-            + (-pigeon.getPitch().getValueAsDouble()/10);
+            + (-inputs.pitch/10);
       }
     }
       if (DriverStation.isTest()){
@@ -400,7 +398,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * Updates the odometry
    */
   public void updateOdometry() {
-    odometer.updateWithTime(Timer.getFPGATimestamp(), getGyroscopeRotation(), getModulePositions());
+    odometer.updateWithTime(inputs.gyroTimeStamp, getGyroscopeRotation(), getModulePositions());
   }
 
   /**
@@ -651,6 +649,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   //This is the things the subsystem does periodically. 
   @Override
   public void periodic() {
+    updateInputs();
     SmartDashboard.putNumber("pose2d X", getPose().getX());
     SmartDashboard.putNumber("pose2d Y", getPose().getY());
     updateOdometry();
@@ -675,4 +674,16 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("DRIVETRAIN/inIntakeZone", drivetrainInIntakeZones());
   }
 
+  private void updateInputs() {
+   for (int i = 0; i < 4; i++) {
+      inputs.swerveModuleStates[i] = modules[i].getState();
+      inputs.swerveModulePositions[i] = modules[i].getPosition();
+   }
+   inputs.gyroScopeRotation = pigeon.getRotation2d();
+   inputs.pitch = pigeon.getPitch().getValueAsDouble();
+   inputs.roll = pigeon.getRoll().getValueAsDouble();
+   inputs.gyroTimeStamp = Timer.getFPGATimestamp();
+   inputs.angularVelocity = pigeon.getAngularVelocityZWorld().getValueAsDouble();
+   Logger.processInputs("Drivetrain", inputs);
+  }
 }
