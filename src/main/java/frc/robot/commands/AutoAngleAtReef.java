@@ -69,18 +69,13 @@ public class AutoAngleAtReef extends Command {
 
     //step 1: determine which tag ID is the closest tag that our robot sees
     //if a limelight is not connected, it's pose returned will be (0, 0, 0). Becuase of this we check for connection and set the distance to a very high number if there is no connection
-    Pose3d poseA = LimelightHelpers.getTargetPose3d_RobotSpace(Vision.APRILTAG_LIMELIGHTA_NAME);
-    Double distanceA = (Limelight.getInstance().isConnected(APRILTAG_LIMELIGHTA_NAME)) ? MythicalMath.DistanceFromOrigin3d(poseA.getX(), poseA.getY(), poseA.getZ()) : 100;
+    double distanceA = Limelight.getInstance().limelightA.getClosestTagDistRobotSpace(100);
+    double distanceB = Limelight.getInstance().limelightB.getClosestTagDistRobotSpace(100);
+    double distanceC = Limelight.getInstance().limelightC.getClosestTagDistRobotSpace(100);
 
-    Pose3d poseB = LimelightHelpers.getTargetPose3d_RobotSpace(Vision.APRILTAG_LIMELIGHTB_NAME);
-    Double distanceB = (Limelight.getInstance().isConnected(APRILTAG_LIMELIGHTB_NAME)) ? MythicalMath.DistanceFromOrigin3d(poseB.getX(), poseB.getY(), poseB.getZ()) : 100;
-
-    Pose3d poseC = LimelightHelpers.getTargetPose3d_RobotSpace(Vision.APRILTAG_LIMELIGHTC_NAME);
-    Double distanceC = (Limelight.getInstance().isConnected(APRILTAG_LIMELIGHTC_NAME)) ? MythicalMath.DistanceFromOrigin3d(poseC.getX(), poseC.getY(), poseC.getZ()) : 100;
-
-    double tagA = LimelightHelpers.getFiducialID(Vision.APRILTAG_LIMELIGHTA_NAME);
-    double tagB = LimelightHelpers.getFiducialID(Vision.APRILTAG_LIMELIGHTB_NAME);
-    double tagC = LimelightHelpers.getFiducialID(Vision.APRILTAG_LIMELIGHTC_NAME);
+    double tagA = Limelight.getInstance().limelightA.targetTagID;
+    double tagB = Limelight.getInstance().limelightB.targetTagID;
+    double tagC = Limelight.getInstance().limelightC.targetTagID;
 
     double tagClosest; /*the tag ID of the closest april tag to our robot */
     if (distanceA < distanceB && distanceA < distanceC) {
@@ -167,11 +162,11 @@ public class AutoAngleAtReef extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    //ends command if none of the limelights see an april tag
+    //ends command if none of the limelights are connected
     return (
-      !Limelight.getInstance().isConnected(APRILTAG_LIMELIGHTA_NAME)
-      && !Limelight.getInstance().isConnected(APRILTAG_LIMELIGHTB_NAME)
-      && !Limelight.getInstance().isConnected(APRILTAG_LIMELIGHTC_NAME)
+      !Limelight.getInstance().limelightA.isConnected
+      && !Limelight.getInstance().limelightB.isConnected
+      && !Limelight.getInstance().limelightC.isConnected
     );
   }
 }

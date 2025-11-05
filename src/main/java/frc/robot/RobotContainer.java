@@ -1311,12 +1311,6 @@ public class RobotContainer {
     SmartDashboard.putString(
         "AlliancePeriodic",
         currentAlliance == null ? "null" : currentAlliance == Alliance.Red ? "Red" : "Blue");
-    if (Preferences.getBoolean("Use Limelight", false)) {
-      limelight.updateLoggingWithPoses();
-      SmartDashboard.putBoolean("LIMELIGHT/isConnectedA", Limelight.getInstance().isConnected(Vision.APRILTAG_LIMELIGHTA_NAME));
-      SmartDashboard.putBoolean("LIMELIGHT/isConnectedB", Limelight.getInstance().isConnected(Vision.APRILTAG_LIMELIGHTB_NAME));
-      SmartDashboard.putBoolean("LIMELIGHT/isConnectedC", Limelight.getInstance().isConnected(Vision.APRILTAG_LIMELIGHTC_NAME));
-    }
     SmartDashboard.putBoolean("REEFLINEUP/deliveringLeft", RobotState.getInstance().deliveringLeft);
   }
 
